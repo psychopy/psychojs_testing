@@ -1,0 +1,30 @@
+{
+  "name": "e2e_robot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pretest_e2e": "node test/meta/cleanup.browserstack.js",
+    "test_e2e": "npx wdio wdio.conf.js",
+    "posttest_e2e": "node test/meta/logs.summarize.run.js && node test/meta/screenshots.compare.js",
+    "test_e2e_travis": "npm run test_e2e bs",
+    "upload_report": "node test/meta/logs.ftp.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wdio/cli": "^6.4.7",
+    "@wdio/dot-reporter": "^6.4.7",
+    "@wdio/jasmine-framework": "^6.4.7",
+    "@wdio/local-runner": "^6.4.7",
+    "@wdio/selenium-standalone-service": "^6.4.7",
+    "@wdio/sync": "^6.4.7",
+    "jimp": "^0.14.0",
+    "json2csv": "^5.0.1",
+    "replace-color": "^2.3.0",
+    "ssh2-sftp-client": "^5.3.1",
+    "wdio-json-reporter": "^2.0.0"
+  },
+  "dependencies": {}
+}
