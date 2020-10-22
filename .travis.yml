@@ -8,6 +8,8 @@ jobs:
   include:
   - stage: cleanup
     script: npm run cleanup_browserstack
+  - stage: travis_environment_vars
+    script: node test/meta/test.js
   - stage: e2e_img
     script: npx wdio wdio.conf.js e2e_calibration bs Windows_8.1_IE_latest
     if: type == cron
