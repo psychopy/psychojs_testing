@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pretest_e2e": "node test/meta/cleanup.browserstack.js",
     "test_e2e": "npx wdio wdio.conf.js",
-    "posttest_e2e": "node test/meta/logs.summarize.run.js && node test/meta/screenshots.compare.js",
-    "test_e2e_travis": "npm run test_e2e bs",
-    "upload_report": "node test/meta/logs.ftp.js"
+    "posttest_e2e": "npm run compare_screenshots && npm run summarize_reports",
+    "ftp_report": "node test/meta/logs.ftp.js",
+    "cleanup_browserstack": "node test/meta/cleanup.browserstack.js",
+    "compare_screenshots": "node test/meta/screenshots.compare.js",
+    "summarize_reports": "node test/meta/logs.summarize.run.js",
+    "test_e2e_local_full": "npm run cleanup_browserstack local_test && npm run ftp_report local_test cleanup && npm run test_e2e local bs && npm run ftp_report local_test e2e_combined"
   },
   "keywords": [],
   "author": "",

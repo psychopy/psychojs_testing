@@ -1,5 +1,5 @@
 module.exports = { 
-  capabilities: (platformPattern) => {
+  capabilities: (buildName, platformPattern) => {
     // For pattern matching of strings with * and . wildcards
     // From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
     function wildTest(wildcard, str) {
@@ -9,8 +9,7 @@ module.exports = {
     }
 
     // Settings shared by desktop and mobile
-    let buildName = 'development',
-        projectName = 'PsychoJS',
+    let projectName = 'PsychoJS',
         video = 'true',
         debug = 'true';
     // All generated capabilities

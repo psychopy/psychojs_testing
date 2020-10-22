@@ -5,6 +5,8 @@ const Jimp = require('jimp');
 // Extract platformPattern and wdioServer
 let lastClaIndex = process.argv.length - 1;
 let lastCla = process.argv[lastClaIndex];
+let wdioServer;
+let buildName;
 
 // If last command-line argument isn't local or bs, assume it's a platformPattern, and second-last argument is wdioServer
 if (!(['local', 'bs'].includes(lastCla))) {
@@ -15,6 +17,8 @@ if (!(['local', 'bs'].includes(lastCla))) {
   platformPattern = "*";
   wdioServer = lastCla;
 }
+console.log('platformPattern: ' + platformPattern);
+console.log('wdioServer: ' + wdioServer);
 if (!(['local', 'bs'].includes(wdioServer))) {
   console.log('CLI argument (' + wdioServer + ') was not recognized as valid ' +
     'wdioServer. Please use "local" for local server or "bs" for BrowserStack. If last CLI argument ' +
@@ -29,9 +33,24 @@ let specs, testOverride;
 if (process.argv[lastClaIndex - 1].startsWith('e2e')) {
   testOverride = process.argv[lastClaIndex - 1];
   specs = ['./test/specs/single_test.js'];
+  lastClaIndex--;
 } else {
   testOverride = null;
   specs = ['./test/specs/all_tests.js'];
+}
+console.log('testOverride: ' + testOverride);
+
+// And finally, if wdioeServer === 'bs', the command-line argument before all of the above specifies the build name
+if (wdioServer === 'bs') {
+  buildName = process.argv[lastClaIndex - 1];
+} else {
+  buildName = null;
+}
+console.log('buildName: ' + buildName);
+// If buildName is the name of the default wdio config, assume a buildName is missing
+if (buildName === 'wdio.conf.js') {
+  console.log('The buildName CLI argunent was "' + buildName + '". Are you sure you specified a buildName?');
+  process.exit(1);  
 }
 
 exports.config = {
@@ -43,7 +62,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(platformPattern),
+  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(buildName, platformPattern),
 
   // Local test-runner
   runner: 'local',
