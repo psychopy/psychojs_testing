@@ -7,7 +7,7 @@ jobs:
   - stage: e2e_text
   include:
   - stage: cleanup
-  - script: npm run cleanup_browserstack
+    script: npm run cleanup_browserstack
   - stage: e2e_img
     script: npx wdio wdio.conf.js e2e_calibration bs Windows_8.1_IE_latest
     if: type == cron
