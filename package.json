@@ -10,7 +10,7 @@
     "cleanup_browserstack": "node test/meta/cleanup.browserstack.js",
     "compare_screenshots": "node test/meta/screenshots.compare.js",
     "summarize_reports": "node test/meta/logs.summarize.run.js",
-    "test_e2e_local_full": "npm run cleanup_browserstack local_test && npm run ftp_report local_test cleanup && npm run test_e2e local bs && npm run ftp_report local_test e2e_combined"
+    "test_e2e_local_full": "npm run cleanup_browserstack local && npm run ftp_report local cleanup && npm run test_e2e local bs && npm run ftp_report local e2e_combined"
   },
   "keywords": [],
   "author": "",
