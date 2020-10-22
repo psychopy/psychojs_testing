@@ -9,3 +9,8 @@ let test = async () => {
   }
 }
 test();
+
+console.log("TRAVIS_BRANCH");
+console.log(process.env.TRAVIS_BRANCH);
+console.log("TRAVIS_COMMIT_MESSAGE");
+console.log(process.env.TRAVIS_COMMIT_MESSAGE);
