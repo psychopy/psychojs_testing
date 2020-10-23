@@ -11,10 +11,10 @@ if (process.env.TRAVIS_BRANCH !== undefined) {
   console.log('updateBrowserStack.js: build specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
   build = process.env.TRAVIS_BRANCH;
 } else if (argv.build !== undefined) {
-  console.log('updateBrowserStack.js: build specified via CLI argument as ' + argv.build);
+  console.log('updateBrowserStack.js: build specified via CLI option as ' + argv.build);
   build = argv.build;
 } else {
-  throw "updateBrowserStack.js: No build specified via TRAVIS_BRANCH or CLI argument";
+  throw "updateBrowserStack.js: No build specified via TRAVIS_BRANCH or CLI option";
 }
 
 // Delete build in BrowserStack logs
