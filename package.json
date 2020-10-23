@@ -26,7 +26,8 @@
     "json2csv": "^5.0.1",
     "replace-color": "^2.3.0",
     "ssh2-sftp-client": "^5.3.1",
-    "wdio-json-reporter": "^2.0.0"
+    "wdio-json-reporter": "^2.0.0",
+    "yargs": "^16.1.0"
   },
   "dependencies": {}
 }
