@@ -18,4 +18,5 @@ if (process.env.TRAVIS_BRANCH !== undefined) {
 }
 
 // Delete build in BrowserStack logs
+const BrowserStack = require('../shared/BrowserStack.js');
 BrowserStack.deleteOneBuild(build);
