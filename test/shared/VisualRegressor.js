@@ -1,11 +1,10 @@
+// Performs visual regression tests of screenshots
+
 // *** Modules
 const Jimp = require('jimp');
 const replaceColor = require('replace-color')
 const fs = require('fs');
 const json2csv = require('json2csv');
-
-// If last CLI argument == validate, add counterexamples
-const validate = process.argv.pop() === 'validate';
 
 const paths = {
   reference_imgs: 'https://thomaspronk.com/temp/reference_imgs/',
@@ -116,7 +115,7 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, colorsT
   };
 };
 
-let compareScreenshotsWithReferences = async () => {
+let compareScreenshotsWithReferences = async (validate) => {
   // If true, at least one comparison failed
   failed = false;
   // Read reference filenames
@@ -202,5 +201,7 @@ let compareScreenshotsWithReferences = async () => {
     //process.exit(1);
   }
 };
-console.log("Comparing screenshots");
-compareScreenshotsWithReferences();
+
+module.exports = {
+  compareScreenshotsWithReferences: compareScreenshotsWithReferences
+};

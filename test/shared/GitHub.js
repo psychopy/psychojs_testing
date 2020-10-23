@@ -1,5 +1,8 @@
 // Helper functions for making calls to the GitHub REST API
 
+// Module for OS calls
+const child_process = require('child_process');
+
 // Default repo
 const repoName = "tpronk/e2e_robot";
 

@@ -1,5 +1,8 @@
 // Helper functions for making calls to the BrowserStack REST API
 
+// Module for OS calls
+const child_process = require('child_process');
+
 // Default project name
 const projectName = "PsychoJS";
 
