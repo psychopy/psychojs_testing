@@ -2,55 +2,47 @@
 const fs = require('fs');
 const Jimp = require('jimp');
 
-// Extract platformPattern and wdioServer
-let lastClaIndex = process.argv.length - 1;
-let lastCla = process.argv[lastClaIndex];
-let wdioServer;
-let buildName;
+// Parse CLI arguments
+const yargs = require('yargs/yargs')
+const { hideBin } = require('yargs/helpers')
+const argv = yargs(hideBin(process.argv)).argv
 
-// If last command-line argument isn't local or bs, assume it's a platformPattern, and second-last argument is wdioServer
-if (!(['local', 'bs'].includes(lastCla))) {
-  platformPattern = lastCla;
-  lastClaIndex = process.argv.length - 2;
-  wdioServer = process.argv[lastClaIndex];
-} else {
-  platformPattern = "*";
-  wdioServer = lastCla;
+// Parse wdioServer CLI option
+const wdioServer = argv.wdioServer;
+if (wdioServer === undefined) {
+  throw new Error('No wdioServer CLI argument specified');
 }
-console.log('platformPattern: ' + platformPattern);
-console.log('wdioServer: ' + wdioServer);
 if (!(['local', 'bs'].includes(wdioServer))) {
-  console.log('CLI argument (' + wdioServer + ') was not recognized as valid ' +
-    'wdioServer. Please use "local" for local server or "bs" for BrowserStack. If last CLI argument ' +
-    'is neither of the above, it is assumed to be the platformPattern and the second-last CLI argument ' +
-    'is assumed to be the wdioServer'
-  );
-  process.exit(1);
+  throw new Error('The wdioServer CLI argument (' + wdioServer + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
+console.log('wdio.conf.js: wdioServer is ' + wdioServer);
 
-// If command-line argument before platformPattern and wdioServer starts with 'e2e', assume it's a test in SharedBehaviors.js
+// Parse platformPattern CLI option
+const platformPattern = argv.platformPattern === undefined? '*': argv.platformPattern;
+console.log('wdio.conf.js: platformPattern is ' + platformPattern);
+
+// Parse testOverride CLI option
 let specs, testOverride;
-if (process.argv[lastClaIndex - 1].startsWith('e2e')) {
-  testOverride = process.argv[lastClaIndex - 1];
-  specs = ['./test/specs/single_test.js'];
-  lastClaIndex--;
-} else {
+if (argv.testOverride === undefined) {
   testOverride = null;
-  specs = ['./test/specs/all_tests.js'];
-}
-console.log('testOverride: ' + testOverride);
-
-// And finally, if wdioeServer === 'bs', the command-line argument before all of the above specifies the build name
-if (wdioServer === 'bs') {
-  buildName = process.argv[lastClaIndex - 1];
+  specs = ['./test/specs/all_tests.js'];  
+  console.log('wdio.conf.js: no testOverride, so running all tests');
 } else {
-  buildName = null;
+  testOverride = argv.testOverride;
+  specs = ['./test/specs/single_test.js'];
+  console.log('wdio.conf.js: testOverride is ' + testOverride);
 }
-console.log('buildName: ' + buildName);
-// If buildName is the name of the default wdio config, assume a buildName is missing
-if (buildName === 'wdio.conf.js') {
-  console.log('The buildName CLI argunent was "' + buildName + '". Are you sure you specified a buildName?');
-  process.exit(1);  
+
+// Get build from CLI or TRAVIS_BRANCH
+let build;
+if (process.env.TRAVIS_BRANCH !== undefined) {
+  console.log('wdio.conf.js: build specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
+  build = process.env.TRAVIS_BRANCH;
+} else if (argv.build !== undefined) {
+  console.log('wdio.conf.js: build specified via CLI option as ' + argv.build);
+  build = argv.build;
+} else {
+  throw new Error('wdio.conf.js: No build specified via TRAVIS_BRANCH or CLI option');
 }
 
 exports.config = {
@@ -62,7 +54,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(buildName, platformPattern),
+  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(build, platformPattern),
 
   // Local test-runner
   runner: 'local',
