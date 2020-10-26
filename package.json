@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test_e2e": "npx wdio wdio.conf.js",
-    "posttest_e2e": "npm run compare_screenshots && npm run summarize_reports",
-    "ftp_report": "node test/meta/logs.ftp.js",
-    "cleanup_browserstack": "node test/meta/cleanup.browserstack.js",
-    "compare_screenshots": "node test/meta/screenshots.compare.js",
-    "summarize_reports": "node test/meta/logs.summarize.run.js",
-    "test_e2e_local_full": "npm run cleanup_browserstack local && npm run ftp_report local cleanup && npm run test_e2e local bs && npm run ftp_report local e2e_combined"
+    "e2e_delete_logs": "node test/cli/deleteLogs.js",
+    "e2e_test_bs": "npx wdio wdio.conf.js --wdioServer bs",
+    "e2e_compare_screenshots": "node test/cli/compareScreenshots.js",
+    "e2e_summarize_report": "node test/cli/summarizeReport.js",
+    "e2e_upload_report": "node test/cli/updateStager.js --action upload",
+    "e2e_selected_devices_all_tests": "npm run e2e_delete_logs && npm run e2e_test_bs --platformPattern iOS_13_iPad#7th_iPhone && npm run e2e_summarize_report && npm run e2e_upload_report",
+    "e2e_all_devices_selected_test": "node test/cli/selectedTestrun.js"
   },
   "keywords": [],
   "author": "",

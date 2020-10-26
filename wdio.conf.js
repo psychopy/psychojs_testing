@@ -21,16 +21,16 @@ console.log('wdio.conf.js: wdioServer is ' + wdioServer);
 const platformPattern = argv.platformPattern === undefined? '*': argv.platformPattern;
 console.log('wdio.conf.js: platformPattern is ' + platformPattern);
 
-// Parse testOverride CLI option
-let specs, testOverride;
-if (argv.testOverride === undefined) {
-  testOverride = null;
+// Parse test CLI option
+let specs, test;
+if (argv.test === undefined) {
+  test = null;
   specs = ['./test/specs/all_tests.js'];  
-  console.log('wdio.conf.js: no testOverride, so running all tests');
+  console.log('wdio.conf.js: no test, so running all tests');
 } else {
-  testOverride = argv.testOverride;
+  test = argv.test;
   specs = ['./test/specs/single_test.js'];
-  console.log('wdio.conf.js: testOverride is ' + testOverride);
+  console.log('wdio.conf.js: test is ' + test);
 }
 
 // Get build from CLI or TRAVIS_BRANCH
@@ -164,26 +164,33 @@ exports.config = {
       'json_logs',       // json test reporter
       'processed_logs',  // Aggregated logs
       'raw_logs',        // webdriverio and web API logs
-      // Screenshots
+      // Images
       'screenshots',
       'cutouts',
       'cutouts_resized',
       'selenium_logs'    // local selenium server logs
     ];
+    console.log(subDirs);
     if (!fs.existsSync(tmpDir)) {
+      console.log('Creating directory: ' + tmpDir)
       fs.mkdirSync(tmpDir);
     };
     let files, path;
-    for (let subDir_i in subDirs) {
-      path = tmpDir + '/' + subDirs[subDir_i];
+    for (subDir of subDirs) {
+      path = tmpDir + '/' + subDir;
+      console.log('Processing directory: ' + path);      
+      console.log(subDir);
       if (!fs.existsSync(path)) {
+        console.log('Creating directory: ' + path);
         fs.mkdirSync(path);
       } else {
+        console.log('Deleting files in directory: ' + path);
         files = fs.readdirSync(path);
         for (let file_i in files) {
           fs.unlinkSync(path + '/' + files[file_i]);
         }
       }
+      console.log('done');
     }
   },
   /**
@@ -264,9 +271,9 @@ exports.config = {
       return browser.capabilities.customLogs;
     });
 
-    // Get testOverride
-    browser.addCommand('getTestOverride', () => {
-      return testOverride;
+    // Get test
+    browser.addCommand('getTest', () => {
+      return test;
     });
 
     // Print current sessionId | platform and init custom log

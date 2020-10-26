@@ -1,52 +1,56 @@
-// Upload or delete path on Stager via CLI arguments
-
-// *** Get branchPath (if any specified)
-let branchPath;
-if (process.env.TRAVIS_BRANCH !== undefined) {
-  console.log('updateStager.js: branchPath specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-  branchPath = process.env.TRAVIS_BRANCH;
-} else {
-  console.log('updateStager.js: no branchPath specified via TRAVIS_BRANCH');
-  branchPath = '';
-}
+// Upload or delete test on Stager via CLI arguments
 
 // *** Parse CLI arguments
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
-const action = argv.action;
-// action
-if (action === undefined) {
+
+// CLI option: argv.action
+if (argv.action === undefined) {
   throw 'updateStager.js: No action CLI option specified';
 }
-// Depending on branchPath and path CLI option, construct path
-let path;
-if (argv.path === undefined && branchPath === '') {
-  throw 'updateStager.js: No branchPath nor path CLI option specified';
-} else if(branchPath === '') {
-  // Only from CLI option
-  path = argv.path;
-} else if (argv.path === undefined) {
-  // Only from branchPath
-  path = branchPath;
+
+// Get branch (if any specified)
+let branch;
+if (process.env.TRAVIS_BRANCH !== undefined) {
+  console.log('updateStager.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
+  branch = process.env.TRAVIS_BRANCH;
+} else if (argv.branch !== undefined) {
+  console.log('updateBrowserStack.js: branch specified via CLI option as ' + argv.branch);
+  branch = argv.branch;
 } else {
-  // Both branchPath and CLI option
-  path = branchPath + '/' + argv.path;
+  console.log('updateStager.js: no branch specified via TRAVIS_BRANCH no CLI option');
+  branch = '';
 }
 
-// *** Perform action
+// Depending on branch and test CLI option, construct test
+let path;
+if (argv.test === undefined && branch === '') {
+  throw 'updateStager.js: No branch nor test CLI option specified';
+} else if(branch === '') {
+  // Only from test
+  path = argv.test;
+} else if (argv.test === undefined) {
+  // Only from branch
+  path = branch;
+} else {
+  // Both branch and test
+  path = branch + '/' + argv.test;
+}
+
+// *** Perform argv.action
 const Stager = require('../shared/Stager.js');
-switch (action) {
-  // Delete remote path 
+switch (argv.action) {
+  // Delete remote test 
   case 'delete':
-    console.log('updateStager.js: action delete, path ' + path);
+    console.log('updateStager.js: argv.action delete, path ' + path);
     Stager.deleteDirectory(path);
     break;
-  // Upload to remote path 
+  // Upload to remote test 
   case 'upload':
-    console.log('updateStager.js: action upload, path ' + path);
+    console.log('updateStager.js: argv.action upload, path ' + path);
     Stager.uploadDirectory('./.tmp', path);
     break;
   default:
-    throw 'updateStager.js action CLI option not recognized: ' + action;
+    throw 'updateStager.js argv.action CLI option not recognized: ' + argv.action;
 }

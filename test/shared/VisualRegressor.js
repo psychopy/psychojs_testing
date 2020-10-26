@@ -12,8 +12,7 @@ const paths = {
   screenshots: '.tmp/screenshots/',
   cutouts: './.tmp/cutouts/',
   cutouts_resized: './.tmp/cutouts_resized/',
-  processed_logs: './.tmp/processed_logs/',
-
+  processed_logs: './.tmp/processed_logs/'
 };
 const colorsToRed = [
   Buffer.from([255,0,0]),
@@ -118,21 +117,26 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, colorsT
 let compareScreenshotsWithReferences = async (validate) => {
   // If true, at least one comparison failed
   failed = false;
-  // Read reference filenames
-  let referenceFilenames = ['img1.png', 'img2.png'];
-  // Extract prefixes
-  let prefixes = referenceFilenames.map(function(referenceFilename) {
-    return referenceFilename.split('.')[0]
-  });
   // Read screenshot filenames
   let allScreenshotFilenames = fs.readdirSync(paths.screenshots);
+  // Extract prefixes
+  let prefixes = allScreenshotFilenames.map(function(referenceFilename) {
+    return referenceFilename.split(' ')[0]
+  });  
+  // Only unique prefixes
+  prefixes = prefixes.filter((value, index, self) => {
+    return self.indexOf(value) === index;
+  });
   // Local vars
   let referenceImg, screenshotFilenames, screenshotImg, platform;
   let results = [], result;  
   // For each prefix, compare with screenshot  
   for (let prefix of prefixes) {
+    referenceImg = null;
     // Read reference img
-    referenceImg = await Jimp.read(paths.reference_imgs + prefix + '.png');
+    try {
+      referenceImg = await Jimp.read(paths.reference_imgs + prefix + '.png');
+      console.log('Found reference image for prefix ' + prefix);
     // Filter out screenshot filenames with matching prefix
     screenshotFilenames = allScreenshotFilenames.filter(function (screenshotFilename) {
       return screenshotFilename.startsWith(prefix);
@@ -182,6 +186,9 @@ let compareScreenshotsWithReferences = async (validate) => {
         // Add to results
         results.push(result);
       }      
+    }      
+    } catch(e) {
+      console.log('No reference image for prefix ' + prefix);
     }
   }  
   // Store output as JSON

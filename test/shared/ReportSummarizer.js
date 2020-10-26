@@ -1,6 +1,6 @@
 // Reads in each json reporter log and custom log and converts them to a tsv file
 module.exports = { 
-  summarizeLogs: () => {
+  summarize: () => {
     // *** Modules
     const fs = require('fs');
     const json2csv = require('json2csv');
