@@ -3,25 +3,25 @@ node_js:
 - '12'
 jobs:
   allow_failures:
-  - if: type == cron
+  - if: type != cron
   include:
   # Jobs triggered by cron
   - stage: synchronize with GitHub
     script: node test/cli/syncWithGitHub.js
-    if: type == cron
+    if: type != cron
   - stage: delete logs and reports
     script: npm run delete_logs
-    if: type == cron
+    if: type != cron
   - stage: e2e_img
     script: npm run e2e_add_devices_selected_test -- --test e2e_img
-    if: type == cron
+    if: type != cron
   - stage: e2e_polygon
     script: npm run e2e_add_devices_selected_test -- --test e2e_img
-    if: type == cron
+    if: type != cron
   # Jobs triggered by commit
   - stage: e2e_selected_devices_all_tests
     script: npm run e2e_selected_devices_all_tests
-    if: type != cron
+    if: type == cron
 env:
   global:
   - secure: RSfec6USloEHsXyq24Pl6lbaaNFLStkpihMfXCujQDn+1hjJA90dkzemu/MsShap7JE21Xe3YcKUFmA3a4om81DdLf1DlnCcZUeGXjjsPqIJHw0IjyGSVCIJPIXFk/zA8kPlXBWDabfiLWDMkoq5+gNLbVX691AjtoZLa9pGtyv1peMlkU6UU/y5xPpy/e2s6Fufioe10U2qjqWvt3Pljybl/YSepBFqWal9J/kxUbPOKbOEBFs3FGacY7WMGrCj7p03N1vxHcRdknoyhXuCi6EsQEJN1dDcUFv4ti9dOYa5jQXVHRLf5Qgt7+eQkEcIfywCH27l3bmdNZFSaCLzDMCueUiL86d1RFA6CKLBg69aGJ1eF2umKsIx+wFSjM0CMTLcAnmkdNomk/Yb0x8OiIu8VR8qFyUZggP26S6G70gdpby7utB/Av3qyKboQAt2P9V+WjmDfdUpJb++fgGmULggvXGRUP6oKfwzis0wWXm08pZBFcfL6wGInfZqzsbO3TH7YeB7DmccuBR8hU0wgtPwdvqGEHn/7v3UPQxGTr6Lv33vlkgFkZAkgts2gjBAq9h0ZX/FdpcXQ8yCQ7kpBO1mz4ukfNPG4RUF2xBHlth5i2R5nsBlFG8mOtjQpkJj51HwBSYc/kK/8YF6YdmL1o8vZTYxnlvYlsPc67wchdY=
