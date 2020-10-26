@@ -10,13 +10,13 @@ jobs:
     script: node test/cli/syncWithGitHub.js
     if: type != cron
   - stage: delete logs and reports
-    script: npm run delete_logs
+    script: npm run e2e_delete_logs
     if: type != cron
   - stage: e2e_img
-    script: npm run e2e_add_devices_selected_test -- --test e2e_img
+    script: npm run e2e_all_devices_selected_test -- --test e2e_img
     if: type != cron
   - stage: e2e_polygon
-    script: npm run e2e_add_devices_selected_test -- --test e2e_img
+    script: npm run e2e_all_devices_selected_test -- --test e2e_img
     if: type != cron
   # Jobs triggered by commit
   - stage: e2e_selected_devices_all_tests
