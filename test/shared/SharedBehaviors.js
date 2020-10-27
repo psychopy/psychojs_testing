@@ -315,13 +315,15 @@ e2e_img = (calibration = null) => {
   waitForReport('intro_trial');
   tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
   // Make screenshots of test1 to test6
+  let rms;
   for (let test_i = 1; test_i <= 4; test_i++) {
     testName = 'img' + test_i;      
     // Wait for confirmation we're at the next test routine
     waitForReport(testName);
     // Wait a moment, then take screenshot
     //browser.pause(200);    
-    browser.writeScreenshot(testName);
+    rms = browser.compareScreenshot(testName);
+    expect(rms).toBeLessThanOrEqual(200, {message: testName + ' rms too high'});
     // Next routine
     tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
   }

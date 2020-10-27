@@ -41,7 +41,7 @@ let sdOfDifferences = (expected, observed, dropAlpha = true) => {
 };
         
 // Compare two images
-let compareScreenshotWithReference = async (screenshotImg, referenceImg, colorsToRed, screenshotFilename) => {
+let compareScreenshotWithReference = async (screenshotImg, referenceImg, screenshotFilename) => {
   // Preliminary cutout borders
   let top = screenshotImg.bitmap.height;
   let bottom = 0;
@@ -114,6 +114,17 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, colorsT
   };
 };
 
+let getReferenceImg = async (prefix) => {
+  try {
+    referenceImg = await Jimp.read(paths.reference_imgs + prefix + '.png');
+    console.log('Found reference image for prefix ' + prefix);
+    return referenceImg;
+  } catch(e) {
+    console.log('No reference image for prefix ' + prefix);
+    return null;
+  };
+}
+
 let compareScreenshotsWithReferences = async (validate) => {
   // If true, at least one comparison failed
   failed = false;
@@ -137,56 +148,52 @@ let compareScreenshotsWithReferences = async (validate) => {
     try {
       referenceImg = await Jimp.read(paths.reference_imgs + prefix + '.png');
       console.log('Found reference image for prefix ' + prefix);
-    // Filter out screenshot filenames with matching prefix
-    screenshotFilenames = allScreenshotFilenames.filter(function (screenshotFilename) {
-      return screenshotFilename.startsWith(prefix);
-    });    
-    // For each screenshot filename, read image, and compare
-    for (let screenshotFilename of screenshotFilenames) {
-      console.log(screenshotFilename);
-      screenshotImg = await Jimp.read(paths.screenshots + screenshotFilename);
-      // Make comparison
-      result = await compareScreenshotWithReference(
-        screenshotImg,
-        referenceImg,
-        colorsToRed,
-        screenshotFilename,
-      );
-      // Extract platform from screenshotFilename, add to result
-      platform = screenshotFilename.split(" ")[1];
-      platform = platform.substring(0, platform .length - 4);
-      result.platform = platform;
-      // Add prefix to result
-      result.prefix = prefix;
-      // Add to results
-      results.push(result);
-      // Check if failed
-      failed = failed || !result.cutoutSuccess || result.rms > 20;
-    }  
-    // If validate, also compare counter examples
-    if (validate) {
-      // Read counterexample filenames
-      let counterexampleFilenames = fs.readdirSync(paths.counterexample_imgs);
-      // For each counter example filename, read image, and compare
-      for (let screenshotFilename of counterexampleFilenames) {
-        console.log(screenshotFilename);
-        screenshotImg = await Jimp.read(paths.counterexample_imgs + screenshotFilename);
+      // Filter out screenshot filenames with matching prefix
+      screenshotFilenames = allScreenshotFilenames.filter(function (screenshotFilename) {
+        return screenshotFilename.startsWith(prefix);
+      });    
+      // For each screenshot filename, read image, and compare
+      for (let screenshotFilename of screenshotFilenames) {
+        screenshotImg = await Jimp.read(paths.screenshots + screenshotFilename);
         // Make comparison
         result = await compareScreenshotWithReference(
           screenshotImg,
           referenceImg,
-          colorsToRed,
-          screenshotFilename,
+          screenshotFilename
         );
         // Extract platform from screenshotFilename, add to result
-        platform = screenshotFilename.substring(0, screenshotFilename.length - 4);
+        platform = screenshotFilename.split(" ")[1];
+        platform = platform.substring(0, platform .length - 4);
         result.platform = platform;
         // Add prefix to result
         result.prefix = prefix;
         // Add to results
         results.push(result);
+        // Check if failed
+        failed = failed || !result.cutoutSuccess || result.rms > 20;
+      }  
+      // If validate, also compare counter examples
+      if (validate) {
+        // Read counterexample filenames
+        let counterexampleFilenames = fs.readdirSync(paths.counterexample_imgs);
+        // For each counter example filename, read image, and compare
+        for (let screenshotFilename of counterexampleFilenames) {
+          screenshotImg = await Jimp.read(paths.counterexample_imgs + screenshotFilename);
+          // Make comparison
+          result = await compareScreenshotWithReference(
+            screenshotImg,
+            referenceImg,
+            screenshotFilename
+          );
+          // Extract platform from screenshotFilename, add to result
+          platform = screenshotFilename.substring(0, screenshotFilename.length - 4);
+          result.platform = platform;
+          // Add prefix to result
+          result.prefix = prefix;
+          // Add to results
+          results.push(result);
+        }      
       }      
-    }      
     } catch(e) {
       console.log('No reference image for prefix ' + prefix);
     }
@@ -210,5 +217,7 @@ let compareScreenshotsWithReferences = async (validate) => {
 };
 
 module.exports = {
-  compareScreenshotsWithReferences: compareScreenshotsWithReferences
+  compareScreenshotsWithReferences: compareScreenshotsWithReferences,
+  compareScreenshotWithReference: compareScreenshotWithReference,
+  getReferenceImg: getReferenceImg
 };

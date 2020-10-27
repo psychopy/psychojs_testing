@@ -1,6 +1,9 @@
 // Modules
 const fs = require('fs');
 const Jimp = require('jimp');
+const VisualRegressor = require('./test/shared/VisualRegressor.js');
+const ReportSummarizer = require('./test/shared/ReportSummarizer.js');
+const Stager = require('./test/shared/Stager.js');
 
 // Parse CLI arguments
 const yargs = require('yargs/yargs')
@@ -24,9 +27,9 @@ console.log('wdio.conf.js: platformPattern is ' + platformPattern);
 // Parse test CLI option
 let specs, test;
 if (argv.test === undefined) {
-  test = null;
+  test = 'all_tests';
   specs = ['./test/specs/all_tests.js'];  
-  console.log('wdio.conf.js: no test, so running all tests');
+  console.log('wdio.conf.js: no test speficied, so running all tests');
 } else {
   test = argv.test;
   specs = ['./test/specs/single_test.js'];
@@ -170,7 +173,6 @@ exports.config = {
       'cutouts_resized',
       'selenium_logs'    // local selenium server logs
     ];
-    console.log(subDirs);
     if (!fs.existsSync(tmpDir)) {
       console.log('Creating directory: ' + tmpDir)
       fs.mkdirSync(tmpDir);
@@ -178,8 +180,6 @@ exports.config = {
     let files, path;
     for (subDir of subDirs) {
       path = tmpDir + '/' + subDir;
-      console.log('Processing directory: ' + path);      
-      console.log(subDir);
       if (!fs.existsSync(path)) {
         console.log('Creating directory: ' + path);
         fs.mkdirSync(path);
@@ -190,7 +190,6 @@ exports.config = {
           fs.unlinkSync(path + '/' + files[file_i]);
         }
       }
-      console.log('done');
     }
   },
   /**
@@ -259,6 +258,38 @@ exports.config = {
     browser.addCommand('writeScreenshot', (name) => {
       browser.writeJimpImg(browser.getJimpScreenshot(), name);
     });
+    // Perform a visual regression test
+    browser.addCommand('compareScreenshot', async (name) => {
+      // Make screenshot
+      let screenshotImg = await browser.getJimpScreenshot();
+      // Write screenshot to file
+      browser.writeJimpImg(screenshotImg, name);
+      // Get reference
+      let referenceImg = await VisualRegressor.getReferenceImg(name);
+      // If reference available, perform comparison
+      if (referenceImg === null) {
+        // No reference; test passed
+        return true;
+      } else {
+        // Yes reference, compare
+        let platformName = await browser.getPlatformName();
+        let comparisonResult = await VisualRegressor.compareScreenshotWithReference(
+          screenshotImg,
+          referenceImg,
+          name + ' ' + platformName + '.png'
+        );
+        // Add results to log
+        for (let comparisonResultKey in comparisonResult) {
+          browser.logAdd(
+            name + '.' + comparisonResultKey,
+            comparisonResult[comparisonResultKey]
+          );
+        }
+        // Return RMS value
+        return comparisonResult.rms;
+      }
+    });
+
 
     // Managing custom log-file
     browser.addCommand('logInit', () => {
@@ -276,10 +307,29 @@ exports.config = {
       return test;
     });
 
-    // Print current sessionId | platform and init custom log
-    console.log(browser.sessionId + ' | ' + browser.getPlatformName());
+    // Print current sessionId and platformName
+    console.log('sessionId: ' + browser.sessionId);
+    console.log('platformName: ' + browser.getPlatformName())
+    // Init custom log
     browser.logInit();
     browser.logAdd('platform', browser.getPlatformName())
     browser.logAdd('resolution', browser.getResolution());
+  },
+  /**
+   * Gets executed after all workers got shut down and the process is about to exit. An error
+   * thrown in the onComplete hook will result in the test run failing.
+   * @param {Object} exitCode 0 - success, 1 - fail
+   * @param {Object} config wdio configuration object
+   * @param {Array.<Object>} capabilities list of capabilities details
+   * @param {<Object>} results object containing test results
+   */
+  onComplete: async function (exitCode, config, capabilities, results) {
+    console.log("***AFTER***");
+    // Summarize reports
+    ReportSummarizer.summarize();
+    // Delete old logs
+    await Stager.deleteDirectory(build + '/' + test);
+    // Upload logs
+    await Stager.uploadDirectory('./.tmp', build + '/' + test);
   }
 }

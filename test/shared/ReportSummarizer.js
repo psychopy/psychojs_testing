@@ -21,7 +21,6 @@ module.exports = {
       );
     };
 
-
     // *** Process JSON reporter files
     // Path to JSON reporter logs
     let pathIn = '.tmp/json_logs';
@@ -37,13 +36,18 @@ module.exports = {
     let specfile_id;
     let capability_id;
 
-
     // Convert each JSON reporter log file
+    console.log('ReportSummarizer.js: found ' + filenames.length + ' JSON logs');
     for (let filename of filenames) {
       // Read and parse file to JSON
-      json = JSON.parse(
-        fs.readFileSync(pathIn + '/' + filename).toString()
-      );
+      try {
+        json = JSON.parse(
+          fs.readFileSync(pathIn + '/' + filename).toString()
+        );
+      } catch (e) {
+        console.log(e);
+      }
+      console.log('ReportSummarizer.js: read ' + filename);
       // Set specfile_id and capability_id from filename
       filename = filename.split('.')[0]
       filename = filename.split('-');
@@ -77,6 +81,8 @@ module.exports = {
       pathOut + '/' + 'results.csv',
       json2csv.parse(output)
     );
+
+    console.log('ReportSummarizer.js: summarizing');
 
     // *** Summarize output
     // Summarized output

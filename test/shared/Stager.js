@@ -8,27 +8,31 @@ let basePath = '/var/www/staging/report';
 // Makes a connection, performs request specified via requestFunction, then closes connection
 ftpRequest = (requestFunction) => {
   return new Promise(resolve => {
-    console.log('Stager.js: establishing FTP connection');
-    let client = new Client();
-    let result;
-    client.connect({
-      host: 'staging.psychopy.org',
-      port: process.env.STAGING_PORT,
-      username: process.env.STAGING_USERNAME,
-      password: process.env.STAGING_PASSWORD
-    }).then((data) => {
-      console.log('Stager.js: performing request');
-      return requestFunction(client);
-    }).then((data) => {
-      console.log('Stager.js: result is ' + JSON.stringify(data));
-      result = data;
-      return client.end();
-    }).then((data) => {
-      resolve(result);
-    }).catch((err) => {
-      console.log('Stager.js: error ' + err);
-      return client.end();
-    });
+    try {
+      console.log('Stager.js: establishing FTP connection');
+      let client = new Client();
+      let result;
+      client.connect({
+        host: 'staging.psychopy.org',
+        port: process.env.STAGING_PORT,
+        username: process.env.STAGING_USERNAME,
+        password: process.env.STAGING_PASSWORD
+      }).then((data) => {
+        console.log('Stager.js: performing request');
+        return requestFunction(client);
+      }).then((data) => {
+        console.log('Stager.js: result is ' + JSON.stringify(data));
+        result = data;
+        return client.end();
+      }).then((data) => {
+        resolve(result);
+      }).catch((err) => {
+        console.log('Stager.js: error during FTP connection: ' + err);
+        return client.end();
+      });
+    } catch (err) {
+      console.log('Stager.js: error during ftpRequest: ' + err);
+    }
   });
 }
 
