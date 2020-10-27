@@ -28,10 +28,12 @@ ftpRequest = (requestFunction) => {
         resolve(result);
       }).catch((err) => {
         console.log('Stager.js: error during FTP connection: ' + err);
+        resolve(result);
         return client.end();
       });
     } catch (err) {
       console.log('Stager.js: error during ftpRequest: ' + err);
+      resolve(result);
     }
   });
 }
