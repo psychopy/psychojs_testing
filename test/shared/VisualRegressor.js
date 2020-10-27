@@ -132,7 +132,7 @@ let compareScreenshotsWithReferences = async (validate) => {
   let allScreenshotFilenames = fs.readdirSync(paths.screenshots);
   // Extract prefixes
   let prefixes = allScreenshotFilenames.map(function(referenceFilename) {
-    return referenceFilename.split(' ')[0]
+    return referenceFilename.split('#')[0]
   });  
   // Only unique prefixes
   prefixes = prefixes.filter((value, index, self) => {
@@ -162,8 +162,8 @@ let compareScreenshotsWithReferences = async (validate) => {
           screenshotFilename
         );
         // Extract platform from screenshotFilename, add to result
-        platform = screenshotFilename.split(" ")[1];
-        platform = platform.substring(0, platform .length - 4);
+        platform = screenshotFilename.split("#")[1];
+        platform = platform.substring(0, platform.length - 4);
         result.platform = platform;
         // Add prefix to result
         result.prefix = prefix;

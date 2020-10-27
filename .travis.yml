@@ -20,7 +20,7 @@ jobs:
     if: type != cron
   # Jobs triggered by commit
   - stage: e2e_selected_devices_all_tests
-    script: npm run e2e_selected_devices_all_tests
+    script: npm run e2e_delete_logs && npm run e2e_selected_devices_all_tests
     if: type == cron
 env:
   global:

@@ -1,5 +1,5 @@
 module.exports = { 
-  capabilities: (build, platformPattern) => {
+  capabilities: (build, platformPattern, test) => {
     // For pattern matching of strings with * and . wildcards
     // From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
     function wildTest(wildcard, str) {
@@ -107,9 +107,9 @@ module.exports = {
           specificSetting.osVersion + '_' +
           browser + '_' +
           generalSettings.browserVersion;
-        platform = platform.replace(/ /gi, "#");          
+        //platform = platform.replace(/ /gi, "#");          
         capability = JSON.parse(JSON.stringify(generalSettings));
-        capability['bstack:options'].sessionName = platform;
+        capability['bstack:options'].sessionName = test + ':' + platform;
         capability['bstack:options'].os = specificSetting.os;
         capability['bstack:options'].osVersion = specificSetting.osVersion;
         capability.browserName = browser;
@@ -259,9 +259,9 @@ module.exports = {
           device[0] + '_' +
           device[1] + '_' +
           specificSetting.browserName;
-        platform = platform.replace(/ /gi, "#");
+        //platform = platform.replace(/ /gi, "#");
         capability = JSON.parse(JSON.stringify(generalSettings));
-        capability['bstack:options'].sessionName = platform;
+        capability['bstack:options'].sessionName = test + ':' + platform;
         capability['bstack:options'].os = specificSetting.os;
         capability['bstack:options'].osVersion = device[0];
         capability['bstack:options'].deviceName = device[1];

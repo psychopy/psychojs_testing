@@ -57,7 +57,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(build, platformPattern),
+  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(build, platformPattern, test),
 
   // Local test-runner
   runner: 'local',
@@ -249,7 +249,7 @@ exports.config = {
     });    
     // Making screenshots and saving them
     browser.addCommand('writeJimpImg', (img, name) => {
-      img.write('.tmp/screenshots/' + name + ' ' + browser.getPlatformName() + '.png');
+      img.write('.tmp/screenshots/' + name + '#' + browser.getPlatformName() + '.png');
     });
     browser.addCommand('getJimpScreenshot', async () => {
       let screenshotBase64 = await browser.takeScreenshot();
@@ -276,7 +276,7 @@ exports.config = {
         let comparisonResult = await VisualRegressor.compareScreenshotWithReference(
           screenshotImg,
           referenceImg,
-          name + ' ' + platformName + '.png'
+          name + '#' + platformName + '.png'
         );
         // Add results to log
         for (let comparisonResultKey in comparisonResult) {
