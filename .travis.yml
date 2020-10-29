@@ -1,42 +1,54 @@
 language: node_js
 node_js:
 - '12'
+stages:
+- synchronize
+- cleanup
+- e2e_code
+- e2e_conditions
+- e2e_img
+- e2e_polygon
+- e2e_sound
+- e2e_text
+- e2e_textbox
+- e2e_video
+- join
 jobs:
   allow_failures:
   - if: type == cron
   include:
   # Jobs triggered by cron
-  - stage: synchronize with GitHub
+  - stage: synchronize
     script: node test/cli/syncWithGitHub.js
     if: type == cron
-  - stage: cleanup logs and reports
+  - stage: cleanup
     script: npm run e2e_delete_logs
     if: type == cron    
-  - stage: delete logs and reports
+  - stage: e2e_code
     script: npm run e2e_code
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_conditions
     script: npm run e2e_conditions
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_img
     script: npm run e2e_img
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_polygon
     script: npm run e2e_polygon
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_sound
     script: npm run e2e_sound
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_text
     script: npm run e2e_text
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_textbox
     script: npm run e2e_textbox
     if: type == cron
-  - stage: delete logs and reports
+  - stage: e2e_video
     script: npm run e2e_video
     if: type == cron
-  - stage: join reports
+  - stage: join
     script: node test\cli\joinReports.js
     if: type == cron
   # Jobs triggered by commit. Commented out for now
