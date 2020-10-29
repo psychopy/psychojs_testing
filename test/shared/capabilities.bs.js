@@ -38,7 +38,7 @@ module.exports = {
         'osVersion': '10',
         'browserNames': [
           ['Chrome', true],
-          ['Edge', true], 
+          ['Edge', false], 
           ['Firefox', true],
           ['IE']
         ]
@@ -158,7 +158,7 @@ module.exports = {
         'os': 'Android',
         'browserName': 'Android',
         'devices': [
-          ['11.0', 'Google Pixel 4'],
+          ['11.0', 'Google Pixel 4', true],
           
           ['10.0', 'Samsung Galaxy S20'],
           ['10.0', 'Samsung Galaxy S20 Plus'],
@@ -261,7 +261,7 @@ module.exports = {
 //          ['11', 'iPad Pro 9.7 2016'],
 //          ['11', 'iPad Pro 12.9 2017'],
 //          ['11', 'iPad Mini 4'],
-          ['11', 'iPad 6th', true],
+          ['11', 'iPad 6th'],
 //          ['11', 'iPad 5th'],
 //
 //          ['10', 'iPhone 7'],
