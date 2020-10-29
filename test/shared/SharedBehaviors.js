@@ -323,7 +323,7 @@ e2e_img = (calibration = null) => {
     // Wait a moment, then take screenshot
     //browser.pause(200);    
     rms = browser.compareScreenshot(testName);
-    expect(rms).toBeLessThanOrEqual(200, {message: testName + ' rms too high'});
+    expect(rms).toBeLessThanOrEqual(50, {message: testName + ' rms > 50'});
     // Next routine
     tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
   }
