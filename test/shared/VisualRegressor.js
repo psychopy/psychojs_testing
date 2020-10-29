@@ -7,7 +7,7 @@ const fs = require('fs');
 const json2csv = require('json2csv');
 
 const paths = {
-  reference_imgs: 'https://thomaspronk.com/temp/reference_imgs/',
+  reference_imgs: 'https://staging.psychopy.org/reference_imgs/',
   counterexample_imgs: './test/counterexample_imgs/',
   screenshots: '.tmp/screenshots/',
   cutouts: './.tmp/cutouts/',
