@@ -1,5 +1,5 @@
 module.exports = { 
-  capabilities: (build, platformPattern, test) => {
+  capabilities: (build, platformPattern, test, subset) => {
     // For pattern matching of strings with * and . wildcards
     // From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
     function wildTest(wildcard, str) {
@@ -36,7 +36,12 @@ module.exports = {
       {
         'os': 'Windows',
         'osVersion': '10',
-        'browserNames': ['Chrome', 'Edge', 'Firefox', 'IE']
+        'browserNames': [
+          ['Chrome', true],
+          ['Edge', true], 
+          ['Firefox', true],
+          ['IE']
+        ]
       },
       {
         'os': 'Windows',
@@ -61,7 +66,12 @@ module.exports = {
       {
         'os': 'OS X',
         'osVersion': 'High Sierra',
-        'browserNames': ['Chrome', 'Edge', 'Firefox', 'Safari']
+        'browserNames': [
+          ['Chrome', true],
+          ['Edge', true], 
+          ['Firefox', true],
+          ['Safari', true]
+        ]
       }
       
       
@@ -99,22 +109,30 @@ module.exports = {
     ];
     
     // Construct desktop capabilities
+    let browserName, belongsToSubset;
     for (let specificSetting of specificSettings) {
       //specificSetting = specificSettings[specificSetting_i];
       for (let browser of specificSetting.browserNames) {
+        if (typeof browser === "string") {
+          browserName = browser;
+          belongsToSubset = false;
+        } else {
+          browserName = browser[0];
+          belongsToSubset = browser[1];
+        }        
         platform =           
           specificSetting.os + '_' +
           specificSetting.osVersion + '_' +
-          browser + '_' +
+          browserName + '_' +
           generalSettings.browserVersion;
         //platform = platform.replace(/ /gi, "#");          
         capability = JSON.parse(JSON.stringify(generalSettings));
         capability['bstack:options'].sessionName = test + ':' + platform;
         capability['bstack:options'].os = specificSetting.os;
         capability['bstack:options'].osVersion = specificSetting.osVersion;
-        capability.browserName = browser;
+        capability.browserName = browserName;
         capability['e2e_robot:platform'] = platform;
-        if (wildTest(platformPattern, platform)) {
+        if (wildTest(platformPattern, platform) && (!subset || belongsToSubset)) {
           output.push(capability);
         }
       }
@@ -147,11 +165,11 @@ module.exports = {
           ['10.0', 'Samsung Galaxy S20 Ultra'],
           ['10.0', 'Google Pixel 4 XL'],
           ['10.0', 'Google Pixel 4'],
-          ['10.0', 'Google Pixel 3'],
+          ['10.0', 'Google Pixel 3', true],
           ['10.0', 'OnePlus 8'],
           ['10.0', 'OnePlus 7T'],
           
-          ['9.0', 'Samsung Galaxy S9 Plus'],
+          ['9.0', 'Samsung Galaxy S9 Plus', true],
           ['9.0', 'Samsung Galaxy S8 Plus'],
           ['9.0', 'Samsung Galaxy S10e'],
           ['9.0', 'Samsung Galaxy S10 Plus'],
@@ -187,7 +205,7 @@ module.exports = {
           ['7.1', 'Google Pixel'],
           
           ['7.0', 'Samsung Galaxy S8 Plus'],
-          ['7.0', 'Samsung Galaxy S8'],
+          ['7.0', 'Samsung Galaxy S8', true],
           ['7.0', 'Samsung Galaxy Tab S3'],
           
           ['6.0', 'Samsung Galaxy S7'],
@@ -215,7 +233,7 @@ module.exports = {
           ['13', 'iPhone 11 Pro'],
           ['13', 'iPhone 11'],
           ['13', 'iPhone SE 2020'],
-          ['13', 'iPhone 8'],          
+          ['13', 'iPhone 8', true],          
           ['13', 'iPad Pro 12.9 2020'],
           ['13', 'iPad Pro 12.9 2018'],
           ['13', 'iPad Pro 11 2020'],
@@ -223,7 +241,7 @@ module.exports = {
 
           // ['12', 'iPhone XS'],
           // ['12', 'iPhone XS Max'],
-          // ['12', 'iPhone XR'],
+          ['12', 'iPhone XR', true],
           // ['12', 'iPhone 8'],
           // ['12', 'iPhone 8 Plus'],
           // ['12', 'iPhone 7'],          
@@ -243,7 +261,7 @@ module.exports = {
 //          ['11', 'iPad Pro 9.7 2016'],
 //          ['11', 'iPad Pro 12.9 2017'],
 //          ['11', 'iPad Mini 4'],
-//          ['11', 'iPad 6th'],
+          ['11', 'iPad 6th', true],
 //          ['11', 'iPad 5th'],
 //
 //          ['10', 'iPhone 7'],
@@ -253,6 +271,7 @@ module.exports = {
     ];
     for (let specificSetting of specificSettings) {
       for (let device of specificSetting.devices) {
+        belongsToSubset = device.length > 2 && device[2];
         //console.log(device);
         platform = 
           specificSetting.os + '_' +
@@ -269,7 +288,8 @@ module.exports = {
         capability.browserName = specificSetting.browserName;
         //capability.platformName = specificSetting.os;
         capability['e2e_robot:platform'] = platform;
-        if (wildTest(platformPattern, platform)) {
+        
+        if (wildTest(platformPattern, platform) && (!subset || belongsToSubset)) {
           output.push(capability);
         }        
       }
