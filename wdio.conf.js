@@ -50,6 +50,9 @@ if (process.env.TRAVIS_BRANCH !== undefined) {
   throw new Error('wdio.conf.js: No build specified via TRAVIS_BRANCH or CLI option');
 }
 
+// Get subset from CLI
+let subset = argv.subset !== undefined;
+
 exports.config = {
   // Connect to browserstack is wdioServer is 'bs'
   user: wdioServer === 'bs' ? process.env.BROWSERSTACK_USER : undefined,
@@ -59,7 +62,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(build, platformPattern, test),
+  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(build, platformPattern, test, subset),
 
   // Local test-runner
   runner: 'local',
