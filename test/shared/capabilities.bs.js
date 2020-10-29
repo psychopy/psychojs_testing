@@ -70,7 +70,7 @@ module.exports = {
           ['Chrome', true],
           ['Edge', true], 
           ['Firefox', true],
-          ['Safari', true]
+          ['Safari', false]
         ]
       }
       
