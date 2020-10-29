@@ -30,7 +30,7 @@ if (argv.test === undefined) {
   test = 'all_tests';
   specFile = 'all_tests'
   specs = ['./test/specs/' + specFile + '.js'];  
-  console.log('wdio.conf.js: no test speficied, so running all tests');
+  console.log('wdio.conf.js: no test specified, so running all tests');
 } else {
   test = argv.test;
   specFile = 'single_test';
