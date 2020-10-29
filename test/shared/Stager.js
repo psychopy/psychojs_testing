@@ -6,7 +6,8 @@ let Client = require('ssh2-sftp-client');
 let basePath = '/var/www/staging/report';
 
 // Makes a connection, performs request specified via requestFunction, then closes connection
-ftpRequest = (requestFunction) => {
+// If hideResult === true, don't print result returned by request
+ftpRequest = (requestFunction, showResult = true) => {
   return new Promise(resolve => {
     try {
       console.log('Stager.js: establishing FTP connection');
@@ -19,9 +20,13 @@ ftpRequest = (requestFunction) => {
         password: process.env.STAGING_PASSWORD
       }).then((data) => {
         console.log('Stager.js: performing request');
-        return requestFunction(client);
+        return requestFunction(client, basePath);
       }).then((data) => {
-        console.log('Stager.js: result is ' + JSON.stringify(data));
+        if (!showResult) {
+          console.log('Stager.js: request resolved');
+        } else {
+          console.log('Stager.js: request resolved with data ' + JSON.stringify(data));
+        }
         result = data;
         return client.end();
       }).then((data) => {
@@ -36,23 +41,23 @@ ftpRequest = (requestFunction) => {
       resolve(result);
     }
   });
-}
+};
 
 // Upload directory
 uploadDirectory = async (from, to) => {
-  await ftpRequest((client) => {
+  await ftpRequest((client, basePath) => {
     console.log('Stager.js: uploading directory from ' + from + ' to ' + basePath + '/' + to);
     return client.uploadDir(from, basePath + '/' + to);
   });
-}
+};
 
 // Delete directory recursively
 deleteDirectory = async (directory) => {
-  await ftpRequest((client) => {
+  await ftpRequest((client, basePath) => {
     console.log('Stager.js: deleting directory at ' + basePath + '/' + directory);
     return client.rmdir(basePath + '/' + directory, true);
   });
-}
+};
 
 // Delete all directories except
 deleteAllDirectoriesExcept = async (directoriesToKeep) => {
@@ -78,5 +83,6 @@ deleteAllDirectoriesExcept = async (directoriesToKeep) => {
 module.exports = {
   uploadDirectory: uploadDirectory,
   deleteDirectory: deleteDirectory,
-  deleteAllDirectoriesExcept: deleteAllDirectoriesExcept
+  deleteAllDirectoriesExcept: deleteAllDirectoriesExcept,
+  ftpRequest: ftpRequest
 };
