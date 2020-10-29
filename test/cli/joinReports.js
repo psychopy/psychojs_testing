@@ -3,6 +3,7 @@
 
 // *** Modules
 const Stager = require('../shared/Stager.js');
+const ReportSummarizer = require('../shared/ReportSummarizer.js');
 const json2csv = require('json2csv');
 const fs = require('fs');
 
@@ -42,22 +43,17 @@ joinReports = async () => {
     report = JSON.parse(getResults);
     joinedReports = joinedReports.concat(joinedReports, report);
   }
-  console.log(joinedReports);
   // Create a .tmp/ folder if it doesn't exist yet
   if (!fs.existsSync('.tmp')) {
     fs.mkdirSync('.tmp');
   };  
-  // Store joined reports in .tmp/
-  fs.writeFileSync(
-    '.tmp/results.json',
-    JSON.stringify(joinedReports)
-  );
+  // Store joined reports in .tmp
+  ReportSummarizer.writeJsonAndCsv('.tmp/results', joinedReports);
+  // Summarize reports
+  let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
+  // Store summarized reports
+  ReportSummarizer.writeJsonAndCsv('.tmp/summary', summaries);
 
-  // Store output as CSV
-  fs.writeFileSync(
-    '.tmp/results.csv',
-    json2csv.parse(joinedReports)
-  );  
 };
 joinReports();
 
