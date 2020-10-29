@@ -1,6 +1,8 @@
-// Reads in each json reporter log and custom log and converts them to a tsv file
+// Reads in each json reporter logs and aggrates them
 module.exports = { 
-  summarize: () => {
+  // Merges individual JSON report files to single JSON and csv file
+  // If specFrom is defined, replace spec entries with value specFrom to specTo
+  merge: (suiteFrom = [], suiteTo = undefined) => {
     // *** Modules
     const fs = require('fs');
     const json2csv = require('json2csv');
@@ -8,6 +10,9 @@ module.exports = {
     // *** Functions
     // Add an entry to output, prefilling specfile_id and capability_id
     log = (suite, spec, state, message, duration) => {
+      if (suiteFrom.includes(suite)) {
+        suite = suiteTo;
+      }
       output.push(
         {
           capability_id: capability_id,      
@@ -81,7 +86,9 @@ module.exports = {
       pathOut + '/' + 'results.csv',
       json2csv.parse(output)
     );
+  },
 
+  summarize: () => {
     console.log('ReportSummarizer.js: summarizing');
 
     // *** Summarize output

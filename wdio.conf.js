@@ -25,14 +25,16 @@ const platformPattern = argv.platformPattern === undefined? '*': argv.platformPa
 console.log('wdio.conf.js: platformPattern is ' + platformPattern);
 
 // Parse test CLI option
-let specs, test;
+let specs, test, specFile;
 if (argv.test === undefined) {
   test = 'all_tests';
-  specs = ['./test/specs/all_tests.js'];  
+  specFile = 'all_tests'
+  specs = ['./test/specs/' + specFile + '.js'];  
   console.log('wdio.conf.js: no test speficied, so running all tests');
 } else {
   test = argv.test;
-  specs = ['./test/specs/single_test.js'];
+  specFile = 'single_test';
+  specs = ['./test/specs/' + specFile + '.js'];
   console.log('wdio.conf.js: test is ' + test);
 }
 
@@ -326,7 +328,7 @@ exports.config = {
   onComplete: async function (exitCode, config, capabilities, results) {
     console.log("***AFTER***");
     // Summarize reports
-    ReportSummarizer.summarize();
+    ReportSummarizer.merge(['custom', specFile], test);
     // Delete old logs
     await Stager.deleteDirectory(build + '/' + test);
     // Upload logs
