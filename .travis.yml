@@ -49,9 +49,9 @@ jobs:
     script: npm run e2e_test_bs -- --test e2e_video
     if: type == cron
   - stage: join
-    script: node test\cli\joinReports.js
+    script: node test/cli/joinReports.js
     if: type == cron
-  # Jobs triggered by commit. Commented out for now
+  # Jobs triggered by push/pull
   - stage: selected_devices
     before_script: npm run e2e_delete_logs
     script: npm run e2e_test_bs -- --subset
