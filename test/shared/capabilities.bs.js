@@ -1,5 +1,5 @@
 module.exports = { 
-  capabilities: (build, platformPattern, test, subset) => {
+  capabilities: (branch, platformPattern, test, subset) => {
     // For pattern matching of strings with * and . wildcards
     // From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
     function wildTest(wildcard, str) {
@@ -20,7 +20,7 @@ module.exports = {
     // *** Desktop
     generalSettings = {
       'bstack:options': {
-        buildName: build,
+        buildName: branch,
         projectName: projectName,
         video: video,
         debug: debug,
@@ -141,7 +141,7 @@ module.exports = {
     // *** Mobile
     generalSettings = {
       'bstack:options': {
-        buildName: build,
+        buildName: branch,
         projectName: projectName,
         video: video,
         debug: debug,

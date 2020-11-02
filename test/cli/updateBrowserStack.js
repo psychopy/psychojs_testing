@@ -5,18 +5,18 @@ const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
 
-// *** Get build name from TRAVIS_BRANCH or CLI argument
-let build;
+// *** Get branch name from TRAVIS_BRANCH or CLI argument
+let branch;
 if (process.env.TRAVIS_BRANCH !== undefined) {
-  console.log('updateBrowserStack.js: build specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-  build = process.env.TRAVIS_BRANCH;
-} else if (argv.build !== undefined) {
-  console.log('updateBrowserStack.js: build specified via CLI option as ' + argv.build);
-  build = argv.build;
+  console.log('updateBrowserStack.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
+  branch = process.env.TRAVIS_BRANCH;
+} else if (argv.branch !== undefined) {
+  console.log('updateBrowserStack.js: branch specified via CLI option as ' + argv.branch);
+  branch = argv.branch;
 } else {
-  throw "updateBrowserStack.js: No build specified via TRAVIS_BRANCH or CLI option";
+  throw "updateBrowserStack.js: No branch specified via TRAVIS_BRANCH or CLI option";
 }
 
-// Delete build in BrowserStack logs
+// Delete branch in BrowserStack logs
 const BrowserStack = require('../shared/BrowserStack.js');
-BrowserStack.deleteOneBuild(build);
+BrowserStack.deleteOneBuild(branch);
