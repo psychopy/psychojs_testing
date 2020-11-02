@@ -38,16 +38,16 @@ if (argv.test === undefined) {
   console.log('wdio.conf.js: test is ' + test);
 }
 
-// Get build from CLI or TRAVIS_BRANCH
-let build;
+// Get branch from CLI or TRAVIS_BRANCH
+let branch;
 if (process.env.TRAVIS_BRANCH !== undefined) {
-  console.log('wdio.conf.js: build specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-  build = process.env.TRAVIS_BRANCH;
-} else if (argv.build !== undefined) {
-  console.log('wdio.conf.js: build specified via CLI option as ' + argv.build);
-  build = argv.build;
+  console.log('wdio.conf.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
+  branch = process.env.TRAVIS_BRANCH;
+} else if (argv.branch !== undefined) {
+  console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
+  branch = argv.branch;
 } else {
-  throw new Error('wdio.conf.js: No build specified via TRAVIS_BRANCH or CLI option');
+  throw new Error('wdio.conf.js: No branch specified via TRAVIS_BRANCH or CLI option');
 }
 
 // Get subset from CLI
@@ -62,7 +62,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(build, platformPattern, test, subset),
+  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(branch, platformPattern, test, subset),
 
   // Local test-runner
   runner: 'local',
@@ -333,8 +333,8 @@ exports.config = {
     // Summarize reports
     ReportSummarizer.merge(['custom', specFile], test);
     // Delete old logs
-    await Stager.deleteDirectory(build + '/' + test);
+    await Stager.deleteDirectory(branch + '/' + test);
     // Upload logs
-    await Stager.uploadDirectory('./.tmp', build + '/' + test);
+    await Stager.uploadDirectory('./.tmp', branch + '/' + test);
   }
 }
