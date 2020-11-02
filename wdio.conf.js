@@ -1,4 +1,4 @@
-// Modules (yet another tiny temporary edit here)
+// Modules (temporary edit here)
 const fs = require('fs');
 const Jimp = require('jimp');
 const VisualRegressor = require('./test/shared/VisualRegressor.js');
