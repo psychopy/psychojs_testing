@@ -54,7 +54,7 @@ jobs:
   # Jobs triggered by push/pull
   - stage: selected_devices
     before_script: npm run e2e_delete_logs
-    script: npm run e2e_test_bs -- --subset --platformPattern iOS_13_iPad#7th_iPhone
+    script: npm run e2e_test_bs -- --subset --platformPattern *Windows*10*Chrome*
     if: type != cron
 env:
   global:
