@@ -10,19 +10,22 @@ const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
 
-// Parse wdioServer CLI option
-const wdioServer = argv.wdioServer;
-if (wdioServer === undefined) {
-  throw new Error('No wdioServer CLI argument specified');
+// Parse server CLI option
+const server = argv.server;
+if (server === undefined) {
+  throw new Error('No server CLI argument specified');
 }
-if (!(['local', 'bs'].includes(wdioServer))) {
-  throw new Error('The wdioServer CLI argument (' + wdioServer + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
+if (!(['local', 'bs'].includes(server))) {
+  throw new Error('The server CLI argument (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
-console.log('wdio.conf.js: wdioServer is ' + wdioServer);
+console.log('wdio.conf.js: server is ' + server);
 
-// Parse platformPattern CLI option
-const platformPattern = argv.platformPattern === undefined? '*': argv.platformPattern;
-console.log('wdio.conf.js: platformPattern is ' + platformPattern);
+// Parse upload CLI option
+const upload = argv.upload !== undefined && upload === 'yes';
+
+// Parse platform CLI option
+const platform = argv.platform === undefined? '*': argv.platform;
+console.log('wdio.conf.js: platform is ' + platform);
 
 // Parse test CLI option
 let specs, test, specFile;
@@ -54,15 +57,15 @@ if (process.env.TRAVIS_BRANCH !== undefined) {
 let subset = argv.subset !== undefined;
 
 exports.config = {
-  // Connect to browserstack is wdioServer is 'bs'
-  user: wdioServer === 'bs' ? process.env.BROWSERSTACK_USER : undefined,
-  key: wdioServer === 'bs' ? process.env.BROWSERSTACK_ACCESSKEY : undefined,
+  // Connect to browserstack is server is 'bs'
+  user: server === 'bs' ? process.env.BROWSERSTACK_USER : undefined,
+  key: server === 'bs' ? process.env.BROWSERSTACK_ACCESSKEY : undefined,
 
   // Number of instances run at same time
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + wdioServer).capabilities(branch, platformPattern, test, subset),
+  capabilities: require('./test/shared/capabilities.' + server).capabilities(branch, platform, test, subset),
 
   // Local test-runner
   runner: 'local',
@@ -102,7 +105,7 @@ exports.config = {
   waitforTimeout: 1000,
 
   // Test runner services
-  services: wdioServer === 'bs' ? [] :
+  services: server === 'bs' ? [] :
     [
       // Selenium-standalone; takes care of local browserdrivers 
       ['selenium-standalone', {
@@ -127,7 +130,7 @@ exports.config = {
   // Framework settings
   framework: 'jasmine',
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: wdioServer === 'bs' ? 2 : 0,
+  specFileRetries: server === 'bs' ? 2 : 0,
   // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
   specFileRetriesDeferred: true,
   // Options to be passed to Jasmine.
@@ -250,7 +253,7 @@ exports.config = {
     });    
     // returns true if we're running a local Selenium server
     browser.addCommand('runningLocal', () => {
-      return wdioServer === 'local';
+      return server === 'local';
     });    
     // Making screenshots and saving them
     browser.addCommand('writeJimpImg', (img, name) => {
@@ -332,9 +335,12 @@ exports.config = {
     console.log("***AFTER***");
     // Summarize reports
     ReportSummarizer.merge(['custom', specFile], test);
-    // Delete old logs
-    await Stager.deleteDirectory(branch + '/' + test);
-    // Upload logs
-    await Stager.uploadDirectory('./.tmp', branch + '/' + test);
+    // If upload enabled, update stager
+    if (upload) {
+      // Delete old logs
+      await Stager.deleteDirectory(branch + '/' + test);
+      // Upload logs
+      await Stager.uploadDirectory('./.tmp', branch + '/' + test);
+    }
   }
 }
