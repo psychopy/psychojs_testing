@@ -4,13 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "e2e_delete_logs": "node test/cli/deleteLogs.js",
-    "e2e_test_bs": "npx wdio wdio.conf.js --wdioServer bs",
-    "e2e_compare_screenshots": "node test/cli/compareScreenshots.js",
-    "e2e_summarize_report": "node test/cli/summarizeReport.js",
-    "e2e_upload_report": "node test/cli/updateStager.js --action upload",
-    "e2e_selected_devices_all_tests": "npm run e2e_delete_logs && npm run e2e_test_bs -- --platformPattern iOS_13_iPad#7th_iPhone && npm run e2e_summarize_report && npm run e2e_upload_report",
-    "e2e_all_devices_selected_test": "node test/cli/selectedTestrun.js"
   },
   "keywords": [],
   "author": "",
