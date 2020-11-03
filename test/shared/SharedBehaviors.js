@@ -8,7 +8,8 @@ experimentUrls = {
   e2e_text: 'https://run.pavlovia.org/tpronk/e2e_text/html/',
   e2e_textbox: 'https://run.pavlovia.org/tpronk/e2e_textbox/html/',
   e2e_video: 'https://run.pavlovia.org/tpronk/e2e_video/',
-  e2e_combined: 'https://run.pavlovia.org/tpronk/e2e_combined/html/'
+  e2e_combined: 'https://run.pavlovia.org/tpronk/e2e_combined/html/',
+  int_gonogo: 'https://run.pavlovia.org/tpronk/int_gonogo/',
 };
 
 /**
@@ -528,6 +529,15 @@ e2e_combined = (calibration = null) => {
   waitForReport("FINISHED");
 }
 
+int_gonogo = (calibration = null) => {
+  // Navigate to experiment and perform prelude
+  browser.url(experimentUrls.int_gonogo);
+  performPavloviaPrelude();
+  // Wait for slideshow
+  waitForReport('slideshow');
+  // Make a screenshot
+  browser.writeScreenshot('slideshow');
+}
 
 module.exports = {
   experimentUrls: experimentUrls,
@@ -546,6 +556,7 @@ module.exports = {
     e2e_text: e2e_text,
     e2e_textbox: e2e_textbox,
     e2e_video: e2e_video,
-    e2e_combined: e2e_combined
+    e2e_combined: e2e_combined,
+    int_gonogo: int_gonogo
   }
 };
