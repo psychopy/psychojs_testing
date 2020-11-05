@@ -43,14 +43,16 @@ if (argv.test === undefined) {
 
 // Get branch from CLI or TRAVIS_BRANCH
 let branch;
-if (process.env.TRAVIS_BRANCH !== undefined) {
-  console.log('wdio.conf.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-  branch = process.env.TRAVIS_BRANCH;
-} else if (argv.branch !== undefined) {
-  console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
-  branch = argv.branch;
-} else {
-  throw new Error('wdio.conf.js: No branch specified via TRAVIS_BRANCH or CLI option');
+if (upload || server === 'bs') {
+  if (process.env.TRAVIS_BRANCH !== undefined) {
+    console.log('wdio.conf.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
+    branch = process.env.TRAVIS_BRANCH;
+  } else if (argv.branch !== undefined) {
+    console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
+    branch = argv.branch;
+  } else {
+    throw new Error('wdio.conf.js: No branch specified via TRAVIS_BRANCH or CLI option');
+  }
 }
 
 // Get subset from CLI
