@@ -66,26 +66,25 @@ deleteBuilds = (filterFunction) => {
   }
 };  
 
-// Delete one build named buildName
-deleteOneBuild = (buildName) => {
-  console.log('BrowserStack.js: deleting one build with buildName ' + buildName);
+// Delete one test + branch named testName
+deleteOneTest = (testName) => {
+  console.log('BrowserStack.js: deleting one test + branch with testName ' + testName);
   deleteBuilds((build) => {
-    return build.name === buildName;
+    return build.name === testName;
   });
 };
 
-// Delete all builds except those named buildNames
-deleteAllBuildsExcept = (buildNames) => {
-  console.log('BrowserStack.js: deleting all builds except those with buildNames ' + JSON.stringify(buildNames));
+// Delete all branches except those named branchNames (i.e. the string after ":" in the buildName)
+deleteAllBranchesExcept = (branchNames) => {
+  console.log('BrowserStack.js: deleting all builds except those with branchNames ' + JSON.stringify(branchNames));
   deleteBuilds((build) => {
-    return !buildNames.includes(build.name);
+    return !branchNames.includes(build.name.split(':')[1]);
   });
-
 };
 
 module.exports = {
   getProjectIdByName: getProjectIdByName,
   getBuildsByProjectId: getBuildsByProjectId,
-  deleteOneBuild: deleteOneBuild,
-  deleteAllBuildsExcept: deleteAllBuildsExcept
+  deleteOneTest: deleteOneTest,
+  deleteAllBranchesExcept: deleteAllBranchesExcept
 };
