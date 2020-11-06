@@ -20,7 +20,7 @@ module.exports = {
     // *** Desktop
     generalSettings = {
       'bstack:options': {
-        buildName: branch,
+        buildName: test + ':' + branch,
         projectName: projectName,
         video: video,
         debug: debug,
@@ -127,7 +127,7 @@ module.exports = {
           generalSettings.browserVersion;
         //platform = platform.replace(/ /gi, "#");          
         capability = JSON.parse(JSON.stringify(generalSettings));
-        capability['bstack:options'].sessionName = test + ':' + platform;
+        capability['bstack:options'].sessionName = platform;
         capability['bstack:options'].os = specificSetting.os;
         capability['bstack:options'].osVersion = specificSetting.osVersion;
         capability.browserName = browserName;
@@ -141,7 +141,7 @@ module.exports = {
     // *** Mobile
     generalSettings = {
       'bstack:options': {
-        buildName: branch,
+        buildName: test + ':' + branch,
         projectName: projectName,
         video: video,
         debug: debug,
@@ -280,7 +280,7 @@ module.exports = {
           specificSetting.browserName;
         //platform = platform.replace(/ /gi, "#");
         capability = JSON.parse(JSON.stringify(generalSettings));
-        capability['bstack:options'].sessionName = test + ':' + platform;
+        capability['bstack:options'].sessionName = platform;
         capability['bstack:options'].os = specificSetting.os;
         capability['bstack:options'].osVersion = device[0];
         capability['bstack:options'].deviceName = device[1];
