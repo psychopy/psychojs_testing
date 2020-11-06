@@ -3,6 +3,7 @@ const fs = require('fs');
 const Jimp = require('jimp');
 const VisualRegressor = require('./test/shared/VisualRegressor.js');
 const ReportSummarizer = require('./test/shared/ReportSummarizer.js');
+const BrowserStack = require('./test/shared/BrowserStack.js');
 const Stager = require('./test/shared/Stager.js');
 
 // Parse CLI arguments
@@ -201,6 +202,9 @@ exports.config = {
         }
       }
     }
+    // Delete old test logs
+    console.log('Deleting BrowserStack logs of build ' + test + ':' + branch);
+    BrowserStack.deleteOneTest(test + ':' + branch);
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
