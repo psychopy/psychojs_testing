@@ -51,11 +51,11 @@ jobs:
   - stage: join
     script: node test/cli/joinReports.js
     if: type == cron
-  # Jobs triggered by push/pull
-  - stage: selected_devices
-    before_script: node test/cli/deleteLogs.js
-    script: npx wdio wdio.conf.js --wdioServer bs --subset --platformPattern *Windows*10*Chrome*
-    if: type != cron && !fork
+  # Jobs triggered by push/pull (disabled for now)
+#  - stage: selected_devices
+#    before_script: node test/cli/deleteLogs.js
+#    script: npx wdio wdio.conf.js --wdioServer bs --subset --platformPattern *Windows*10*Chrome*
+#    if: type != cron && !fork
 env:
   global:
   - secure: RSfec6USloEHsXyq24Pl6lbaaNFLStkpihMfXCujQDn+1hjJA90dkzemu/MsShap7JE21Xe3YcKUFmA3a4om81DdLf1DlnCcZUeGXjjsPqIJHw0IjyGSVCIJPIXFk/zA8kPlXBWDabfiLWDMkoq5+gNLbVX691AjtoZLa9pGtyv1peMlkU6UU/y5xPpy/e2s6Fufioe10U2qjqWvt3Pljybl/YSepBFqWal9J/kxUbPOKbOEBFs3FGacY7WMGrCj7p03N1vxHcRdknoyhXuCi6EsQEJN1dDcUFv4ti9dOYa5jQXVHRLf5Qgt7+eQkEcIfywCH27l3bmdNZFSaCLzDMCueUiL86d1RFA6CKLBg69aGJ1eF2umKsIx+wFSjM0CMTLcAnmkdNomk/Yb0x8OiIu8VR8qFyUZggP26S6G70gdpby7utB/Av3qyKboQAt2P9V+WjmDfdUpJb++fgGmULggvXGRUP6oKfwzis0wWXm08pZBFcfL6wGInfZqzsbO3TH7YeB7DmccuBR8hU0wgtPwdvqGEHn/7v3UPQxGTr6Lv33vlkgFkZAkgts2gjBAq9h0ZX/FdpcXQ8yCQ7kpBO1mz4ukfNPG4RUF2xBHlth5i2R5nsBlFG8mOtjQpkJj51HwBSYc/kK/8YF6YdmL1o8vZTYxnlvYlsPc67wchdY=
