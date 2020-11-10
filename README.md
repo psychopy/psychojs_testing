@@ -23,6 +23,8 @@ Scripts for automated end-to-end testing of [PsychoJS](https://github.com/psycho
     * [Handling network time-outs](#handling-network-time-outs)
     * [Speeding up testruns](#speeding-up-testruns)
 * [Generating and parsing test logs](#generating-and-parsing-test-logs)
+    * [Generating custom logs](#generating-custom-logs)
+    * [Parsing custom logs](#parsing-custom-logs)
 * [Overview of tests](#overview-of-tests)
 
 <div id='core-technologies'></div>
@@ -166,8 +168,14 @@ There are two factors that can cause PsychoJS test-runs to be relatively slow: F
 <div id='generating-and-parsing-test-logs'></div>
 
 # Generating and parsing test logs
+<div id='generating-custom-logs'></div>
 
-By default, jasmine's test reporters only report whether a test was passed, had failed, or was skipped. Additional information is only logged upon a fail. I added a feature for logging additional information. The custom browser commands `browser.logInit`, `bowser.logAdd`, and `browser.logGet` can be used to manage this log. Customized logs are stored in `browser.capabilities.customLogs`, which are in turn stored in JSON files in `.tmp/json_logs/` via the [JSON reporter](https://webdriver.io/docs/wdio-json-reporter.html). The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`.
+## Generating custom logs
+By default, jasmine's test reporters only report whether a test was passed, had failed, or was skipped. Additional information is only logged upon a fail. I added a feature for logging additional information. The custom browser commands `browser.logInit`, `bowser.logAdd`, and `browser.logGet` can be used to manage this log. Customized logs are stored in `browser.capabilities.customLogs`, which are in turn stored in JSON files in `.tmp/json_logs/` via the [JSON reporter](https://webdriver.io/docs/wdio-json-reporter.html). 
+<div id='parsing-custom-logs'></div>
+
+## Parsing custom logs
+The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In cases where no JSON logs were produced, a special fail entry called "No JSON logs" is added to the aggregated output.
 
 <div id='overview-of-tests'></div>
 
