@@ -175,7 +175,7 @@ By default, jasmine's test reporters only report whether a test was passed, had 
 <div id='parsing-custom-logs'></div>
 
 ## Parsing custom logs
-The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In cases where no JSON logs were produced, a special fail entry called "No JSON logs" is added to the aggregated output.
+The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In cases where a JSON logfile could not be parsed, a special fail entry is added to the aggregated output. This entry has no suite specified, has spec `merge_logs`, state `failed`, and for `message`, the error message returned by the parsing attempt.
 
 <div id='overview-of-tests'></div>
 
