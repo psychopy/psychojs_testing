@@ -53,39 +53,44 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   // Specfile and capability ID (numbered 0 to X)
   let specfile_id;
   let capability_id;
+  // Filename split to array
+  let splitFilename;
 
   // Convert each JSON reporter log file
   console.log('ReportSummarizer.js: found ' + filenames.length + ' JSON logs');
   for (let filename of filenames) {
+    // Set specfile_id and capability_id from filename
+    splitFilename = filename.split('.')[0]
+    splitFilename = splitFilename.split('-');
+    capability_id = Number(splitFilename[1]);
+    specfile_id = Number(splitFilename[2]);  
     // Read and parse file to JSON
     try {
       json = JSON.parse(
         fs.readFileSync(pathIn + '/' + filename).toString()
       );
-    } catch (e) {
-      console.log(e);
-    }
-    console.log('ReportSummarizer.js: read ' + filename);
-    // Set specfile_id and capability_id from filename
-    filename = filename.split('.')[0]
-    filename = filename.split('-');
-    capability_id = Number(filename[1]);
-    specfile_id = Number(filename[2]);  
-    // Add sessionId
-    log('custom', 'sessionId', 'custom', json.capabilities.sessionId, "");
-    // Add browserName
-    log('custom', 'browserName', 'custom', json.capabilities.browserName, "");
-    // Add custom logs
-    for (let customLogKey in json.capabilities.customLogs) {
-      log('custom', customLogKey, 'custom', json.capabilities.customLogs[customLogKey], "");
-    }
-    // Add suites and specs
-    for (let suite of json.suites) {
-      suiteName = suite.name;
-      for (let test of suite.tests) {
-        log(suiteName, test.name, test.state, test.state === 'passed'? '': test.error, test.duration);
+      console.log('ReportSummarizer.js: read ' + filename);
+      // Add sessionId
+      log('custom', 'sessionId', 'custom', json.capabilities.sessionId, "");
+      // Add browserName
+      log('custom', 'browserName', 'custom', json.capabilities.browserName, "");
+      // Add custom logs
+      for (let customLogKey in json.capabilities.customLogs) {
+        log('custom', customLogKey, 'custom', json.capabilities.customLogs[customLogKey], "");
       }
+      // Add suites and specs
+      for (let suite of json.suites) {
+        suiteName = suite.name;
+        for (let test of suite.tests) {
+          log(suiteName, test.name, test.state, test.state === 'passed'? '': test.error, test.duration);
+        }
+      }
+    } catch (e) {
+      console.log('ReportSummarizer.js: error reading ' + filename);
+      console.log(e);
+      log('', 'merge_logs', 'failed', e.toString(), '');
     }
+
   }
   // Store merged reports
   writeJsonAndCsv(pathOut + '/' + 'report', output);
