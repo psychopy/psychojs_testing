@@ -1,3 +1,9 @@
+process.on('error', function(err) {
+  console.log("Caught an error");
+  console.log(err);
+});
+//process.emit('error', 'custom error');
+
 // Modules (temporary edit here)
 const fs = require('fs');
 const Jimp = require('jimp');
@@ -22,10 +28,14 @@ if (!(['local', 'bs'].includes(server))) {
 console.log('wdio.conf.js: server is ' + server);
 
 // Parse upload CLI option
-const upload = argv.upload !== undefined && upload === 'yes';
+const upload = argv.upload !== undefined && argv.upload === 'yes';
 
 // Parse platform CLI option
-const platform = argv.platform === undefined? '*': argv.platform;
+let platform = argv.platform === undefined? '*': argv.platform;
+// Hack for spaces in platform; assume any elements of argv._ after the first are part of platform
+if (platform !== '*' && argv._.length > 1) {
+  platform = platform + ' ' + argv._.slice(1, argv._.length).join(' ');
+}
 console.log('wdio.conf.js: platform is ' + platform);
 
 // Parse test CLI option
@@ -213,6 +223,8 @@ exports.config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    */
   before: function (capabilities, specs) {
+    //console.log(this)
+
     // These function concern getting capabilities that are specified
     // in the config but not available in browser.capabilities during
     // the test run.
@@ -348,5 +360,13 @@ exports.config = {
       // Upload logs
       await Stager.uploadDirectory('./.tmp', branch + '/' + test);
     }
+  },
+
+  afterTest: function (test, context, { error, result, duration, passed, retries }) {
+    // console.log('afterTest');
+    // console.log(test);
+    // console.log(context);
+    // console.log(error);
+    // console.log(result);
   }
 }
