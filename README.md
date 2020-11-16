@@ -80,7 +80,7 @@ Run all tests via local server.
 
 Run the e2e_img test on each Android device via BrowserStack, using demo as name for the logs, and uploading reports to the PsychoPy staging server. 
 
-`npx wdio wdio.conf.js --server local --upload yes --branch demo --platform *Android* --test e2e_img`
+`npx wdio wdio.conf.js --server bs --upload yes --branch demo --platform *Android* --test e2e_img`
 
 <div id='supporting-scripts'></div>
 
