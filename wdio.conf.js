@@ -5,6 +5,7 @@ const VisualRegressor = require('./test/shared/VisualRegressor.js');
 const ReportSummarizer = require('./test/shared/ReportSummarizer.js');
 const BrowserStack = require('./test/shared/BrowserStack.js');
 const Stager = require('./test/shared/Stager.js');
+const Paths = require('./test/shared/Paths.js');
 
 // Parse CLI arguments
 const yargs = require('yargs/yargs')
@@ -100,7 +101,7 @@ exports.config = {
     '@wdio/applitools-service': 'silent',
     '@wdio/browserstack-service': 'silent'
   },
-  outputDir: './.tmp/logs_raw',
+  outputDir: Paths.dir_logs_raw,
 
   // Give up after X tests have failed (0 - don't bail)
   bail: 0,
@@ -116,7 +117,7 @@ exports.config = {
     [
       // Selenium-standalone; takes care of local browserdrivers 
       ['selenium-standalone', {
-        logPath: './.tmp/logs_selenium',
+        logPath: Paths.dir_logs_selenium,
         installArgs: {
           drivers: {
             chrome: { version: '84.0.4147.30' },
@@ -159,12 +160,9 @@ exports.config = {
   reporters: [
     'dot',
     ['json', {
-      outputDir: './.tmp/logs_json',
+      outputDir: Paths.dir_logs_json,
       stdout: false
-    }],
-    // ['junit', {
-    //   outputDir: './.tmp/junit_logs'
-    // }]
+    }]
   ],
 
   // =====
@@ -176,41 +174,40 @@ exports.config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    */
   onPrepare: function (config, capabilities) {
-    // Construct and clean up .tmp
-    let tmpDir = '.tmp';
-    let subDirs = [
-      'logs_capabilities',   // capabilities, as logged before testrun
-      'logs_json',           // json test reporter
-      'logs_processed',      // Aggregated logs
-      'logs_raw',            // webdriverio and web API logs
-      'logs_selenium',       // Local selenium server logs
-      // Images
-      'screenshots_cutout',  // Screenshots, cutout relevant area
-      'screenshots_raw',     // Screenshots, as delivered via webdriverio
-      'screenshots_scaled',  // Screenshots, cutout and scaled to reference
-    ];
-    if (!fs.existsSync(tmpDir)) {
-      console.log('Creating directory: ' + tmpDir)
-      fs.mkdirSync(tmpDir);
+    // *** Setup temporary directories
+    // Construct tmp dir
+    if (!fs.existsSync(Paths.dir_tmp)) {
+      console.log('Creating directory: ' + Paths.dir_tmp)
+      fs.mkdirSync(Paths.dir_tmp);
     };
+    // Construct or clean up log dirs
+    let logDirs = [
+      Paths.dir_tmp,
+      Paths.dir_logs_capabilities,
+      Paths.dir_logs_json,
+      Paths.dir_logs_processed,
+      Paths.dir_logs_raw,
+      Paths.dir_logs_selenium,
+      Paths.dir_screenshots_cutout,
+      Paths.dir_screenshots_raw,
+      Paths.dir_screenshots_scaled,
+    ];      
     let files, path;
-    for (subDir of subDirs) {
-      path = tmpDir + '/' + subDir;
-      if (!fs.existsSync(path)) {
-        console.log('Creating directory: ' + path);
-        fs.mkdirSync(path);
+    for (logDir of logDirs) {
+      if (!fs.existsSync(logDir)) {
+        console.log('Creating directory: ' + logDir);
+        fs.mkdirSync(logDir);
       } else {
-        console.log('Deleting files in directory: ' + path);
-        files = fs.readdirSync(path);
+        console.log('Deleting files in directory: ' + logDir);
+        files = fs.readdirSync(logDir);
         for (let file_i in files) {
-          fs.unlinkSync(path + '/' + files[file_i]);
+          fs.unlinkSync(logDir + '/' + files[file_i]);
         }
       }
     }
-    // Log all capabilities
-    fs.writeFileSync('./.tmp/logs_capabilities/capabilities.json', JSON.stringify(capabilities));
-
-    // Delete old test logs
+    // *** Log all capabilities
+    fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
+    // *** Delete old test logs
     console.log('Deleting BrowserStack logs of build ' + test + ':' + branch);
     BrowserStack.deleteOneTest(test + ':' + branch);
   },
@@ -273,7 +270,7 @@ exports.config = {
     });    
     // Making screenshots and saving them
     browser.addCommand('writeJimpImg', (img, name) => {
-      img.write('.tmp/screenshots_raw/' + name + '#' + browser.getPlatformName() + '.png');
+      img.write(Paths.dir_screenshots_raw + '/' + name + '#' + browser.getPlatformName() + '.png');
     });
     browser.addCommand('getJimpScreenshot', async () => {
       let screenshotBase64 = await browser.takeScreenshot();
@@ -348,47 +345,31 @@ exports.config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: async function (exitCode, config, capabilities, results) {
-    console.log("***AFTER***");
     // Merge reports
     let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
     // Store merged reports
-    ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/report', joinedReports);
+    ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'report', joinedReports);
     // Summarize reports
     let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
     // Store summaries
-    ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/summary', summaries);
+    ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', summaries);
     // Store summaries of all tests with at least on fail
     let summariesFailed = summaries.filter( (summary) => {
       return summary.failed > 0
     })
-    ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/failed', summariesFailed);
-
-    // Merge together in an XLSX file
-    const XLSX = require('xlsx');
-    let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(
-      wb, 
-      XLSX.utils.json_to_sheet(summariesFailed),
-      'failed'
-    );
-    XLSX.utils.book_append_sheet(
-      wb, 
-      XLSX.utils.json_to_sheet(summaries),
-      'summary'
-    );
-    XLSX.utils.book_append_sheet(
-      wb, 
-      XLSX.utils.json_to_sheet(joinedReports),
-      'report'
-    );
-    XLSX.writeFile(wb, '.tmp/logs_processed/combined_report.xlsx');
-
+    ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', summariesFailed);
+    // Store failed, summaries, and reports in a single XLSX
+    ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/' + 'combined_report.xlsx', {
+      failed: summariesFailed,
+      summary: summaries,
+      report: joinedReports
+    });
     // If upload enabled, update stager
     if (upload) {
       // Delete old logs
       await Stager.deleteDirectory(branch + '/' + test);
       // Upload logs
-      await Stager.uploadDirectory('./.tmp', branch + '/' + test);
+      await Stager.uploadDirectory(Paths.dir_tmp, branch + '/' + test);
     }
   },
 

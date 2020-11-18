@@ -1,5 +1,8 @@
 // Upload or delete test on Stager via CLI arguments
 
+// *** Modules
+const Paths = require('./test/shared/Paths.js');
+
 // *** Parse CLI arguments
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
@@ -49,7 +52,7 @@ switch (argv.action) {
   // Upload to remote test 
   case 'upload':
     console.log('updateStager.js: argv.action upload, path ' + path);
-    Stager.uploadDirectory('./.tmp', path);
+    Stager.uploadDirectory(Paths.dir_tmp, path);
     break;
   default:
     throw 'updateStager.js argv.action CLI option not recognized: ' + argv.action;

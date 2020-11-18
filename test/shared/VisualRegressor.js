@@ -5,15 +5,8 @@ const Jimp = require('jimp');
 const replaceColor = require('replace-color')
 const fs = require('fs');
 const json2csv = require('json2csv');
+const Paths = require('./Paths.js');
 
-const paths = {
-  reference_imgs: 'https://staging.psychopy.org/reference_imgs/',
-  counterexample_imgs: './test/counterexample_imgs/',
-  screenshots: '.tmp/screenshots_raw/',
-  cutouts: './.tmp/screenshots_cutout/',
-  cutouts_resized: './.tmp/screenshots_scaled/',
-  processed_logs: './.tmp/logs_processed/'
-};
 const colorsToRed = [
   Buffer.from([255,0,0]),
   Buffer.from([234,51,35]), 
@@ -91,7 +84,7 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
       width,
       height
     );
-    cutoutImg.write(paths.cutouts + screenshotFilename);
+    cutoutImg.write(Paths.dir_screenshots_cutout + '/' + screenshotFilename);
   } catch (e) {
     cutoutSuccess = false;
     console.log(
@@ -103,7 +96,7 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
   }
   // Resize cutout to reference
   cutoutImg = await cutoutImg.resize(referenceImg.bitmap.width, referenceImg.bitmap.width);
-  cutoutImg.write(paths.cutouts_resized + screenshotFilename);
+  cutoutImg.write(Paths.dir_screenshots_scaled + '/' + screenshotFilename);
   // Compare
   let rms = sdOfDifferences(referenceImg, cutoutImg);
   // Return results
@@ -116,7 +109,7 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
 
 let getReferenceImg = async (prefix) => {
   try {
-    referenceImg = await Jimp.read(paths.reference_imgs + prefix + '.png');
+    referenceImg = await Jimp.read(Paths.url_reference_imgs + '/' + prefix + '.png');
     console.log('Found reference image for prefix ' + prefix);
     return referenceImg;
   } catch(e) {
@@ -129,7 +122,7 @@ let compareScreenshotsWithReferences = async (validate) => {
   // If true, at least one comparison failed
   failed = false;
   // Read screenshot filenames
-  let allScreenshotFilenames = fs.readdirSync(paths.screenshots);
+  let allScreenshotFilenames = fs.readdirSync(Paths.dir_screenshots_raw);
   // Extract prefixes
   let prefixes = allScreenshotFilenames.map(function(referenceFilename) {
     return referenceFilename.split('#')[0]
@@ -146,7 +139,7 @@ let compareScreenshotsWithReferences = async (validate) => {
     referenceImg = null;
     // Read reference img
     try {
-      referenceImg = await Jimp.read(paths.reference_imgs + prefix + '.png');
+      referenceImg = await Jimp.read(Paths.url_reference_imgs + '/' + prefix + '.png');
       console.log('Found reference image for prefix ' + prefix);
       // Filter out screenshot filenames with matching prefix
       screenshotFilenames = allScreenshotFilenames.filter(function (screenshotFilename) {
@@ -154,7 +147,7 @@ let compareScreenshotsWithReferences = async (validate) => {
       });    
       // For each screenshot filename, read image, and compare
       for (let screenshotFilename of screenshotFilenames) {
-        screenshotImg = await Jimp.read(paths.screenshots + screenshotFilename);
+        screenshotImg = await Jimp.read(Paths.dir_screenshots_raw + '/' + screenshotFilename);
         // Make comparison
         result = await compareScreenshotWithReference(
           screenshotImg,
@@ -175,10 +168,10 @@ let compareScreenshotsWithReferences = async (validate) => {
       // If validate, also compare counter examples
       if (validate) {
         // Read counterexample filenames
-        let counterexampleFilenames = fs.readdirSync(paths.counterexample_imgs);
+        let counterexampleFilenames = fs.readdirSync(Paths.dir_counterexample_imgs);
         // For each counter example filename, read image, and compare
         for (let screenshotFilename of counterexampleFilenames) {
-          screenshotImg = await Jimp.read(paths.counterexample_imgs + screenshotFilename);
+          screenshotImg = await Jimp.read(dir_counterexample_imgs + '/' + screenshotFilename);
           // Make comparison
           result = await compareScreenshotWithReference(
             screenshotImg,
@@ -200,13 +193,13 @@ let compareScreenshotsWithReferences = async (validate) => {
   }  
   // Store output as JSON
   fs.writeFileSync(
-    paths.processed_logs + 'screenshot_stats.json',
+    Paths.dir_logs_processed + '/' + 'screenshot_stats.json',
     JSON.stringify(results)
   );
   // Store output as CSV
   if (results.length > 0) {
     fs.writeFileSync(
-      paths.processed_logs + 'screenshot_stats.csv',
+      Paths.dir_logs_processed + '/' + 'screenshot_stats.csv',
       json2csv.parse(results)
     );  
   }

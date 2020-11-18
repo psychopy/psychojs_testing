@@ -4,8 +4,8 @@
 // *** Modules
 const Stager = require('../shared/Stager.js');
 const ReportSummarizer = require('../shared/ReportSummarizer.js');
-const json2csv = require('json2csv');
 const fs = require('fs');
+const Paths = require('./test/shared/Paths.js');
 
 // *** Parse CLI arguments
 const yargs = require('yargs/yargs')
@@ -44,40 +44,26 @@ joinReports = async () => {
     joinedReports = joinedReports.concat(joinedReports, report);
   }
   // Create a .tmp/ folder if it doesn't exist yet
-  if (!fs.existsSync('.tmp')) {
-    fs.mkdirSync('.tmp');
+  if (!fs.existsSync(Paths.dir_tmp)) {
+    fs.mkdirSync(Paths.dir_tmp);
   };  
   // Store joined reports in .tmp
-  ReportSummarizer.writeJsonAndCsv('.tmp/results', joinedReports);
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/results', joinedReports);
   // Summarize reports
   let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
   // Store summaries
-  ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/summary', summaries);
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/summary', summaries);
   // Store summaries of all tests with at least on fail
   let summariesFailed = summaries.filter( (summary) => {
     return summary.failed > 0
   })
-  ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/failed', summariesFailed);
-
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/failed', summariesFailed);
   // Merge together in an XLSX file
-  const XLSX = require('xlsx');
-  let wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(
-    wb, 
-    XLSX.utils.json_to_sheet(summariesFailed),
-    'failed'
-  );
-  XLSX.utils.book_append_sheet(
-    wb, 
-    XLSX.utils.json_to_sheet(summaries),
-    'summary'
-  );
-  XLSX.utils.book_append_sheet(
-    wb, 
-    XLSX.utils.json_to_sheet(joinedReports),
-    'report'
-  );
-  XLSX.writeFile(wb, '.tmp/logs_processed/combined_report.xlsx');
+  ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/combined_report.xlsx', {
+    failed: summariesFailed,
+    summary: summaries,
+    report: joinedReports
+  });
 };
 joinReports();
 

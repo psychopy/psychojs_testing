@@ -1,31 +1,52 @@
 // *** Modules
 const fs = require('fs');
 const json2csv = require('json2csv');
+const XLSX = require('xlsx');
+const Paths = require('./Paths.js');
 
-// Write a JSON array of objects to a JSON and CSV file
+// Write a JSON array to a JSON and CSV file
 writeJsonAndCsv = (filePrefix, output) => {
   // Store output as JSON
   fs.writeFileSync(
     filePrefix + '.json',
     JSON.stringify(output)
   );
-  // Store output as CSV
-  fs.writeFileSync(
-    filePrefix + '.csv',
-    json2csv.parse(output)
-  );
+  // Store output as CSV (if any output exists)
+  if (output.length > 0) {
+    fs.writeFileSync(
+      filePrefix + '.csv',
+      json2csv.parse(output)
+    );
+  }
 };
 
-// Merges individual JSON report files to single JSON and csv file
-// If specFrom is defined, replace spec entries with value specFrom to specTo
+// Write an object of JSON arrays to an XLSX file
+// Each property of output becomes a separate sheet in the XLSX
+writeXLSX = (filename, output) => {
+  // Create workbook
+  let wb = XLSX.utils.book_new();
+  // Append each sheet
+  for (output_i in output) {
+    XLSX.utils.book_append_sheet(
+      wb, 
+      XLSX.utils.json_to_sheet(output[output_i]),
+      output_i
+    );
+  }
+  XLSX.writeFile(wb, filename);
+};
+
+// Merges individual JSON report files to a tabular data structure
+// Each row in the result for which suite matches an element of suiteFrom,
+// suite gets replaced by suiteTo
 merge = (suiteFrom = [], suiteTo = undefined) => {
   // *** Functions
-  // Add an entry to output, prefilling specfile_id and capability_id
+  // Add an entry to joinedReports, prefilling specfile_id and capability_id
   log = (suite, spec, state, message, duration) => {
     if (suiteFrom.includes(suite)) {
       suite = suiteTo;
     }
-    output.push(
+    joinedReports.push(
       {
         capability_id: capability_id,      
         specfile_id: specfile_id,
@@ -39,14 +60,10 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   };
 
   // *** Process JSON reporter files
-  // Path to capabilities
-  let pathCapabilities = '.tmp/logs_capabilities';
-  // Path to JSON reporter logs
-  let pathIn = '.tmp/logs_json';
   // List of JSON reporter log filenames
-  let filenames = fs.readdirSync(pathIn).sort();
+  let filenames = fs.readdirSync(Paths.dir_logs_json).sort();
   // Converted logs
-  let output = [];
+  let joinedReports = [];
   // Raw JSON reporter log
   let json;
   // Specfile and capability ID (numbered 0 to X)
@@ -68,7 +85,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
     // Read and parse file to JSON
     try {
       json = JSON.parse(
-        fs.readFileSync(pathIn + '/' + filename).toString()
+        fs.readFileSync(Paths.dir_logs_json + '/' + filename).toString()
       );
       console.log('ReportSummarizer.js: read ' + filename);
       // Add sessionId
@@ -94,17 +111,17 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   // *** Add entries for logs we couldn't process; these should add up to the number of platforms not present in processed lgos
   // Read capabilities
   capabilities = JSON.parse(
-    fs.readFileSync(pathCapabilities + '/capabilities.json').toString()
+    fs.readFileSync(Paths.dir_logs_capabilities + '/capabilities.json').toString()
   );  
   // allPlatforms; all those found in capabilities
   let allPlatforms = capabilities.map((capability) => {
     return capability['bstack:options'].sessionName;
   });
   // processedPlatforms; those we found in processed logs
-  let processedPlatforms = output.filter((outputEntry) => {
-    return outputEntry.spec == 'platform'
-  }).map( (outputEntry) => {
-    return outputEntry.message
+  let processedPlatforms = joinedReports.filter((joinedReport) => {
+    return joinedReport.spec == 'platform'
+  }).map( (joinedReport) => {
+    return joinedReport.message
   });
   // platforms not present in processed logs
   let unprocessedPlatforms = allPlatforms.filter((platform) => {
@@ -123,23 +140,20 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   }
 
   // Return merged reports
-  return output;
+  return joinedReports;
 };
 
-// Summarize output, add custom entries present in customLog
-summarize = (output, customLogsToAdd) => {
+// Summarize joinedReports, add custom entries present in customLogsToAdd
+summarize = (joinedReports, customLogsToAdd) => {
   console.log('ReportSummarizer.js: summarizing');
-
-  // *** Summarize output
-  // Summarized output
+  // Summarized joinedReports
   let summaries = [];
   // List with each unique capability ID
   let capabilities;
   // Filtered logs
   let customLogs;
-
-  // Extract unique capability IDs from output
-  capabilities = output.map((row) => {
+  // Extract unique capability IDs from joinedReports
+  capabilities = joinedReports.map((row) => {
     return row.capability_id;
   });
   capabilities = Array.from(new Set(capabilities));
@@ -151,7 +165,7 @@ summarize = (output, customLogsToAdd) => {
     // Add capability_id
     summary.capability_id = capability;
     // Add customLogs
-    customLogs = output.filter(function (row) {
+    customLogs = joinedReports.filter(function (row) {
       return row.capability_id === capability && row.state === 'custom' && customLogsToAdd.includes(row.spec)
     });
     for (let customLog of customLogs) {
@@ -159,12 +173,12 @@ summarize = (output, customLogsToAdd) => {
     }
     // Count passed, failed, skipped
     for (let state of ['passed', 'failed', 'skipped']) {
-      summary[state] = output.filter(function (row) {
+      summary[state] = joinedReports.filter(function (row) {
         return row.capability_id === capability && row.state === state
       }).length;
     }
     // All failed tests of this capability
-    failedTests = output.filter(function (row) {
+    failedTests = joinedReports.filter(function (row) {
       return row.capability_id === capability && row.state === 'failed'
     });
     // Append all failed specs to a space-separated string
@@ -182,12 +196,9 @@ summarize = (output, customLogsToAdd) => {
   return summaries;
 };
 
-// List all failed tests
-
-
-// Reads in each json reporter logs and aggrates them
 module.exports = { 
   writeJsonAndCsv: writeJsonAndCsv,
+  writeXLSX: writeXLSX,
   merge: merge,
   summarize: summarize
 };

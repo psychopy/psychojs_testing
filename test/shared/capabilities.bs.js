@@ -1,5 +1,7 @@
-const BrowserStack = require('./BrowserStack.js');
+// Modules
 const fs = require('fs');
+const BrowserStack = require('./BrowserStack.js');
+const Paths = require('./Paths.js');
 
 // Returns index of highest number in array that is not NaN
 const indexOfMax = (values) => {
@@ -25,7 +27,7 @@ const wildTest = (wildcard, str) => {
 // Returns browsers from BrowserStack after basic filtering
 const getBrowsers = () => {
   // Get all available browsers from local HDD (cachedBrowsersFile), otherwise cache from BrowserStack's REST API
-  const cachedBrowsersFile = './.tmp/logs_capabilities/browsers.json';
+  const cachedBrowsersFile = Paths.dir_logs_capabilities + '/browsers.json';
   let allBrowsers;
   if (fs.existsSync(cachedBrowsersFile)) {
     allBrowsers = JSON.parse(fs.readFileSync(cachedBrowsersFile));
