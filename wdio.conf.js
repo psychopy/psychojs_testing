@@ -1,10 +1,4 @@
-process.on('error', function(err) {
-  console.log("Caught an error");
-  console.log(err);
-});
-//process.emit('error', 'custom error');
-
-// Modules (temporary edit here)
+// Modules 
 const fs = require('fs');
 const Jimp = require('jimp');
 const VisualRegressor = require('./test/shared/VisualRegressor.js');
@@ -78,7 +72,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + server).capabilities(branch, platform, test, subset),
+  capabilities: require('./test/shared/capabilities.' + server).getCapabilities(test + ':' + branch, platform, subset),
 
   // Local test-runner
   runner: 'local',
@@ -106,7 +100,7 @@ exports.config = {
     '@wdio/applitools-service': 'silent',
     '@wdio/browserstack-service': 'silent'
   },
-  outputDir: './.tmp/raw_logs',
+  outputDir: './.tmp/logs_raw',
 
   // Give up after X tests have failed (0 - don't bail)
   bail: 0,
@@ -122,7 +116,7 @@ exports.config = {
     [
       // Selenium-standalone; takes care of local browserdrivers 
       ['selenium-standalone', {
-        logPath: './.tmp/selenium_logs',
+        logPath: './.tmp/logs_selenium',
         installArgs: {
           drivers: {
             chrome: { version: '84.0.4147.30' },
@@ -143,7 +137,7 @@ exports.config = {
   // Framework settings
   framework: 'jasmine',
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: server === 'bs' ? 2 : 0,
+  specFileRetries: server === 'bs' ? 0:0,//2 : 0,
   // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
   specFileRetriesDeferred: true,
   // Options to be passed to Jasmine.
@@ -165,7 +159,7 @@ exports.config = {
   reporters: [
     'dot',
     ['json', {
-      outputDir: './.tmp/json_logs',
+      outputDir: './.tmp/logs_json',
       stdout: false
     }],
     // ['junit', {
@@ -185,14 +179,15 @@ exports.config = {
     // Construct and clean up .tmp
     let tmpDir = '.tmp';
     let subDirs = [
-      'json_logs',       // json test reporter
-      'processed_logs',  // Aggregated logs
-      'raw_logs',        // webdriverio and web API logs
+      'logs_capabilities',   // capabilities, as logged before testrun
+      'logs_json',           // json test reporter
+      'logs_processed',      // Aggregated logs
+      'logs_raw',            // webdriverio and web API logs
+      'logs_selenium',       // Local selenium server logs
       // Images
-      'screenshots',
-      'cutouts',
-      'cutouts_resized',
-      'selenium_logs'    // local selenium server logs
+      'screenshots_cutout',  // Screenshots, cutout relevant area
+      'screenshots_raw',     // Screenshots, as delivered via webdriverio
+      'screenshots_scaled',  // Screenshots, cutout and scaled to reference
     ];
     if (!fs.existsSync(tmpDir)) {
       console.log('Creating directory: ' + tmpDir)
@@ -212,6 +207,9 @@ exports.config = {
         }
       }
     }
+    // Log all capabilities
+    fs.writeFileSync('./.tmp/logs_capabilities/capabilities.json', JSON.stringify(capabilities));
+
     // Delete old test logs
     console.log('Deleting BrowserStack logs of build ' + test + ':' + branch);
     BrowserStack.deleteOneTest(test + ':' + branch);
@@ -229,7 +227,7 @@ exports.config = {
     // in the config but not available in browser.capabilities during
     // the test run.
     browser.addCommand('getPlatformName', () => {
-      return capabilities['e2e_robot:platform'];
+      return capabilities['bstack:options'].sessionName;
     });
     browser.addCommand('getOsName', () => {
       return capabilities['bstack:options'].os;
@@ -275,7 +273,7 @@ exports.config = {
     });    
     // Making screenshots and saving them
     browser.addCommand('writeJimpImg', (img, name) => {
-      img.write('.tmp/screenshots/' + name + '#' + browser.getPlatformName() + '.png');
+      img.write('.tmp/screenshots_raw/' + name + '#' + browser.getPlatformName() + '.png');
     });
     browser.addCommand('getJimpScreenshot', async () => {
       let screenshotBase64 = await browser.takeScreenshot();
@@ -351,8 +349,40 @@ exports.config = {
    */
   onComplete: async function (exitCode, config, capabilities, results) {
     console.log("***AFTER***");
+    // Merge reports
+    let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
+    // Store merged reports
+    ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/report', joinedReports);
     // Summarize reports
-    ReportSummarizer.merge(['custom', specFile], test);
+    let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
+    // Store summaries
+    ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/summary', summaries);
+    // Store summaries of all tests with at least on fail
+    let summariesFailed = summaries.filter( (summary) => {
+      return summary.failed > 0
+    })
+    ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/failed', summariesFailed);
+
+    // Merge together in an XLSX file
+    const XLSX = require('xlsx');
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(
+      wb, 
+      XLSX.utils.json_to_sheet(summariesFailed),
+      'failed'
+    );
+    XLSX.utils.book_append_sheet(
+      wb, 
+      XLSX.utils.json_to_sheet(summaries),
+      'summary'
+    );
+    XLSX.utils.book_append_sheet(
+      wb, 
+      XLSX.utils.json_to_sheet(joinedReports),
+      'report'
+    );
+    XLSX.writeFile(wb, '.tmp/logs_processed/combined_report.xlsx');
+
     // If upload enabled, update stager
     if (upload) {
       // Delete old logs
