@@ -1,5 +1,5 @@
 module.exports = {
-  capabilities: () => {
+  getCapabilities: () => {
     let generalSettings = {
       'bstack:options': {
         os: 'local',
@@ -14,7 +14,9 @@ module.exports = {
     for (let browser of browsers) {
       capability = JSON.parse(JSON.stringify(generalSettings));
       capability.browserName = browser;
-      capability['e2e_robot:platform'] = 'local_local_' + browser + '_local';
+      capability['bstack:options'] = {
+        sessionName: 'local_local_' + browser + '_local'
+      };
       output.push(capability);
     }
     return output;
