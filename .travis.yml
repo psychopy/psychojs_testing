@@ -19,7 +19,7 @@ jobs:
   include:
   # Jobs triggered by cron
   - stage: synchronize
-    script: node test/cli/syncWithGitHub.js
+    script: node test/cli/syncWithGitHub.js alain sotiri thomas
     if: type == cron
   - stage: cleanup
     script: node test/cli/deleteLogs.js
