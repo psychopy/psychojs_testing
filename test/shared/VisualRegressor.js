@@ -9,10 +9,10 @@ const json2csv = require('json2csv');
 const paths = {
   reference_imgs: 'https://staging.psychopy.org/reference_imgs/',
   counterexample_imgs: './test/counterexample_imgs/',
-  screenshots: '.tmp/screenshots/',
-  cutouts: './.tmp/cutouts/',
-  cutouts_resized: './.tmp/cutouts_resized/',
-  processed_logs: './.tmp/processed_logs/'
+  screenshots: '.tmp/screenshots_raw/',
+  cutouts: './.tmp/screenshots_cutout/',
+  cutouts_resized: './.tmp/screenshots_scaled/',
+  processed_logs: './.tmp/logs_processed/'
 };
 const colorsToRed = [
   Buffer.from([255,0,0]),
