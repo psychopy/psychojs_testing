@@ -2,7 +2,7 @@ experimentUrls = {
   e2e_calibration: 'https://run.pavlovia.org/tpronk/e2e_calibration/',
   e2e_code: 'https://run.pavlovia.org/tpronk/e2e_code/html/',
   e2e_conditions: 'https://run.pavlovia.org/tpronk/e2e_conditions/html/',
-  e2e_img: 'https://run.pavlovia.org/tpronk/e2e_img/html/',
+  e2e_img: 'https://run.pavlovia.org/thewhodidthis/e2e_img/html/',
   e2e_polygon: 'https://run.pavlovia.org/tpronk/e2e_polygon/html/',
   e2e_sound: 'https://run.pavlovia.org/tpronk/e2e_sound/html/',
   e2e_text: 'https://run.pavlovia.org/tpronk/e2e_text/html/',
@@ -292,7 +292,7 @@ e2e_conditions = (calibration = null) => {
   ];
   for (reportValue of reportValues) {
     waitForReport(reportValue);
-    tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+    tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   }
   // Check if experiment finishes
   waitForReport("FINISHED");
@@ -314,7 +314,7 @@ e2e_img = (calibration = null) => {
   }
   // Tap past intro screen
   waitForReport('intro_trial');
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   // Make screenshots of test1 to test6
   let rms;
   for (let test_i = 1; test_i <= 4; test_i++) {
@@ -326,7 +326,7 @@ e2e_img = (calibration = null) => {
     rms = browser.compareScreenshot(testName);
     expect(rms).toBeLessThanOrEqual(50, {message: testName + ' rms > 50'});
     // Next routine
-    tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+    tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   }
   // Wait for FINISHED
   waitForReport('FINISHED');
@@ -348,7 +348,7 @@ e2e_polygon = (calibration = null) => {
   }
   // Tap past intro screen
   waitForReport('intro_trial');
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   // Make screenshots of test1 to test6
   for (let test_i = 1; test_i <= 2; test_i++) {
     testName = 'polygon' + test_i;      
@@ -358,7 +358,7 @@ e2e_polygon = (calibration = null) => {
     //browser.pause(200);    
     browser.writeScreenshot(testName);
     // Next routine
-    tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+    tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   }
   // Wait for FINISHED
   waitForReport('FINISHED');
@@ -381,11 +381,11 @@ e2e_sound = (calibration = null) => {
   }  
   // Wait for intro_trial and tap past it
   waitForReport('intro_trial');
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   // Wait for sound_trial
   waitForReport('sound_trial');
   // Check if experiment finishes
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));    
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));    
   waitForReport("FINISHED");
 };
 
@@ -405,7 +405,7 @@ e2e_text = (calibration = null) => {
   }
   // Tap past intro screen
   waitForReport('STARTED');
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   // Make screenshots of test1 to test6
   for (let test_i = 1; test_i <= 6; test_i++) {
     testName = 'text' + test_i;      
@@ -415,7 +415,7 @@ e2e_text = (calibration = null) => {
     //browser.pause(200);    
     browser.writeScreenshot(testName);
     // Next routine
-    tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+    tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   }
   // Wait for FINISHED
   waitForReport('FINISHED');
@@ -493,12 +493,12 @@ e2e_video = (calibration = null) => {
   }  
   // Wait for intro_trial and tap past it
   waitForReport('intro_trial');
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   // Wait for video_trial and take screenshot
   waitForReport('video_trial');
   browser.writeScreenshot('video');
   // Check if experiment finishes
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));    
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));    
   waitForReport("FINISHED");
 };
 
@@ -520,12 +520,12 @@ e2e_combined = (calibration = null) => {
     };'
   );  
   // Tap past intro  
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   // Wait for combined_trial and take screenshot
   waitForReport('combined_trial');
   browser.writeScreenshot('combined');
   // Check if experiment finishes
-  tapAtCoordinate(calibration.transformX(0.5), calibration.transformY(0.5));    
+  tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));    
   waitForReport("FINISHED");
 }
 
