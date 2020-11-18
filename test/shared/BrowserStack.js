@@ -18,7 +18,6 @@ curlCommand = (postfix, infix = '') => {
 getProjectIdByName = (projectName) => {
   console.log('BrowserStack.js: finding projectId with projectName ' + projectName);
   // Query projects
-  console.log(curlCommand('projects.json'));
   let projects = JSON.parse(child_process.execSync(curlCommand('projects.json')));
   console.log('BrowserStack.js: ' + projects.length + ' projects in total');
   // Project with matching name
@@ -41,7 +40,7 @@ getBuildsByProjectId = (projectId) => {
   return projectDetails.project.builds;
 }
 
-/// Delete builds as speficied via filterFunction
+// Delete builds as speficied via filterFunction
 deleteBuilds = (filterFunction) => {
   console.log('BrowserStack.js: deleting builds');
   // Get all builds of projectName
@@ -66,6 +65,14 @@ deleteBuilds = (filterFunction) => {
   }
 };  
 
+// Get all available browsers
+getBrowsers = () => {
+  console.log('BrowserStack.js: getting all available capabilities');
+  let browsers = JSON.parse(child_process.execSync(curlCommand('browsers.json')));
+  return browsers;
+};
+
+
 // Delete one test + branch named testName
 deleteOneTest = (testName) => {
   console.log('BrowserStack.js: deleting one test + branch with testName ' + testName);
@@ -85,6 +92,7 @@ deleteAllBranchesExcept = (branchNames) => {
 module.exports = {
   getProjectIdByName: getProjectIdByName,
   getBuildsByProjectId: getBuildsByProjectId,
+  getBrowsers: getBrowsers,
   deleteOneTest: deleteOneTest,
   deleteAllBranchesExcept: deleteAllBranchesExcept
 };
