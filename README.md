@@ -23,6 +23,8 @@ Scripts for automated end-to-end testing of [PsychoJS](https://github.com/psycho
     * [Handling network time-outs](#handling-network-time-outs)
     * [Speeding up testruns](#speeding-up-testruns)
 * [Generating and parsing test logs](#generating-and-parsing-test-logs)
+    * [Generating custom logs](#generating-custom-logs)
+    * [Parsing custom logs](#parsing-custom-logs)
 * [Overview of tests](#overview-of-tests)
 
 <div id='core-technologies'></div>
@@ -78,7 +80,7 @@ Run all tests via local server.
 
 Run the e2e_img test on each Android device via BrowserStack, using demo as name for the logs, and uploading reports to the PsychoPy staging server. 
 
-`npx wdio wdio.conf.js --server local --upload yes --branch demo --platform *Android* --test e2e_img`
+`npx wdio wdio.conf.js --server bs --upload yes --branch demo --platform *Android* --test e2e_img`
 
 <div id='supporting-scripts'></div>
 
@@ -166,8 +168,14 @@ There are two factors that can cause PsychoJS test-runs to be relatively slow: F
 <div id='generating-and-parsing-test-logs'></div>
 
 # Generating and parsing test logs
+<div id='generating-custom-logs'></div>
 
-By default, jasmine's test reporters only report whether a test was passed, had failed, or was skipped. Additional information is only logged upon a fail. I added a feature for logging additional information. The custom browser commands `browser.logInit`, `bowser.logAdd`, and `browser.logGet` can be used to manage this log. Customized logs are stored in `browser.capabilities.customLogs`, which are in turn stored in JSON files in `.tmp/json_logs/` via the [JSON reporter](https://webdriver.io/docs/wdio-json-reporter.html). The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`.
+## Generating custom logs
+By default, jasmine's test reporters only report whether a test was passed, had failed, or was skipped. Additional information is only logged upon a fail. I added a feature for logging additional information. The custom browser commands `browser.logInit`, `bowser.logAdd`, and `browser.logGet` can be used to manage this log. Customized logs are stored in `browser.capabilities.customLogs`, which are in turn stored in JSON files in `.tmp/json_logs/` via the [JSON reporter](https://webdriver.io/docs/wdio-json-reporter.html). 
+<div id='parsing-custom-logs'></div>
+
+## Parsing custom logs
+The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In some cases an empty JSON logfile, or no logfile at all, is produced. This can happen, for example, when a BrowserStack session could not be initialized. In these cases, a special set of entries are added to the processed logs, usingy the capability_ids `none_1`, `none_2` etc. One entry registers the platform, while a second entry has spec `parse_logs` and state `failed`.
 
 <div id='overview-of-tests'></div>
 
