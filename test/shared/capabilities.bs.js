@@ -1,299 +1,184 @@
-module.exports = { 
-  capabilities: (branch, platformPattern, test, subset) => {
-    // For pattern matching of strings with * and . wildcards
-    // From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
-    function wildTest(wildcard, str) {
-      let w = wildcard.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // regexp escape 
-      const re = new RegExp(`^${w.replace(/\*/g,'.*').replace(/\?/g,'.')}$`,'i');
-      return re.test(str); // remove last 'i' above to have case sensitive
+const BrowserStack = require('./BrowserStack.js');
+const fs = require('fs');
+
+// Returns index of highest number in array that is not NaN
+const indexOfMax = (values) => {
+  let max = undefined;
+  let maxIndex = undefined;
+  for (let i = 0; i < values.length; i++) {
+    if (!isNaN(values[i]) && (max === undefined || values[i] > max)) {
+      max = values[i];
+      maxIndex = i;
     }
+  }
+  return maxIndex;
+};
 
-    // Settings shared by desktop and mobile
-    let projectName = 'PsychoJS',
-        video = 'true',
-        debug = 'true';
-    // All generated capabilities
-    let output = [];
+// For pattern matching of strings with * and . wildcards
+// From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
+const wildTest = (wildcard, str) => {
+  let w = wildcard.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // regexp escape 
+  const re = new RegExp(`^${w.replace(/\*/g,'.*').replace(/\?/g,'.')}$`,'i');
+  return re.test(str); // remove last 'i' above to have case sensitive
+}
 
-    let generalSettings, specificSettings, platform, capability;
-    
-    // *** Desktop
-    generalSettings = {
-      'bstack:options': {
-        buildName: test + ':' + branch,
-        projectName: projectName,
-        video: video,
-        debug: debug,
-        seleniumVersion: '3.141.59',
-        resolution: '1280x1024',
-        local: 'false'
-      },
-      browserVersion: 'latest'
-    };
-    
-    // os, osVersion, browser
-    specificSettings = [
-      {
-        'os': 'Windows',
-        'osVersion': '10',
-        'browserNames': [
-          ['Chrome', true],
-          ['Edge', false], 
-          ['Firefox', true],
-          ['IE']
-        ]
-      },
-      {
-        'os': 'Windows',
-        'osVersion': '8.1',
-        'browserNames': ['Chrome', 'Edge', 'Firefox', 'IE']
-      },
-      {
-        'os': 'Windows',
-        'osVersion': '7',
-        'browserNames': ['Chrome', 'Edge', 'Firefox', 'IE']
-      },
-      {
-        'os': 'OS X',
-        'osVersion': 'Catalina',
-        'browserNames': ['Chrome', 'Edge', 'Firefox', 'Safari']
-      },
-      {
-        'os': 'OS X',
-        'osVersion': 'Mojave',
-        'browserNames': ['Chrome', 'Edge', 'Firefox', 'Safari']
-      },
-      {
-        'os': 'OS X',
-        'osVersion': 'High Sierra',
-        'browserNames': [
-          ['Chrome', true],
-          ['Edge', true], 
-          ['Firefox', true],
-          ['Safari', false]
-        ]
-      }
-      
-      
-      
-//      {
-//        'os': 'OS X',
-//        'osVersion': 'Sierra',
-//        'browserNames': ['Chrome', 'Edge', 'Firefox', 'Safari']
-//      },
-//      {
-//        'os': 'OS X',
-//        'osVersion': 'El Capitan',
-//        'browserNames': ['Chrome', 'Firefox', 'Safari']
-//      },
-//      {
-//        'os': 'OS X',
-//        'osVersion': 'Yosemite',
-//        'browserNames': ['Chrome', 'Firefox', 'Safari']
-//      },
-//      {
-//        'os': 'OS X',
-//        'osVersion': 'Mavericks',
-//        'browserNames': ['Chrome', 'Firefox', 'Safari']
-//      },
-      /*{
-        'os': 'OS X',
-        'osVersion': 'Mountain Lion',
-        'browserNames': ['Chrome', 'Firefox', 'Safari']
-      },
-      {
-        'os': 'OS X',
-        'osVersion': 'Lion',
-        'browserNames': ['Chrome', 'Firefox', 'Safari']
-      }*/
-    ];
-    
-    // Construct desktop capabilities
-    let browserName, belongsToSubset;
-    for (let specificSetting of specificSettings) {
-      //specificSetting = specificSettings[specificSetting_i];
-      for (let browser of specificSetting.browserNames) {
-        if (typeof browser === "string") {
-          browserName = browser;
-          belongsToSubset = false;
-        } else {
-          browserName = browser[0];
-          belongsToSubset = browser[1];
-        }        
-        platform =           
-          specificSetting.os + '_' +
-          specificSetting.osVersion + '_' +
-          browserName + '_' +
-          generalSettings.browserVersion;
-        //platform = platform.replace(/ /gi, "#");          
-        capability = JSON.parse(JSON.stringify(generalSettings));
-        capability['bstack:options'].sessionName = platform;
-        capability['bstack:options'].os = specificSetting.os;
-        capability['bstack:options'].osVersion = specificSetting.osVersion;
-        capability.browserName = browserName;
-        capability['e2e_robot:platform'] = platform;
-        if (wildTest(platformPattern, platform) && (!subset || belongsToSubset)) {
-          output.push(capability);
+// Returns browsers from BrowserStack after basic filtering
+const getBrowsers = () => {
+  // Get all available browsers from local HDD (cachedBrowsersFile), otherwise cache from BrowserStack's REST API
+  const cachedBrowsersFile = './.tmp/logs_capabilities/browsers.json';
+  let allBrowsers;
+  if (fs.existsSync(cachedBrowsersFile)) {
+    allBrowsers = JSON.parse(fs.readFileSync(cachedBrowsersFile));
+  } else {
+    allBrowsers = BrowserStack.getBrowsers();
+    fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
+  }
+  // Select browsers that match these filters
+  let browserFilters = [
+    { 
+      os: ['Windows'], 
+      os_version: ['7', '8.1', '10'], 
+      browser: ['chrome', 'edge', 'firefox', 'ie']
+    },
+    {
+      os: ['OS X'], 
+      os_version: ['Catalina', 'Mojave', 'High Sierra'], 
+      browser: ['chrome', 'edge', 'firefox', 'safari']
+    },
+    {
+      os: ['ios'], 
+      os_version: ['13', '14'], 
+      browser: ['iphone']
+    },
+    { 
+      os: ['android'], 
+      os_version: ['6.0', '7.0', '7.1', '8.0', '8.1', '9.0', '10.0', '11.0'], 
+      browser: ['android']
+    }
+  ];
+
+  // Browsers that meet filters
+  let browsers = [];
+
+  // For each filter, select browsers that match filter
+  // Then, if browser_version is not null, select highest browser_version
+  let selectedBrowsers, browser_versions, indexLatestBrowser; 
+  for (let browserFilter of browserFilters) {
+    for (let os of browserFilter.os) {
+      for (let os_version of browserFilter.os_version) {
+        for (let browserName of browserFilter.browser) {
+          // Browsers that meet current filter
+          selectedBrowsers = allBrowsers.filter((browser) => {
+            return browser.os == os && browser.os_version == os_version && browser.browser == browserName;
+          });
+          
+          if (['ios', 'android'].includes(os)) {
+            // For ios and android, add all selectedBrowsers
+            browsers = browsers.concat(selectedBrowsers);
+          } else {
+            // For other OSs, select highest browser_version
+            browser_versions = selectedBrowsers.map((browser) => {
+              // Convert browser_version from string to number 
+              return +(browser.browser_version);
+            })
+            indexLatestBrowser = indexOfMax(browser_versions);
+            browsers.push(selectedBrowsers[indexLatestBrowser])          
+          }
         }
       }
-    }    
-    
-    // *** Mobile
-    generalSettings = {
-      'bstack:options': {
-        buildName: test + ':' + branch,
-        projectName: projectName,
-        video: video,
-        debug: debug,
-//        realMobile: 'true',
-//        local: 'false',
-        appiumVersion: '1.17.0',
-        appiumLogs: 'false'
-      }
-    };    
-    
-    // os, osVersion, device
-    specificSettings = [
-      {
-        'os': 'Android',
-        'browserName': 'Android',
-        'devices': [
-          ['11.0', 'Google Pixel 4', true],
-          
-          ['10.0', 'Samsung Galaxy S20'],
-          ['10.0', 'Samsung Galaxy S20 Plus'],
-          ['10.0', 'Samsung Galaxy S20 Ultra'],
-          ['10.0', 'Google Pixel 4 XL'],
-          ['10.0', 'Google Pixel 4'],
-          ['10.0', 'Google Pixel 3', true],
-          ['10.0', 'OnePlus 8'],
-          ['10.0', 'OnePlus 7T'],
-          
-          ['9.0', 'Samsung Galaxy S9 Plus', true],
-          ['9.0', 'Samsung Galaxy S8 Plus'],
-          ['9.0', 'Samsung Galaxy S10e'],
-          ['9.0', 'Samsung Galaxy S10 Plus'],
-          ['9.0', 'Samsung Galaxy S10'],
-          ['9.0', 'Samsung Galaxy Note 10 Plus'],
-          ['9.0', 'Samsung Galaxy Note 10'],
-          ['9.0', 'Samsung Galaxy A10'],
-          ['9.0', 'Google Pixel 3a XL'],
-          ['9.0', 'Google Pixel 3a'],
-          ['9.0', 'Google Pixel 3 XL'],
-          ['9.0', 'Google Pixel 3'],
-          ['9.0', 'Google Pixel 2'],
-          ['9.0', 'Motorola Moto G7 Play'],          
-          ['9.0', 'OnePlus 7'],
-          ['9.0', 'OnePlus 6T'],
-          ['9.0', 'Xiaomi Redmi Note 8'],
-          ['9.0', 'Xiaomi Redmi Note 7'],
-          ['9.0', 'Samsung Galaxy Tab S6'],
-          ['9.0', 'Samsung Galaxy Tab S5e'],
-
-          ['8.1', 'Samsung Galaxy Note 9'],
-          ['8.1', 'Samsung Galaxy J7 Prime'],
-          ['8.1', 'Samsung Galaxy Tab S4'],          
-          
-          ['8.0', 'Samsung Galaxy S9 Plus'],
-          ['8.0', 'Samsung Galaxy S9'],
-          ['8.0', 'Google Pixel 2'],
-          ['8.0', 'Google Pixel'],
-          // ['8.0', 'Samsung Galaxy Tab S3'], // Not supported anymore
-          
-          ['7.1', 'Samsung Galaxy Note 8'],
-          ['7.1', 'Samsung Galaxy A8'],
-          ['7.1', 'Google Pixel'],
-          
-          ['7.0', 'Samsung Galaxy S8 Plus'],
-          ['7.0', 'Samsung Galaxy S8', true],
-          ['7.0', 'Samsung Galaxy Tab S3'],
-          
-          ['6.0', 'Samsung Galaxy S7'],
-          ['6.0', 'Samsung Galaxy Note 4'],
-          ['6.0', 'Google Nexus 6'],
-          ['6.0', 'Motorola Moto X 2nd Gen']
-
-
-          
-//          ['5.0', 'Samsung Galaxy S6'],
-//          ['5.0', 'Google Nexus 6'],
-//          ['5.0', 'Motorola Moto X 2nd Gen'],
-
-//          ['4.4', 'Samsung Galaxy Note 4'],
-//          ['4.4', 'Google Nexus 5'],
-//          ['4.4', 'Samsung Galaxy Tab 4']
-        ]
-      },
-      {
-        'os': 'iOS',
-        'browserName': 'iPhone',
-        'devices': [
-          ['13', 'iPhone XS'],
-          ['13', 'iPhone 11 Pro Max'],
-          ['13', 'iPhone 11 Pro'],
-          ['13', 'iPhone 11'],
-          ['13', 'iPhone SE 2020'],
-          ['13', 'iPhone 8', true],          
-          ['13', 'iPad Pro 12.9 2020'],
-          ['13', 'iPad Pro 12.9 2018'],
-          ['13', 'iPad Pro 11 2020'],
-          ['13', 'iPad 7th'],
-
-          // ['12', 'iPhone XS'],
-          // ['12', 'iPhone XS Max'],
-          ['12', 'iPhone XR', true],
-          // ['12', 'iPhone 8'],
-          // ['12', 'iPhone 8 Plus'],
-          // ['12', 'iPhone 7'],          
-          // ['12', 'iPhone 6S'],          
-          // ['12', 'iPad Pro 12.9 2018'],
-          // ['12', 'iPad Pro 11 2018'],
-          // ['12', 'iPad Mini 2019'],
-          // ['12', 'iPad Air 2019']
-          
-//          ['11', 'iPhone X'],
-//          ['11', 'iPhone 8'],
-//          ['11', 'iPhone 8 Plus'],
-//          ['11', 'iPhone 6S'],
-//          ['11', 'iPhone 6S Plus'],
-//          ['11', 'iPhone 6'],
-//          ['11', 'iPhone SE'],
-//          ['11', 'iPad Pro 9.7 2016'],
-//          ['11', 'iPad Pro 12.9 2017'],
-//          ['11', 'iPad Mini 4'],
-          ['11', 'iPad 6th'],
-//          ['11', 'iPad 5th'],
-//
-//          ['10', 'iPhone 7'],
-//          ['10', 'iPhone 7 Plus']
-        ]
-      }      
-    ];
-    for (let specificSetting of specificSettings) {
-      for (let device of specificSetting.devices) {
-        belongsToSubset = device.length > 2 && device[2];
-        //console.log(device);
-        platform = 
-          specificSetting.os + '_' +
-          device[0] + '_' +
-          device[1] + '_' +
-          specificSetting.browserName;
-        //platform = platform.replace(/ /gi, "#");
-        capability = JSON.parse(JSON.stringify(generalSettings));
-        capability['bstack:options'].sessionName = platform;
-        capability['bstack:options'].os = specificSetting.os;
-        capability['bstack:options'].osVersion = device[0];
-        capability['bstack:options'].deviceName = device[1];
-        //capability['bstack:options'].platformName = specificSetting.os;
-        capability.browserName = specificSetting.browserName;
-        //capability.platformName = specificSetting.os;
-        capability['e2e_robot:platform'] = platform;
-        
-        if (wildTest(platformPattern, platform) && (!subset || belongsToSubset)) {
-          output.push(capability);
-        }        
-      }
-    }    
-    return (output);
+    }
   }
+  return browsers; b
+}
+
+// An array of browserNames to test on if subset === true
+const browserSubsets = [
+  'Windows_10_Chrome_*'
+];
+
+
+// Generates browserstack capabilities
+// buildName is used as build in browserstack logs
+// platformPattern is a string with wildcards for selecting platformNames
+// if subset is true, besides platformPattern, platformNames are selected that meet platformSubset
+const getCapabilities = (buildName, platformPattern, subset) => {
+  // Get platforms in BrowserStack's browsers.json format
+  let browsers = getBrowsers();
+
+  // Additional browserstack options to add to each capability
+  const generalOptions = {
+    projectName: 'PsychoJS',
+    buildName: buildName,
+    video: 'true',
+    debug: 'true',
+    local: 'false'
+  };
+  
+  // Convert browsers to capabilities
+  let capabilities = browsers.map((browser) => {
+    // Recode browser properties
+    let capability = {
+      browserName: browser.browser,
+      'bstack:options': {
+        os: browser.os,
+        osVersion: browser.os_version
+      }
+    };
+    // Add general options
+    capability['bstack:options'] = Object.assign(capability['bstack:options'], generalOptions);
+    // Add desktop/mobile-specific options
+    if (['android', 'ios'].includes(browser.os)) {
+      // mobile-specific
+      let platformName = 
+        browser.os + '_' +
+        browser.os_version + '_' +
+        browser.device + '_' +
+        browser.browser;      
+
+      capability['bstack:options'] = Object.assign(capability['bstack:options'], {
+        deviceName:  browser.device,
+        appiumLogs: 'false',
+        sessionName: platformName,
+        appiumVersion: '1.17.0'
+      });
+    } else {
+      // desktop-specific
+      let platformName =           
+        browser.os + '_' +
+        browser.os_version + '_' +
+        browser.browser + '_' +
+        browser.browser_version;
+      capability['bstack:options'] = Object.assign(capability['bstack:options'], {
+        sessionName: platformName,
+        seleniumVersion: '3.141.59',
+        resolution: '1280x1024'
+      });
+      capability.browserVersion = browser.browser_version;
+    }
+    return capability;
+  });
+  // Filter on platformPattern and subset
+  capabilities = capabilities.filter((capability) => {
+    // Filter on platformSubsets if subset === true
+    let matchesFilter;
+    if (subset) {
+      matchesFilter = false;
+      for (platformSubset of platformSubsets) {
+        matchesFilter = matchesFilter || wildTest(platformSubset, capability['bstack:options'].sessionName);
+      }
+    } else {
+      matchesFilter = true;
+    }
+    // Filter on platformPattern
+    if (matchesFilter) {
+      matchesFilter = wildTest(platformPattern, capability['bstack:options'].sessionName);
+    }
+    return matchesFilter;
+  });
+  //console.log(capabilities);
+  return capabilities;
+}
+
+module.exports = { 
+  getCapabilities: getCapabilities
 };
