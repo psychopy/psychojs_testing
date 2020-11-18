@@ -51,9 +51,33 @@ joinReports = async () => {
   ReportSummarizer.writeJsonAndCsv('.tmp/results', joinedReports);
   // Summarize reports
   let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
-  // Store summarized reports
-  ReportSummarizer.writeJsonAndCsv('.tmp/summary', summaries);
+  // Store summaries
+  ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/summary', summaries);
+  // Store summaries of all tests with at least on fail
+  let summariesFailed = summaries.filter( (summary) => {
+    return summary.failed > 0
+  })
+  ReportSummarizer.writeJsonAndCsv('.tmp/logs_processed/failed', summariesFailed);
 
+  // Merge together in an XLSX file
+  const XLSX = require('xlsx');
+  let wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(
+    wb, 
+    XLSX.utils.json_to_sheet(summariesFailed),
+    'failed'
+  );
+  XLSX.utils.book_append_sheet(
+    wb, 
+    XLSX.utils.json_to_sheet(summaries),
+    'summary'
+  );
+  XLSX.utils.book_append_sheet(
+    wb, 
+    XLSX.utils.json_to_sheet(joinedReports),
+    'report'
+  );
+  XLSX.writeFile(wb, '.tmp/logs_processed/combined_report.xlsx');
 };
 joinReports();
 
