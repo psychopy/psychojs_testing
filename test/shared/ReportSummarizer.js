@@ -98,7 +98,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   );  
   // allPlatforms; all those found in capabilities
   let allPlatforms = capabilities.map((capability) => {
-    return capability['e2e_robot:platform'];
+    return capability['bstack:options'].sessionName;
   });
   // processedPlatforms; those we found in processed logs
   let processedPlatforms = output.filter((outputEntry) => {
@@ -119,7 +119,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   for (i = 0; i < unprocessedPlatforms.length; i++){
     capability_id = 'none_' + i;
     log('custom', 'platform', 'custom', unprocessedPlatforms[i], '');
-    log('', 'process_logs', 'failed', '', '');  
+    log('', 'process_logs', 'failed', 'Could not process JSON logs', '');  
   }
 
   // Return merged reports
@@ -142,7 +142,7 @@ summarize = (output, customLogsToAdd) => {
   capabilities = output.map((row) => {
     return row.capability_id;
   });
-  capabilities = Int8Array.from(new Set(capabilities)).sort();
+  capabilities = Array.from(new Set(capabilities));
   // List of failed tests per capability
   let failedTests;
   // For each unique capability, aggregate data
@@ -155,7 +155,7 @@ summarize = (output, customLogsToAdd) => {
       return row.capability_id === capability && row.state === 'custom' && customLogsToAdd.includes(row.spec)
     });
     for (let customLog of customLogs) {
-      summary[customLog.specfile_id + '.' + customLog.spec] = customLog.message
+      summary[customLog.spec] = customLog.message
     }
     // Count passed, failed, skipped
     for (let state of ['passed', 'failed', 'skipped']) {
