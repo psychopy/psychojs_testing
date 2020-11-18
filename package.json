@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,6 +19,7 @@
     "replace-color": "^2.3.0",
     "ssh2-sftp-client": "^5.3.1",
     "wdio-json-reporter": "^2.0.0",
+    "xlsx": "^0.16.8",
     "yargs": "^16.1.0"
   },
   "dependencies": {}
