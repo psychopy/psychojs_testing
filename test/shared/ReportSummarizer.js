@@ -9,7 +9,6 @@ writeJsonAndCsv = (filePrefix, output) => {
     filePrefix + '.json',
     JSON.stringify(output)
   );
-
   // Store output as CSV
   fs.writeFileSync(
     filePrefix + '.csv',
@@ -40,10 +39,10 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   };
 
   // *** Process JSON reporter files
+  // Path to capabilities
+  let pathCapabilities = '.tmp/logs_capabilities';
   // Path to JSON reporter logs
-  let pathIn = '.tmp/json_logs';
-  // Path to processed logs
-  let pathOut = '.tmp/processed_logs';
+  let pathIn = '.tmp/logs_json';
   // List of JSON reporter log filenames
   let filenames = fs.readdirSync(pathIn).sort();
   // Converted logs
@@ -55,6 +54,8 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   let capability_id;
   // Filename split to array
   let splitFilename;
+  // Number of logs we couldn't process
+  let failedLogs = 0;
 
   // Convert each JSON reporter log file
   console.log('ReportSummarizer.js: found ' + filenames.length + ' JSON logs');
@@ -86,14 +87,43 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
         }
       }
     } catch (e) {
-      console.log('ReportSummarizer.js: error reading ' + filename);
-      console.log(e);
-      log('', 'merge_logs', 'failed', e.toString(), '');
+      console.log('ReportSummarizer.js: error reading ' + filename + ' (' + e.message + ')');
+      failedLogs++;
     }
-
   }
-  // Store merged reports
-  writeJsonAndCsv(pathOut + '/' + 'report', output);
+  // *** Add entries for logs we couldn't process; these should add up to the number of platforms not present in processed lgos
+  // Read capabilities
+  capabilities = JSON.parse(
+    fs.readFileSync(pathCapabilities + '/capabilities.json').toString()
+  );  
+  // allPlatforms; all those found in capabilities
+  let allPlatforms = capabilities.map((capability) => {
+    return capability['e2e_robot:platform'];
+  });
+  // processedPlatforms; those we found in processed logs
+  let processedPlatforms = output.filter((outputEntry) => {
+    return outputEntry.spec == 'platform'
+  }).map( (outputEntry) => {
+    return outputEntry.message
+  });
+  // platforms not present in processed logs
+  let unprocessedPlatforms = allPlatforms.filter((platform) => {
+    return !processedPlatforms.includes(platform);
+  });
+  console.log(
+    'ReportSummarizer.js: found ' + failedLogs + ' JSON logs that could not be processed and ' + unprocessedPlatforms.length + ' platforms without processed logs. ' +
+    'These are ' + JSON.stringify(unprocessedPlatforms)
+  );
+  // Add 'no_logs' entries for unprocessed platforms
+  specfile_id = 'none';
+  for (i = 0; i < unprocessedPlatforms.length; i++){
+    capability_id = 'none_' + i;
+    log('custom', 'platform', 'custom', unprocessedPlatforms[i], '');
+    log('', 'process_logs', 'failed', '', '');  
+  }
+
+  // Return merged reports
+  return output;
 };
 
 // Summarize output, add custom entries present in customLog
@@ -113,6 +143,8 @@ summarize = (output, customLogsToAdd) => {
     return row.capability_id;
   });
   capabilities = Int8Array.from(new Set(capabilities)).sort();
+  // List of failed tests per capability
+  let failedTests;
   // For each unique capability, aggregate data
   for(let capability of capabilities) {
     summary = {};
@@ -131,19 +163,27 @@ summarize = (output, customLogsToAdd) => {
         return row.capability_id === capability && row.state === state
       }).length;
     }
+    // All failed tests of this capability
+    failedTests = output.filter(function (row) {
+      return row.capability_id === capability && row.state === 'failed'
+    });
     // Append all failed specs to a space-separated string
-    summary.failed_specs = 
-      output.filter(function (row) {
-        return row.capability_id === capability && row.state === 'failed'
-      }).map(function(row) {
-        return row.suite;
-      }).join(' ');
+    summary.failed_specs = failedTests.map(function(row) {
+      return row.spec;
+    }).join(' ');
+    // Append messages of failed specs to a space-separated string
+    summary.messages = failedTests.map(function(row) {
+      return row.message;
+    }).join(' ');
 
     // Add to summaries
     summaries.push(summary);
   }
   return summaries;
 };
+
+// List all failed tests
+
 
 // Reads in each json reporter logs and aggrates them
 module.exports = { 
