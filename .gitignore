@@ -2,7 +2,8 @@ node_modules/
 nbproject/
 test/reference_imgs/
 test/counterexample_imgs/
-.tmp/
+.tmp_e2e/
+.tmp_experiments/
 .vs/
 .vscode/
 dist/
