@@ -10,8 +10,8 @@ module.exports = {
   dir_screenshots_cutout:  './.tmp/screenshots_cutout',
   dir_screenshots_raw:     './.tmp/screenshots_raw',
   dir_screenshots_scaled:  './.tmp/screenshots_scaled',  
+  dir_experiments:         './.tmp/experiments',
   
   dir_counterexample_imgs: './test/counterexample_imgs',
-  
   url_reference_imgs:      'https://staging.psychopy.org/reference_imgs'
 };
