@@ -1,16 +1,25 @@
-experimentUrls = {
-  e2e_calibration: 'https://run.pavlovia.org/tpronk/e2e_calibration/',
-  e2e_code: 'https://run.pavlovia.org/tpronk/e2e_code/html/',
-  e2e_conditions: 'https://run.pavlovia.org/tpronk/e2e_conditions/html/',
-  e2e_img: 'https://run.pavlovia.org/thewhodidthis/e2e_img/html/',
-  e2e_polygon: 'https://run.pavlovia.org/tpronk/e2e_polygon/html/',
-  e2e_sound: 'https://run.pavlovia.org/tpronk/e2e_sound/html/',
-  e2e_text: 'https://run.pavlovia.org/tpronk/e2e_text/html/',
-  e2e_textbox: 'https://run.pavlovia.org/tpronk/e2e_textbox/html/',
-  e2e_video: 'https://run.pavlovia.org/tpronk/e2e_video/',
-  e2e_combined: 'https://run.pavlovia.org/tpronk/e2e_combined/html/',
-  int_gonogo: 'https://run.pavlovia.org/tpronk/int_gonogo/',
+// experimentUrls = {
+//   e2e_calibration: 'https://run.pavlovia.org/tpronk/e2e_calibration/',
+//   e2e_code: 'https://run.pavlovia.org/tpronk/e2e_code/html/',
+//   e2e_conditions: 'https://run.pavlovia.org/tpronk/e2e_conditions/html/',
+//   e2e_img: 'https://run.pavlovia.org/thewhodidthis/e2e_img/html/',
+//   e2e_polygon: 'https://run.pavlovia.org/tpronk/e2e_polygon/html/',
+//   e2e_sound: 'https://run.pavlovia.org/tpronk/e2e_sound/html/',
+//   e2e_text: 'https://run.pavlovia.org/tpronk/e2e_text/html/',
+//   e2e_textbox: 'https://run.pavlovia.org/tpronk/e2e_textbox/html/',
+//   e2e_video: 'https://run.pavlovia.org/tpronk/e2e_video/',
+//   e2e_combined: 'https://run.pavlovia.org/tpronk/e2e_combined/html/',
+//   int_gonogo: 'https://run.pavlovia.org/tpronk/int_gonogo/',
+// };
+getExperimentUrl = (experiment) => {
+  let branch = browser.getBranch();
+  if (branch === 'pavlovia') {
+    return 'https://run.pavlovia.org/tpronk/' + experiment;
+  } else {
+    return 'https://staging.psychopy.org/app/' + branch + '/' + experiment;
+  }
 };
+
 
 /**
  * Goes through the Pavlovia loading procedure that precedes a PsychoJS experiment:
@@ -217,7 +226,7 @@ waitForReport = (value) => {
  */  
 e2e_calibration = (screenshots) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_calibration);
+  browser.url(getExperimentUrl('e2e_calibration'));
   performPavloviaPrelude();
 
   // Perform calibration procedure, store results
@@ -249,7 +258,7 @@ e2e_calibration = (screenshots) => {
  */  
 e2e_code = () => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_code);
+  browser.url(getExperimentUrl('e2e_code'));
   performPavloviaPrelude(waitForCanvas = false);
   // Wait for correct report value
   waitForReport('not_implemented begin_experiment begin_routine each_frame end_routine end_experiment');
@@ -263,7 +272,7 @@ e2e_code = () => {
  */  
 e2e_conditions = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_conditions);
+  browser.url(getExperimentUrl('e2e_conditions'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -306,7 +315,7 @@ e2e_conditions = (calibration = null) => {
  */  
 e2e_img = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_img);
+  browser.url(getExperimentUrl('e2e_img'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -340,7 +349,7 @@ e2e_img = (calibration = null) => {
  */  
 e2e_polygon = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_polygon);
+  browser.url(getExperimentUrl('e2e_polygon'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -373,7 +382,7 @@ e2e_polygon = (calibration = null) => {
  */  
 e2e_sound = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_sound);
+  browser.url(getExperimentUrl('e2e_sound'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -397,7 +406,7 @@ e2e_sound = (calibration = null) => {
  */  
 e2e_text = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_text);
+  browser.url(getExperimentUrl('e2e_text'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -448,7 +457,7 @@ e2e_textbox = (calibration = null) => {
     calibration = e2e_calibration(false);    
   }
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_textbox);
+  browser.url(getExperimentUrl('e2e_textbox'));
   performPavloviaPrelude();
   // Go through intro, type something in textbox, make screenshot
   waitForReport('intro');
@@ -485,7 +494,7 @@ e2e_textbox = (calibration = null) => {
  */  
 e2e_video = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_video);
+  browser.url(getExperimentUrl('e2e_video'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -505,7 +514,7 @@ e2e_video = (calibration = null) => {
 
 e2e_combined = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.e2e_combined);
+  browser.url(getExperimentUrl('e2e_combined'));
   performPavloviaPrelude();
   // If no calibration specified, get from viewport
   if (calibration === null) {
@@ -531,7 +540,7 @@ e2e_combined = (calibration = null) => {
 
 int_gonogo = (calibration = null) => {
   // Navigate to experiment and perform prelude
-  browser.url(experimentUrls.int_gonogo);
+  browser.url(getExperimentUrl('int_gonogo'));
   performPavloviaPrelude();
   // Wait for slideshow
   waitForReport('slideshow');
@@ -540,7 +549,7 @@ int_gonogo = (calibration = null) => {
 }
 
 module.exports = {
-  experimentUrls: experimentUrls,
+  //experimentUrls: experimentUrls,
   performPavloviaPrelude: performPavloviaPrelude,
   getViewportResolutions: getViewportResolutions,
   tapAtCoordinate: tapAtCoordinate,

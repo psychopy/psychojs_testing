@@ -24,17 +24,25 @@ if (process.env.TRAVIS_BRANCH !== undefined) {
 
 // Download experiments to temporary directory
 deployExperiments = async () => {
-  // Recreate experiments directory
-  fs.rmdirSync(Paths.dir_experiments, {recursive: true});
-  fs.mkdirSync(Paths.dir_experiments);
+  // Delete experiments directory (it not empty)
+  try {
+    fs.rmdirSync(Paths.dir_experiments, {recursive: true});
+  } catch (e) {}
+  // Recreate experiments directory (with workaround for Windows)
+  let dirCreated = false;
+  while (!dirCreated) {
+    try {
+      fs.mkdirSync(Paths.dir_experiments);
+      dirCreated = true;
+    } catch (e) {}
+  }
 
   // Download experiments
   console.log('deployExperiments.js: downloading experiments');
   downloadResults = await Stager.ftpRequest((client, basePath) => {
     return client.downloadDir(basePath + '/experiments', Paths.dir_experiments);
-  }, false);
-  console.log(downloadResults);
-
+  }, true);
+  
   // List of  experiments
   let experiments = fs.readdirSync(Paths.dir_experiments);
   console.log('deployExperiments.js: preparing ' + experiments.length + ' experiments');
@@ -45,9 +53,8 @@ deployExperiments = async () => {
 
   // For each experiment, compile index.html and copy dist/ to lib/
   for (let experiment of experiments) {
-    // Compile template
+    // Compile and write template
     let compiled = Mustache.render(template, { experiment: experiment });
-    console.log(compiled);
     fs.writeFileSync(
       Paths.dir_experiments + '/' + experiment + '/index.html', 
       compiled

@@ -33,6 +33,15 @@ const getBrowsers = () => {
     allBrowsers = JSON.parse(fs.readFileSync(cachedBrowsersFile));
   } else {
     allBrowsers = BrowserStack.getBrowsers();
+    // Workaround for constructing directories (since log cleanup may not have been performed yet)
+    if (!fs.existsSync(Paths.dir_tmp)) {
+      console.log('capabilities.bs.js. Creating directory: ' + Paths.dir_tmp)
+      fs.mkdirSync(Paths.dir_tmp);
+    };    
+    if (!fs.existsSync(Paths.dir_logs_capabilities)) {
+      console.log('capabilities.bs.js. Creating directory: ' + Paths.dir_logs_capabilities)
+      fs.mkdirSync(Paths.dir_logs_capabilities);
+    };    
     fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
   }
   // Select browsers that match these filters

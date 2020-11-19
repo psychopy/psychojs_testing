@@ -309,7 +309,10 @@ exports.config = {
         return comparisonResult.rms;
       }
     });
-
+    // Get current branch
+    browser.addCommand('getBranch', () => {
+      return branch;
+    });
 
     // Managing custom log-file
     browser.addCommand('logInit', () => {
@@ -366,9 +369,9 @@ exports.config = {
     // If upload enabled, update stager
     if (upload) {
       // Delete old logs
-      await Stager.deleteDirectory(branch + '/' + test);
+      await Stager.deleteDirectory('report/' + branch + '/' + test);
       // Upload logs
-      await Stager.uploadDirectory(Paths.dir_tmp, branch + '/' + test);
+      await Stager.uploadDirectory(Paths.dir_tmp, 'report/' + branch + '/' + test);
     }
   },
 
