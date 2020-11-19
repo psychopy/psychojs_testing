@@ -182,7 +182,6 @@ exports.config = {
     };
     // Construct or clean up log dirs
     let logDirs = [
-      Paths.dir_tmp,
       Paths.dir_logs_capabilities,
       Paths.dir_logs_json,
       Paths.dir_logs_processed,
@@ -192,8 +191,8 @@ exports.config = {
       Paths.dir_screenshots_raw,
       Paths.dir_screenshots_scaled,
     ];      
-    let files, path;
-    for (logDir of logDirs) {
+    let files;
+    for (let logDir of logDirs) {
       if (!fs.existsSync(logDir)) {
         console.log('Creating directory: ' + logDir);
         fs.mkdirSync(logDir);
@@ -205,11 +204,12 @@ exports.config = {
         }
       }
     }
-    // *** Log all capabilities
-    fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
     // *** Delete old test logs
     console.log('Deleting BrowserStack logs of build ' + test + ':' + branch);
     BrowserStack.deleteOneTest(test + ':' + branch);
+    // *** Log all capabilities
+    fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
+    console.log(capabilities);
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
