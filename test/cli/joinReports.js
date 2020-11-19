@@ -28,7 +28,7 @@ if (process.env.TRAVIS_BRANCH !== undefined) {
 joinReports = async () => {
   // Get all testruns of branch
   let listResults = await Stager.ftpRequest((client, basePath) => {
-    return client.list(basePath + '/' + branch);
+    return client.list(basePath + '/report/' + branch);
   });
   let testruns = listResults.map((listResult) => {
     return listResult.name;
@@ -38,7 +38,7 @@ joinReports = async () => {
   let joinedReports = [], report, getResults;
   for (let testrun of testruns) {
     getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/' + branch + '/' + testrun + '/processed_logs/results.json');
+      return client.get(basePath + '/report/' + branch + '/' + testrun + '/processed_logs/results.json');
     }, false);
     report = JSON.parse(getResults);
     joinedReports = joinedReports.concat(joinedReports, report);

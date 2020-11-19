@@ -16,8 +16,11 @@ const pseudoBranches = argv._;
 // *** Perform action
 console.log('syncWithGithub.js: retrieving GitHub branches');
 let branchNames = GitHub.getBranchNames().concat(pseudoBranches);
-console.log(branchNames);
 console.log('syncWithGithub.js: deleting BrowserStack builds');
 BrowserStack.deleteAllBranchesExcept(branchNames);
+// Prefix branchesNames with 'report/'
+let directories = branchNames.map((branchName) => {
+  return 'report/' + branchName;
+});
 console.log('syncWithGithub.js: deleting staging server reports');
-Stager.deleteAllDirectoriesExcept(branchNames);
+Stager.deleteAllDirectoriesExcept(directories);

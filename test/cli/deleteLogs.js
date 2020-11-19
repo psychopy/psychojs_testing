@@ -30,6 +30,6 @@ if (process.env.STAGING_PORT === undefined ||  process.env.STAGING_USERNAME === 
   console.log('deleteLogs.js: could not find STAGING_PORT, STAGING_USERNAME, or STAGING_PASSWORD. Skipping deletion of reports on staging server');
 } else {
   const Stager = require('../shared/Stager.js');
-  Stager.deleteDirectory(branch);
+  Stager.deleteDirectory('report/' + branch);
 }
 
