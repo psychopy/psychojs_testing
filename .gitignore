@@ -5,3 +5,5 @@ test/counterexample_imgs/
 .tmp/
 .vs/
 .vscode/
+dist/
+docs/
