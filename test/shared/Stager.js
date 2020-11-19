@@ -3,7 +3,7 @@
 // FTP module
 let Client = require('ssh2-sftp-client');
 // Path to staging report directory
-let basePath = '/var/www/staging/';
+let basePath = '/var/www/staging';
 
 // Makes a connection, performs request specified via requestFunction, then closes connection
 // If hideResult === true, don't print result returned by request
