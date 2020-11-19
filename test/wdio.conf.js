@@ -1,11 +1,11 @@
 // Modules 
 const fs = require('fs');
 const Jimp = require('jimp');
-const VisualRegressor = require('./test/shared/VisualRegressor.js');
-const ReportSummarizer = require('./test/shared/ReportSummarizer.js');
-const BrowserStack = require('./test/shared/BrowserStack.js');
-const Stager = require('./test/shared/Stager.js');
-const Paths = require('./test/shared/Paths.js');
+const VisualRegressor = require('./shared/VisualRegressor.js');
+const ReportSummarizer = require('./shared/ReportSummarizer.js');
+const BrowserStack = require('./shared/BrowserStack.js');
+const Stager = require('./shared/Stager.js');
+const Paths = require('./shared/Paths.js');
 
 // Parse CLI arguments
 const yargs = require('yargs/yargs')
@@ -73,7 +73,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + server).getCapabilities(test + ':' + branch, platform, subset),
+  capabilities: require('./shared/capabilities.' + server).getCapabilities(test + ':' + branch, platform, subset),
 
   // Local test-runner
   runner: 'local',
@@ -209,7 +209,6 @@ exports.config = {
     BrowserStack.deleteOneTest(test + ':' + branch);
     // *** Log all capabilities
     fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
-    console.log(capabilities);
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
