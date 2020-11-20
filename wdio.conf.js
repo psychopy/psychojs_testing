@@ -51,8 +51,8 @@ if (argv.test === undefined) {
 let branch;
 if (upload || server === 'bs') {
   if (process.env.GITHUB_REF !== undefined) {
-    console.log('wdio.conf.js: branch specified via GITHUB_REF as ' + process.env.GITHUB_REF);
-    branch = process.env.GITHUB_REF;
+    branch = process.env.GITHUB_REF.split('/').pop() 
+    console.log('wdio.conf.js: branch specified via GITHUB_REF as ' + branch);
   } else if (argv.branch !== undefined) {
     console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
     branch = argv.branch;
