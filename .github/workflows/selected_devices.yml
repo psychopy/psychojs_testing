@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
       - name: Report cache hit
-        run: echo ${{ jobs.test.cache_node_modules.outputs.catch-hit }}
+        run: echo ${{ steps.cache_node_modules.outputs.catch-hit }}
       - name: Install modules
         run: npm ci
       - name: Turnstyle (wait for other workflows)
