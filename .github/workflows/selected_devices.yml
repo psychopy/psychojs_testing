@@ -31,7 +31,7 @@ jobs:
         run: npm install
       # Runs a single command using the runners shell
       - name: e2e_test
-        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset
+        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia
         env: 
           BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
           BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
