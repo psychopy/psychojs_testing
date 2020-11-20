@@ -37,5 +37,11 @@ jobs:
         run: echo {{ cache-hit }}
       - name: Install modules
         run: npm ci
+      - name: Turnstyle (wait for other workflows)
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test selected_devices
         run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia
