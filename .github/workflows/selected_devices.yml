@@ -1,4 +1,4 @@
-name: CI
+name: e2e test selected_devices
 on:
   push:
     branches: '**'
