@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches: '**'
+  pull_request:
+    branches: '**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
+      BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+      STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+      STAGING_PORT: ${{ secrets.STAGING_PORT }}
+      STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: install
+        run: npm ci
+      - name: e2e_test
+        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia
