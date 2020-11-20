@@ -1,41 +1,26 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: '**'
   pull_request:
     branches: '**'
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    env:
+      BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
+      BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+      STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+      STAGING_PORT: ${{ secrets.STAGING_PORT }}
+      STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: '12'
       - name: install
-        run: npm install
-      # Runs a single command using the runners shell
+        run: npm ci
       - name: e2e_test
         run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia
-        env: 
-          BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
-          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
-          STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
-          STAGING_PORT: ${{ secrets.STAGING_PORT }}
-          STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
-          
