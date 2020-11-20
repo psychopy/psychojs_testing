@@ -16,11 +16,26 @@ jobs:
       STAGING_PORT: ${{ secrets.STAGING_PORT }}
       STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: install
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Report cache hit
+        run: echo {{ cache-hit }}
+      - name: Install modules
         run: npm ci
-      - name: e2e_test
+      - name: Run e2e_test selected_devices
         run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia
