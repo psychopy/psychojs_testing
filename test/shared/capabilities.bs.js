@@ -104,7 +104,19 @@ const getBrowsers = () => {
 
 // An array of browserNames to test on if subset === true
 const browserSubsets = [
-  'Windows_10_Chrome_*'
+  'Windows_10_chrome_*',
+  'Windows_10_firefox_*',
+  'Windows_10_edge_*',
+  'OS X_Catalina_chrome_*',
+  'OS X_Catalina_edge_*',
+  'OS X_Catalina_firefox_*',
+  'OS X_Catalina_safari_*',
+  'android_11.0_Google Pixel 4_android',
+  'android_10.0_Google Pixel 3_android',
+  'android_9.0_Samsung Galaxy S9 Plus_android',
+  'android_7.0_Samsung Galaxy S8 Plus_android',
+  'ios_14_iPhone XS_iphone',
+  'ios_13_iPhone 8_iphone'
 ];
 
 
