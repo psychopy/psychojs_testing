@@ -1,7 +1,9 @@
 // Helper functions for FTP requests to report directory on Staging Server
 
-// FTP module
+// Modules
 let Client = require('ssh2-sftp-client');
+const CLIParser = require('./shared/CLIParser.js');
+
 // Path to staging report directory
 let basePath = '/var/www/staging';
 
