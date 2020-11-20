@@ -103,7 +103,7 @@ const getBrowsers = () => {
 }
 
 // An array of browserNames to test on if subset === true
-const browserSubsets = [
+const platformSubsets = [
   'Windows_10_chrome_*',
   'Windows_10_firefox_*',
   'Windows_10_edge_*',
@@ -186,7 +186,7 @@ const getCapabilities = (buildName, platformPattern, subset) => {
     let matchesFilter;
     if (subset) {
       matchesFilter = false;
-      for (platformSubset of platformSubsets) {
+      for (let platformSubset of platformSubsets) {
         matchesFilter = matchesFilter || wildTest(platformSubset, capability['bstack:options'].sessionName);
       }
     } else {
