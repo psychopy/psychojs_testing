@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: '12'
       - name: Cache node modules
+        id: cache_node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -34,7 +35,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
       - name: Report cache hit
-        run: echo {{ cache-hit }}
+        run: echo ${{ jobs.test.cache_node_modules.outputs.catch-hit }}
       - name: Install modules
         run: npm ci
       - name: Turnstyle (wait for other workflows)
