@@ -15,7 +15,41 @@ env:
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
 
 jobs:
-  test:
+  sync_with_github:
+    name: Sync BS logs and Stager with GitHub 
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install modules
+        run: npm ci
+      - name: Turnstyle (wait for other workflows to complete)
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync BS logs and Stager with GitHub 
+        run: node test/cli/syncWithGitHub.js alain sotiri thomas
+  e2e_test:
+    name: Run e2e tests
+    needs: [sync_with_github]
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -49,4 +83,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }}
+        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }} --platform *Windows*10*chrome*
+  join_reports:
+    name: Join reports
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install modules
+        run: npm ci
+      - name: Turnstyle (wait for other workflows to complete)
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Join reports
+        run: node test/cli/joinReports.js
+
