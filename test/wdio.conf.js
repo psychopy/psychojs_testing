@@ -11,7 +11,6 @@ const CLIParser = require('./shared/CLIParser.js');
 // *** Parse CLI arguments
 // Parse server CLI option
 const server = CLIParser.parseOption({cli: 'server'});
-console.log(server);
 if (!(['local', 'bs'].includes(server))) {
   throw new Error('wdio.conf.js: The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
@@ -41,7 +40,7 @@ if (test === undefined) {
 // Get branch from CLI or TRAVIS_BRANCH
 let branch;
 if (upload || server === 'bs') {
-  branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
+  branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
 }
 
 // Get subset from CLI
