@@ -31,4 +31,4 @@ jobs:
         run: npm install
       # Runs a single command using the runners shell
       - name: e2e_test
-        run: npx wdio wdio.conf.js --wdioServer bs --subset --platformPattern *Windows*10*Chrome*
+        run: npx wdio wdio.conf.js --server bs --subset --platform *Windows*10*Chrome* --upload yes
