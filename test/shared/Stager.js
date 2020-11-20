@@ -2,7 +2,7 @@
 
 // Modules
 let Client = require('ssh2-sftp-client');
-const CLIParser = require('./shared/CLIParser.js');
+const CLIParser = require('./CLIParser.js');
 
 // Path to staging report directory
 let basePath = '/var/www/staging';
