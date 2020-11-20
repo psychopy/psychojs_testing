@@ -6,42 +6,33 @@ const ReportSummarizer = require('./shared/ReportSummarizer.js');
 const BrowserStack = require('./shared/BrowserStack.js');
 const Stager = require('./shared/Stager.js');
 const Paths = require('./shared/Paths.js');
+const CLIParser = require('./shared/CLIParser.js');
 
-// Parse CLI arguments
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
-const argv = yargs(hideBin(process.argv)).argv
-
+// *** Parse CLI arguments
 // Parse server CLI option
-const server = argv.server;
-if (server === undefined) {
-  throw new Error('No server CLI argument specified');
-}
+const server = CLIParser.parseOption({cli: 'server'});
+console.log(server);
 if (!(['local', 'bs'].includes(server))) {
-  throw new Error('The server CLI argument (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
+  throw new Error('wdio.conf.js: The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
-console.log('wdio.conf.js: server is ' + server);
 
 // Parse upload CLI option
-const upload = argv.upload !== undefined && argv.upload === 'yes';
+let upload = CLIParser.parseOption({cli: 'upload'}, false);
+upload = upload !== undefined && upload === 'yes';
 
 // Parse platform CLI option
-let platform = argv.platform === undefined? '*': argv.platform;
-// Hack for spaces in platform; assume any elements of argv._ after the first are part of platform
-if (platform !== '*' && argv._.length > 1) {
-  platform = platform + ' ' + argv._.slice(1, argv._.length).join(' ');
-}
-console.log('wdio.conf.js: platform is ' + platform);
+let platform = CLIParser.parseOption({cli: 'platform'}, false);
+platform = platform === undefined? '*': platform;
 
 // Parse test CLI option
-let specs, test, specFile;
-if (argv.test === undefined) {
+let test = CLIParser.parseOption({cli: 'test'}, false);
+let specs, specFile;
+if (test === undefined) {
   test = 'all_tests';
   specFile = 'all_tests'
   specs = ['./test/specs/' + specFile + '.js'];  
   console.log('wdio.conf.js: no test specified, so running all tests');
 } else {
-  test = argv.test;
   specFile = 'single_test';
   specs = ['./test/specs/' + specFile + '.js'];
   console.log('wdio.conf.js: test is ' + test);
@@ -50,24 +41,18 @@ if (argv.test === undefined) {
 // Get branch from CLI or TRAVIS_BRANCH
 let branch;
 if (upload || server === 'bs') {
-  if (process.env.TRAVIS_BRANCH !== undefined) {
-    console.log('wdio.conf.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-    branch = process.env.TRAVIS_BRANCH;
-  } else if (argv.branch !== undefined) {
-    console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
-    branch = argv.branch;
-  } else {
-    throw new Error('wdio.conf.js: No branch specified via TRAVIS_BRANCH or CLI option');
-  }
+  branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
 }
 
 // Get subset from CLI
-let subset = argv.subset !== undefined;
+let subset =  CLIParser.parseOption({cli: 'subset'}, false);
+subset = subset !== undefined;
 
+// *** WebdriverIO config
 exports.config = {
   // Connect to browserstack is server is 'bs'
-  user: server === 'bs' ? process.env.BROWSERSTACK_USER : undefined,
-  key: server === 'bs' ? process.env.BROWSERSTACK_ACCESSKEY : undefined,
+  user: server === 'bs' ? CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent): undefined,
+  key: server === 'bs' ? CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent): undefined,
 
   // Number of instances run at same time
   maxInstances: 3, // 3

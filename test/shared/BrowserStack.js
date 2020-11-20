@@ -1,7 +1,8 @@
 // Helper functions for making calls to the BrowserStack REST API
 
-// Module for OS calls
+// Modules
 const child_process = require('child_process');
+const CLIParser = require('./CLIParser.js');
 
 // Default project name
 const projectName = "PsychoJS";
@@ -9,7 +10,11 @@ const projectName = "PsychoJS";
 // CURL shorthand
 curlCommand = (postfix, infix = '') => {
   return '' +
-    'curl -u "' + process.env.BROWSERSTACK_USER + ':' + process.env.BROWSERSTACK_ACCESSKEY + '" ' +
+    'curl -u "' + 
+    CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent) + 
+    ':' + 
+    CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent) + 
+    '" ' +
     infix +
     ' https://api.browserstack.com/automate/' +
     postfix;

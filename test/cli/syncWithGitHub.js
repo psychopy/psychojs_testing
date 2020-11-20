@@ -7,7 +7,7 @@ const GitHub = require('../shared/GitHub.js');
 const BrowserStack = require('../shared/BrowserStack.js');
 const Stager = require('../shared/Stager.js');
 
-// Parse CLI arguments
+// Get pseudoBranches; list of unnamed CLI options
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv

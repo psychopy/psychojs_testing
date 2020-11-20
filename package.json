@@ -19,7 +19,7 @@
     "lint:js": "jshint rollup.config.js src/**/*.js",
     "start": "npm run build && npm run deploy && npm run e2e_test",
     "deploy": "node test/cli/deployExperiments.js --branch thomas",
-    "e2e_test": "npx wdio test/wdio.conf.js --server bs --upload yes --branch thomas --platform *Windows*10*chrome* --test e2e_calibration"
+    "e2e_test": "npx wdio test/wdio.conf.js --server bs --upload yes --branch pavlovia --platform *Windows*10*chrome* --test e2e_calibration"
   },
   "babel": {
     "presets": [

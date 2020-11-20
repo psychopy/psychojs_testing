@@ -15,9 +15,9 @@ ftpRequest = (requestFunction, showResult = true) => {
       let result;
       client.connect({
         host: 'staging.psychopy.org',
-        port: process.env.STAGING_PORT,
-        username: process.env.STAGING_USERNAME,
-        password: process.env.STAGING_PASSWORD
+        port: CLIParser.parseOption({env: 'STAGING_PORT'}, true, CLIParser.logSilent),
+        username: CLIParser.parseOption({env: 'STAGING_USERNAME'}, true, CLIParser.logSilent),
+        password: CLIParser.parseOption({env: 'STAGING_PASSWORD'}, true, CLIParser.logSilent),
       }).then((data) => {
         console.log('Stager.js: performing request');
         return requestFunction(client, basePath);

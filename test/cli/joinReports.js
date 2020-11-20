@@ -1,28 +1,14 @@
 // Downloads the merged reports of each testrun, joins them together, summarizes them, and uploads the result
 // Upload or delete test on Stager via CLI arguments
 
-// *** Modules
+// Modules
 const Stager = require('../shared/Stager.js');
 const ReportSummarizer = require('../shared/ReportSummarizer.js');
 const fs = require('fs');
 const Paths = require('./test/shared/Paths.js');
 
-// *** Parse CLI arguments
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
-const argv = yargs(hideBin(process.argv)).argv
-
-// Get branch parameter
-let build;
-if (process.env.TRAVIS_BRANCH !== undefined) {
-  console.log('joinReports.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-  branch = process.env.TRAVIS_BRANCH;
-} else if (argv.branch !== undefined) {
-  console.log('joinReports.js: branch specified via CLI option as ' + argv.branch);
-  branch = argv.branch;
-} else {
-  throw "joinReports.js: No branch specified via TRAVIS_BRANCH or CLI option";
-}
+// Get branch 
+let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
 
 // Join reports
 joinReports = async () => {
