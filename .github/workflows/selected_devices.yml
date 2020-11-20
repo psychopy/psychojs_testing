@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ * ]
   pull_request:
-    branches: [ master ]
+    branches: [ * ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
         run: npm install
       # Runs a single command using the runners shell
       - name: e2e_test
-        run: npx wdio wdio.conf.js --server bs --platform *Windows*10*Chrome* --upload yes
+        run: npx wdio wdio.conf.js --server bs --upload yes --subset
         env: 
           BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
           BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
