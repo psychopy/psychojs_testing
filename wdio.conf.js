@@ -50,9 +50,9 @@ if (argv.test === undefined) {
 // Get branch from CLI or TRAVIS_BRANCH
 let branch;
 if (upload || server === 'bs') {
-  if (process.env.TRAVIS_BRANCH !== undefined) {
-    console.log('wdio.conf.js: branch specified via TRAVIS_BRANCH as ' + process.env.TRAVIS_BRANCH);
-    branch = process.env.TRAVIS_BRANCH;
+  if (process.env.GITHUB_REF !== undefined) {
+    console.log('wdio.conf.js: branch specified via GITHUB_REF as ' + process.env.GITHUB_REF);
+    branch = process.env.GITHUB_REF;
   } else if (argv.branch !== undefined) {
     console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
     branch = argv.branch;
