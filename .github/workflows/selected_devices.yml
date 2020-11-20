@@ -31,7 +31,7 @@ jobs:
         run: npm install
       # Runs a single command using the runners shell
       - name: e2e_test
-        run: npx wdio wdio.conf.js --server bs --subset --platform *Windows*10*Chrome* --upload yes
+        run: npx wdio wdio.conf.js --server bs --platform *Windows*10*Chrome* --upload yes
         env: 
           BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
           BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
