@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '5 8 * * sun'
   workflow_dispatch:
+  push:
+    branches: '**'
+    
 
 env:
   BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
@@ -18,7 +21,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix: 
-        test: ["e2e_img", "e2e_conditions"]
+        test: ['e2e_img', 'e2e_conditions']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
