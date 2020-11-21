@@ -1,8 +1,9 @@
 // Modules
-const Paths = require('./../shared/Paths.js');
-const Stager = require('./../shared/Stager.js');
+const Paths = require('../shared/Paths.js');
+const Stager = require('../shared/Stager.js');
 const fs = require('fs');
 const Mustache = require('mustache');
+const CLIParser = require('../shared/CLIParser.js');
 
 // Get branch
 let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
