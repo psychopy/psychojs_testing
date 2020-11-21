@@ -61,13 +61,13 @@ deleteDirectory = async (directory) => {
   });
 };
 
-// Delete all directories except
-deleteAllDirectoriesExcept = async (directoriesToKeep) => {
+// Delete all subdirectories in containingDirectory except directoriesToKeep
+deleteAllDirectoriesExcept = async (containingDirectory, directoriesToKeep) => {
   console.log('Stager.js: deleting all directories except ' + JSON.stringify(directoriesToKeep));
   let listResults = await ftpRequest((client) => {
-    console.log('Stager.js: listing directories at ' + basePath);
-    return client.list(basePath);
-  });
+    console.log('Stager.js: listing directories at ' + basePath + '/' + containingDirectory);
+    return client.list(basePath + '/' + containingDirectory);
+  }, false);
   console.log('Stager.js: ' + listResults.length + ' directories on staging server');
   let allDirectories = listResults.map((listResult) => {
     return listResult.name;
@@ -78,7 +78,7 @@ deleteAllDirectoriesExcept = async (directoriesToKeep) => {
   });
   console.log('Stager.js: directories to delete on staging server are ' + JSON.stringify(directoriesToDelete));
   for (directoryToDelete of directoriesToDelete) {
-    await deleteDirectory(directoryToDelete);
+    await deleteDirectory(containingDirectory + '/' + directoryToDelete);
   }
 }
 
