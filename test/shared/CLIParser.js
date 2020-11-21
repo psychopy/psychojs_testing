@@ -17,6 +17,7 @@ const processors = {
     if (processMe !== '*' && argv._.length > 1) {
       return processMe + ' ' + argv._.slice(1, argv._.length).join(' ');
     }
+    return processMe;
   }
 };
 
@@ -68,7 +69,6 @@ parseOption = (sources = {}, required = true, logLevel = logFull) => {
     }
     // Feed to processor
     if (optionValueRaw !== undefined && processor !== undefined) {
-      console.log(processor);
       optionValue = processor(optionValueRaw);
       report +=  logLevel < logFull? '': ', which was parsed to ' + optionValue;
     } else {
