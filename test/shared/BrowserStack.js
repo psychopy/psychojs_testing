@@ -10,7 +10,7 @@ const projectName = "PsychoJS";
 // CURL shorthand
 curlCommand = (postfix, infix = '') => {
   return '' +
-    'curl -u "' + 
+    'curl -s -u "' + 
     CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent) + 
     ':' + 
     CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent) + 
@@ -59,10 +59,6 @@ deleteBuilds = (filterFunction) => {
   console.log('BrowserStack.js: deleting builds with buildIds ' + JSON.stringify(buildIdsToDelete));
   for (let buildIdToDelete of buildIdsToDelete) {
     console.log('BrowserStack.js: deleting build with buildId ' + JSON.stringify(buildIdToDelete));
-    console.log(curlCommand(
-      'builds/' + buildIdToDelete + '.json',
-      '-X DELETE'
-    ));
     child_process.execSync(curlCommand(
       'builds/' + buildIdToDelete + '.json',
       '-X DELETE'
