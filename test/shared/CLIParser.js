@@ -3,7 +3,6 @@
 // Modules
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers');
-const { compareScreenshotWithReference } = require('./VisualRegressor');
 
 // List of functions to process environment variables
 const processors = {
