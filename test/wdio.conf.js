@@ -161,12 +161,13 @@ exports.config = {
     // *** Setup temporary directories
     // Construct tmp dir
     if (!fs.existsSync(Paths.dir_tmp)) {
-      console.log('Creating directory: ' + Paths.dir_tmp)
+      console.log('wdio.conf.js: Creating directory ' + Paths.dir_tmp)
       fs.mkdirSync(Paths.dir_tmp);
     };
     // Construct or clean up log dirs
     let logDirs = [
       Paths.dir_logs_capabilities,
+      Paths.dir_logs_joined,
       Paths.dir_logs_json,
       Paths.dir_logs_processed,
       Paths.dir_logs_raw,
@@ -175,21 +176,27 @@ exports.config = {
       Paths.dir_screenshots_raw,
       Paths.dir_screenshots_scaled,
     ];      
-    let files;
+    let files, errorMessage;
     for (let logDir of logDirs) {
       if (!fs.existsSync(logDir)) {
-        console.log('Creating directory: ' + logDir);
+        console.log('wdio.conf.js Creating directory ' + logDir);
         fs.mkdirSync(logDir);
       } else {
-        console.log('Deleting files in directory: ' + logDir);
+        console.log('wdio.conf.js Deleting files in directory ' + logDir);
         files = fs.readdirSync(logDir);
-        for (let file_i in files) {
-          fs.unlinkSync(logDir + '/' + files[file_i]);
+        for (let file of files) {
+          try {
+            fs.unlinkSync(logDir + '/' + file);
+          } catch (e) {
+            errorMessage = 'wdio.conf.js Could not delete file ' + file;
+            console.log('\x1b[31m' + errorMessage + '\x1b[0m');
+            throw new Error(errorMessage);            
+          }
         }
       }
     }
     // *** Delete old test logs
-    console.log('Deleting BrowserStack logs of build ' + test + ':' + branch);
+    console.log('wdio.conf.js Deleting BrowserStack logs of build ' + test + ':' + branch);
     BrowserStack.deleteOneTest(test + ':' + branch);
     // *** Log all capabilities
     fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
@@ -315,8 +322,8 @@ exports.config = {
     });
 
     // Print current sessionId and platformName
-    console.log('sessionId: ' + browser.sessionId);
-    console.log('platformName: ' + browser.getPlatformName())
+    console.log('sessionId is ' + browser.sessionId);
+    console.log('platformName is ' + browser.getPlatformName())
     // Init custom log
     browser.logInit();
     browser.logAdd('platform', browser.getPlatformName())
