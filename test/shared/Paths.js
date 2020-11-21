@@ -3,7 +3,9 @@ module.exports = {
   dir_tmp:                 './.tmp_e2e',
   dir_logs_capabilities:   './.tmp_e2e/logs_capabilities',
   dir_logs_json:           './.tmp_e2e/logs_json',
+  dir_logs_joined:         './.tmp_e2e/logs_joined',
   dir_logs_processed:      './.tmp_e2e/logs_processed',
+  subdir_logs_processed:   'logs_processed',
   dir_logs_raw:            './.tmp_e2e/logs_raw',
   dir_logs_selenium:       './.tmp_e2e/logs_selenium',
   
