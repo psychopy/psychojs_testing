@@ -53,8 +53,8 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
         suite: suite,
         spec: spec,
         state: state,
-        message: message,
-        duration: duration
+        duration: duration,
+        message: message
       }
     );
   };
