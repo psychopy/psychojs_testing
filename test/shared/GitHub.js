@@ -9,7 +9,7 @@ const repoName = "tpronk/e2e_robot";
 // Get branch names of default repo
 getBranchNames = () => {
   let branches = JSON.parse(child_process.execSync(
-    'curl https://api.github.com/repos/' + repoName + '/branches'
+    'curl -s https://api.github.com/repos/' + repoName + '/branches'
   ));
   let branchNames = branches.map((branch) => {
     return branch.name;
