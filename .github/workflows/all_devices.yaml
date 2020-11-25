@@ -16,7 +16,7 @@ env:
 
 jobs:
   sync_with_github:
-    name: Sync BS logs and Stager with GitHub 
+    name: Sync with GitHub and delete old testrun logs
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -47,6 +47,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Sync BS logs and Stager with GitHub 
         run: node test/cli/syncWithGitHub.js alain sotiri thomas
+      - name: Sync BS logs and Stager with GitHub 
+        run: node test/cli/deleteLogs.js --testrun all_devices
   e2e_tests:
     name: Run e2e tests
     needs: [sync_with_github]
@@ -83,7 +85,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }} --platform *Windows*10*chrome*
+        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }} --platform *Windows*10*chrome* --testrun all_devices
   join_reports:
     name: Join reports
     needs: [e2e_tests]
@@ -116,5 +118,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Join reports
-        run: node test/cli/joinReports.js
+        run: node test/cli/joinReports.js --testrun all_devices
 
