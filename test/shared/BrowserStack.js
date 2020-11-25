@@ -74,11 +74,11 @@ getBrowsers = () => {
 };
 
 
-// Delete one test + branch named testName
-deleteOneTest = (testName) => {
-  console.log('BrowserStack.js: deleting one test + branch with testName ' + testName);
+// Delete logs of one build
+deleteOneBuild = (buildName) => {
+  console.log('BrowserStack.js: deleting build with buildName ' + buildName);
   deleteBuilds((build) => {
-    return build.name === testName;
+    return build.name === buildName;
   });
 };
 
@@ -86,14 +86,20 @@ deleteOneTest = (testName) => {
 deleteAllBranchesExcept = (branchNames) => {
   console.log('BrowserStack.js: deleting all builds except those with branchNames ' + JSON.stringify(branchNames));
   deleteBuilds((build) => {
-    return !branchNames.includes(build.name.split(':')[1]);
+    return !branchNames.includes(build.name.split(':')[0]);
   });
 };
+
+// Construct a build name (for BrowserStack logs) given branch, testrun, and test
+createBuildName = (branch, testrun, test) => {
+  return branch + ':' + testrun + ':' + test;
+}
 
 module.exports = {
   getProjectIdByName: getProjectIdByName,
   getBuildsByProjectId: getBuildsByProjectId,
   getBrowsers: getBrowsers,
-  deleteOneTest: deleteOneTest,
-  deleteAllBranchesExcept: deleteAllBranchesExcept
+  deleteOneBuild: deleteOneBuild,
+  deleteAllBranchesExcept: deleteAllBranchesExcept,
+  createBuildName: createBuildName
 };

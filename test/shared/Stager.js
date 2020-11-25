@@ -82,9 +82,15 @@ deleteAllDirectoriesExcept = async (containingDirectory, directoriesToKeep) => {
   }
 }
 
+// Construct a path (for reports on Stager) given branch, testrun, and test
+createReportPath = (branch, testrun, test) => {
+  return branch + '/' + testrun + '/' + test;
+}
+
 module.exports = {
   uploadDirectory: uploadDirectory,
   deleteDirectory: deleteDirectory,
   deleteAllDirectoriesExcept: deleteAllDirectoriesExcept,
-  ftpRequest: ftpRequest
+  ftpRequest: ftpRequest,
+  createReportPath: createReportPath
 };
