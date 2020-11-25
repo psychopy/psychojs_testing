@@ -1,0 +1,57 @@
+name: compile psyexp to js
+on:
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    env:
+      STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+      STAGING_PORT: ${{ secrets.STAGING_PORT }}
+      STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+      PSYCHOPY_PATH: '../psychopy'
+    steps:
+      - name: Checkout PsychoJS
+        uses: actions/checkout@v2
+        with:
+          path: psychojs
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache PsychoJS node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/psychojs/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install PsychoJS node modules
+        run: npm ci
+        working-directory: ./psychojs
+      - name: Checkout PsychoPy
+        uses: actions/checkout@v2
+        with:
+          repository: psychopy/psychopy
+          path: psychopy
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+                python-version: 3.7
+      - uses: actions/cache@v2
+        name: Cache PsychoPy dependencies
+        with:
+          path: ~/psychopy/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install PsychoPy dependencies
+        run: pip install -e .
+        working-directory: ./psychopy
+      - name: Compile experiments from psyexp to JS
+        run: node test/cli/compileExperiments.js
+        working-directory: ./psychojs
