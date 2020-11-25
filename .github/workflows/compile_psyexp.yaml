@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Cache node modules
+      - name: Cache PsychoJS node modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -30,17 +30,18 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install node modules
+      - name: Install PsychoJS node modules
         run: npm ci
         working-directory: ./psychojs
       - name: Checkout PsychoPy
         uses: actions/checkout@v2
         with:
+          repository: psychopy/psychopy
           path: psychopy
       - name: Set up Python 3.7
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-      - name: Install Python dependencies
-        run: echo $(ls *)
+      - name: Install PsychoPy dependencies
+        run: pip install -e .
         working-directory: ./psychopy
