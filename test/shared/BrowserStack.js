@@ -73,12 +73,19 @@ getBrowsers = () => {
   return browsers;
 };
 
-
 // Delete logs of one build
 deleteOneBuild = (buildName) => {
   console.log('BrowserStack.js: deleting build with buildName ' + buildName);
   deleteBuilds((build) => {
     return build.name === buildName;
+  });
+};
+
+// Delete all builds that start with buildPrefix
+deleteAllBuildsStartingWith = (buildPrefix) => {
+  console.log('BrowserStack.js: deleting all builds that start with ' + buildPrefix);
+  deleteBuilds((build) => {
+    return build.name.startsWith(buildPrefix);
   });
 };
 
@@ -92,8 +99,22 @@ deleteAllBranchesExcept = (branchNames) => {
 
 // Construct a build name (for BrowserStack logs) given branch, testrun, and test
 createBuildName = (branch, testrun, test) => {
-  return branch + ':' + testrun + ':' + test;
-}
+  let buildName = '';
+  if (branch !== undefined) {
+    buildName += branch;
+  } else {
+    return buildName;
+  }
+  if (testrun !== undefined) {
+    buildName += ':' + testrun;
+  } else {
+    return buildName;
+  }
+  if (test !== undefined) {
+    buildName += ':' + test;
+  } 
+  return buildName;
+} 
 
 module.exports = {
   getProjectIdByName: getProjectIdByName,
@@ -101,5 +122,6 @@ module.exports = {
   getBrowsers: getBrowsers,
   deleteOneBuild: deleteOneBuild,
   deleteAllBranchesExcept: deleteAllBranchesExcept,
+  deleteAllBuildsStartingWith: deleteAllBuildsStartingWith,
   createBuildName: createBuildName
 };
