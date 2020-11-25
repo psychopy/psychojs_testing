@@ -42,5 +42,5 @@ jobs:
         with:
           python-version: 3.7
       - name: Install Python dependencies
-        run: echo $(ls)
+        run: echo $(ls *)
         working-directory: ./psychopy
