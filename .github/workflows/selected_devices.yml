@@ -42,4 +42,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test selected_devices
-        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia
+        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --testrun selected_devices
