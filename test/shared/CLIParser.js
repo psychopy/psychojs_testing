@@ -87,6 +87,7 @@ parseOption = (sources = {}, required = true, logLevel = logFull) => {
     throw new Error(errorMessage);
   }
   // Still here? Return optionValue (undefined)
+  console.log('CLIParser.js: ' + optionKey + ' was not required and had no value in ' + JSON.stringify(Object.getOwnPropertyNames(sources)));
   return optionValue;
 }
 
