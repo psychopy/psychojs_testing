@@ -11,25 +11,33 @@ const CLIParser = require('../shared/CLIParser.js');
 // Get branch 
 let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
 
+// Get testrun
+let testrun = CLIParser.parseOption({cli: 'testrun'});
+
 // Join reports
 (async () => {
   // Get all testruns of branch
   let listResults = await Stager.ftpRequest((client, basePath) => {
-    return client.list(basePath + '/report/' + branch);
+    return client.list(basePath + '/report/' + branch + '/' + testrun);
   }, false);
-  let testruns = listResults.map((listResult) => {
+  // Filter out directories
+  listResults = listResults.filter((listResult) => {
+    return listResult.type === 'd';
+  });
+  // Get names of tests
+  let tests = listResults.map((listResult) => {
     return listResult.name;
   })
-  console.log('joinReports.js: Found ' + testruns.length + ' testruns');
-  // Merge reports of each testrun together
+  console.log('joinReports.js: Found ' + tests.length + ' tests');
+  // Merge reports of each test together
   let joinedReports = [], report, getResults;
-  for (let testrun of testruns) {
-    console.log('joinReports.js: Adding testrun ' + testrun);
+  for (let test of tests) {
+    console.log('joinReports.js: Adding test ' + test);
     getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/report/' + branch + '/' + testrun + '/' + Paths.subdir_logs_processed + '/report.json');
+      return client.get(basePath + '/report/' + branch + '/' + testrun + '/' + test + '/' + Paths.subdir_logs_processed + '/report.json');
     }, false);
     report = JSON.parse(getResults);
-    joinedReports = joinedReports.concat(joinedReports, report);
+    joinedReports = joinedReports.concat(report);
   }
   // Create a tmp folder if it doesn't exist yet
   if (!fs.existsSync(Paths.dir_tmp)) {
@@ -58,7 +66,7 @@ let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
     report: joinedReports
   });
   // Upload to stager
-  await Stager.uploadDirectory(Paths.dir_logs_joined, 'report/' + branch);
+  await Stager.uploadDirectory(Paths.dir_logs_joined, 'report/' + branch + '/' + testrun);
 })();
 
 
