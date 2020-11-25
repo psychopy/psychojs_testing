@@ -84,7 +84,21 @@ deleteAllDirectoriesExcept = async (containingDirectory, directoriesToKeep) => {
 
 // Construct a path (for reports on Stager) given branch, testrun, and test
 createReportPath = (branch, testrun, test) => {
-  return branch + '/' + testrun + '/' + test;
+  let path = '';
+  if (branch !== undefined) {
+    path += branch;
+  } else {
+    return path;
+  }
+  if (testrun !== undefined) {
+    path += '/' + testrun;
+  } else {
+    return path;
+  }
+  if (test !== undefined) {
+    path += '/' + test;
+  } 
+  return path;
 }
 
 module.exports = {
