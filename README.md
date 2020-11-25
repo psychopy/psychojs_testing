@@ -25,6 +25,7 @@ Scripts for automated end-to-end testing of [PsychoJS](https://github.com/psycho
 * [Generating and parsing test logs](#generating-and-parsing-test-logs)
     * [Generating custom logs](#generating-custom-logs)
     * [Parsing custom logs](#parsing-custom-logs)
+    * [Organization of test logs](#organization-of-test-logs)
 * [Overview of tests](#overview-of-tests)
 
 <div id='core-technologies'></div>
@@ -69,7 +70,8 @@ upload | No; disabled by default | Upload reports to PsychoPy's staging server |
 branch | If `server == bs` or `upload == yes` | On BrowserStack, the test logs will get this name as their build. On the staging server, the test logs will be uploaded to this directory. | Via `TRAVIS_BRANCH` environment variable or CLI option `--branch` | Any string that is a valid directory. Note that BrowserStack will filter out [characters that it does not accept](https://www.browserstack.com/question/640) in build names.
 subset | No; whole set of platforms by default | Set of pre-specified platforms for shortened testrun. See [Registering platform](#registering-platform) | Via CLI options `--subset` | `yes` for subset of platforms, `no` for whole set
 platform | No; all platforms (included in whole set or subset) by default (`*`) | Platforms to run tests on. See [Registering platform](#registering-platform) | Via CLI option `--platform` | Any string with `*` and `.` wildcards
-test | No; all tests by default | Which test to run. See [Overview of tests](#overview-of-tests) | Via CLI option `--test` | Any valid test name
+test | No; all tests by default | Which test to execute. See [Overview of tests](#overview-of-tests) | Via CLI option `--test` | Any valid test name
+testrun | No; name of test by default | Identifies a testrun in BrowserStack logs and on Stager. See [Organization of test logs](#organization-of-test-logs) | Via CLI option `--test` | Any valid test name
 
 <div id='examples'></div>
 
@@ -176,7 +178,12 @@ By default, jasmine's test reporters only report whether a test was passed, had 
 
 ## Parsing custom logs
 The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In some cases an empty JSON logfile, or no logfile at all, is produced. This can happen, for example, when a BrowserStack session could not be initialized. In these cases, a special set of entries are added to the processed logs, usingy the capability_ids `none_1`, `none_2` etc. One entry registers the platform, while a second entry has spec `parse_logs` and state `failed`.
+<div id='organization-of-test-logs'></div>
 
+## Organization of test logs
+The staging server and BrowserStack can contain logs of multiple branches, testruns, and tests. These logs are organized as follows:
+* On the staging server, logs are organized in subdirectories of the form: `report/<branch>/<testrun>/<test>`
+* On BrowserStack, logs are organized in builds whose names have the form: `<branch>:<testrun>:<test>`
 <div id='overview-of-tests'></div>
 
 # Overview of tests
