@@ -25,6 +25,7 @@ Scripts for automated end-to-end testing of [PsychoJS](https://github.com/psycho
 * [Generating and parsing test logs](#generating-and-parsing-test-logs)
     * [Generating custom logs](#generating-custom-logs)
     * [Parsing custom logs](#parsing-custom-logs)
+    * [Organization of test logs](#organization-of-test-logs)
 * [Overview of tests](#overview-of-tests)
 
 <div id='core-technologies'></div>
