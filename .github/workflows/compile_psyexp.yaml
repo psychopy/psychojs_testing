@@ -31,7 +31,8 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
       - name: Install modules
-        run: npm ci psychojs
+        run: npm ci
+        working-directory: ./psychojs
       - name: Run e2e_test selected_devices
         run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --testrun selected_devices
         working-directory: ./psychojs
