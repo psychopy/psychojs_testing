@@ -1,47 +1,37 @@
 // Modules 
 const fs = require('fs');
 const Jimp = require('jimp');
-const VisualRegressor = require('./test/shared/VisualRegressor.js');
-const ReportSummarizer = require('./test/shared/ReportSummarizer.js');
-const BrowserStack = require('./test/shared/BrowserStack.js');
-const Stager = require('./test/shared/Stager.js');
-const Paths = require('./test/shared/Paths.js');
+const VisualRegressor = require('./shared/VisualRegressor.js');
+const ReportSummarizer = require('./shared/ReportSummarizer.js');
+const BrowserStack = require('./shared/BrowserStack.js');
+const Stager = require('./shared/Stager.js');
+const Paths = require('./shared/Paths.js');
+const CLIParser = require('./shared/CLIParser.js');
 
-// Parse CLI arguments
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
-const argv = yargs(hideBin(process.argv)).argv
-
+// *** Parse CLI arguments
 // Parse server CLI option
-const server = argv.server;
-if (server === undefined) {
-  throw new Error('No server CLI argument specified');
-}
+const server = CLIParser.parseOption({cli: 'server'});
 if (!(['local', 'bs'].includes(server))) {
-  throw new Error('The server CLI argument (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
+  throw new Error('wdio.conf.js: The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
-console.log('wdio.conf.js: server is ' + server);
 
 // Parse upload CLI option
-const upload = argv.upload !== undefined && argv.upload === 'yes';
+let upload = CLIParser.parseOption({cli: 'upload'}, false);
+upload = upload !== undefined && upload === 'yes';
 
 // Parse platform CLI option
-let platform = argv.platform === undefined? '*': argv.platform;
-// Hack for spaces in platform; assume any elements of argv._ after the first are part of platform
-if (platform !== '*' && argv._.length > 1) {
-  platform = platform + ' ' + argv._.slice(1, argv._.length).join(' ');
-}
-console.log('wdio.conf.js: platform is ' + platform);
+let platform = CLIParser.parseOption({cli: 'platform'}, false);
+platform = platform === undefined? '*': platform;
 
 // Parse test CLI option
-let specs, test, specFile;
-if (argv.test === undefined) {
+let test = CLIParser.parseOption({cli: 'test'}, false);
+let specs, specFile;
+if (test === undefined) {
   test = 'all_tests';
   specFile = 'all_tests'
   specs = ['./test/specs/' + specFile + '.js'];  
   console.log('wdio.conf.js: no test specified, so running all tests');
 } else {
-  test = argv.test;
   specFile = 'single_test';
   specs = ['./test/specs/' + specFile + '.js'];
   console.log('wdio.conf.js: test is ' + test);
@@ -50,30 +40,24 @@ if (argv.test === undefined) {
 // Get branch from CLI or TRAVIS_BRANCH
 let branch;
 if (upload || server === 'bs') {
-  if (process.env.GITHUB_REF !== undefined) {
-    branch = process.env.GITHUB_REF.split('/').pop() 
-    console.log('wdio.conf.js: branch specified via GITHUB_REF as ' + branch);
-  } else if (argv.branch !== undefined) {
-    console.log('wdio.conf.js: branch specified via CLI option as ' + argv.branch);
-    branch = argv.branch;
-  } else {
-    throw new Error('wdio.conf.js: No branch specified via TRAVIS_BRANCH or CLI option');
-  }
+  branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
 }
 
 // Get subset from CLI
-let subset = argv.subset !== undefined;
+let subset =  CLIParser.parseOption({cli: 'subset'}, false);
+subset = subset !== undefined;
 
+// *** WebdriverIO config
 exports.config = {
   // Connect to browserstack is server is 'bs'
-  user: server === 'bs' ? process.env.BROWSERSTACK_USER : undefined,
-  key: server === 'bs' ? process.env.BROWSERSTACK_ACCESSKEY : undefined,
+  user: server === 'bs' ? CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent): undefined,
+  key: server === 'bs' ? CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent): undefined,
 
   // Number of instances run at same time
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./test/shared/capabilities.' + server).getCapabilities(test + ':' + branch, platform, subset),
+  capabilities: require('./shared/capabilities.' + server).getCapabilities(test + ':' + branch, platform, subset),
 
   // Local test-runner
   runner: 'local',
@@ -177,12 +161,13 @@ exports.config = {
     // *** Setup temporary directories
     // Construct tmp dir
     if (!fs.existsSync(Paths.dir_tmp)) {
-      console.log('Creating directory: ' + Paths.dir_tmp)
+      console.log('wdio.conf.js: Creating directory ' + Paths.dir_tmp)
       fs.mkdirSync(Paths.dir_tmp);
     };
     // Construct or clean up log dirs
     let logDirs = [
       Paths.dir_logs_capabilities,
+      Paths.dir_logs_joined,
       Paths.dir_logs_json,
       Paths.dir_logs_processed,
       Paths.dir_logs_raw,
@@ -191,25 +176,30 @@ exports.config = {
       Paths.dir_screenshots_raw,
       Paths.dir_screenshots_scaled,
     ];      
-    let files;
+    let files, errorMessage;
     for (let logDir of logDirs) {
       if (!fs.existsSync(logDir)) {
-        console.log('Creating directory: ' + logDir);
+        console.log('wdio.conf.js Creating directory ' + logDir);
         fs.mkdirSync(logDir);
       } else {
-        console.log('Deleting files in directory: ' + logDir);
+        console.log('wdio.conf.js Deleting files in directory ' + logDir);
         files = fs.readdirSync(logDir);
-        for (let file_i in files) {
-          fs.unlinkSync(logDir + '/' + files[file_i]);
+        for (let file of files) {
+          try {
+            fs.unlinkSync(logDir + '/' + file);
+          } catch (e) {
+            errorMessage = 'wdio.conf.js Could not delete file ' + file;
+            console.log('\x1b[31m' + errorMessage + '\x1b[0m');
+            throw new Error(errorMessage);            
+          }
         }
       }
     }
     // *** Delete old test logs
-    console.log('Deleting BrowserStack logs of build ' + test + ':' + branch);
+    console.log('wdio.conf.js Deleting BrowserStack logs of build ' + test + ':' + branch);
     BrowserStack.deleteOneTest(test + ':' + branch);
     // *** Log all capabilities
     fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
-    console.log(capabilities);
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
@@ -310,7 +300,10 @@ exports.config = {
         return comparisonResult.rms;
       }
     });
-
+    // Get current branch
+    browser.addCommand('getBranch', () => {
+      return branch;
+    });
 
     // Managing custom log-file
     browser.addCommand('logInit', () => {
@@ -329,8 +322,8 @@ exports.config = {
     });
 
     // Print current sessionId and platformName
-    console.log('sessionId: ' + browser.sessionId);
-    console.log('platformName: ' + browser.getPlatformName())
+    console.log('sessionId is ' + browser.sessionId);
+    console.log('platformName is ' + browser.getPlatformName())
     // Init custom log
     browser.logInit();
     browser.logAdd('platform', browser.getPlatformName())
@@ -367,9 +360,9 @@ exports.config = {
     // If upload enabled, update stager
     if (upload) {
       // Delete old logs
-      await Stager.deleteDirectory(branch + '/' + test);
+      await Stager.deleteDirectory('report/' + branch + '/' + test);
       // Upload logs
-      await Stager.uploadDirectory(Paths.dir_tmp, branch + '/' + test);
+      await Stager.uploadDirectory(Paths.dir_tmp, 'report/' + branch + '/' + test);
     }
   },
 

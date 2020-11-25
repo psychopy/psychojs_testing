@@ -37,11 +37,11 @@ const getBrowsers = () => {
     if (!fs.existsSync(Paths.dir_tmp)) {
       console.log('capabilities.bs.js. Creating directory: ' + Paths.dir_tmp)
       fs.mkdirSync(Paths.dir_tmp);
-    };    
+    }  
     if (!fs.existsSync(Paths.dir_logs_capabilities)) {
       console.log('capabilities.bs.js. Creating directory: ' + Paths.dir_logs_capabilities)
       fs.mkdirSync(Paths.dir_logs_capabilities);
-    };        
+    }     
     fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
   }
   // Select browsers that match these filters
@@ -103,8 +103,20 @@ const getBrowsers = () => {
 }
 
 // An array of browserNames to test on if subset === true
-const browserSubsets = [
-  'Windows_10_Chrome_*'
+const platformSubsets = [
+  'Windows_10_chrome_*',
+  'Windows_10_firefox_*',
+  'Windows_10_edge_*',
+  'OS X_Catalina_chrome_*',
+  'OS X_Catalina_edge_*',
+  'OS X_Catalina_firefox_*',
+  'OS X_Catalina_safari_*',
+  'android_11.0_Google Pixel 4_android',
+  'android_10.0_Google Pixel 3_android',
+  'android_9.0_Samsung Galaxy S9 Plus_android',
+  'android_7.0_Samsung Galaxy S8 Plus_android',
+  'ios_14_iPhone XS_iphone',
+  'ios_13_iPhone 8_iphone'
 ];
 
 
@@ -174,7 +186,7 @@ const getCapabilities = (buildName, platformPattern, subset) => {
     let matchesFilter;
     if (subset) {
       matchesFilter = false;
-      for (platformSubset of platformSubsets) {
+      for (let platformSubset of platformSubsets) {
         matchesFilter = matchesFilter || wildTest(platformSubset, capability['bstack:options'].sessionName);
       }
     } else {
