@@ -9,5 +9,5 @@ jobs:
     env:
       DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
     steps:
-      - name: echo pull_request_target type
-        run: echo ${{ github.event.type }}
+      - name: echo github.event.action
+        run: echo ${{ github.event.action }}
