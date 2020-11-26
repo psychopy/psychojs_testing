@@ -5,6 +5,9 @@ on:
 jobs:
   compile:
     runs-on: ubuntu-18.04
+    defaults:
+      run:
+        shell: sh
     env:
       STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
       STAGING_PORT: ${{ secrets.STAGING_PORT }}
