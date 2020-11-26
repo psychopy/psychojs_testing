@@ -11,3 +11,5 @@ jobs:
     steps:
       - name: echo github.event.action
         run: echo ${{ github.event.action }}
+      - name: echo DUMMY_SECRET
+        run: echo ${{ secrets.DUMMY_SECRET }}
