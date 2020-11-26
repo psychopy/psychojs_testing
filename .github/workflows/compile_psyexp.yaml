@@ -4,7 +4,7 @@ on:
 
 jobs:
   compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     env:
       STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
       STAGING_PORT: ${{ secrets.STAGING_PORT }}
@@ -41,7 +41,7 @@ jobs:
       - name: Set up Python 3.7
         uses: actions/setup-python@v2
         with:
-                python-version: 3.7
+          python-version: 3.7
       - uses: actions/cache@v2
         name: Cache PsychoPy dependencies
         with:
@@ -51,6 +51,9 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install PsychoPy dependencies
         run: pip install -e .
+        working-directory: ./psychopy
+      - name: Install wxPython
+        run: pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
         working-directory: ./psychopy
       - name: Compile experiments from psyexp to JS
         run: node test/cli/compileExperiments.js
