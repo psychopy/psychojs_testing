@@ -7,9 +7,13 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'Repo (default: tpronk/e2e_robot)'
+        description: 'Repository'
         required: true
         default: 'tpronk/e2e_robot'
+      ref:
+        description: 'Branch/tag/SHA (default branch if empty)'
+        required: false
+        default: ''
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -24,6 +28,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.repo || 'tpronk/e2e_robot' }}
+          ref: ${{ github.event.inputs.ref }}
       - name: Setup node
         uses: actions/setup-node@v1
         with:
