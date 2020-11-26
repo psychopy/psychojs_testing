@@ -1,14 +1,13 @@
 name: test external pull request
-on:
-
-
+on: 
+  pull_request_target:
+    types: [assigned, unassigned, labeled, opened, edited, closed, reopened, synchronize, ready_for_review, locked, unlocked, review_requested, review_request_removed]
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
-      BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
-      STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
-      STAGING_PORT: ${{ secrets.STAGING_PORT }}
-      STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+      DUMMY_SECRET: ${{ secrets.DUMMY_SECRET }}
     steps:
+      - name: echo pull_request_target type
+        run: echo ${{ github.event }}
