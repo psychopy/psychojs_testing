@@ -8,7 +8,7 @@ on:
     inputs:
       repo:
         description: 'Repo (default: tpronk/e2e_robot)'
-        required: false
+        required: true
         default: 'tpronk/e2e_robot'
 jobs:
   test:
@@ -23,7 +23,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.repo }}
+          repository: ${{ github.event.inputs.repo || 'tpronk/e2e_robot' }}
       - name: Setup node
         uses: actions/setup-node@v1
         with:
