@@ -1,4 +1,4 @@
-name: compile psyexp to js
+name: compile psyexp to js (Windows)
 on:
   workflow_dispatch:
 
