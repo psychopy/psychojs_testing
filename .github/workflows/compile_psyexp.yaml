@@ -65,8 +65,8 @@ jobs:
         run: sudo apt update
       - name: Install wxPython dependencies
         run: sudo apt-get install git curl libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
-      - name: Install sounddevice library 
-        run: pip install -e sounddevice
+      - name: Install pyo library 
+        run: pip install pyo
         working-directory: ./psychopy
       - name: Activate virtual screen
         run: /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1024x768x24 -ac +extension GLX +extension RANDR +render -noreset
