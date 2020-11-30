@@ -64,7 +64,7 @@ jobs:
       - name: Update APT
         run: sudo apt update
       - name: Install wxPython dependencies
-        run: sudo apt-get install libusb-1.0-0-dev portaudio19-dev libasound2-dev
+        run: sudo apt-get install git curl libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
       - name: Install psychtoolbox
         run: pip install psychtoolbox
         working-directory: ./psychopy
