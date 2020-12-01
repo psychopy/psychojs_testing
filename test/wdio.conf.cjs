@@ -70,7 +70,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./shared/capabilities.' + server + '.cjs').getCapabilities(buildName, platform, subset),
+  capabilities: require('./shared/capabilities.' + server + '.cjs').getWebdriverCapabilities(buildName, platform, subset),
 
   // Local test-runner
   runner: 'local',
