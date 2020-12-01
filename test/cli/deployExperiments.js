@@ -13,6 +13,48 @@ const child_process = require('child_process');
 let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
 console.log('deployExperiments.js: branch is ' + branch);
 
+// Base URL to experiment on Stager
+let baseURL = 'https://staging.psychopy.org/experiments/html/' + branch;
+
+// get files in dirPath and each of its subdirectories
+// https://coderrocketfuel.com/article/recursively-list-all-the-files-in-a-directory-using-node-js
+const getAllFiles = (dirPath, arrayOfFiles) => {
+  let files = fs.readdirSync(dirPath);
+
+  arrayOfFiles = arrayOfFiles || [];
+
+  files.forEach(function (file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(path.join(dirPath, "/", file));
+    }
+  })
+
+  return arrayOfFiles;
+}
+
+// get files in fromPath and each of its subdirectories. Returned files have:
+// (a) their fromPath replaced by toPath and (b) slashes as separators
+const readDirSyncRecursive = (fromPath, toPath) => {
+  let files = getAllFiles(fromPath);
+  // If fromPath starts with ./, remove it
+  if (fromPath.substr(0, 2) === './') {
+    fromPath = fromPath.substr(2, fromPath.length);
+  }
+  // Add a trailing slash to fromPAth
+  fromPath += '/';
+  // perform (a) and (b) transformations
+  files = files.map( (file) => {
+    // replace backslashed by slashes
+    file = file.replace(/\\/g, '/');
+    // replace fromPath by toPath
+    file = file.replace(fromPath, toPath)
+    return file;
+  });
+  return files;
+}
+
 // Download experiments to temporary directory
 (async () => {
   // Delete experiments directory (it not empty)
@@ -50,15 +92,33 @@ console.log('deployExperiments.js: branch is ' + branch);
   let includes = fs.readdirSync('./dist');
 
   // For each experiment, compile index.html and copy dist/ to lib/
+  let resources;
   for (let experiment of experiments) {
     console.log('deployExperiments.js: deploying ' + experiment);
-    // Compile and write template
+
+    // Compile and write index.html
     console.log('deployExperiments.js: compiling index.html');
     let compiled = Mustache.render(template, { experiment: experiment });
     fs.writeFileSync(
       Paths.dir_experiments + '/' + experiment + '/index.html', 
       compiled
     );
+    
+    // Compile and write resources
+    try {
+      console.log(Paths.dir_experiments + '/' + experiment + '/resources');
+      resources = readDirSyncRecursive(Paths.dir_experiments + '/' + experiment + '/resources', '');
+    } catch (e) {
+      resources = [];
+    }
+    fs.writeFileSync(
+      Paths.dir_experiments + '/' + experiment + '/resources.json', 
+      JSON.stringify({
+        resources: resources,
+        resourceDirectory: baseURL + '/' + experiment + '/resources/'
+      })
+    );    
+
     // Copy dist/ to lib/
     console.log('deployExperiments.js: copying lib');
     fs.mkdirSync(Paths.dir_experiments + '/' + experiment + '/lib');
@@ -73,7 +133,6 @@ console.log('deployExperiments.js: branch is ' + branch);
   // Upload compiled experiments to stager
   Stager.uploadDirectory(
     Paths.dir_experiments,
-    'eperiments/html/' + branch
+    'experiments/html/' + branch
   )
-}();
-deployExperiments();
+})();
