@@ -1,7 +1,7 @@
 // Modules
 const fs = require('fs');
-const BrowserStack = require('./BrowserStack.js');
-const Paths = require('./Paths.js');
+const BrowserStack = require('./BrowserStack.cjs');
+const Paths = require('./Paths.cjs');
 
 // Returns index of highest number in array that is not NaN
 const indexOfMax = (values) => {
@@ -35,11 +35,11 @@ const getBrowsers = () => {
     allBrowsers = BrowserStack.getBrowsers();
     // Workaround for constructing directories (since log cleanup may not have been performed yet)
     if (!fs.existsSync(Paths.dir_tmp)) {
-      console.log('capabilities.bs.js. Creating directory: ' + Paths.dir_tmp)
+      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_tmp)
       fs.mkdirSync(Paths.dir_tmp);
     }  
     if (!fs.existsSync(Paths.dir_logs_capabilities)) {
-      console.log('capabilities.bs.js. Creating directory: ' + Paths.dir_logs_capabilities)
+      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_logs_capabilities)
       fs.mkdirSync(Paths.dir_logs_capabilities);
     }     
     fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));

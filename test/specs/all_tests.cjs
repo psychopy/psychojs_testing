@@ -1,4 +1,4 @@
-const SharedBehaviors = require('../shared/SharedBehaviors');
+const SharedBehaviors = require('../shared/SharedBehaviors.cjs');
 describe('all_tests', () => {
   let calibration;
   it('e2e_calibration', () => {

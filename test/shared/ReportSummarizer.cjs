@@ -2,7 +2,7 @@
 const fs = require('fs');
 const json2csv = require('json2csv');
 const XLSX = require('xlsx');
-const Paths = require('./Paths.js');
+const Paths = require('./Paths.cjs');
 
 // Write a JSON array to a JSON and CSV file
 writeJsonAndCsv = (filePrefix, output) => {
@@ -75,7 +75,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   let failedLogs = 0;
 
   // Convert each JSON reporter log file
-  console.log('ReportSummarizer.js: found ' + filenames.length + ' JSON logs');
+  console.log('[ReportSummarizer.cjs] found ' + filenames.length + ' JSON logs');
   for (let filename of filenames) {
     // Set specfile_id and capability_id from filename
     splitFilename = filename.split('.')[0]
@@ -87,7 +87,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
       json = JSON.parse(
         fs.readFileSync(Paths.dir_logs_json + '/' + filename).toString()
       );
-      console.log('ReportSummarizer.js: read ' + filename);
+      console.log('[ReportSummarizer.cjs] read ' + filename);
       // Add sessionId
       log('custom', 'sessionId', 'custom', json.capabilities.sessionId, "");
       // Add browserName
@@ -104,7 +104,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
         }
       }
     } catch (e) {
-      console.log('ReportSummarizer.js: error reading ' + filename + ' (' + e.message + ')');
+      console.log('[ReportSummarizer.cjs] error reading ' + filename + ' (' + e.message + ')');
       failedLogs++;
     }
   }
@@ -128,7 +128,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
     return !processedPlatforms.includes(platform);
   });
   console.log(
-    'ReportSummarizer.js: found ' + failedLogs + ' JSON logs that could not be processed and ' + unprocessedPlatforms.length + ' platforms without processed logs. ' +
+    '[ReportSummarizer.cjs] found ' + failedLogs + ' JSON logs that could not be processed and ' + unprocessedPlatforms.length + ' platforms without processed logs. ' +
     'These are ' + JSON.stringify(unprocessedPlatforms)
   );
   // Add 'no_logs' entries for unprocessed platforms
@@ -145,7 +145,7 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
 
 // Summarize joinedReports, add custom entries present in customLogsToAdd
 summarize = (joinedReports, customLogsToAdd) => {
-  console.log('ReportSummarizer.js: summarizing');
+  console.log('[ReportSummarizer.cjs] summarizing');
   // Summarized joinedReports
   let summaries = [];
   // List with each unique capability ID

@@ -2,7 +2,7 @@
 
 // Modules
 let Client = require('ssh2-sftp-client');
-const CLIParser = require('./CLIParser.js');
+const CLIParser = require('./CLIParser.cjs');
 
 // Path to staging report directory
 let basePath = '/var/www/staging';
@@ -12,7 +12,7 @@ let basePath = '/var/www/staging';
 ftpRequest = (requestFunction, showResult = true) => {
   return new Promise(resolve => {
     try {
-      console.log('Stager.js: establishing FTP connection');
+      console.log('[Stager.cjs] establishing FTP connection');
       let client = new Client();
       let result;
       client.connect({
@@ -21,25 +21,25 @@ ftpRequest = (requestFunction, showResult = true) => {
         username: CLIParser.parseOption({env: 'STAGING_USERNAME'}, true, CLIParser.logSilent),
         password: CLIParser.parseOption({env: 'STAGING_PASSWORD'}, true, CLIParser.logSilent),
       }).then((data) => {
-        console.log('Stager.js: performing request');
+        console.log('[Stager.cjs] performing request');
         return requestFunction(client, basePath);
       }).then((data) => {
         if (!showResult) {
-          console.log('Stager.js: request resolved');
+          console.log('[Stager.cjs] request resolved');
         } else {
-          console.log('Stager.js: request resolved with data ' + JSON.stringify(data));
+          console.log('[Stager.cjs] request resolved with data ' + JSON.stringify(data));
         }
         result = data;
         return client.end();
       }).then((data) => {
         resolve(result);
       }).catch((err) => {
-        console.log('Stager.js: error during FTP connection: ' + err);
+        console.log('[Stager.cjs] error during FTP connection: ' + err);
         resolve(result);
         return client.end();
       });
     } catch (err) {
-      console.log('Stager.js: error during ftpRequest: ' + err);
+      console.log('[Stager.cjs] error during ftpRequest: ' + err);
       resolve(result);
     }
   });
@@ -48,7 +48,7 @@ ftpRequest = (requestFunction, showResult = true) => {
 // Upload directory
 uploadDirectory = async (from, to) => {
   await ftpRequest((client, basePath) => {
-    console.log('Stager.js: uploading directory from ' + from + ' to ' + basePath + '/' + to);
+    console.log('[Stager.cjs] uploading directory from ' + from + ' to ' + basePath + '/' + to);
     return client.uploadDir(from, basePath + '/' + to);
   });
 };
@@ -56,27 +56,27 @@ uploadDirectory = async (from, to) => {
 // Delete directory recursively
 deleteDirectory = async (directory) => {
   await ftpRequest((client, basePath) => {
-    console.log('Stager.js: deleting directory at ' + basePath + '/' + directory);
+    console.log('[Stager.cjs] deleting directory at ' + basePath + '/' + directory);
     return client.rmdir(basePath + '/' + directory, true);
   });
 };
 
 // Delete all subdirectories in containingDirectory except directoriesToKeep
 deleteAllDirectoriesExcept = async (containingDirectory, directoriesToKeep) => {
-  console.log('Stager.js: deleting all directories except ' + JSON.stringify(directoriesToKeep));
+  console.log('[Stager.cjs] deleting all directories except ' + JSON.stringify(directoriesToKeep));
   let listResults = await ftpRequest((client) => {
-    console.log('Stager.js: listing directories at ' + basePath + '/' + containingDirectory);
+    console.log('[Stager.cjs] listing directories at ' + basePath + '/' + containingDirectory);
     return client.list(basePath + '/' + containingDirectory);
   }, false);
-  console.log('Stager.js: ' + listResults.length + ' directories on staging server');
+  console.log('[Stager.cjs] ' + listResults.length + ' directories on staging server');
   let allDirectories = listResults.map((listResult) => {
     return listResult.name;
   })
-  console.log('Stager.js: directory names on staging server are ' + JSON.stringify(allDirectories));
+  console.log('[Stager.cjs] directory names on staging server are ' + JSON.stringify(allDirectories));
   let directoriesToDelete = allDirectories.filter((directory) => {
     return !directoriesToKeep.includes(directory);
   });
-  console.log('Stager.js: directories to delete on staging server are ' + JSON.stringify(directoriesToDelete));
+  console.log('[Stager.cjs] directories to delete on staging server are ' + JSON.stringify(directoriesToDelete));
   for (directoryToDelete of directoriesToDelete) {
     await deleteDirectory(containingDirectory + '/' + directoryToDelete);
   }

@@ -1,20 +1,20 @@
 // Download experiments from stager, compile psyexp file, and upload
 
 // Modules
-const Paths = require('../shared/Paths.js');
-const Stager = require('../shared/Stager.js');
-const CLIParser = require('../shared/CLIParser.js');
+const Paths = require('../shared/Paths.cjs');
+const Stager = require('../shared/Stager.cjs');
+const CLIParser = require('../shared/CLIParser.cjs');
 const path = require('path');
 const child_process = require('child_process');
 const fs = require('fs');
 
 // Get path to psychopy
 const psychopyPath = CLIParser.parseOption({env: 'PSYCHOPY_PATH'});
-console.log('compileExperiments.js: psychopyPath is ' + psychopyPath);
+console.log('[compileExperiments.cjs] psychopyPath is ' + psychopyPath);
 
 // Download experiments to temporary directory
 (async () => {
-  console.log('compileExperiments.js: cleaning up temporary folders');
+  console.log('[compileExperiments.cjs] cleaning up temporary folders');
   // Delete experiments directory (it not empty)
   try {
     fs.rmdirSync(Paths.dir_experiments, {recursive: true});
@@ -36,25 +36,25 @@ console.log('compileExperiments.js: psychopyPath is ' + psychopyPath);
   }
 
   // Download experiments
-  console.log('compileExperiments.js: downloading experiments');
+  console.log('[compileExperiments.cjs] downloading experiments');
   downloadResults = await Stager.ftpRequest((client, basePath) => {
     return client.downloadDir(basePath + '/experiments/psyexp', Paths.dir_experiments);
   }, true);
   
   // List of  experiments
   let experiments = fs.readdirSync(Paths.dir_experiments);
-  console.log('compileExperiments.js: compiling ' + experiments.length + ' experiments');
+  console.log('[compileExperiments.cjs] compiling ' + experiments.length + ' experiments');
 
   // Local path to directory of current experiment
   let experimentPath;
   // For each experiment, compile psyexp (if applicable) index.html and copy dist/ to lib/
   for (let experiment of experiments) {
-    console.log('compileExperiments.js: compiling psyexp for ' + experiment);
+    console.log('[compileExperiments.cjs] compiling psyexp for ' + experiment);
     experimentPath = path.resolve(Paths.dir_experiments + '/' + experiment);
     child_process.execSync(
       'python ' + psychopyPath + '/psychopy/scripts/psyexpCompile.py ' + 
       experimentPath + '/' + experiment + '.psyexp ' +
-      '--outfile ' + experimentPath + '/' + experiment + '.js'
+      '--outfile ' + experimentPath + '/' + experiment + '.cjs'
     );
   }
 

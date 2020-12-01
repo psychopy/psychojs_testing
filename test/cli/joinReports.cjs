@@ -2,11 +2,11 @@
 // Upload or delete test on Stager via CLI arguments
 
 // Modules
-const Stager = require('../shared/Stager.js');
-const ReportSummarizer = require('../shared/ReportSummarizer.js');
+const Stager = require('../shared/Stager.cjs');
+const ReportSummarizer = require('../shared/ReportSummarizer.cjs');
 const fs = require('fs');
-const Paths = require('../shared/Paths.js');
-const CLIParser = require('../shared/CLIParser.js');
+const Paths = require('../shared/Paths.cjs');
+const CLIParser = require('../shared/CLIParser.cjs');
 
 // Get branch 
 let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
@@ -28,11 +28,11 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   let tests = listResults.map((listResult) => {
     return listResult.name;
   })
-  console.log('joinReports.js: Found ' + tests.length + ' tests');
+  console.log('[joinReports.cjs] Found ' + tests.length + ' tests');
   // Merge reports of each test together
   let joinedReports = [], report, getResults;
   for (let test of tests) {
-    console.log('joinReports.js: Adding test ' + test);
+    console.log('[joinReports.cjs] Adding test ' + test);
     getResults = await Stager.ftpRequest((client, basePath) => {
       return client.get(basePath + '/report/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_logs_processed + '/report.json');
     }, false);

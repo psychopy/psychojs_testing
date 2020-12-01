@@ -1,30 +1,30 @@
 // Modules 
 const fs = require('fs');
 const Jimp = require('jimp');
-const VisualRegressor = require('./shared/VisualRegressor.js');
-const ReportSummarizer = require('./shared/ReportSummarizer.js');
-const BrowserStack = require('./shared/BrowserStack.js');
-const Stager = require('./shared/Stager.js');
-const Paths = require('./shared/Paths.js');
-const CLIParser = require('./shared/CLIParser.js');
+const VisualRegressor = require('./shared/VisualRegressor.cjs');
+const ReportSummarizer = require('./shared/ReportSummarizer.cjs');
+const BrowserStack = require('./shared/BrowserStack.cjs');
+const Stager = require('./shared/Stager.cjs');
+const Paths = require('./shared/Paths.cjs');
+const CLIParser = require('./shared/CLIParser.cjs');
 
 // *** Parse CLI arguments
 // Parse server CLI option
 const server = CLIParser.parseOption({cli: 'server'});
 if (!(['local', 'bs'].includes(server))) {
-  throw new Error('wdio.conf.js: The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
+  throw new Error('[wdio.conf.cjs] The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
-console.log('wdio.conf.js: server is ' + server);
+console.log('[wdio.conf.cjs] server is ' + server);
 
 // Parse upload CLI option
 let upload = CLIParser.parseOption({cli: 'upload'}, false);
 upload = upload !== undefined && upload === 'yes';
-console.log('wdio.conf.js: upload is ' + upload);
+console.log('[wdio.conf.cjs] upload is ' + upload);
 
 // Parse platform CLI option
 let platform = CLIParser.parseOption({cli: 'platform'}, false);
 platform = platform === undefined? '*': platform;
-console.log('wdio.conf.js: platform is ' + platform);
+console.log('[wdio.conf.cjs] platform is ' + platform);
 
 // Parse test CLI option
 let test = CLIParser.parseOption({cli: 'test'}, false);
@@ -32,33 +32,33 @@ let specs, specFile;
 if (test === undefined) {
   test = 'all_tests';
   specFile = 'all_tests'
-  specs = ['./test/specs/' + specFile + '.js'];  
+  specs = ['./test/specs/' + specFile + '.cjs'];  
 } else {
   specFile = 'single_test';
-  specs = ['./test/specs/' + specFile + '.js'];
+  specs = ['./test/specs/' + specFile + '.cjs'];
 }
-console.log('wdio.conf.js: test is ' + test);
+console.log('[wdio.conf.cjs] test is ' + test);
 
 // Parse testrun CLI option
 let testrun = CLIParser.parseOption({cli: 'testrun'}, false);
 testrun = testrun === undefined? test: testrun;
-console.log('wdio.conf.js: testrun is ' + testrun);
+console.log('[wdio.conf.cjs] testrun is ' + testrun);
 
 // Get branch from CLI or TRAVIS_BRANCH
 let branch;
 if (upload || server === 'bs') {
   branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
 }
-console.log('wdio.conf.js: branch is ' + branch);
+console.log('[wdio.conf.cjs] branch is ' + branch);
 
 // Get subset from CLI
 let subset =  CLIParser.parseOption({cli: 'subset'}, false);
 subset = subset !== undefined;
-console.log('wdio.conf.js: subset is ' + subset);
+console.log('[wdio.conf.cjs] subset is ' + subset);
 
 // Construct buildName (for browserStack logs)
 const buildName = BrowserStack.createBuildName(branch, testrun, test);
-console.log('wdio.conf.js: buildName is ' + buildName);
+console.log('[wdio.conf.cjs] buildName is ' + buildName);
 
 // *** WebdriverIO config
 exports.config = {
@@ -70,7 +70,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./shared/capabilities.' + server).getCapabilities(buildName, platform, subset),
+  capabilities: require('./shared/capabilities.' + server + '.cjs').getCapabilities(buildName, platform, subset),
 
   // Local test-runner
   runner: 'local',
@@ -175,7 +175,7 @@ exports.config = {
       // *** Setup temporary directories
       // Construct tmp dir
       if (!fs.existsSync(Paths.dir_tmp)) {
-        console.log('wdio.conf.js: Creating directory ' + Paths.dir_tmp)
+        console.log('[wdio.conf.cjs] Creating directory ' + Paths.dir_tmp)
         fs.mkdirSync(Paths.dir_tmp);
       };
       // Construct or clean up log dirs
@@ -193,16 +193,16 @@ exports.config = {
       let files, errorMessage;
       for (let logDir of logDirs) {
         if (!fs.existsSync(logDir)) {
-          console.log('wdio.conf.js Creating directory ' + logDir);
+          console.log('wdio.conf.cjs Creating directory ' + logDir);
           fs.mkdirSync(logDir);
         } else {
-          console.log('wdio.conf.js Deleting files in directory ' + logDir);
+          console.log('wdio.conf.cjs Deleting files in directory ' + logDir);
           files = fs.readdirSync(logDir);
           for (let file of files) {
             try {
               fs.unlinkSync(logDir + '/' + file);
             } catch (e) {
-              errorMessage = 'wdio.conf.js Could not delete file ' + file;
+              errorMessage = 'wdio.conf.cjs Could not delete file ' + file;
               console.log('\x1b[31m' + errorMessage + '\x1b[0m');
               throw new Error(errorMessage);            
             }
@@ -210,7 +210,7 @@ exports.config = {
         }
       }
       // *** Delete old test logs
-      console.log('wdio.conf.js Deleting BrowserStack logs');
+      console.log('wdio.conf.cjs Deleting BrowserStack logs');
       BrowserStack.deleteOneBuild(buildName);
       // *** Log all capabilities
       fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
@@ -363,21 +363,21 @@ exports.config = {
       // Merge reports
       let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
       // Store merged reports
-      console.log('wdio.conf.js: write report');
+      console.log('[wdio.conf.cjs] write report');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'report', joinedReports);
       // Summarize reports
       let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
       // Store summaries
-      console.log('wdio.conf.js: write summary');
+      console.log('[wdio.conf.cjs] write summary');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', summaries);
       // Store summaries of all tests with at least on fail
       let summariesFailed = summaries.filter( (summary) => {
         return summary.failed > 0
       })
-      console.log('wdio.conf.js: write failed');
+      console.log('[wdio.conf.cjs] write failed');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', summariesFailed);
       // Store failed, summaries, and reports in a single XLSX
-      console.log('wdio.conf.js: write XLSX');
+      console.log('[wdio.conf.cjs] write XLSX');
       ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/' + 'combined_report.xlsx', {
         failed: summariesFailed,
         summary: summaries,
@@ -386,12 +386,12 @@ exports.config = {
       // If upload enabled, update stager
       if (upload) {
         const stagerPath = Stager.createReportPath(branch, testrun, test);
-        console.log('wdio.conf.js: stagerPath is ' + stagerPath);
+        console.log('[wdio.conf.cjs] stagerPath is ' + stagerPath);
         // Delete old logs
-        console.log('wdio.conf.js: Deleting old reports on Stager');
+        console.log('[wdio.conf.cjs] Deleting old reports on Stager');
         await Stager.deleteDirectory('report/' + stagerPath);
         // Upload logs
-        console.log('wdio.conf.js: Uploading new reports to Stager');
+        console.log('[wdio.conf.cjs] Uploading new reports to Stager');
         await Stager.uploadDirectory(Paths.dir_tmp, 'report/' + stagerPath);
       }
     } catch (e) {

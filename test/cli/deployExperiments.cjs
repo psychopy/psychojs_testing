@@ -1,17 +1,17 @@
 // Download experiments from stager, compile index.html, add library, and upload
 
 // Modules
-const Paths = require('../shared/Paths.js');
-const Stager = require('../shared/Stager.js');
+const Paths = require('../shared/Paths.cjs');
+const Stager = require('../shared/Stager.cjs');
 const fs = require('fs');
 const Mustache = require('mustache');
-const CLIParser = require('../shared/CLIParser.js');
+const CLIParser = require('../shared/CLIParser.cjs');
 const path = require('path');
 const child_process = require('child_process');
 
 // Get branch
 let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
-console.log('deployExperiments.js: branch is ' + branch);
+console.log('[deployExperiments.cjs] branch is ' + branch);
 
 // Base URL to experiment on Stager
 let baseURL = 'https://staging.psychopy.org/experiments/html/' + branch;
@@ -58,7 +58,7 @@ const readDirSyncRecursive = (fromPath, toPath) => {
 // Download experiments to temporary directory
 (async () => {
   // Delete experiments directory (it not empty)
-  console.log('deployExperiments.js: cleaning up temporary folders');
+  console.log('[deployExperiments.cjs] cleaning up temporary folders');
   try {
     fs.rmdirSync(Paths.dir_experiments, {recursive: true});
   } catch (e) {}
@@ -78,14 +78,14 @@ const readDirSyncRecursive = (fromPath, toPath) => {
   }
 
   // Download experiments
-  console.log('deployExperiments.js: downloading experiments');
+  console.log('[deployExperiments.cjs] downloading experiments');
   downloadResults = await Stager.ftpRequest((client, basePath) => {
     return client.downloadDir(basePath + '/experiments/js', Paths.dir_experiments);
   }, true);
   
   // List of  experiments
   let experiments = fs.readdirSync(Paths.dir_experiments);
-  console.log('deployExperiments.js: preparing ' + experiments.length + ' experiments');
+  console.log('[deployExperiments.cjs] preparing ' + experiments.length + ' experiments');
   // Get template
   let template = fs.readFileSync('./src/index.html', 'utf8');
   // Get includes
@@ -94,10 +94,10 @@ const readDirSyncRecursive = (fromPath, toPath) => {
   // For each experiment, compile index.html and copy dist/ to lib/
   let resources;
   for (let experiment of experiments) {
-    console.log('deployExperiments.js: deploying ' + experiment);
+    console.log('[deployExperiments.cjs] deploying ' + experiment);
 
     // Compile and write index.html
-    console.log('deployExperiments.js: compiling index.html');
+    console.log('[deployExperiments.cjs] compiling index.html');
     let compiled = Mustache.render(template, { experiment: experiment });
     fs.writeFileSync(
       Paths.dir_experiments + '/' + experiment + '/index.html', 
@@ -105,6 +105,7 @@ const readDirSyncRecursive = (fromPath, toPath) => {
     );
     
     // Compile and write resources
+    console.log('[deployExperiments.cjs] compiling resources.json');
     try {
       console.log(Paths.dir_experiments + '/' + experiment + '/resources');
       resources = readDirSyncRecursive(Paths.dir_experiments + '/' + experiment + '/resources', '');
@@ -112,7 +113,7 @@ const readDirSyncRecursive = (fromPath, toPath) => {
       resources = [];
     }
     fs.writeFileSync(
-      Paths.dir_experiments + '/' + experiment + '/resources.json', 
+      Paths.dir_experiments + '/' + experiment + '/resources.cjson', 
       JSON.stringify({
         resources: resources,
         resourceDirectory: baseURL + '/' + experiment + '/resources/'
@@ -120,7 +121,7 @@ const readDirSyncRecursive = (fromPath, toPath) => {
     );    
 
     // Copy dist/ to lib/
-    console.log('deployExperiments.js: copying lib');
+    console.log('[deployExperiments.cjs] copying lib');
     fs.mkdirSync(Paths.dir_experiments + '/' + experiment + '/lib');
     includes.map((include) => { 
       fs.copyFileSync(

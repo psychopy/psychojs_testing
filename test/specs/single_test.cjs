@@ -1,4 +1,4 @@
-const SharedBehaviors = require('../shared/SharedBehaviors');
+const SharedBehaviors = require('../shared/SharedBehaviors.cjs');
 describe('single_test', () => {
   let test, testFunction;
   it('get_test', () => {
