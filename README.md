@@ -56,7 +56,7 @@ The installation provides a Selenium Standalone service that includes Chrome and
 
 # Running tests 
 An end-to-end testrun can be started via this command:
-`npx wdio wdio.conf.js`
+`npx wdio test/wdio.conf.cjs`
 
 <div id='test-configuration'></div>
 
@@ -78,11 +78,11 @@ testrun | No; name of test by default | Identifies a testrun in BrowserStack log
 ## Examples
 Run all tests via local server.
 
-`npx wdio wdio.conf.js --server local`
+`npx wdio test/wdio.conf.cjs --server local`
 
 Run the e2e_img test on each Android device via BrowserStack, using demo as name for the logs, and uploading reports to the PsychoPy staging server. 
 
-`npx wdio wdio.conf.js --server bs --upload yes --branch demo --platform *Android* --test e2e_img`
+`npx wdio test/wdio.conf.cjs --server bs --upload yes --branch demo --platform *Android* --test e2e_img`
 
 <div id='supporting-scripts'></div>
 
@@ -130,7 +130,7 @@ There are multiple ways of making screenshots of a canvas, but none is ideal:
 <div id='processing-screenshots'></div>
 
 ### Processing screenshots
-The custom browser command `browser.writeScreenshot(name)` stores an in-browser screenshot as PNG file into `.tmp/screenshots/`. The filename of this PNG is `<name> <platformName>.PNG`. The module `test/shared/VisualRegressor.js` conducts a series of image processing steps on each screenshot in order to make them more comparable:
+The custom browser command `browser.writeScreenshot(name)` stores an in-browser screenshot as PNG file into `.tmp/screenshots/`. The filename of this PNG is `<name> <platformName>.PNG`. The module `test/shared/VisualRegressor.cjs` conducts a series of image processing steps on each screenshot in order to make them more comparable:
 1. For extracting the actual graphics on the PsychoJS canvas, and so excluding any of the grey background or browser user interface elements, they should be surrounded by a red (255, 0, 0) rectangle. This rectangle is cut out and stored in `.tmp/cutouts/`.
 2. Next, each cutout is resized to have the same dimensions as its reference image. The resized cutout is stored in `.tmp/cutouts_resized/`.
 3. Finally, the resized cutout is compared with the reference image, by calculating the RMS of the difference in RGB values of each pixel. There are separate repos illustrating a [JavaScript](https://github.com/tpronk/img_compare_js) and [Python](https://github.com/tpronk/img_compare_py) implementation of the RMS difference measure.
@@ -160,12 +160,12 @@ In addition, sessions in BrowserStack and filenames of screenshots are postfixed
 <div id='handling-network-time-outs'></div>
 
 ## Handling network time-outs
-BrowserStack's open source subscription allows for 5 instances to run simultaneously, as can be specified in `wdio.conf.js` via `maxInstances`. However, due to network hickups, requests from the testing script may arrive at the BroswerStack server; acknowledgment of the request not being received by the testing script; being resent; and thus exceeding BrowserStack's limit of 5 instances. I found that setting `maxInstances` to 3 is a relatively safe number for preventing this issue.
+BrowserStack's open source subscription allows for 5 instances to run simultaneously, as can be specified in `wdio.conf.cjs` via `maxInstances`. However, due to network hickups, requests from the testing script may arrive at the BroswerStack server; acknowledgment of the request not being received by the testing script; being resent; and thus exceeding BrowserStack's limit of 5 instances. I found that setting `maxInstances` to 3 is a relatively safe number for preventing this issue.
 
 <div id='speeding-up-testruns'></div>
 
 ## Speeding up testruns
-There are two factors that can cause PsychoJS test-runs to be relatively slow: Firstly, tests that require precise pointer interactions need to be preceded by a calibration procedure. Secondly, for each spec file, WebdriverIO starts up a separate session. Starting up a new session can take a while, especially on mobile devices. To speed up test-runs, tests are bundled into a single spec file called `test/specs/all_tests.js`. This spec file first executes the calibration procedure, then executes each test, by calling each function specified in `SharedBehaviors.tests` with the calibration results as its first argument. This is the default behavior of `e2e_robot`.
+There are two factors that can cause PsychoJS test-runs to be relatively slow: Firstly, tests that require precise pointer interactions need to be preceded by a calibration procedure. Secondly, for each spec file, WebdriverIO starts up a separate session. Starting up a new session can take a while, especially on mobile devices. To speed up test-runs, tests are bundled into a single spec file called `test/specs/all_tests.cjs`. This spec file first executes the calibration procedure, then executes each test, by calling each function specified in `SharedBehaviors.tests` with the calibration results as its first argument. This is the default behavior of `e2e_robot`.
 
 <div id='generating-and-parsing-test-logs'></div>
 
@@ -177,7 +177,7 @@ By default, jasmine's test reporters only report whether a test was passed, had 
 <div id='parsing-custom-logs'></div>
 
 ## Parsing custom logs
-The module `test/shared/ReportSummarizer.js` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In some cases an empty JSON logfile, or no logfile at all, is produced. This can happen, for example, when a BrowserStack session could not be initialized. In these cases, a special set of entries are added to the processed logs, usingy the capability_ids `none_1`, `none_2` etc. One entry registers the platform, while a second entry has spec `parse_logs` and state `failed`.
+The module `test/shared/ReportSummarizer.cjs` combines and aggretates the logs into JSON and CSV files that are stored in `.tmp/processed_logs/`. In some cases an empty JSON logfile, or no logfile at all, is produced. This can happen, for example, when a BrowserStack session could not be initialized. In these cases, a special set of entries are added to the processed logs, usingy the capability_ids `none_1`, `none_2` etc. One entry registers the platform, while a second entry has spec `parse_logs` and state `failed`.
 <div id='organization-of-test-logs'></div>
 
 ## Organization of test logs

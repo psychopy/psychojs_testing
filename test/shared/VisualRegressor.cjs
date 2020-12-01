@@ -5,7 +5,7 @@ const Jimp = require('jimp');
 const replaceColor = require('replace-color')
 const fs = require('fs');
 const json2csv = require('json2csv');
-const Paths = require('./Paths.js');
+const Paths = require('./Paths.cjs');
 
 const colorsToRed = [
   Buffer.from([255,0,0]),
@@ -67,11 +67,8 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
   let shorterSide = Math.min(width, height);
   if (width !== height) {
     console.log(
-      '\x1b[33m' +
-      ' Cutout not square. ' +
-      (100 * (longerSide / shorterSide) - 100).toFixed(2) +
-      '%' +
-      '\x1b[0m'
+      '[VisualRegressor.cjs] Cutout not square. ' +
+      (100 * (longerSide / shorterSide) - 100).toFixed(2) + '%'
     );
   }  
   // Crop cutout
@@ -88,10 +85,8 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
   } catch (e) {
     cutoutSuccess = false;
     console.log(
-      '\x1b[31m' +
-      ' Cutout failed. ' +
-      [left, top, right, bottom] +
-      '\x1b[0m'
+      '[VisualRegressor.cjs] Cutout failed. ' +
+      [left, top, right, bottom] 
     );
   }
   // Resize cutout to reference
@@ -110,10 +105,10 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
 let getReferenceImg = async (prefix) => {
   try {
     referenceImg = await Jimp.read(Paths.url_reference_imgs + '/' + prefix + '.png');
-    console.log('Found reference image for prefix ' + prefix);
+    console.log('[VisualRegressor.cjs] Found reference image for prefix ' + prefix);
     return referenceImg;
   } catch(e) {
-    console.log('No reference image for prefix ' + prefix);
+    console.log('[VisualRegressor.cjs] No reference image for prefix ' + prefix);
     return null;
   };
 }
@@ -140,7 +135,7 @@ let compareScreenshotsWithReferences = async (validate) => {
     // Read reference img
     try {
       referenceImg = await Jimp.read(Paths.url_reference_imgs + '/' + prefix + '.png');
-      console.log('Found reference image for prefix ' + prefix);
+      console.log('[VisualRegressor.cjs] Found reference image for prefix ' + prefix);
       // Filter out screenshot filenames with matching prefix
       screenshotFilenames = allScreenshotFilenames.filter(function (screenshotFilename) {
         return screenshotFilename.startsWith(prefix);
@@ -188,7 +183,7 @@ let compareScreenshotsWithReferences = async (validate) => {
         }      
       }      
     } catch(e) {
-      console.log('No reference image for prefix ' + prefix);
+      console.log('[VisualRegressor.cjs] No reference image for prefix ' + prefix);
     }
   }  
   // Store output as JSON

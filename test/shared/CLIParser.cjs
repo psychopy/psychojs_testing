@@ -75,19 +75,19 @@ parseOption = (sources = {}, required = true, logLevel = logFull) => {
     }
     if (optionValue !== undefined) {
       if (logLevel > logSilent) {
-        console.log('CLIParser.js: ' + report);
+        console.log('[CLIParser.cjs] ' + report);
       }
       return optionValue;
     }
   }
   // Still here? No value 
   if (required) {
-    let errorMessage = 'CLIParser.js: ' + optionKey + ' was required, but had no value in ' + JSON.stringify(sources);
+    let errorMessage = '[CLIParser.cjs] ' + optionKey + ' was required, but had no value in ' + JSON.stringify(sources);
     console.log('\x1b[31m' + errorMessage + '\x1b[0m');
     throw new Error(errorMessage);
   }
   // Still here? Return optionValue (undefined)
-  console.log('CLIParser.js: ' + optionKey + ' was not required and had no value in ' + JSON.stringify(sources));
+  console.log('[CLIParser.cjs] ' + optionKey + ' was not required and had no value in ' + JSON.stringify(sources));
   return optionValue;
 }
 

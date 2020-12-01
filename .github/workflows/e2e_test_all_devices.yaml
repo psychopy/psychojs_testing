@@ -46,9 +46,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Sync BS logs and Stager with GitHub 
-        run: node test/cli/syncWithGitHub.js alain sotiri thomas
+        run: node test/cli/syncWithGitHub.cjs alain sotiri thomas
       - name: Sync BS logs and Stager with GitHub 
-        run: node test/cli/deleteLogs.js --testrun all_devices
+        run: node test/cli/deleteLogs.cjs --testrun all_devices
   e2e_tests:
     name: Run e2e tests
     needs: [sync_with_github]
@@ -85,7 +85,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio test/wdio.conf.js --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }} --platform *Windows*10*chrome* --testrun all_devices
+        run: npx wdio test/wdio.conf.cjs --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }} --platform *Windows*10*chrome* --testrun all_devices
   join_reports:
     name: Join reports
     needs: [e2e_tests]
@@ -118,5 +118,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Join reports
-        run: node test/cli/joinReports.js --testrun all_devices
+        run: node test/cli/joinReports.cjs --testrun all_devices
 

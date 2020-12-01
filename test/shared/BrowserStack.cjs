@@ -2,7 +2,7 @@
 
 // Modules
 const child_process = require('child_process');
-const CLIParser = require('./CLIParser.js');
+const CLIParser = require('./CLIParser.cjs');
 
 // Default project name
 const projectName = "PsychoJS";
@@ -21,10 +21,10 @@ curlCommand = (postfix, infix = '') => {
 };
 
 getProjectIdByName = (projectName) => {
-  console.log('BrowserStack.js: finding projectId with projectName ' + projectName);
+  console.log('[BrowserStack.cjs] finding projectId with projectName ' + projectName);
   // Query projects
   let projects = JSON.parse(child_process.execSync(curlCommand('projects.json')));
-  console.log('BrowserStack.js: ' + projects.length + ' projects in total');
+  console.log('[BrowserStack.cjs] ' + projects.length + ' projects in total');
   // Project with matching name
   const matchingProject = projects.filter((project) => {
     return project.name === projectName
@@ -32,22 +32,22 @@ getProjectIdByName = (projectName) => {
   if (matchingProject.length !== 1) {
     throw 'Searching for a project with name ' + projectName + ' did not yield a single result, but ' + matchingProject.length;
   }
-  console.log('BrowserStack.js: matching projectId is ' + matchingProject[0].id);
+  console.log('[BrowserStack.cjs] matching projectId is ' + matchingProject[0].id);
   return matchingProject[0].id;
 }
 
 getBuildsByProjectId = (projectId) => {
-  console.log('BrowserStack.js: finding builds with projectId ' + projectId);
+  console.log('[BrowserStack.cjs] finding builds with projectId ' + projectId);
   // Query project details
   let projectDetails = JSON.parse(child_process.execSync(curlCommand('projects/' + projectId + '.json')));
   // Return builds
-  console.log('BrowserStack.js: ' + projectDetails.project.builds.length + ' builds in total');
+  console.log('[BrowserStack.cjs] ' + projectDetails.project.builds.length + ' builds in total');
   return projectDetails.project.builds;
 }
 
 // Delete builds as speficied via filterFunction
 deleteBuilds = (filterFunction) => {
-  console.log('BrowserStack.js: deleting builds');
+  console.log('[BrowserStack.cjs] deleting builds');
   // Get all builds of projectName
   let projectId = getProjectIdByName(projectName);
   let builds = getBuildsByProjectId(projectId);
@@ -56,9 +56,9 @@ deleteBuilds = (filterFunction) => {
   let buildIdsToDelete = buildsToDelete.map((build) => {
     return build.hashed_id;
   })
-  console.log('BrowserStack.js: deleting builds with buildIds ' + JSON.stringify(buildIdsToDelete));
+  console.log('[BrowserStack.cjs] deleting builds with buildIds ' + JSON.stringify(buildIdsToDelete));
   for (let buildIdToDelete of buildIdsToDelete) {
-    console.log('BrowserStack.js: deleting build with buildId ' + JSON.stringify(buildIdToDelete));
+    console.log('[BrowserStack.cjs] deleting build with buildId ' + JSON.stringify(buildIdToDelete));
     child_process.execSync(curlCommand(
       'builds/' + buildIdToDelete + '.json',
       '-X DELETE'
@@ -68,14 +68,14 @@ deleteBuilds = (filterFunction) => {
 
 // Get all available browsers
 getBrowsers = () => {
-  console.log('BrowserStack.js: getting all available capabilities');
+  console.log('[BrowserStack.cjs] getting all available capabilities');
   let browsers = JSON.parse(child_process.execSync(curlCommand('browsers.json')));
   return browsers;
 };
 
 // Delete logs of one build
 deleteOneBuild = (buildName) => {
-  console.log('BrowserStack.js: deleting build with buildName ' + buildName);
+  console.log('[BrowserStack.cjs] deleting build with buildName ' + buildName);
   deleteBuilds((build) => {
     return build.name === buildName;
   });
@@ -83,7 +83,7 @@ deleteOneBuild = (buildName) => {
 
 // Delete all builds that start with buildPrefix
 deleteAllBuildsStartingWith = (buildPrefix) => {
-  console.log('BrowserStack.js: deleting all builds that start with ' + buildPrefix);
+  console.log('[BrowserStack.cjs] deleting all builds that start with ' + buildPrefix);
   deleteBuilds((build) => {
     return build.name.startsWith(buildPrefix);
   });
@@ -91,7 +91,7 @@ deleteAllBuildsStartingWith = (buildPrefix) => {
 
 // Delete all branches except those named branchNames (i.e. the string after ":" in the buildName)
 deleteAllBranchesExcept = (branchNames) => {
-  console.log('BrowserStack.js: deleting all builds except those with branchNames ' + JSON.stringify(branchNames));
+  console.log('[BrowserStack.cjs] deleting all builds except those with branchNames ' + JSON.stringify(branchNames));
   deleteBuilds((build) => {
     return !branchNames.includes(build.name.split(':')[0]);
   });
