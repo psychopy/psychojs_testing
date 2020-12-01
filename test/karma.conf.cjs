@@ -17,9 +17,20 @@ if (server === 'bs') {
 }
 console.log('[wdio.conf.cjs] branch is ' + branch);
 
+// Parse platform CLI option
+let platform = CLIParser.parseOption({cli: 'platform'}, false);
+platform = platform === undefined? '*': platform;
+console.log('[wdio.conf.cjs] platform is ' + platform);
+
+// Get subset from CLI
+let subset =  CLIParser.parseOption({cli: 'subset'}, false);
+subset = subset !== undefined;
+console.log('[wdio.conf.cjs] subset is ' + subset);
+
 // Construct browsers
 let customLaunchers, browsers;
 if (server === 'bs') {
+  /*
   customLaunchers = {
     bstack_chrome_windows: {
       base: 'BrowserStack',
@@ -38,6 +49,9 @@ if (server === 'bs') {
       os_version: '11.0'
     }
   };
+  */
+  customLaunchers = require('./shared/capabilities.' + server + '.cjs').getApiCapabilities(platform, subset);
+  console.log(customLaunchers);
   browsers = Object.keys(customLaunchers);  
 } else {
   customLaunchers = [];
@@ -127,6 +141,6 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: server === 'bs'? 3: Infinity
   })
 }
