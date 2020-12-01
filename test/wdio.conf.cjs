@@ -32,10 +32,10 @@ let specs, specFile;
 if (test === undefined) {
   test = 'all_tests';
   specFile = 'all_tests'
-  specs = ['./test/specs/' + specFile + '.cjs'];  
+  specs = ['./test/specs_e2e/' + specFile + '.cjs'];  
 } else {
   specFile = 'single_test';
-  specs = ['./test/specs/' + specFile + '.cjs'];
+  specs = ['./test/specs_e2e/' + specFile + '.cjs'];
 }
 console.log('[wdio.conf.cjs] test is ' + test);
 
@@ -44,7 +44,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'}, false);
 testrun = testrun === undefined? test: testrun;
 console.log('[wdio.conf.cjs] testrun is ' + testrun);
 
-// Get branch from CLI or TRAVIS_BRANCH
+// Get branch from CLI or GITHUB_REF
 let branch;
 if (upload || server === 'bs') {
   branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
