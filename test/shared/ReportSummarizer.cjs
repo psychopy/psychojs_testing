@@ -36,7 +36,70 @@ writeXLSX = (filename, output) => {
   XLSX.writeFile(wb, filename);
 };
 
-// Merges individual JSON report files to a tabular data structure
+// Merges JSON file produced by karma's JSON reporter into a tabular data structure
+mergeKarma = () => {
+  joinedReports = [];
+  // *** Functions
+  // Add an entry to joinedReports, prefilling specfile_id and capability_id
+  log = (suite, spec, state, message, duration) => {
+    joinedReports.push(
+      {
+        capability_id: capability_id,      
+        specfile_id: specfile_id,
+        suite: suite,
+        spec: spec,
+        state: state,
+        duration: duration,
+        message: message
+      }
+    );
+  };
+  // Read JSON file with karma logs
+  let json = JSON.parse(
+    //fs.readFileSync(Paths.dir_tmp_unit + '/results.json').toString()
+    fs.readFileSync('.tmp_unit/results.json').toString()
+  );  
+  // Capability_ids: browser IDs
+  let capability_ids = Object.keys(json.browsers);
+  let specfile_id, suite, state;
+  for (capability_id of capability_ids) {
+    for (specfile of json.result[capability_id]) {
+      specfile_id = specfile.id;
+      // Should have one suite per specfile
+      if (specfile.suite.length > 1) {
+        throw '[ReportSummarizer.cjs] capability ' + capability_id + ' and specfile_id ' + specfile_id + ' had more than 1 suite';
+      }
+      suite = specfile.suite[0];
+      // Add platform
+      log(
+        suite,
+        'platform',
+        'custom',
+        json.browsers[capability_id].name,
+        ''
+      );
+      // Decide whether this spec passed, failed, or skipped
+      if (specfile.skipped) {
+        state = 'skipped';
+      } else if (specfile.success) {
+        state = 'passed';
+      } else {
+        state = 'failed';
+      }
+      // Add spec result
+      log(
+        suite,
+        specfile.description,
+        state,
+        state !== 'failed'? '': JSON.stringify(specfile.log),
+        specfile.time
+      );
+    }
+  }
+  return joinedReports;
+}
+
+// Merges individual JSON files procuded by webdriverIO's JSON reporter into a tabular data structure
 // Each row in the result for which suite matches an element of suiteFrom,
 // suite gets replaced by suiteTo
 merge = (suiteFrom = [], suiteTo = undefined) => {
@@ -200,5 +263,6 @@ module.exports = {
   writeJsonAndCsv: writeJsonAndCsv,
   writeXLSX: writeXLSX,
   merge: merge,
+  mergeKarma: mergeKarma,
   summarize: summarize
 };
