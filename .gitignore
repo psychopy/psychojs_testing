@@ -4,7 +4,10 @@ test/reference_imgs/
 test/counterexample_imgs/
 .tmp_e2e/
 .tmp_experiments/
+.tmp_unit/
 .vs/
 .vscode/
 dist/
 docs/
+debug.log
+local.log
