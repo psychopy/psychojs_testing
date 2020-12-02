@@ -1,5 +1,6 @@
 // Paths to temporary folders, image folders, and URLs
 module.exports = {
+  dir_tmp_unit:            './.tmp_unit',
   dir_tmp:                 './.tmp_e2e',
   dir_logs_capabilities:   './.tmp_e2e/logs_capabilities',
   dir_logs_json:           './.tmp_e2e/logs_json',
