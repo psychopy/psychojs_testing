@@ -54,8 +54,17 @@ if (server === 'bs') {
   console.log(customLaunchers);
   browsers = Object.keys(customLaunchers);  
 } else {
-  customLaunchers = [];
-  browsers = ['Chrome'];
+  customLaunchers = {
+    local_local_chrome_local: {
+      base: 'Chrome',
+      displayName: 'local_local_chrome_local'
+    },
+    local_local_chrome2_local: {
+      base: 'Chrome',
+      displayName: 'local_local_chrome2_local'
+    }
+  };
+  browsers = ['local_local_chrome_local', 'local_local_chrome2_local'];
 }
 
 module.exports = function(config) {
