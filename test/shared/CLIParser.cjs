@@ -11,10 +11,15 @@ const processors = {
     return processMe.split('/').pop()
   },
   // Return platform CLI argument plus all unnamed arguments (hack for spaces in platform name)
+  // Ignore any unnamed arguments with 'conf.cjs' in it (hack for karma start karma.conf.cjs)
   platform: function(processMe) {
     let argv = yargs(hideBin(process.argv)).argv;
+    let startIndex = 1;
     if (processMe !== '*' && argv._.length > 1) {
-      return processMe + ' ' + argv._.slice(1, argv._.length).join(' ');
+      if (argv._[1].includes('conf.cjs')) {
+        startIndex = 2;
+      }
+      return processMe + ' ' + argv._.slice(startIndex, argv._.length).join(' ');
     }
     return processMe;
   }
@@ -82,12 +87,12 @@ parseOption = (sources = {}, required = true, logLevel = logFull) => {
   }
   // Still here? No value 
   if (required) {
-    let errorMessage = '[CLIParser.cjs] ' + optionKey + ' was required, but had no value in ' + JSON.stringify(sources);
+    let errorMessage = '[CLIParser.cjs] Option was required, but had no value in ' + JSON.stringify(sources);
     console.log('\x1b[31m' + errorMessage + '\x1b[0m');
     throw new Error(errorMessage);
   }
   // Still here? Return optionValue (undefined)
-  console.log('[CLIParser.cjs] ' + optionKey + ' was not required and had no value in ' + JSON.stringify(sources));
+  console.log('[CLIParser.cjs] Option was not required and had no value in ' + JSON.stringify(sources));
   return optionValue;
 }
 
