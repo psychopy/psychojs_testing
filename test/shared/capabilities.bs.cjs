@@ -102,6 +102,47 @@ const getBrowsers = () => {
   return browsers; b
 }
 
+// Contstruct platformName from browser and return it
+getPlatformFromBrowser = (browser) => {
+  if (['android', 'ios'].includes(browser.os)) {
+    return '' +
+      browser.os + '_' +
+      browser.os_version + '_' +
+      browser.device + '_' +
+      browser.browser;      
+  } else {
+    return '' +
+      browser.os + '_' +
+      browser.os_version + '_' +
+      browser.browser + '_' +
+      browser.browser_version;
+  }
+};
+
+// Return capabilities that meet subset and platformPattern filters
+// platform element is extracted via platformFunction
+filterCapabilities = (capabilities, platformPattern, subset, platformFunction) => {
+  // Filter on platformPattern and subset
+  return capabilities.filter((capability) => {
+    // Filter on platformSubsets if subset === true
+    let matchesFilter;
+    let platform = platformFunction(capability);
+    if (subset) {
+      matchesFilter = false;
+      for (let platformSubset of platformSubsets) {
+        matchesFilter = matchesFilter || wildTest(platformSubset, platform);
+      }
+    } else {
+      matchesFilter = true;
+    }
+    // Filter on platformPattern
+    if (matchesFilter) {
+      matchesFilter = wildTest(platformPattern, platform);
+    }
+    return matchesFilter;
+  });
+};
+
 // An array of browserNames to test on if subset === true
 const platformSubsets = [
   'Windows_10_chrome_*',
@@ -119,12 +160,11 @@ const platformSubsets = [
   'ios_13_iPhone 8_iphone'
 ];
 
-
-// Generates browserstack capabilities
+// Generate browserstack WebDriver capabilities 
 // buildName is used as build in browserstack logs
 // platformPattern is a string with wildcards for selecting platformNames
 // if subset is true, besides platformPattern, platformNames are selected that meet platformSubset
-const getCapabilities = (buildName, platformPattern, subset) => {
+const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
   // Get platforms in BrowserStack's browsers.json format
   let browsers = getBrowsers();
 
@@ -144,7 +184,8 @@ const getCapabilities = (buildName, platformPattern, subset) => {
       browserName: browser.browser,
       'bstack:options': {
         os: browser.os,
-        osVersion: browser.os_version
+        osVersion: browser.os_version,
+        sessionName: getPlatformFromBrowser(browser)
       }
     };
     // Add general options
@@ -152,27 +193,14 @@ const getCapabilities = (buildName, platformPattern, subset) => {
     // Add desktop/mobile-specific options
     if (['android', 'ios'].includes(browser.os)) {
       // mobile-specific
-      let platformName = 
-        browser.os + '_' +
-        browser.os_version + '_' +
-        browser.device + '_' +
-        browser.browser;      
-
       capability['bstack:options'] = Object.assign(capability['bstack:options'], {
         deviceName:  browser.device,
         appiumLogs: 'false',
-        sessionName: platformName,
         appiumVersion: '1.17.0'
       });
     } else {
       // desktop-specific
-      let platformName =           
-        browser.os + '_' +
-        browser.os_version + '_' +
-        browser.browser + '_' +
-        browser.browser_version;
       capability['bstack:options'] = Object.assign(capability['bstack:options'], {
-        sessionName: platformName,
         seleniumVersion: '3.141.59',
         resolution: '1280x1024'
       });
@@ -180,28 +208,48 @@ const getCapabilities = (buildName, platformPattern, subset) => {
     }
     return capability;
   });
-  // Filter on platformPattern and subset
-  capabilities = capabilities.filter((capability) => {
-    // Filter on platformSubsets if subset === true
-    let matchesFilter;
-    if (subset) {
-      matchesFilter = false;
-      for (let platformSubset of platformSubsets) {
-        matchesFilter = matchesFilter || wildTest(platformSubset, capability['bstack:options'].sessionName);
-      }
-    } else {
-      matchesFilter = true;
-    }
-    // Filter on platformPattern
-    if (matchesFilter) {
-      matchesFilter = wildTest(platformPattern, capability['bstack:options'].sessionName);
-    }
-    return matchesFilter;
+  // Filter capabilities
+  capabilities = filterCapabilities(capabilities, platformPattern, subset, (capability) => {
+    return capability['bstack:options'].sessionName;
   });
   //console.log(capabilities);
   return capabilities;
 }
 
+// Generate browserstack WebDriver capabilities 
+// buildName is used as build in browserstack logs
+// platformPattern is a string with wildcards for selecting platformNames
+// if subset is true, besides platformPattern, platformNames are selected that meet platformSubset
+const getApiCapabilities = (platformPattern, subset) => {
+  // Get platforms in BrowserStack's browsers.json format
+  let browsers = getBrowsers();
+
+  // Add platform
+  let capabilities = browsers.map((browser) => {
+    browser.displayName = getPlatformFromBrowser(browser);
+    browser.base = 'BrowserStack';
+    return browser;
+  });
+  // Filter capabilities
+  capabilities = filterCapabilities(capabilities, platformPattern, subset, (capability) => {
+    return capability.displayName;
+  });
+  // Convert to object with platform as key
+  let customLaunchers = {};
+  for (capability of capabilities) {
+    customLaunchers[capability.displayName] = capability;
+  }
+  //console.log(capabilities);
+  return customLaunchers;
+}
+
+// getWdioServices; no services required when running via BrowserStack
+const getWdioServices = () => {
+  return [];
+};
+
 module.exports = { 
-  getCapabilities: getCapabilities
+  getWebdriverCapabilities: getWebdriverCapabilities,
+  getApiCapabilities: getApiCapabilities,
+  getWdioServices: getWdioServices
 };

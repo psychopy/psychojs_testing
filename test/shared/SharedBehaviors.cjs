@@ -12,14 +12,8 @@
 //   int_gonogo: 'https://run.pavlovia.org/tpronk/int_gonogo/',
 // };
 getExperimentUrl = (experiment) => {
-  let branch = browser.getBranch();
-  if (branch === 'pavlovia') {
-    return 'https://run.pavlovia.org/tpronk/' + experiment;
-  } else {
-    return 'https://staging.psychopy.org/app/' + branch + '/' + experiment;
-  }
+  return browser.getBaseUrl() + '/' + experiment;
 };
-
 
 /**
  * Goes through the Pavlovia loading procedure that precedes a PsychoJS experiment:

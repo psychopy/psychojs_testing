@@ -12,34 +12,46 @@ const fs = require('fs');
 const psychopyPath = CLIParser.parseOption({env: 'PSYCHOPY_PATH'});
 console.log('[compileExperiments.cjs] psychopyPath is ' + psychopyPath);
 
-// Download experiments to temporary directory
+// Get download CLI option (download psyexp files from stager?)
+let download = CLIParser.parseOption({cli: 'download'}, false);
+download = download !== undefined;
+console.log('[compileExperiments.cjs] download is ' + download);
+
+// Get upload CLI option (upload psyexp files compiled to JS to stager?)
+let upload = CLIParser.parseOption({cli: 'upload'}, false);
+upload = upload !== undefined;
+console.log('[compileExperiments.cjs] upload is ' + upload);
+
+// Perform compilation
 (async () => {
-  console.log('[compileExperiments.cjs] cleaning up temporary folders');
-  // Delete experiments directory (it not empty)
-  try {
-    fs.rmdirSync(Paths.dir_experiments, {recursive: true});
-  } catch (e) {}
-  // Recreate experiments directory (with workaround for Windows)
-  let dirCreated = false;
-  // Keep trying for 10 seconds
-  let startTime = new Date().getTime();
-  while (!dirCreated) {
+  if (download) {
+    console.log('[compileExperiments.cjs] cleaning up temporary folders');
+    // Delete experiments directory (it not empty)
     try {
-      fs.mkdirSync(Paths.dir_experiments);
-      dirCreated = true;
-    } catch (e) {
-      // 10 seconds passed? Throw error
-      if ((new Date().getTime()) - startTime > 10000) {
-        throw (e);
+      fs.rmdirSync(Paths.dir_experiments, {recursive: true});
+    } catch (e) {}
+    // Recreate experiments directory (with workaround for Windows)
+    let dirCreated = false;
+    // Keep trying for 10 seconds
+    let startTime = new Date().getTime();
+    while (!dirCreated) {
+      try {
+        fs.mkdirSync(Paths.dir_experiments);
+        dirCreated = true;
+      } catch (e) {
+        // 10 seconds passed? Throw error
+        if ((new Date().getTime()) - startTime > 10000) {
+          throw (e);
+        }
       }
     }
-  }
 
-  // Download experiments
-  console.log('[compileExperiments.cjs] downloading experiments');
-  downloadResults = await Stager.ftpRequest((client, basePath) => {
-    return client.downloadDir(basePath + '/experiments/psyexp', Paths.dir_experiments);
-  }, true);
+    // Download experiments
+    console.log('[compileExperiments.cjs] downloading experiments');
+    downloadResults = await Stager.ftpRequest((client, basePath) => {
+      return client.downloadDir(basePath + '/experiments/psyexp', Paths.dir_experiments);
+    }, true);
+  }
   
   // List of  experiments
   let experiments = fs.readdirSync(Paths.dir_experiments);
@@ -54,14 +66,17 @@ console.log('[compileExperiments.cjs] psychopyPath is ' + psychopyPath);
     child_process.execSync(
       'python ' + psychopyPath + '/psychopy/scripts/psyexpCompile.py ' + 
       experimentPath + '/' + experiment + '.psyexp ' +
-      '--outfile ' + experimentPath + '/' + experiment + '.cjs'
+      '--outfile ' + experimentPath + '/' + experiment + '.js'
     );
   }
 
-  // Upload compiled experiments to stager
-  Stager.uploadDirectory(
-    Paths.dir_experiments,
-    'experiments/js'
-  )
+  if (upload) {
+    // Upload compiled experiments to stager
+    console.log('[compileExperiments.cjs] uploading experiments');
+    Stager.uploadDirectory(
+      Paths.dir_experiments,
+      'experiments/js'
+    )
+  }
 })();
 
