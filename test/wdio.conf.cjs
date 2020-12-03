@@ -9,24 +9,27 @@ const Paths = require('./shared/Paths.cjs');
 const CLIParser = require('./shared/CLIParser.cjs');
 
 // *** Parse CLI arguments
-// Parse server CLI option
+// Get server CLI option
 const server = CLIParser.parseOption({cli: 'server'});
 if (!(['local', 'bs'].includes(server))) {
   throw new Error('[wdio.conf.cjs] The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
 }
 console.log('[wdio.conf.cjs] server is ' + server);
 
-// Parse upload CLI option
+// Include capability generator module
+const CapabilityGenerator = require('./shared/capabilities.' + server + '.cjs');
+
+// Get upload CLI option
 let upload = CLIParser.parseOption({cli: 'upload'}, false);
 upload = upload !== undefined && upload === 'yes';
 console.log('[wdio.conf.cjs] upload is ' + upload);
 
-// Parse platform CLI option
+// Get platform CLI option
 let platform = CLIParser.parseOption({cli: 'platform'}, false);
 platform = platform === undefined? '*': platform;
 console.log('[wdio.conf.cjs] platform is ' + platform);
 
-// Parse test CLI option
+// Get test CLI option
 let test = CLIParser.parseOption({cli: 'test'}, false);
 let specs, specFile;
 if (test === undefined) {
@@ -39,7 +42,7 @@ if (test === undefined) {
 }
 console.log('[wdio.conf.cjs] test is ' + test);
 
-// Parse testrun CLI option
+// Get testrun CLI option
 let testrun = CLIParser.parseOption({cli: 'testrun'}, false);
 testrun = testrun === undefined? test: testrun;
 console.log('[wdio.conf.cjs] testrun is ' + testrun);
@@ -50,6 +53,11 @@ if (upload || server === 'bs') {
   branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
 }
 console.log('[wdio.conf.cjs] branch is ' + branch);
+
+// Get app CLI option and construct baseUrl
+const url = CLIParser.parseOption({cli: 'url'}, false);
+const baseUrl = url !== undefined? url: 'https://staging.psychopy.org/app/' + branch;
+console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
 // Get subset from CLI
 let subset =  CLIParser.parseOption({cli: 'subset'}, false);
@@ -70,7 +78,7 @@ exports.config = {
   maxInstances: 3, // 3
 
   // Local (local) or BrowserStack (bs) capabilities
-  capabilities: require('./shared/capabilities.' + server + '.cjs').getWebdriverCapabilities(buildName, platform, subset),
+  capabilities: CapabilityGenerator.getWebdriverCapabilities(buildName, platform, subset),
 
   // Local test-runner
   runner: 'local',
@@ -110,27 +118,7 @@ exports.config = {
   waitforTimeout: 1000,
 
   // Test runner services
-  services: server === 'bs' ? [] :
-    [
-      // Selenium-standalone; takes care of local browserdrivers 
-      ['selenium-standalone', {
-        logPath: Paths.dir_logs_selenium,
-        installArgs: {
-          drivers: {
-            chrome: { version: '84.0.4147.30' },
-            firefox: { version: '0.26.0' },
-            MicrosoftEdge: { version: '84.0.522.40' }
-          }
-        },
-        args: {
-          drivers: {
-            chrome: { version: '84.0.4147.30' },
-            firefox: { version: '0.26.0' },
-            MicrosoftEdge: { version: '84.0.522.40' }
-          }
-        }
-      }]
-    ],
+  services: [].concat(CapabilityGenerator.getWdioServices()),
 
   // Framework settings
   framework: 'jasmine',
@@ -210,8 +198,10 @@ exports.config = {
         }
       }
       // *** Delete old test logs
-      console.log('wdio.conf.cjs Deleting BrowserStack logs');
-      BrowserStack.deleteOneBuild(buildName);
+      if (server === 'bs') {
+        console.log('wdio.conf.cjs Deleting BrowserStack logs');
+        BrowserStack.deleteOneBuild(buildName);
+      }
       // *** Log all capabilities
       fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
     } catch (e) {
@@ -322,8 +312,8 @@ exports.config = {
       }
     });
     // Get current branch
-    browser.addCommand('getBranch', () => {
-      return branch;
+    browser.addCommand('getBaseUrl', () => {
+      return baseUrl;
     });
 
     // Managing custom log-file

@@ -243,7 +243,13 @@ const getApiCapabilities = (platformPattern, subset) => {
   return customLaunchers;
 }
 
+// getWdioServices; no services required when running via BrowserStack
+const getWdioServices = () => {
+  return [];
+};
+
 module.exports = { 
   getWebdriverCapabilities: getWebdriverCapabilities,
-  getApiCapabilities: getApiCapabilities
+  getApiCapabilities: getApiCapabilities,
+  getWdioServices: getWdioServices
 };
