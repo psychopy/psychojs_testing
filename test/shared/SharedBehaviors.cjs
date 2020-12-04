@@ -1,3 +1,4 @@
+const Mustache = require('mustache');
 // experimentUrls = {
 //   e2e_calibration: 'https://run.pavlovia.org/tpronk/e2e_calibration/',
 //   e2e_code: 'https://run.pavlovia.org/tpronk/e2e_code/html/',
@@ -12,7 +13,7 @@
 //   int_gonogo: 'https://run.pavlovia.org/tpronk/int_gonogo/',
 // };
 getExperimentUrl = (experiment) => {
-  return browser.getBaseUrl() + '/' + experiment;
+  return Mustache.render(browser.getBaseUrl(), {experiment: experiment});
 };
 
 /**

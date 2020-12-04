@@ -42,7 +42,6 @@ if (url !== undefined) {
 }
 console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
-
 // get files in dirPath and each of its subdirectories
 // https://coderrocketfuel.com/article/recursively-list-all-the-files-in-a-directory-using-node-js
 const getAllFiles = (dirPath, arrayOfFiles) => {
