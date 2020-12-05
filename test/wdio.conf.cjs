@@ -21,7 +21,7 @@ const CapabilityGenerator = require('./shared/capabilities.' + server + '.cjs');
 
 // Get upload CLI option
 let upload = CLIParser.parseOption({cli: 'upload'}, false);
-upload = upload !== undefined && upload === 'yes';
+upload = upload !== undefined;
 console.log('[wdio.conf.cjs] upload is ' + upload);
 
 // Get platform CLI option
@@ -63,11 +63,7 @@ if (url !== undefined) {
     if (branch === undefined) {
       throw new Error('[wdio.conf.cjs] url nor branch were specified, so baseUrl could not be constructed');
     }
-    baseUrl = 'https://staging.psychopy.org/app/' + branch + '/';
-}
-// No {{experiment}} in url? Append it to the end
-if (!baseUrl.includes('{{experiment}}')) {
-  baseUrl += '{{experiment}}';
+    baseUrl = 'https://staging.psychopy.org/app/' + branch + '/{{experiment}}';
 }
 console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
