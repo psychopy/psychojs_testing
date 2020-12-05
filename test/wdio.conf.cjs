@@ -48,15 +48,27 @@ testrun = testrun === undefined? test: testrun;
 console.log('[wdio.conf.cjs] testrun is ' + testrun);
 
 // Get branch from CLI or GITHUB_REF
-let branch;
-if (upload || server === 'bs') {
-  branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
+const branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);
+if ((upload || server === 'bs') && branch === undefined) {
+  throw new Error('[wdio.conf.cjs] upload was enabled or server was bs, but branch was not defined');
 }
 console.log('[wdio.conf.cjs] branch is ' + branch);
 
 // Get app CLI option and construct baseUrl
 const url = CLIParser.parseOption({cli: 'url'}, false);
-const baseUrl = url !== undefined? url: 'https://staging.psychopy.org/app/' + branch;
+// Default url is stager/branch/{{experiment}}
+if (url !== undefined) {
+  baseUrl = url;
+} else {
+    if (branch === undefined) {
+      throw new Error('[wdio.conf.cjs] url nor branch were specified, so baseUrl could not be constructed');
+    }
+    baseUrl = 'https://staging.psychopy.org/app/' + branch + '/';
+}
+// No {{experiment}} in url? Append it to the end
+if (!baseUrl.includes('{{experiment}}')) {
+  baseUrl += '{{experiment}}';
+}
 console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
 // Get subset from CLI
@@ -353,18 +365,18 @@ exports.config = {
       // Merge reports
       let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
       // Store merged reports
-      console.log('[wdio.conf.cjs] write report');
+      console.log('[wdio.conf.cjs] write "report" logs');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'report', joinedReports);
       // Summarize reports
       let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
       // Store summaries
-      console.log('[wdio.conf.cjs] write summary');
+      console.log('[wdio.conf.cjs] write "summary" logs');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', summaries);
       // Store summaries of all tests with at least on fail
       let summariesFailed = summaries.filter( (summary) => {
         return summary.failed > 0
       })
-      console.log('[wdio.conf.cjs] write failed');
+      console.log('[wdio.conf.cjs] write "failed" logs');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', summariesFailed);
       // Store failed, summaries, and reports in a single XLSX
       console.log('[wdio.conf.cjs] write XLSX');
