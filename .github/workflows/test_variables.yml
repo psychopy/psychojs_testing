@@ -50,5 +50,5 @@ jobs:
         test: ${{needs.sync_with_github.outputs.TESTS}}
     steps:
       - name: Echo test
-        uses: echo ${{ matrix.test }}
+        run: echo ${{ matrix.test }}
       
