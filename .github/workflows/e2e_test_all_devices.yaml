@@ -57,7 +57,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix: 
-        test: ['e2e_img', 'e2e_conditions']
+        test: ['e2e_code', 'e2e_conditions', 'e2e_img', 'e2e_polygon', 'e2e_sound', 'e2e_text', 'e2e_textbox', 'e2e_video']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -85,7 +85,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio test/wdio.conf.cjs --server bs --upload yes --subset --branch pavlovia --test ${{ matrix.test }} --platform *Windows*10*chrome* --testrun all_devices
+        run: npx wdio test/wdio.conf.cjs --server bs --upload --testrun all_devices --test ${{ matrix.test }} 
   join_reports:
     name: Join reports
     needs: [e2e_tests]
