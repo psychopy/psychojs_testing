@@ -13,7 +13,8 @@ jobs:
   sync_with_github:
     name: Test variables
     runs-on: ubuntu-latest
-    continue-on-error: true
+    outputs: 
+      TESTS: ${{env.TESTS}}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -39,3 +40,15 @@ jobs:
         run: echo "TESTS=$(node test/cli/printTests.cjs)" >> $GITHUB_ENV
       - name: Echo the value
         run: echo ${{env.TESTS}}
+  e2e_tests:
+    name: Run e2e tests
+    needs: [sync_with_github]
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix: 
+        test: ${{needs.sync_with_github.outputs.TESTS}}
+    steps:
+      - name: Echo test
+        uses: echo ${{ matrix.test }}
+      
