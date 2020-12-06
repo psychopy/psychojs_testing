@@ -12,10 +12,11 @@ env:
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
 
 jobs:
-  sync_with_github:
-    name: Sync with GitHub and delete old testrun logs
+  prepare:
+    name: Sync with GitHub, delete old logs, and get tests
     runs-on: ubuntu-latest
-    continue-on-error: true
+    outputs:
+      tests: ${{steps.get_tests.outputs.tests}} 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -46,15 +47,20 @@ jobs:
         run: node test/cli/syncWithGitHub.cjs alain sotiri thomas
       - name: Delete old test logs 
         run: node test/cli/deleteLogs.cjs --testrun all_devices
+      - name: Get tests
+        id: get_tests
+        run: echo "::set-output name=tests::$(node test/cli/printTests.cjs)"
   e2e_tests:
     name: Run e2e tests
-    needs: [sync_with_github]
+    needs: [prepare]
     runs-on: ubuntu-latest
     continue-on-error: true
+    env:
+      TESTS: ${{env.TESTS}} 
     strategy:
       max-parallel: 1
       matrix: 
-        test: ['e2e_code', 'e2e_conditions', 'e2e_img', 'e2e_polygon', 'e2e_sound', 'e2e_text', 'e2e_textbox', 'e2e_video']
+        test: ${{fromJson(needs.prepare.outputs.tests)}}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
