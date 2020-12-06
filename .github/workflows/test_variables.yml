@@ -1,0 +1,46 @@
+name: e2e test all_devices
+on:
+  schedule:
+    - cron: '5 8 * * sun'
+  workflow_dispatch:
+
+env:
+  BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
+  BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+  STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+  STAGING_PORT: ${{ secrets.STAGING_PORT }}
+  STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+
+jobs:
+  sync_with_github:
+    name: Sync with GitHub and delete old testrun logs
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install modules
+        run: npm ci
+      - name: Set the value
+        id: step_one
+        run: |
+          echo 'JSON_RESPONSE<<EOF' >> $GITHUB_ENV
+          node test/cli/printTests.js >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Echo the value
+        run: echo {{github.JSON_RESPONSE}}
