@@ -49,6 +49,8 @@ jobs:
       matrix: 
         test: ${{needs.sync_with_github.outputs.TESTS}}
     steps:
-      - name: ${{ matrix.test }}
+      - name: Echo all tests
+        run: echo ${{needs.sync_with_github.outputs.TESTS}}
+      - name: Echo ${{ matrix.test }}
         run: echo ${{ matrix.test }}
       
