@@ -185,7 +185,8 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
       'bstack:options': {
         os: browser.os,
         osVersion: browser.os_version,
-        sessionName: getPlatformFromBrowser(browser)
+        sessionName: getPlatformFromBrowser(browser),
+        consoleLogs: 'verbose'
       }
     };
     // Add general options
