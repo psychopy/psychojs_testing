@@ -55,8 +55,6 @@ jobs:
     needs: [prepare]
     runs-on: ubuntu-latest
     continue-on-error: true
-    env:
-      TESTS: ${{env.TESTS}} 
     strategy:
       max-parallel: 1
       matrix: 
