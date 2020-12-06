@@ -7,6 +7,7 @@ const BrowserStack = require('./shared/BrowserStack.cjs');
 const Stager = require('./shared/Stager.cjs');
 const Paths = require('./shared/Paths.cjs');
 const CLIParser = require('./shared/CLIParser.cjs');
+const { SevereServiceError } = require('webdriverio');
 
 // *** Parse CLI arguments
 // Get server CLI option
@@ -166,7 +167,7 @@ exports.config = {
    * @param {Object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare: function (config, capabilities) {
+  onPrepare: async function (config, capabilities) {
     try {
       // *** Setup temporary directories
       // Construct tmp dir
@@ -214,7 +215,20 @@ exports.config = {
       fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');
+      process.exit(1);
     }
+    // Wait until BrowserStack is available
+    if (server === 'bs') {
+      let browserStackBusy = BrowserStack.isBusy();
+      while(browserStackBusy) {
+        // Check every 10 seconds if BrowserStack is still busy        
+        console.log('[wdio.conf.cjs] BrowserStack is busy; waiting 10 seconds');
+        browserStackBusy = await new Promise((resolve, reject) => {
+          setTimeout(() => resolve(BrowserStack.isBusy()), 10000)
+        });
+      }
+    }
+    throw new Error("XXX BrowserStack has running or queued sessions; testrun aborted.");    
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
