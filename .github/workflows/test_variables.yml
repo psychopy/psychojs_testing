@@ -37,8 +37,8 @@ jobs:
       - name: Set the value
         id: step_one
         run: |
-          echo 'JSON_RESPONSE<<EOF' >> $GITHUB_ENV
+          echo 'JSON_RESPONSE<<]' >> $GITHUB_ENV
           node test/cli/printTests.cjs >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo ']' >> $GITHUB_ENV
       - name: Echo the value
         run: echo {{github.JSON_RESPONSE}}
