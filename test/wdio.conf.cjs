@@ -7,6 +7,7 @@ const BrowserStack = require('./shared/BrowserStack.cjs');
 const Stager = require('./shared/Stager.cjs');
 const Paths = require('./shared/Paths.cjs');
 const CLIParser = require('./shared/CLIParser.cjs');
+const { SevereServiceError } = require('webdriverio');
 
 // *** Parse CLI arguments
 // Get server CLI option
@@ -21,7 +22,7 @@ const CapabilityGenerator = require('./shared/capabilities.' + server + '.cjs');
 
 // Get upload CLI option
 let upload = CLIParser.parseOption({cli: 'upload'}, false);
-upload = upload !== undefined && upload === 'yes';
+upload = upload !== undefined;
 console.log('[wdio.conf.cjs] upload is ' + upload);
 
 // Get platform CLI option
@@ -63,11 +64,7 @@ if (url !== undefined) {
     if (branch === undefined) {
       throw new Error('[wdio.conf.cjs] url nor branch were specified, so baseUrl could not be constructed');
     }
-    baseUrl = 'https://staging.psychopy.org/app/' + branch + '/';
-}
-// No {{experiment}} in url? Append it to the end
-if (!baseUrl.includes('{{experiment}}')) {
-  baseUrl += '{{experiment}}';
+    baseUrl = 'https://staging.psychopy.org/app/' + branch + '/{{experiment}}';
 }
 console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
@@ -170,7 +167,7 @@ exports.config = {
    * @param {Object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare: function (config, capabilities) {
+  onPrepare: async function (config, capabilities) {
     try {
       // *** Setup temporary directories
       // Construct tmp dir
@@ -218,7 +215,20 @@ exports.config = {
       fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');
+      process.exit(1);
     }
+    // Wait until BrowserStack is available
+    if (server === 'bs') {
+      let browserStackBusy = BrowserStack.isBusy();
+      while(browserStackBusy) {
+        // Check every 10 seconds if BrowserStack is still busy        
+        console.log('[wdio.conf.cjs] BrowserStack is busy; waiting 10 seconds');
+        browserStackBusy = await new Promise((resolve, reject) => {
+          setTimeout(() => resolve(BrowserStack.isBusy()), 10000)
+        });
+      }
+    }
+    throw new Error("XXX BrowserStack has running or queued sessions; testrun aborted.");    
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global

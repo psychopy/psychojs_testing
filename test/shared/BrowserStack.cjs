@@ -97,6 +97,12 @@ deleteAllBranchesExcept = (branchNames) => {
   });
 };
 
+// Returns true of any sessions are running or queued
+isBusy = () => {
+  let plan = JSON.parse(child_process.execSync(curlCommand('plan.json')));
+  return plan.parallel_sessions_running > 0 || plan.queued_sessions > 0;
+}
+
 // Construct a build name (for BrowserStack logs) given branch, testrun, and test
 createBuildName = (branch, testrun, test) => {
   let buildName = '';
@@ -123,5 +129,6 @@ module.exports = {
   deleteOneBuild: deleteOneBuild,
   deleteAllBranchesExcept: deleteAllBranchesExcept,
   deleteAllBuildsStartingWith: deleteAllBuildsStartingWith,
-  createBuildName: createBuildName
+  createBuildName: createBuildName,
+  isBusy: isBusy
 };
