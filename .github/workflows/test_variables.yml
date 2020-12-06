@@ -1,7 +1,5 @@
-name: e2e test all_devices
+name: Test variables
 on:
-  schedule:
-    - cron: '5 8 * * sun'
   workflow_dispatch:
 
 env:
