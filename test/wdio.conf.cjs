@@ -115,7 +115,7 @@ exports.config = {
     '@wdio/applitools-service': 'warn',
     '@wdio/browserstack-service': 'warn'
   },
-  outputDir: Paths.dir_logs_raw,
+  outputDir: Paths.dir_logs_wdio,
 
   // Give up after X tests have failed (0 - don't bail)
   bail: 0,
@@ -181,7 +181,7 @@ exports.config = {
         Paths.dir_logs_joined,
         Paths.dir_logs_json,
         Paths.dir_logs_processed,
-        Paths.dir_logs_raw,
+        Paths.dir_logs_wdio,
         Paths.dir_logs_selenium,
         Paths.dir_screenshots_cutout,
         Paths.dir_screenshots_raw,
@@ -378,21 +378,17 @@ exports.config = {
       console.log('[wdio.conf.cjs] write "report" logs');
       ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'report', joinedReports);
       // Summarize reports
-      let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
+      let aggregations = ReportSummarizer.aggregate(joinedReports, ['platform']);
       // Store summaries
       console.log('[wdio.conf.cjs] write "summary" logs');
-      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', summaries);
-      // Store summaries of all tests with at least on fail
-      let summariesFailed = summaries.filter( (summary) => {
-        return summary.failed > 0
-      })
+      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', aggregations.summaries);
       console.log('[wdio.conf.cjs] write "failed" logs');
-      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', summariesFailed);
+      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', aggregations.failed);
       // Store failed, summaries, and reports in a single XLSX
       console.log('[wdio.conf.cjs] write XLSX');
       ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/' + 'combined_report.xlsx', {
-        failed: summariesFailed,
-        summary: summaries,
+        failed: aggregations.failed,
+        summary: aggregations.summaries,
         report: joinedReports
       });
       // If upload enabled, update stager

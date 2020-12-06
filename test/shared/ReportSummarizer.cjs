@@ -102,7 +102,7 @@ mergeKarma = () => {
 // Merges individual JSON files procuded by webdriverIO's JSON reporter into a tabular data structure
 // Each row in the result for which suite matches an element of suiteFrom,
 // suite gets replaced by suiteTo
-merge = (suiteFrom = [], suiteTo = undefined) => {
+merge = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
   // *** Functions
   // Add an entry to joinedReports, prefilling specfile_id and capability_id
   log = (suite, spec, state, message, duration) => {
@@ -199,18 +199,20 @@ merge = (suiteFrom = [], suiteTo = undefined) => {
   for (i = 0; i < unprocessedPlatforms.length; i++){
     capability_id = 'none_' + i;
     log('custom', 'platform', 'custom', unprocessedPlatforms[i], '');
-    log('', 'process_logs', 'failed', 'Could not process JSON logs', '');  
+    log('custom', 'process_logs', 'failed', 'Could not process JSON logs', '');  
   }
 
   // Return merged reports
   return joinedReports;
 };
 
-// Summarize joinedReports, add custom entries present in customLogsToAdd
-summarize = (joinedReports, customLogsToAdd) => {
+// Aggregate joinedReports into summaries and failed; see definitions below
+aggregate = (joinedReports, customLogsToAdd) => {
   console.log('[ReportSummarizer.cjs] summarizing');
-  // Summarized joinedReports
+  // Per capability: capability_id, customLogsToAdd, number of passed, failed, skipped, failed_suites, and messages
   let summaries = [];
+  // Per failed test: capability_id, specfile_id, customLogsToAdd, suite, message
+  let failed = [];
   // List with each unique capability ID
   let capabilities;
   // Filtered logs
@@ -220,10 +222,9 @@ summarize = (joinedReports, customLogsToAdd) => {
     return row.capability_id;
   });
   capabilities = Array.from(new Set(capabilities));
-  // List of failed tests per capability
-  let failedTests;
   // For each unique capability, aggregate data
   for(let capability of capabilities) {
+    // *** Create summary
     summary = {};
     // Add capability_id
     summary.capability_id = capability;
@@ -240,23 +241,29 @@ summarize = (joinedReports, customLogsToAdd) => {
         return row.capability_id === capability && row.state === state
       }).length;
     }
+    // Add to summaries
+    summaries.push(summary);
+
+    // *** Create failed
     // All failed tests of this capability
     failedTests = joinedReports.filter(function (row) {
       return row.capability_id === capability && row.state === 'failed'
-    });
-    // Append all failed specs to a space-separated string
-    summary.failed_specs = failedTests.map(function(row) {
-      return row.spec;
-    }).join(' ');
-    // Append messages of failed specs to a space-separated string
-    summary.messages = failedTests.map(function(row) {
-      return row.message;
-    }).join(' ');
-
-    // Add to summaries
-    summaries.push(summary);
+    });    
+    failed = failed.concat(failedTests.map((failedTest) => {
+      let failedRow = {};
+      failedRow.capability_id = failedTest.capability_id;
+      for (let customLog of customLogs) {
+        failedRow[customLog.spec] = customLog.message;
+      }
+      failedRow.suite = failedTest.suite;
+      failedRow.message = failedTest.message;
+      return failedRow;
+    }));
   }
-  return summaries;
+  return {
+    summaries: summaries,
+    failed: failed
+  };
 };
 
 module.exports = { 
@@ -264,5 +271,5 @@ module.exports = {
   writeXLSX: writeXLSX,
   merge: merge,
   mergeKarma: mergeKarma,
-  summarize: summarize
+  aggregate: aggregate
 };

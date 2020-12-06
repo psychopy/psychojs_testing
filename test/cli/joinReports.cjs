@@ -16,6 +16,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
 
 // Join reports
 (async () => {
+  console.log('[joinReports.cjs] Inventorizing tests');
   // Get all testruns of branch
   let listResults = await Stager.ftpRequest((client, basePath) => {
     return client.list(basePath + '/report/' + Stager.createReportPath(branch, testrun));
@@ -48,24 +49,24 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
     fs.mkdirSync(Paths.dir_logs_joined);
   };    
   // Store joined reports
+  console.log('[joinReports.cjs] write "report" logs');
   ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/report', joinedReports);
   // Summarize reports
-  let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
+  let aggregations = ReportSummarizer.aggregate(joinedReports, ['platform']);
   // Store summaries
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/summary', summaries);
-  // Store summaries of all tests with at least on fail
-  let summariesFailed = summaries.filter( (summary) => {
-    return summary.failed > 0
-  })
-  // Store failed
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/failed', summariesFailed);
-  // Merge together in an XLSX file
-  ReportSummarizer.writeXLSX(Paths.dir_logs_joined + '/combined_report.xlsx', {
-    failed: summariesFailed,
-    summary: summaries,
+  console.log('[joinReports.cjs] write "summary" logs');
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', aggregations.summaries);
+  console.log('[joinReports.cjs] write "failed" logs');
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', aggregations.failed);
+  // Store failed, summaries, and reports in a single XLSX
+  console.log('[joinReports.cjs] write XLSX');
+  ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/' + 'combined_report.xlsx', {
+    failed: aggregations.failed,
+    summary: aggregations.summaries,
     report: joinedReports
   });
   // Upload to stager
+  console.log('[joinReports.cjs] Uploading joined logs');
   await Stager.uploadDirectory(Paths.dir_logs_joined, 'report/'  + Stager.createReportPath(branch, testrun));
 })();
 

@@ -7,7 +7,7 @@ module.exports = {
   dir_logs_joined:         './.tmp_e2e/logs_joined',
   dir_logs_processed:      './.tmp_e2e/logs_processed',
   subdir_logs_processed:   'logs_processed',
-  dir_logs_raw:            './.tmp_e2e/logs_raw',
+  dir_logs_wdio:            './.tmp_e2e/logs_wdio',
   dir_logs_selenium:       './.tmp_e2e/logs_selenium',
   
   dir_screenshots_cutout:  './.tmp_e2e/screenshots_cutout',
