@@ -6,6 +6,7 @@ module.exports = {
     let typeText = (text) => {
       result = [];
       for (let i = 0; i < text.length; i++) {
+        console.log(text[i]);
         result = result.concat([
           {"type": "keyDown", "value": text[i]},
           {"type": "keyUp", "value": text[i]}
@@ -14,9 +15,9 @@ module.exports = {
       return result;
     }
     // Skip iPhone (no support of key actions)
-    if (browser.getPlatformName().includes('iPhone')) {
-      pending();
-    }
+    // if (browser.getPlatformName().includes('iPhone')) {
+    //   pending();
+    // }
     // If no calibration specified, get from e2e_calibration
     if (calibration === null) {
       calibration = SharedBehaviors.performCalibrationExperiment(false);    
@@ -35,14 +36,14 @@ module.exports = {
       "actions": typeText('hello')
     }]);
     browser.writeScreenshot('textbox_immediate');
-    browser.pause(10000);
+    browser.pause(1000);
     browser.writeScreenshot('textbox_delayed');
-    // Submit text, screenshot of feedback, finish
-    browser.performActions([{
-      "type": "key",
-      "id": "enter",
-      "actions": typeText(['\uE006'])
-    }]);
+    // Tap submit button
+    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
+    browser.pause(1000);
+    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
+    browser.pause(1000);
+    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
     SharedBehaviors.waitForReport('feedback');
     browser.writeScreenshot('textbox_feedback');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
