@@ -228,7 +228,6 @@ exports.config = {
         });
       }
     }
-    throw new Error("XXX BrowserStack has running or queued sessions; testrun aborted.");    
   },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
