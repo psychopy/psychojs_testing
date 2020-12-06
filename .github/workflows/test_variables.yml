@@ -47,7 +47,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix: 
-        test: ${{needs.sync_with_github.outputs.TESTS}}
+        test: ${{fromJson(needs.sync_with_github.outputs.TESTS)}}
     steps:
       - name: Echo all tests
         run: echo ${{needs.sync_with_github.outputs.TESTS}}
