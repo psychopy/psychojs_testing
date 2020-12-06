@@ -38,4 +38,4 @@ jobs:
         id: step_one
         run: echo "TESTS=$(node test/cli/printTests.cjs)" >> $GITHUB_ENV
       - name: Echo the value
-        run: echo {{env.TESTS}}
+        run: echo ${{env.TESTS}}
