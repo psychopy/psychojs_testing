@@ -23,6 +23,6 @@ const pseudoBranches = argv._;
   console.log('[syncWithGithub.cjs] deleting staging server reports');
   await Stager.deleteAllDirectoriesExcept('report', branchNames);
   // appDirectories: Prefix branchesNames with 'app/'
-  console.log('[syncWithGithub.cjs] deleting staging server apps');
-  await Stager.deleteAllDirectoriesExcept('app', branchNames);
+  console.log('[syncWithGithub.cjs] deleting staging server html experiments');
+  await Stager.deleteAllDirectoriesExcept('experiments/html', branchNames);
 })();
