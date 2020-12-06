@@ -185,8 +185,8 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
       'bstack:options': {
         os: browser.os,
         osVersion: browser.os_version,
-        sessionName: getPlatformFromBrowser(browser),
-        consoleLogs: 'verbose'
+        sessionName: getPlatformFromBrowser(browser)
+        // consoleLogs: 'verbose'
       }
     };
     // Add general options
@@ -202,7 +202,7 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
     } else {
       // desktop-specific
       capability['bstack:options'] = Object.assign(capability['bstack:options'], {
-        seleniumVersion: '3.141.59',
+        seleniumVersion: '3.141.5',
         resolution: '1280x1024'
       });
       capability.browserVersion = browser.browser_version;
