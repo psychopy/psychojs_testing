@@ -11,7 +11,7 @@ env:
 
 jobs:
   sync_with_github:
-    name: Sync with GitHub and delete old testrun logs
+    name: Test variables
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -36,9 +36,6 @@ jobs:
         run: npm ci
       - name: Set the value
         id: step_one
-        run: |
-          echo 'JSON_RESPONSE<<]' >> $GITHUB_ENV
-          node test/cli/printTests.cjs >> $GITHUB_ENV
-          echo ']' >> $GITHUB_ENV
+        run: echo "JSON_RESPONSE=$(node test/cli/printTests.cj)" >> $GITHUB_ENV
       - name: Echo the value
         run: echo {{github.JSON_RESPONSE}}
