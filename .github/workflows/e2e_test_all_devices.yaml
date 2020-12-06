@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Sync BS logs and Stager with GitHub 
         run: node test/cli/syncWithGitHub.cjs alain sotiri thomas
-      - name: Sync BS logs and Stager with GitHub 
+      - name: Delete old test logs 
         run: node test/cli/deleteLogs.cjs --testrun all_devices
   e2e_tests:
     name: Run e2e tests
