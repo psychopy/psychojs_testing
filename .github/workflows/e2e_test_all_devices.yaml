@@ -53,10 +53,12 @@ jobs:
     needs: [sync_with_github]
     runs-on: ubuntu-latest
     continue-on-error: true
+    env:
+      TESTS: ${{env.TESTS}} 
     strategy:
       max-parallel: 1
       matrix: 
-        test: $TESTS
+        test: ${{env.TESTS}}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
