@@ -36,6 +36,6 @@ jobs:
         run: npm ci
       - name: Set the value
         id: step_one
-        run: echo "JSON_RESPONSE=$(node test/cli/printTests.cj)" >> $GITHUB_ENV
+        run: echo "TESTS=$(node test/cli/printTests.cjs)" >> $GITHUB_ENV
       - name: Echo the value
-        run: echo {{github.JSON_RESPONSE}}
+        run: echo {{env.TESTS}}
