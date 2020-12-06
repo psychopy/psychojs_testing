@@ -82,7 +82,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio test/wdio.conf.cjs --server bs --upload --testrun all_devices --test ${{ matrix.test }} 
+        run: npx wdio test/wdio.conf.cjs --server bs --upload --testrun all_devices --test ${{ matrix.test }} --url https://run.pavlovia.org/tpronk/{{experiment}}/html
   join_reports:
     name: Join reports
     needs: [e2e_tests]
