@@ -45,17 +45,24 @@ getBuildsByProjectId = (projectId) => {
   return projectDetails.project.builds;
 }
 
-// Delete builds as speficied via filterFunction
-deleteBuilds = (filterFunction) => {
-  console.log('[BrowserStack.cjs] deleting builds');
+// Get build IDs that match filterFunction
+getBuildIds  = (filterFunction) => {
+  console.log('[BrowserStack.cjs] getting buildIds');
   // Get all builds of projectName
   let projectId = getProjectIdByName(projectName);
   let builds = getBuildsByProjectId(projectId);
   // Select which builds to delete
-  let buildsToDelete = builds.filter(filterFunction);
-  let buildIdsToDelete = buildsToDelete.map((build) => {
-    return build.hashed_id;
+  let filteredBuilds = builds.filter(filterFunction);
+  let filteredBuildIds = filteredBuilds.map((filteredBuild) => {
+    return filteredBuild.hashed_id;
   })
+  return filteredBuildIds;
+};
+
+// Delete builds that match filterFunction
+deleteBuilds = (filterFunction) => {
+  console.log('[BrowserStack.cjs] deleting builds');
+  let buildIdsToDelete = getBuildIds(filterFunction);
   console.log('[BrowserStack.cjs] deleting builds with buildIds ' + JSON.stringify(buildIdsToDelete));
   for (let buildIdToDelete of buildIdsToDelete) {
     console.log('[BrowserStack.cjs] deleting build with buildId ' + JSON.stringify(buildIdToDelete));
