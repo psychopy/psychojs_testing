@@ -59,6 +59,22 @@ getBuildIds  = (filterFunction) => {
   return filteredBuildIds;
 };
 
+// Construct a map of buildNames to buildIds
+getBuildNamesToBuildIdsMap  = (buildNames) => {
+  console.log('[BrowserStack.cjs] Constructing map of buildNames to buildIds');
+  let result = {};
+  for (buildName of buildNames) {
+    let buildIds = BrowserStack.getBuildIds((build) => {
+      return build.name === buildName;
+    });
+    if (buildIds.length !== 1) {
+      throw new Error('[BrowserStack.cjs] Found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName);
+    }
+    result[buildName] = buildIds[0];
+  }
+  return result;
+}
+
 // Delete builds that match filterFunction
 deleteBuilds = (filterFunction) => {
   console.log('[BrowserStack.cjs] deleting builds');
@@ -111,7 +127,7 @@ isBusy = () => {
 }
 
 // Construct a build name (for BrowserStack logs) given branch, testrun, and test
-createBuildName = (branch, testrun, test) => {
+createBuildName = (branch, testrun, test, trailingSeparator = false) => {
   let buildName = '';
   if (branch !== undefined) {
     buildName += branch;
@@ -126,6 +142,9 @@ createBuildName = (branch, testrun, test) => {
   if (test !== undefined) {
     buildName += ':' + test;
   } 
+  if (trailingSeparator) {
+    buildName += ':';
+  }
   return buildName;
 } 
 
@@ -133,6 +152,7 @@ module.exports = {
   getProjectIdByName: getProjectIdByName,
   getBuildsByProjectId: getBuildsByProjectId,
   getBrowsers: getBrowsers,
+  getBuildIds: getBuildIds,
   deleteOneBuild: deleteOneBuild,
   deleteAllBranchesExcept: deleteAllBranchesExcept,
   deleteAllBuildsStartingWith: deleteAllBuildsStartingWith,

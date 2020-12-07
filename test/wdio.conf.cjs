@@ -371,35 +371,29 @@ exports.config = {
    */
   onComplete: async function (exitCode, config, capabilities, results) {
     try {
-      // Get buildId (for constructing URL to BrowserStack logs)
-      // let buildIds = BrowserStack.getBuildIds((build) => {
-      //   build.name = buildName;
-      // });
-      // if (buildIds.length !== 1) {
-      //   throw '[wdio.conf.cjs] During onComplete, found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName;
-      // }
-      // let buildId = buildIds[0];
-      // console.log(buildId);
-
-      // Merge reports
+       // Merge reports
       let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
-      // Store merged reports
-      console.log('[wdio.conf.cjs] write "report" logs');
-      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'report', joinedReports);
-      // Summarize reports
-      let aggregations = ReportSummarizer.aggregate(joinedReports, ['platform']);
-      // Store summaries
-      console.log('[wdio.conf.cjs] write "summary" logs');
-      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', aggregations.summaries);
-      console.log('[wdio.conf.cjs] write "failed" logs');
-      ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', aggregations.failed);
-      // Store failed, summaries, and reports in a single XLSX
-      console.log('[wdio.conf.cjs] write XLSX');
-      ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/' + 'combined_report.xlsx', {
-        failed: aggregations.failed,
-        summary: aggregations.summaries,
-        report: joinedReports
-      });
+      // Construct buildPrefix and map of buildNames to buildIds
+      let buildNamesToBuildIdsMap = {}, buildPrefix = '';
+      if (server === 'bs') {
+        // buildPrefix
+        buildPrefix = BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true);
+        // buildNamesToBuildIdsMap
+        let buildIds = BrowserStack.getBuildIds((build) => {
+          return build.name === buildName;
+        });
+        if (buildIds.length !== 1) {
+          throw new Error('[wdio.conf.cjs] During onComplete, found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName);
+        }
+        buildNamesToBuildIdsMap[buildName] = buildIds[0];
+      }
+      ReportSummarizer.aggregateAndStore(
+        joinedReports, 
+        server === 'bs',
+        buildPrefix,
+        buildNamesToBuildIdsMap,
+        Paths.dir_logs_processed
+      );
       // If upload enabled, update stager
       if (upload) {
         const stagerPath = Stager.createReportPath(branch, testrun, test);

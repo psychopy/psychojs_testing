@@ -7,6 +7,7 @@ const ReportSummarizer = require('../shared/ReportSummarizer.cjs');
 const fs = require('fs');
 const Paths = require('../shared/Paths.cjs');
 const CLIParser = require('../shared/CLIParser.cjs');
+const BrowserStack = require('../shared/BrowserStack.cjs');
 
 // Get branch 
 let branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
@@ -32,14 +33,27 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   console.log('[joinReports.cjs] Found ' + tests.length + ' tests');
   // Merge reports of each test together
   let joinedReports = [], report, getResults;
+  let buildNamesToBuildIdsMap = {}, buildName;
   for (let test of tests) {
     console.log('[joinReports.cjs] Adding test ' + test);
+    // Add test to joinedReports
     getResults = await Stager.ftpRequest((client, basePath) => {
       return client.get(basePath + '/report/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_logs_processed + '/report.json');
     }, false);
     report = JSON.parse(getResults);
     joinedReports = joinedReports.concat(report);
+
+    // Add buildId to map
+    buildName = BrowserStack.createBuildName(branch, testrun, test);
+    let buildIds = BrowserStack.getBuildIds((build) => {
+      return build.name === buildName;
+    });
+    if (buildIds.length !== 1) {
+      throw new Error('[wdio.conf.cjs] During onComplete, found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName);
+    }
+    buildNamesToBuildIdsMap[buildName] = buildIds[0];
   }
+  console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
   // Create a tmp folder if it doesn't exist yet
   if (!fs.existsSync(Paths.dir_tmp)) {
     fs.mkdirSync(Paths.dir_tmp);
@@ -48,23 +62,13 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   if (!fs.existsSync(Paths.dir_logs_joined)) {
     fs.mkdirSync(Paths.dir_logs_joined);
   };    
-  // Store joined reports
-  console.log('[joinReports.cjs] write "report" logs');
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/report', joinedReports);
-  // Summarize reports
-  let aggregations = ReportSummarizer.aggregate(joinedReports, ['platform']);
-  // Store summaries
-  console.log('[joinReports.cjs] write "summary" logs');
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/' + 'summary', aggregations.summaries);
-  console.log('[joinReports.cjs] write "failed" logs');
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/' + 'failed', aggregations.failed);
-  // Store failed, summaries, and reports in a single XLSX
-  console.log('[joinReports.cjs] write XLSX');
-  ReportSummarizer.writeXLSX(Paths.dir_logs_joined + '/' + 'combined_report.xlsx', {
-    failed: aggregations.failed,
-    summary: aggregations.summaries,
-    report: joinedReports
-  });
+  ReportSummarizer.aggregateAndStore(
+    joinedReports,
+    true, 
+    BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true),
+    buildNamesToBuildIdsMap,
+    Paths.dir_logs_joined
+  );
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
   await Stager.uploadDirectory(Paths.dir_logs_joined, 'report/'  + Stager.createReportPath(branch, testrun));

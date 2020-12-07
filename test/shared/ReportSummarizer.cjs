@@ -3,6 +3,7 @@ const fs = require('fs');
 const json2csv = require('json2csv');
 const XLSX = require('xlsx');
 const Paths = require('./Paths.cjs');
+//const BrowserStack = require('./BrowserStack.cjs');
 
 // Write a JSON array to a JSON and CSV file
 writeJsonAndCsv = (filePrefix, output) => {
@@ -207,7 +208,7 @@ merge = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
 };
 
 // Aggregate joinedReports into summaries and failed; see definitions below
-aggregate = (joinedReports, customLogsToAdd) => {
+aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
   console.log('[ReportSummarizer.cjs] summarizing');
   // Per capability: capability_id, customLogsToAdd, number of passed, failed, skipped, failed_suites, and messages
   let summaries = [];
@@ -255,6 +256,12 @@ aggregate = (joinedReports, customLogsToAdd) => {
       for (let customLog of customLogs) {
         failedRow[customLog.spec] = customLog.message;
       }
+      let logUrl = logUrlFunction(
+        joinedReports.filter(function (row) {
+          return row.capability_id === capability && row.suite === failedTest.suite;
+        })
+      );
+      failedRow.log_url = logUrl;
       failedRow.suite = failedTest.suite;
       failedRow.message = failedTest.message;
       return failedRow;
@@ -266,10 +273,62 @@ aggregate = (joinedReports, customLogsToAdd) => {
   };
 };
 
+// Perform log aggregation and store logs
+aggregateAndStore = function(joinedReports, onBrowserStack, buildPrefix, buildNamesToBuildIdsMap, logPath) {
+  // Store merged reports
+  console.log('[ReportSummarizer.cjs] write "report" logs');
+  writeJsonAndCsv(logPath + '/' + 'report', joinedReports);
+  // Construct logUrl function; returns nothing by default
+  let logUrlFunction = () => {
+      return '';
+    };
+    if (onBrowserStack) {
+      logUrlFunction = (reports) => {
+        // Get test name
+        let testName = reports[0].suite;
+        let buildName = buildPrefix + testName;
+        let buildId = buildNamesToBuildIdsMap[buildName];
+        // Find log entry with sessionId
+        let sessionIdEntries = reports.filter((report) => {
+          return report.state === 'custom' && report.spec === 'sessionId';
+        });
+        if (sessionIdEntries.length > 1) {
+          // Found multiple entries; error
+          throw new Error('[ReportSummarizer.cjs] During logUrlFunction, found ' + sessionIdEntries.length + ' sessionId entries');
+        } else if (sessionIdEntries.length === 0) {
+          // Found no entries; no logs on Browserstack
+          return '';
+        } else {
+          // Found one entry, return URL to BrowserStack logs
+          return '' +
+            'https://automate.browserstack.com/dashboard/v2/builds/' +
+            buildId +
+            '/sessions/' +
+            sessionIdEntries[0].message;
+        }
+      }
+    }      
+  // Summarize reports
+  let aggregations = aggregate(joinedReports, ['platform'], logUrlFunction);
+  // Store summaries
+  console.log('[ReportSummarizer.cjs] write "summary" logs');
+  writeJsonAndCsv(logPath + '/' + 'summary', aggregations.summaries);
+  console.log('[ReportSummarizer.cjs] write "failed" logs');
+  writeJsonAndCsv(logPath + '/' + 'failed', aggregations.failed);
+  // Store failed, summaries, and reports in a single XLSX
+  console.log('[ReportSummarizer.cjs] write XLSX');
+  writeXLSX(logPath + '/' + 'combined_report.xlsx', {
+    failed: aggregations.failed,
+    summary: aggregations.summaries,
+    report: joinedReports
+  });
+};
+
 module.exports = { 
   writeJsonAndCsv: writeJsonAndCsv,
   writeXLSX: writeXLSX,
   merge: merge,
   mergeKarma: mergeKarma,
-  aggregate: aggregate
+  aggregate: aggregate,
+  aggregateAndStore: aggregateAndStore
 };
