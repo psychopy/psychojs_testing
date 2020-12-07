@@ -55,12 +55,12 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   let aggregations = ReportSummarizer.aggregate(joinedReports, ['platform']);
   // Store summaries
   console.log('[joinReports.cjs] write "summary" logs');
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'summary', aggregations.summaries);
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/' + 'summary', aggregations.summaries);
   console.log('[joinReports.cjs] write "failed" logs');
-  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_processed + '/' + 'failed', aggregations.failed);
+  ReportSummarizer.writeJsonAndCsv(Paths.dir_logs_joined + '/' + 'failed', aggregations.failed);
   // Store failed, summaries, and reports in a single XLSX
   console.log('[joinReports.cjs] write XLSX');
-  ReportSummarizer.writeXLSX(Paths.dir_logs_processed + '/' + 'combined_report.xlsx', {
+  ReportSummarizer.writeXLSX(Paths.dir_logs_joined + '/' + 'combined_report.xlsx', {
     failed: aggregations.failed,
     summary: aggregations.summaries,
     report: joinedReports

@@ -371,6 +371,16 @@ exports.config = {
    */
   onComplete: async function (exitCode, config, capabilities, results) {
     try {
+      // Get buildId (for constructing URL to BrowserStack logs)
+      // let buildIds = BrowserStack.getBuildIds((build) => {
+      //   build.name = buildName;
+      // });
+      // if (buildIds.length !== 1) {
+      //   throw '[wdio.conf.cjs] During onComplete, found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName;
+      // }
+      // let buildId = buildIds[0];
+      // console.log(buildId);
+
       // Merge reports
       let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
       // Store merged reports
