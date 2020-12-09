@@ -17,6 +17,9 @@ if (test === undefined) {
 }
 console.log('[karma.conf.cjs] test is ' + test);
 
+// Construct testrun
+testrun = testrun === undefined? test: testrun;
+
 // Construct browsers
 let customLaunchers, browsers;
 if (server === 'bs') {
