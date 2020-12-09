@@ -93,6 +93,7 @@ createReportPath = (branch, testrun, test) => {
         path += '/' + test;
       } 
     }     
+  }
   return path;
 }
 

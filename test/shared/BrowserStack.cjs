@@ -153,7 +153,8 @@ createBuildName = (branch, testrun, test, trailingSeparator = false) => {
       if (test !== undefined) {
         buildName += ':' + test;
       } 
-    }     
+    }
+  }     
   if (trailingSeparator) {
     buildName += ':';
   }
