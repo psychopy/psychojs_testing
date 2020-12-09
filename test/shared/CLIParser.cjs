@@ -16,8 +16,8 @@ const processors = {
     let argv = yargs(hideBin(process.argv)).argv;
     let startIndex = 1;
     // Karma workaround, start parsing unnamed arguments after conf.cjs
-    if (argv._.indexOf('karma.conf.cjs') !== -1) {
-      startIndex = argv._.indexOf('karma.conf.cjs') + 1;
+    if (argv._.indexOf('test/karma.conf.cjs') !== -1) {
+      startIndex = argv._.indexOf('test/karma.conf.cjs') + 1;
     }
     if (processMe !== '*' && argv._.length > startIndex) {
       return processMe + ' ' + argv._.slice(startIndex, argv._.length).join(' ');
