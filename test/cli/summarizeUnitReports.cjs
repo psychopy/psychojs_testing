@@ -1,6 +1,14 @@
 const ReportSummarizer = require('./../shared/ReportSummarizer.cjs');
+// Turn logs into table
 let joinedReports = ReportSummarizer.mergeKarma();
 ReportSummarizer.writeJsonAndCsv('./.tmp_unit' + '/report', joinedReports);
+// Aggregate
+ReportSummarizer.aggregateAndStore(
+  joinedReports,
+  './.tmp_unit', 
+  false
+);
+/*
 let summaries = ReportSummarizer.summarize(joinedReports, ['platform']);
 console.log(summaries);
 ReportSummarizer.writeJsonAndCsv('./.tmp_unit' + '/summary', summaries);
@@ -16,3 +24,4 @@ ReportSummarizer.writeXLSX('./.tmp_unit' + '/' + 'combined_report.xlsx', {
   summary: summaries,
   report: joinedReports
 });
+*/

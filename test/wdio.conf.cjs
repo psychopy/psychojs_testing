@@ -388,11 +388,11 @@ exports.config = {
         buildNamesToBuildIdsMap[buildName] = buildIds[0];
       }
       ReportSummarizer.aggregateAndStore(
-        joinedReports, 
+        joinedReports,
+        Paths.dir_logs_processed, 
         server === 'bs',
         buildPrefix,
-        buildNamesToBuildIdsMap,
-        Paths.dir_logs_processed
+        buildNamesToBuildIdsMap
       );
       // If upload enabled, update stager
       if (upload) {

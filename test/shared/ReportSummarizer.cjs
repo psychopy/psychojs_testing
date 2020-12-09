@@ -13,12 +13,11 @@ writeJsonAndCsv = (filePrefix, output) => {
     JSON.stringify(output)
   );
   // Store output as CSV (if any output exists)
-  if (output.length > 0) {
-    fs.writeFileSync(
-      filePrefix + '.csv',
-      json2csv.parse(output)
-    );
-  }
+  let csvOutput = output.length > 0? json2csv.parse(output): '';
+  fs.writeFileSync(
+    filePrefix + '.csv',
+    csvOutput
+  );
 };
 
 // Write an object of JSON arrays to an XLSX file
@@ -87,14 +86,27 @@ mergeKarma = () => {
       } else {
         state = 'failed';
       }
-      // Add spec result
-      log(
-        suite,
-        specfile.description,
-        state,
-        state !== 'failed'? '': JSON.stringify(specfile.log),
-        specfile.time
-      );
+      if (state !== 'failed') {
+        // If not failed, add a single entry
+        log(
+          suite,
+          specfile.description,
+          state,
+          '',
+          specfile.time
+        );
+      } else {
+        // Else, one row per message
+        for (let logMessage of specfile.log) {
+          log(
+            suite,
+            specfile.description,
+            state,
+            state !== 'failed'? '': logMessage,
+            specfile.time
+          );
+        }
+      }
     }
   }
   return joinedReports;
@@ -274,7 +286,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
 };
 
 // Perform log aggregation and store logs
-aggregateAndStore = function(joinedReports, onBrowserStack, buildPrefix, buildNamesToBuildIdsMap, logPath) {
+aggregateAndStore = function(joinedReports, logPath, onBrowserStack, buildPrefix, buildNamesToBuildIdsMap) {
   // Store merged reports
   console.log('[ReportSummarizer.cjs] write "report" logs');
   writeJsonAndCsv(logPath + '/' + 'report', joinedReports);

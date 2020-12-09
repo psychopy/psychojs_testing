@@ -64,10 +64,10 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   };    
   ReportSummarizer.aggregateAndStore(
     joinedReports,
+    Paths.dir_logs_joined,
     true, 
     BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true),
-    buildNamesToBuildIdsMap,
-    Paths.dir_logs_joined
+    buildNamesToBuildIdsMap
   );
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
