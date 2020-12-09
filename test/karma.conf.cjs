@@ -1,6 +1,7 @@
 // Karma configuration
 // Generated on Tue Dec 01 2020 14:30:27 GMT+0000 (Greenwich Mean Time)
 const CLIParser = require('./shared/CLIParser.cjs');
+const BrowserStack = require('./shared/BrowserStack.cjs');
 
 // *** Parse CLI arguments
 // Parse server CLI option
@@ -16,6 +17,22 @@ if (server === 'bs') {
   branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
 }
 console.log('[wdio.conf.cjs] branch is ' + branch);
+
+// Get test CLI option
+let test = CLIParser.parseOption({cli: 'test'}, false);
+let specFile;
+if (test === undefined) {
+  test = 'all_tests';
+  specFile = '*.js';
+} else {
+  specFile = test + '.js';
+}
+console.log('[wdio.conf.cjs] test is ' + test);
+
+// Get testrun CLI option
+let testrun = CLIParser.parseOption({cli: 'testrun'}, false);
+testrun = testrun === undefined? test: testrun;
+console.log('[wdio.conf.cjs] testrun is ' + testrun);
 
 // Parse platform CLI option
 let platform = CLIParser.parseOption({cli: 'platform'}, false);
@@ -51,29 +68,29 @@ if (server === 'bs') {
   };
   */
   customLaunchers = require('./shared/capabilities.' + server + '.cjs').getApiCapabilities(platform, subset);
-  console.log(customLaunchers);
-  browsers = Object.keys(customLaunchers);  
 } else {
   customLaunchers = {
     local_local_chrome_local: {
       base: 'Chrome',
       displayName: 'local_local_chrome_local'
-    },
+    }/*,
     local_local_chrome2_local: {
       base: 'Chrome',
       displayName: 'local_local_chrome2_local'
-    }
+    }*/
   };
-  browsers = ['local_local_chrome_local', 'local_local_chrome2_local'];
+  //browsers = ['local_local_chrome_local', 'local_local_chrome2_local'];
 }
-
+browsers = Object.keys(customLaunchers);  
+console.log('[karma.conf.js] running tests on ' + browsers.length + ' platforms');
 module.exports = function(config) {
   config.set({
-    browserStack: {
+    browserStack: server !== 'bs'? {}:
+    {
       username: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent): undefined,
       accessKey: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent): undefined,
-      project: 'PsychoJS unit',
-      build: branch
+      project: 'PsychoJS',
+      build: BrowserStack.createBuildName(branch, testrun, test)
     },
 
     // define browsers
@@ -86,7 +103,6 @@ module.exports = function(config) {
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
-
 
     // list of files / patterns to load in the browser
     files: [
@@ -104,7 +120,7 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
       {pattern: 'dist/*.js', type: 'module', included: false},
-      {pattern: 'test/specs_unit/*.js', type: 'module'}
+      {pattern: 'test/specs_unit/' + specFile, type: 'module'}
     ],
 
 
@@ -138,7 +154,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_WARN,
 
 
     // enable / disable watching file and executing tests whenever any file changes
