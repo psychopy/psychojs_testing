@@ -4,7 +4,7 @@
 const BrowserStack = require('../shared/BrowserStack.cjs');
 const Stager = require('../shared/Stager.cjs');
 const CLIParser = require('../shared/CLIParser.cjs');
-const Paths = require('../shared/Paths.js')
+const Paths = require('../shared/Paths.cjs')
 
 // Get branch, testrun, and test
 const branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);

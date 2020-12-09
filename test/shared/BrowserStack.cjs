@@ -148,17 +148,12 @@ createBuildName = (branch, testrun, test, trailingSeparator = false) => {
   let buildName = '';
   if (branch !== undefined) {
     buildName += branch;
-  } else {
-    return buildName;
-  }
-  if (testrun !== undefined) {
-    buildName += ':' + testrun;
-  } else {
-    return buildName;
-  }
-  if (test !== undefined) {
-    buildName += ':' + test;
-  } 
+    if (testrun !== undefined) {
+      buildName += ':' + testrun;
+      if (test !== undefined) {
+        buildName += ':' + test;
+      } 
+    }     
   if (trailingSeparator) {
     buildName += ':';
   }

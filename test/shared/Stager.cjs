@@ -87,17 +87,12 @@ createReportPath = (branch, testrun, test) => {
   let path = '';
   if (branch !== undefined) {
     path += branch;
-  } else {
-    return path;
-  }
-  if (testrun !== undefined) {
-    path += '/' + testrun;
-  } else {
-    return path;
-  }
-  if (test !== undefined) {
-    path += '/' + test;
-  } 
+    if (testrun !== undefined) {
+      path += '/' + testrun;
+      if (test !== undefined) {
+        path += '/' + test;
+      } 
+    }     
   return path;
 }
 
