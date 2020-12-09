@@ -56,13 +56,30 @@ getBuildIds  = (projectName, filterFunction) => {
     return [];
   }
   let builds = getBuildsByProjectId(projectId);
-  // Select which builds to delete
+  // Filter out builds
   let filteredBuilds = builds.filter(filterFunction);
   let filteredBuildIds = filteredBuilds.map((filteredBuild) => {
     return filteredBuild.hashed_id;
   })
   return filteredBuildIds;
 };
+
+getSessionsByBuildName = (projectName, buildName) => {
+  // Get build with buildName
+  let buildIds = getBuildIds(projectName, (build) => {
+    return build.name === buildName;
+  });
+  // No buildId? No sessions
+  if (buildIds.length === 0) {
+    return [];
+  } else if (buildIds.length > 1) {
+    throw new Error('[BrowserStack.cjs] Found ' + buildId.length + ' builds on BrowserStack with name ' + buildName);
+  }
+  // Get sessions
+  let sessions = JSON.parse(child_process.execSync(curlCommand('builds/' + buildIds[0] + '/sessions.json')));
+  return sessions;
+};
+
 
 // Construct a map of buildNames to buildIds
 getBuildNamesToBuildIdsMap  = (projectName, buildNames) => {
@@ -78,7 +95,7 @@ getBuildNamesToBuildIdsMap  = (projectName, buildNames) => {
     result[buildName] = buildIds[0];
   }
   return result;
-}
+};
 
 // Delete builds that match filterFunction
 deleteBuilds = (projectName, filterFunction) => {
@@ -166,6 +183,7 @@ module.exports = {
   getBuildsByProjectId: getBuildsByProjectId,
   getBrowsers: getBrowsers,
   getBuildIds: getBuildIds,
+  getSessionsByBuildName: getSessionsByBuildName,
   deleteOneBuild: deleteOneBuild,
   deleteAllBranchesExcept: deleteAllBranchesExcept,
   deleteAllBuildsStartingWith: deleteAllBuildsStartingWith,
