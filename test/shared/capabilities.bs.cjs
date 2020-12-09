@@ -27,21 +27,17 @@ const wildTest = (wildcard, str) => {
 // Returns browsers from BrowserStack after basic filtering
 const getBrowsers = () => {
   // Get all available browsers from local HDD (cachedBrowsersFile), otherwise cache from BrowserStack's REST API
-  const cachedBrowsersFile = Paths.dir_logs_capabilities + '/browsers.json';
+  const cachedBrowsersFile = Paths.dir_tmp_browsers + '/browsers.json';
   let allBrowsers;
   if (fs.existsSync(cachedBrowsersFile)) {
     allBrowsers = JSON.parse(fs.readFileSync(cachedBrowsersFile));
   } else {
     allBrowsers = BrowserStack.getBrowsers();
     // Workaround for constructing directories (since log cleanup may not have been performed yet)
-    if (!fs.existsSync(Paths.dir_tmp)) {
-      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_tmp)
-      fs.mkdirSync(Paths.dir_tmp);
+    if (!fs.existsSync(Paths.dir_tmp_browsers)) {
+      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_tmp_browsers)
+      fs.mkdirSync(Paths.dir_tmp_browsers);
     }  
-    if (!fs.existsSync(Paths.dir_logs_capabilities)) {
-      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_logs_capabilities)
-      fs.mkdirSync(Paths.dir_logs_capabilities);
-    }     
     fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
   }
   // Select browsers that match these filters
@@ -168,9 +164,9 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
   // Get platforms in BrowserStack's browsers.json format
   let browsers = getBrowsers();
 
-  // Additional browserstack options to add to each capability
+  // Additional browserstack options tos add to each capability
   const generalOptions = {
-    projectName: 'PsychoJS',
+    projectName: 'PsychoJS_e2e',
     buildName: buildName,
     video: 'true',
     debug: 'true',

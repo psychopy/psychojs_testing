@@ -81,26 +81,70 @@ parseOption = (sources = {}, required = true, logLevel = logFull) => {
     }
     if (optionValue !== undefined) {
       if (logLevel > logSilent) {
-        console.log('[CLIParser.cjs] ' + report);
+        console.log('[cjs] ' + report);
       }
       return optionValue;
     }
   }
   // Still here? No value 
   if (required) {
-    let errorMessage = '[CLIParser.cjs] Option was required, but had no value in ' + JSON.stringify(sources);
+    let errorMessage = '[cjs] Option was required, but had no value in ' + JSON.stringify(sources);
     console.log('\x1b[31m' + errorMessage + '\x1b[0m');
     throw new Error(errorMessage);
   }
   // Still here? Return optionValue (undefined)
-  console.log('[CLIParser.cjs] Option was not required and had no value in ' + JSON.stringify(sources));
+  console.log('[cjs] Option was not required and had no value in ' + JSON.stringify(sources));
   return optionValue;
 }
+
+// Parse CLI options for running e2e and unit testruns
+parseTestrunCLIOptions = () => {
+  // Get server CLI option
+  const server = parseOption({cli: 'server'});
+  if (!(['local', 'bs'].includes(server))) {
+    throw new Error('[CLIParser.cjs] The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
+  }
+  console.log('[CLIParser.cjs] server is ' + server);
+
+  // Get upload CLI option
+  let upload = parseOption({cli: 'upload'}, false);
+  upload = upload !== undefined;
+  console.log('[CLIParser.cjs] upload is ' + upload);
+
+  // Get platform CLI option
+  let platform = parseOption({cli: 'platform'}, false);
+  platform = platform === undefined? '*': platform;
+  console.log('[CLIParser.cjs] platform is ' + platform);
+
+  // Get test CLI option
+  let test = parseOption({cli: 'test'}, false);
+
+  // Get testrun CLI option
+  let testrun = parseOption({cli: 'testrun'}, false);
+  testrun = testrun === undefined? test: testrun;
+  console.log('[CLIParser.cjs] testrun is ' + testrun);
+
+  // Get branch from CLI or GITHUB_REF
+  const branch = parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);
+  if ((upload || server === 'bs') && branch === undefined) {
+    throw new Error('[CLIParser.cjs] upload was enabled or server was bs, but branch was not defined');
+  }
+  console.log('[CLIParser.cjs] branch is ' + branch);
+
+  // Get subset from CLI
+  let subset =  parseOption({cli: 'subset'}, false);
+  subset = subset !== undefined;
+  console.log('[CLIParser.cjs] subset is ' + subset);
+
+  return [server, upload, platform, test, testrun, branch, subset];
+};
+
 
 module.exports = {
   processors: processors,
   parseOption: parseOption,
   logFull: logFull,
   logCensor: logCensor,
-  logSilent: logSilent
+  logSilent: logSilent,
+  parseTestrunCLIOptions: parseTestrunCLIOptions
 };

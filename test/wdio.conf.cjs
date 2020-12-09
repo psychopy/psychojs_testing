@@ -7,56 +7,26 @@ const BrowserStack = require('./shared/BrowserStack.cjs');
 const Stager = require('./shared/Stager.cjs');
 const Paths = require('./shared/Paths.cjs');
 const CLIParser = require('./shared/CLIParser.cjs');
-const { SevereServiceError } = require('webdriverio');
 
 // *** Parse CLI arguments
-// Get server CLI option
-const server = CLIParser.parseOption({cli: 'server'});
-if (!(['local', 'bs'].includes(server))) {
-  throw new Error('[wdio.conf.cjs] The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
-}
-console.log('[wdio.conf.cjs] server is ' + server);
+let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
-// Include capability generator module
-const CapabilityGenerator = require('./shared/capabilities.' + server + '.cjs');
-
-// Get upload CLI option
-let upload = CLIParser.parseOption({cli: 'upload'}, false);
-upload = upload !== undefined;
-console.log('[wdio.conf.cjs] upload is ' + upload);
-
-// Get platform CLI option
-let platform = CLIParser.parseOption({cli: 'platform'}, false);
-platform = platform === undefined? '*': platform;
-console.log('[wdio.conf.cjs] platform is ' + platform);
-
-// Get test CLI option
-let test = CLIParser.parseOption({cli: 'test'}, false);
-let specs, specFile;
+// Construct test and specFile
+let specFile;
 if (test === undefined) {
   test = 'all_tests';
   specFile = 'all_tests'
-  specs = ['./test/specs_e2e/' + specFile + '.cjs'];  
 } else {
   specFile = 'single_test';
-  specs = ['./test/specs_e2e/' + specFile + '.cjs'];
 }
 console.log('[wdio.conf.cjs] test is ' + test);
 
-// Get testrun CLI option
-let testrun = CLIParser.parseOption({cli: 'testrun'}, false);
-testrun = testrun === undefined? test: testrun;
-console.log('[wdio.conf.cjs] testrun is ' + testrun);
+// Construct buildName (for browserStack logs)
+const buildName = BrowserStack.createBuildName(branch, testrun, test);
+console.log('[wdio.conf.cjs] buildName is ' + buildName);
 
-// Get branch from CLI or GITHUB_REF
-const branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);
-if ((upload || server === 'bs') && branch === undefined) {
-  throw new Error('[wdio.conf.cjs] upload was enabled or server was bs, but branch was not defined');
-}
-console.log('[wdio.conf.cjs] branch is ' + branch);
-
-// Get app CLI option and construct baseUrl
-const url = CLIParser.parseOption({cli: 'url'}, false);
+// Get url CLI option and construct baseUrl
+let url = parseOption({cli: 'url'}, false);
 // Default url is stager/branch/{{experiment}}
 if (url !== undefined) {
   baseUrl = url;
@@ -68,14 +38,8 @@ if (url !== undefined) {
 }
 console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
-// Get subset from CLI
-let subset =  CLIParser.parseOption({cli: 'subset'}, false);
-subset = subset !== undefined;
-console.log('[wdio.conf.cjs] subset is ' + subset);
-
-// Construct buildName (for browserStack logs)
-const buildName = BrowserStack.createBuildName(branch, testrun, test);
-console.log('[wdio.conf.cjs] buildName is ' + buildName);
+// Include capability generator module
+const CapabilityGenerator = require('./shared/capabilities.' + server + '.cjs');
 
 // *** WebdriverIO config
 exports.config = {
@@ -93,7 +57,7 @@ exports.config = {
   runner: 'local',
 
   // Test files & patterns to include & exclude
-  specs: specs,
+  specs: ['./test/specs_e2e/' + specFile + '.cjs'],
   exclude: [],
   //
   // ===================
@@ -169,47 +133,24 @@ exports.config = {
    */
   onPrepare: async function (config, capabilities) {
     try {
-      // *** Setup temporary directories
-      // Construct tmp dir
-      if (!fs.existsSync(Paths.dir_tmp)) {
-        console.log('[wdio.conf.cjs] Creating directory ' + Paths.dir_tmp)
-        fs.mkdirSync(Paths.dir_tmp);
-      };
-      // Construct or clean up log dirs
-      let logDirs = [
-        Paths.dir_logs_capabilities,
-        Paths.dir_logs_joined,
-        Paths.dir_logs_json,
-        Paths.dir_logs_processed,
-        Paths.dir_logs_wdio,
-        Paths.dir_logs_selenium,
-        Paths.dir_screenshots_cutout,
-        Paths.dir_screenshots_raw,
-        Paths.dir_screenshots_scaled,
-      ];      
-      let files, errorMessage;
-      for (let logDir of logDirs) {
-        if (!fs.existsSync(logDir)) {
-          console.log('wdio.conf.cjs Creating directory ' + logDir);
-          fs.mkdirSync(logDir);
-        } else {
-          console.log('wdio.conf.cjs Deleting files in directory ' + logDir);
-          files = fs.readdirSync(logDir);
-          for (let file of files) {
-            try {
-              fs.unlinkSync(logDir + '/' + file);
-            } catch (e) {
-              errorMessage = 'wdio.conf.cjs Could not delete file ' + file;
-              console.log('\x1b[31m' + errorMessage + '\x1b[0m');
-              throw new Error(errorMessage);            
-            }
-          }
-        }
-      }
-      // *** Delete old test logs
+      // *** Clean up temporary directories
+      Paths.cleanupTemporaryDirectories([
+        [Paths.dir_tmp_e2e, false],
+        [Paths.dir_tmp_browsers, true],
+        [Paths.dir_logs_capabilities, true],
+        [Paths.dir_logs_joined, true],
+        [Paths.dir_logs_json, true],
+        [Paths.dir_logs_processed, true],
+        [Paths.dir_logs_wdio, true],
+        [Paths.dir_logs_selenium, true],
+        [Paths.dir_screenshots_cutout, true],
+        [Paths.dir_screenshots_raw, true],
+        [Paths.dir_screenshots_scaled, true]
+      ]);    
+      // *** Delete old BrowserStack logs
       if (server === 'bs') {
-        console.log('wdio.conf.cjs Deleting BrowserStack logs');
-        BrowserStack.deleteOneBuild(buildName);
+        console.log('[wdio.conf.cjs] Deleting BrowserStack logs');
+        BrowserStack.deleteOneBuild('PsychoJS_e2e', buildName);
       }
       // *** Log all capabilities
       fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
@@ -219,14 +160,7 @@ exports.config = {
     }
     // Wait until BrowserStack is available
     if (server === 'bs') {
-      let browserStackBusy = BrowserStack.isBusy();
-      while(browserStackBusy) {
-        // Check every 10 seconds if BrowserStack is still busy        
-        console.log('[wdio.conf.cjs] BrowserStack is busy; waiting 10 seconds');
-        browserStackBusy = await new Promise((resolve, reject) => {
-          setTimeout(() => resolve(BrowserStack.isBusy()), 10000)
-        });
-      }
+      await BrowserStack.waitUntilReady();
     }
   },
   /**
@@ -379,7 +313,7 @@ exports.config = {
         // buildPrefix
         buildPrefix = BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true);
         // buildNamesToBuildIdsMap
-        let buildIds = BrowserStack.getBuildIds((build) => {
+        let buildIds = BrowserStack.getBuildIds('PsychoJS_e2e', (build) => {
           return build.name === buildName;
         });
         if (buildIds.length !== 1) {
@@ -400,10 +334,10 @@ exports.config = {
         console.log('[wdio.conf.cjs] stagerPath is ' + stagerPath);
         // Delete old logs
         console.log('[wdio.conf.cjs] Deleting old reports on Stager');
-        await Stager.deleteDirectory('report/' + stagerPath);
+        await Stager.deleteDirectory(Paths.subdir_report_e2e + '/' + stagerPath);
         // Upload logs
         console.log('[wdio.conf.cjs] Uploading new reports to Stager');
-        await Stager.uploadDirectory(Paths.dir_tmp, 'report/' + stagerPath);
+        await Stager.uploadDirectory(Paths.dir_tmp_e2e, Paths.subdir_report_e2e + '/' + stagerPath);
       }
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');

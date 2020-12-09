@@ -2,24 +2,12 @@
 // Generated on Tue Dec 01 2020 14:30:27 GMT+0000 (Greenwich Mean Time)
 const CLIParser = require('./shared/CLIParser.cjs');
 const BrowserStack = require('./shared/BrowserStack.cjs');
+const Paths = require('./shared/Paths.cjs');
 
 // *** Parse CLI arguments
-// Parse server CLI option
-const server = CLIParser.parseOption({cli: 'server'});
-if (!(['local', 'bs'].includes(server))) {
-  throw new Error('[wdio.conf.cjs] The server option (' + server + ') was not recognized. Use "local" for local server or "bs" for BrowserStack.');
-}
-console.log('[wdio.conf.cjs] server is ' + server);
+let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
-// Get branch from CLI or GITHUB_REF
-let branch;
-if (server === 'bs') {
-  branch = CLIParser.parseOption({cli: 'branch', env: 'GITHUB_REF'});
-}
-console.log('[wdio.conf.cjs] branch is ' + branch);
-
-// Get test CLI option
-let test = CLIParser.parseOption({cli: 'test'}, false);
+// Construct test and specFile
 let specFile;
 if (test === undefined) {
   test = 'all_tests';
@@ -27,69 +15,30 @@ if (test === undefined) {
 } else {
   specFile = test + '.js';
 }
-console.log('[wdio.conf.cjs] test is ' + test);
-
-// Get testrun CLI option
-let testrun = CLIParser.parseOption({cli: 'testrun'}, false);
-testrun = testrun === undefined? test: testrun;
-console.log('[wdio.conf.cjs] testrun is ' + testrun);
-
-// Parse platform CLI option
-let platform = CLIParser.parseOption({cli: 'platform'}, false);
-platform = platform === undefined? '*': platform;
-console.log('[wdio.conf.cjs] platform is ' + platform);
-
-// Get subset from CLI
-let subset =  CLIParser.parseOption({cli: 'subset'}, false);
-subset = subset !== undefined;
-console.log('[wdio.conf.cjs] subset is ' + subset);
+console.log('[karma.conf.cjs] test is ' + test);
 
 // Construct browsers
 let customLaunchers, browsers;
 if (server === 'bs') {
-  /*
-  customLaunchers = {
-    bstack_chrome_windows: {
-      base: 'BrowserStack',
-      browser: 'chrome',
-      browser_version: '72.0',
-      os: 'Windows',
-      os_version: '10',
-      'bstack:options' : {sessionName: 'dummy'}
-    },
-
-    bstack_iphoneX: {
-      base: 'BrowserStack',
-      device: 'iPhone X',
-      os: 'ios',
-      real_mobile: true,
-      os_version: '11.0'
-    }
-  };
-  */
   customLaunchers = require('./shared/capabilities.' + server + '.cjs').getApiCapabilities(platform, subset);
 } else {
   customLaunchers = {
     local_local_chrome_local: {
       base: 'Chrome',
       displayName: 'local_local_chrome_local'
-    }/*,
-    local_local_chrome2_local: {
-      base: 'Chrome',
-      displayName: 'local_local_chrome2_local'
-    }*/
+    }
   };
-  //browsers = ['local_local_chrome_local', 'local_local_chrome2_local'];
 }
 browsers = Object.keys(customLaunchers);  
 console.log('[karma.conf.js] running tests on ' + browsers.length + ' platforms');
+
 module.exports = function(config) {
   config.set({
     browserStack: server !== 'bs'? {}:
     {
       username: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent): undefined,
       accessKey: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent): undefined,
-      project: 'PsychoJS',
+      project: 'PsychoJS_unit',
       build: BrowserStack.createBuildName(branch, testrun, test)
     },
 
@@ -141,7 +90,7 @@ module.exports = function(config) {
     reporters: server === 'bs'? ['dots', 'json', 'BrowserStack']: ['dots', 'json'],
     jsonReporter: {
       stdout: false,
-      outputFile: '.tmp_unit/results.json'
+      outputFile: Paths.dir_tmp_unit + '/results.json'
     },
 
     // web server port
@@ -154,7 +103,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_INFO,
 
 
     // enable / disable watching file and executing tests whenever any file changes

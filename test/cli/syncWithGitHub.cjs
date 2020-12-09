@@ -17,12 +17,15 @@ const pseudoBranches = argv._;
 (async () => {
   console.log('[syncWithGithub.cjs] retrieving GitHub branches');
   let branchNames = GitHub.getBranchNames().concat(pseudoBranches);
+
   console.log('[syncWithGithub.cjs] deleting BrowserStack logs');
-  BrowserStack.deleteAllBranchesExcept(branchNames);
-  // reportDirectories: Prefix branchesNames with 'report/'
+  BrowserStack.deleteAllBranchesExcept('PsychoJS_e2e', branchNames);
+  BrowserStack.deleteAllBranchesExcept('PsychoJS_unit', branchNames);
+  
   console.log('[syncWithGithub.cjs] deleting staging server reports');
-  await Stager.deleteAllDirectoriesExcept('report', branchNames);
-  // appDirectories: Prefix branchesNames with 'app/'
+  await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_e2e, branchNames);
+  await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_unit, branchNames);
+
   console.log('[syncWithGithub.cjs] deleting staging server html experiments');
   await Stager.deleteAllDirectoriesExcept('experiments/html', branchNames);
 })();
