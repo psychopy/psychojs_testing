@@ -99,7 +99,7 @@ const getBrowsers = () => {
       }
     }
   }
-  return browsers; b
+  return browsers; 
 }
 
 // Contstruct platformName from browser and return it
@@ -224,7 +224,6 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
 const getApiCapabilities = (platformPattern, subset) => {
   // Get platforms in BrowserStack's browsers.json format
   let browsers = getBrowsers();
-
   // Add platform
   let capabilities = browsers.map((browser) => {
     browser.displayName = getPlatformFromBrowser(browser);
@@ -235,6 +234,7 @@ const getApiCapabilities = (platformPattern, subset) => {
   capabilities = filterCapabilities(capabilities, platformPattern, subset, (capability) => {
     return capability.displayName;
   });
+
   // Convert to object with platform as key
   let customLaunchers = {};
   for (capability of capabilities) {
