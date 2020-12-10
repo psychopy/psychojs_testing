@@ -36,7 +36,7 @@ jobs:
           python-version: 3.6
       - name: Install swig
         run: |
-          conda install swig
+          $CONDA/bin/conda install swig
           pip install pocketsphinx
         working-directory: ./psychopy
       - name: Install PsychoPy
