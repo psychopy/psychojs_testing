@@ -58,16 +58,18 @@ console.log('[compileExperiments.cjs] upload is ' + upload);
   console.log('[compileExperiments.cjs] compiling ' + experiments.length + ' experiments');
 
   // Local path to directory of current experiment
-  let experimentPath;
+  let experimentPath, compileCommand;
   // For each experiment, compile psyexp (if applicable) index.html and copy dist/ to lib/
   for (let experiment of experiments) {
     console.log('[compileExperiments.cjs] compiling psyexp for ' + experiment);
     experimentPath = path.resolve(Paths.dir_experiments + '/' + experiment);
-    child_process.execSync(
+    compileCommand = '' +
       'python ' + psychopyPath + '/psychopy/scripts/psyexpCompile.py ' + 
       experimentPath + '/' + experiment + '.psyexp ' +
-      '--outfile ' + experimentPath + '/' + experiment + '.js'
-    );
+      '--outfile ' + experimentPath + '/' + experiment + '.js ' +
+      '--version 2020.2.6';
+    child_process.execSync(compileCommand);
+    //console.log(compileCommand);
   }
 
   if (upload) {
