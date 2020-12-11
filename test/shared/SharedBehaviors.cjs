@@ -258,7 +258,7 @@ module.exports = {
     'e2e_code',
     'e2e_conditions',
     'e2e_img',
-    'e2e_polygon',
+    'e2e_polygons',
     'e2e_sound',
     'e2e_text',
     'e2e_textbox',
