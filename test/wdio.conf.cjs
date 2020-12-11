@@ -21,6 +21,10 @@ if (test === undefined) {
 }
 console.log('[wdio.conf.cjs] test is ' + test);
 
+// Construct testrun
+testrun = testrun === undefined? test: testrun;
+console.log('[wdio.conf.cjs] testrun is ' + testrun);
+
 // Construct buildName (for browserStack logs)
 const buildName = BrowserStack.createBuildName(branch, testrun, test);
 console.log('[wdio.conf.cjs] buildName is ' + buildName);
