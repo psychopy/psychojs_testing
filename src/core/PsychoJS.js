@@ -554,7 +554,7 @@ export class PsychoJS
 
 			// if the experiment is running from the pavlovia.org server, we read the configuration file:
 			const experimentUrl = window.location.href;
-			if (true || experimentUrl.indexOf('https://run.pavlovia.org/') === 0 || experimentUrl.indexOf('https://pavlovia.org/run/') === 0)
+			if (experimentUrl.indexOf('https://run.pavlovia.org/') === 0 || experimentUrl.indexOf('https://pavlovia.org/run/') === 0)
 			{
 				const serverResponse = await this._serverManager.getConfiguration(configURL);
 				this._config = serverResponse.config;
@@ -565,8 +565,7 @@ export class PsychoJS
 				{
 					delete this._config.psychoJsManager;
 					this._config.pavlovia = {
-            //URL: 'https://pavlovia.org'
-            URL: 'http://localhost/psychojs/e2e_img'
+						URL: 'https://pavlovia.org'
 					};
 				}
 
@@ -602,7 +601,7 @@ export class PsychoJS
 					environment: ExperimentHandler.Environment.LOCAL,
 					experiment: {
 						name,
-						saveFormat: ExperimentHandler.SaveFormat.CSV,
+						saveFormat: "none", // ExperimentHandler.SaveFormat.CSV,
 						saveIncompleteResults: true
 					}
 				};
