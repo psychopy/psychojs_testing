@@ -3,7 +3,7 @@ const SharedBehaviors = require('../shared/SharedBehaviors.cjs');
 module.exports = {
   run: (calibration = null) => {
     // Navigate to experiment and perform prelude
-    browser.url(SharedBehaviors.getExperimentUrl('e2e_polygon'));
+    browser.url(SharedBehaviors.getExperimentUrl('e2e_polygons'));
     SharedBehaviors.performPavloviaPrelude();
     // If no calibration specified, get from viewport
     if (calibration === null) {

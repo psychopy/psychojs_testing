@@ -1,3 +1,4 @@
+
 const SharedBehaviors = require('../shared/SharedBehaviors.cjs');
 
 module.exports = {
@@ -6,7 +7,6 @@ module.exports = {
     let typeText = (text) => {
       result = [];
       for (let i = 0; i < text.length; i++) {
-        console.log(text[i]);
         result = result.concat([
           {"type": "keyDown", "value": text[i]},
           {"type": "keyUp", "value": text[i]}
@@ -42,12 +42,8 @@ module.exports = {
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
     browser.pause(1000);
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-    browser.pause(1000);
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
     SharedBehaviors.waitForReport('feedback');
     browser.writeScreenshot('textbox_feedback');
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
-    console.log("double tap after feedback");
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
     SharedBehaviors.waitForReport('FINISHED');
   }
