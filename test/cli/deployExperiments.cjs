@@ -7,7 +7,6 @@ const fs = require('fs');
 const Mustache = require('mustache');
 const CLIParser = require('../shared/CLIParser.cjs');
 const path = require('path');
-const child_process = require('child_process');
 
 // Get download CLI option (download JS files from stager?)
 let download = CLIParser.parseOption({cli: 'download'}, false);
@@ -100,8 +99,11 @@ const readDirSyncRecursive = (fromPath, toPath) => {
   console.log('[deployExperiments.cjs] preparing ' + experiments.length + ' experiments');
   // Get template
   let template = fs.readFileSync('./src/index.html', 'utf8');
+  // Get root node (it's in a separate file for injecting in karma tests)
+  let rootNode = fs.readFileSync('./src/root.html', 'utf8');
   // Get includes
   let includes = fs.readdirSync('./dist');
+
 
   // For each experiment, compile index.html and copy dist/ to lib/
   let resources;
@@ -110,7 +112,10 @@ const readDirSyncRecursive = (fromPath, toPath) => {
 
     // Compile and write index.html
     console.log('[deployExperiments.cjs] compiling index.html');
-    let compiled = Mustache.render(template, { experiment: experiment });
+    let compiled = Mustache.render(template, { 
+      rootNode: rootNode,
+      experiment: experiment
+    });
     fs.writeFileSync(
       Paths.dir_experiments + '/' + experiment + '/index.html', 
       compiled

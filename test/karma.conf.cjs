@@ -72,7 +72,8 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
       {pattern: 'dist/*.js', type: 'module', included: false},
-      {pattern: 'test/specs_unit/' + specFile, type: 'module'}
+      {pattern: 'src/root.html', type: 'dom'},
+      {pattern: 'test/specs_unit/' + specFile, type: 'module'},
     ],
 
 
@@ -114,7 +115,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true,
+    singleRun: false,
 
     // Concurrency level
     // how many browser should be started simultaneous
