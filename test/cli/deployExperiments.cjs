@@ -9,12 +9,12 @@ const CLIParser = require('../shared/CLIParser.cjs');
 const path = require('path');
 const child_process = require('child_process');
 
-// Get download CLI option (download psyexp files from stager?)
+// Get download CLI option (download JS files from stager?)
 let download = CLIParser.parseOption({cli: 'download'}, false);
 download = download !== undefined;
 console.log('[compileExperiments.cjs] download is ' + download);
 
-// Get upload CLI option (upload psyexp files compiled to JS to stager?)
+// Get upload CLI option (upload comiled JS files to stager?)
 let upload = CLIParser.parseOption({cli: 'upload'}, false);
 upload = upload !== undefined;
 console.log('[compileExperiments.cjs] upload is ' + upload);
@@ -25,22 +25,6 @@ if (upload) {
   branch = CLIParser.parseOption({env: 'GITHUB_REF', cli: 'branch'});
   console.log('[deployExperiments.cjs] branch is ' + branch);
 }
-
-
-// Get url CLI option and construct baseUrl
-const url = CLIParser.parseOption({cli: 'url'}, false);
-let baseUrl;
-if (url !== undefined) {
-  // url defined? Use it as baseUrl, else check upload and branch settings
-  baseUrl = url;
-} else if (upload) {
-  // url not defined but upload enabled? Construct baserUrl from Stager and branch
-  baseUrl = 'https://staging.psychopy.org/experiments/html/' + branch;
-} else {
-  // Could not construct baseUrl
-  throw "[wdio.conf.cjs] Could not construct baseUrl, because url was not specified and upload was false";
-}
-console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
 // get files in dirPath and each of its subdirectories
 // https://coderrocketfuel.com/article/recursively-list-all-the-files-in-a-directory-using-node-js
@@ -132,22 +116,6 @@ const readDirSyncRecursive = (fromPath, toPath) => {
       compiled
     );
     
-    // Compile and write resources
-    console.log('[deployExperiments.cjs] compiling resources.json');
-    try {
-      console.log(Paths.dir_experiments + '/' + experiment + '/resources');
-      resources = readDirSyncRecursive(Paths.dir_experiments + '/' + experiment + '/resources', '');
-    } catch (e) {
-      resources = [];
-    }
-    fs.writeFileSync(
-      Paths.dir_experiments + '/' + experiment + '/resources.json', 
-      JSON.stringify({
-        resources: resources,
-        resourceDirectory: baseUrl + '/' + experiment + '/resources/'
-      })
-    );    
-
     // Copy dist/ to lib/
     if (fs.existsSync(Paths.dir_experiments + '/' + experiment + '/lib')) {
       console.log('[deployExperiments.cjs] lib directory already exists');
