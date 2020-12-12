@@ -62,7 +62,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   if (!fs.existsSync(Paths.dir_logs_joined)) {
     fs.mkdirSync(Paths.dir_logs_joined);
   };    
-  ReportSummarizer.aggregateAndStore(
+  ReportSummarizer.aggregateAndStoreWdio(
     joinedReports,
     Paths.dir_logs_joined,
     true, 

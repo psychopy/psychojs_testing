@@ -13,17 +13,12 @@ let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseT
 
 // Construct test and specFile
 let specFile;
-if (test === undefined) {
-  test = 'all_tests';
+if (test === 'all_tests') {
   specFile = 'all_tests'
 } else {
   specFile = 'single_test';
 }
-console.log('[wdio.conf.cjs] test is ' + test);
-
-// Construct testrun
-testrun = testrun === undefined? test: testrun;
-console.log('[wdio.conf.cjs] testrun is ' + testrun);
+console.log('[wdio.conf.cjs] specFile is ' + specFile);
 
 // Construct buildName (for browserStack logs)
 const buildName = BrowserStack.createBuildName(branch, testrun, test);
@@ -310,7 +305,7 @@ exports.config = {
   onComplete: async function (exitCode, config, capabilities, results) {
     try {
        // Merge reports
-      let joinedReports = ReportSummarizer.merge(['custom', specFile], test);
+      let joinedReports = ReportSummarizer.mergeWdio(['custom', specFile], test);
       // Construct buildPrefix and map of buildNames to buildIds
       let buildNamesToBuildIdsMap = {}, buildPrefix = '';
       if (server === 'bs') {
@@ -325,7 +320,7 @@ exports.config = {
         }
         buildNamesToBuildIdsMap[buildName] = buildIds[0];
       }
-      ReportSummarizer.aggregateAndStore(
+      ReportSummarizer.aggregateAndStoreWdio(
         joinedReports,
         Paths.dir_logs_processed, 
         server === 'bs',

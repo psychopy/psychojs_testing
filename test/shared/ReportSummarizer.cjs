@@ -37,7 +37,7 @@ writeXLSX = (filename, output) => {
 };
 
 // Merges JSON file produced by karma's JSON reporter into a tabular data structure
-mergeKarma = () => {
+mergeKarma = (onBrowserStack) => {
   joinedReports = [];
   // *** Functions
   // Add an entry to joinedReports, prefilling specfile_id and capability_id
@@ -54,10 +54,26 @@ mergeKarma = () => {
       }
     );
   };
+  // If on browserStack, read sessions and create map from browser.id to platform and url
+  let sessionMap = {}
+  if (onBrowserStack) {
+    let sessions = JSON.parse(
+      fs.readFileSync(Paths.dir_tmp_unit + '/sessions.json').toString()
+    );  
+    let splitName, logUrl;
+    for (let session of sessions) {
+      splitName = JSON.parse(session.automation_session.name);
+      logUrl = session.automation_session.public_url.split('?')[0];
+      sessionMap[splitName[1]] = {
+        platform: splitName[0],
+        logUrl: logUrl
+      }
+    }
+  }
   // Read JSON file with karma logs
   let json = JSON.parse(
     //fs.readFileSync(Paths.dir_tmp_unit + '/results.json').toString()
-    fs.readFileSync('.tmp_unit/results.json').toString()
+    fs.readFileSync(Paths.dir_tmp_unit + '/results.json').toString()
   );  
   // Capability_ids: browser IDs
   let capability_ids = Object.keys(json.browsers);
@@ -71,13 +87,30 @@ mergeKarma = () => {
       }
       suite = specfile.suite[0];
       // Add platform
-      log(
-        suite,
-        'platform',
-        'custom',
-        json.browsers[capability_id].name,
-        ''
-      );
+      if (onBrowserStack) {
+        log(
+          suite,
+          'platform',
+          'custom',
+          sessionMap[capability_id].platform,
+          ''
+        );
+        log(
+          suite,
+          'logUrl',
+          'custom',
+          sessionMap[capability_id].logUrl,
+          ''
+        );
+      } else {
+        log(
+          suite,
+          'platform',
+          'custom',
+          json.browsers[capability_id].name,
+          ''
+        );
+      }
       // Decide whether this spec passed, failed, or skipped
       if (specfile.skipped) {
         state = 'skipped';
@@ -115,7 +148,7 @@ mergeKarma = () => {
 // Merges individual JSON files procuded by webdriverIO's JSON reporter into a tabular data structure
 // Each row in the result for which suite matches an element of suiteFrom,
 // suite gets replaced by suiteTo
-merge = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
+mergeWdio = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
   // *** Functions
   // Add an entry to joinedReports, prefilling specfile_id and capability_id
   log = (suite, spec, state, message, duration) => {
@@ -285,41 +318,63 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
   };
 };
 
-// Perform log aggregation and store logs
-aggregateAndStore = function(joinedReports, logPath, onBrowserStack, buildPrefix, buildNamesToBuildIdsMap) {
+// Perform log aggregation and store WDIO logs
+aggregateAndStoreWdio = (joinedReports, logPath, onBrowserStack, buildPrefix, buildNamesToBuildIdsMap) => {
+  // Construct logUrl function; returns nothing by default
+  let logUrlFunction = () => {
+    return '';
+  };
+  if (onBrowserStack) {
+    logUrlFunction = (reports) => {
+      // Get test name
+      let testName = reports[0].suite;
+      let buildName = buildPrefix + testName;
+      let buildId = buildNamesToBuildIdsMap[buildName];
+      // Find log entry with sessionId
+      let sessionIdEntries = reports.filter((report) => {
+        return report.state === 'custom' && report.spec === 'sessionId';
+      });
+      if (sessionIdEntries.length > 1) {
+        // Found multiple entries; error
+        throw new Error('[ReportSummarizer.cjs] During logUrlFunction, found ' + sessionIdEntries.length + ' sessionId entries');
+      } else if (sessionIdEntries.length === 0) {
+        // Found no entries; no logs on Browserstack
+        return '';
+      } else {
+        // Found one entry, return URL to BrowserStack logs
+        return '' +
+          'https://automate.browserstack.com/dashboard/v2/builds/' +
+          buildId +
+          '/sessions/' +
+          sessionIdEntries[0].message;
+      }
+    }
+  }
+  aggregateAndStore(joinedReports, logPath, logUrlFunction);
+};
+
+// Perform log aggregation and store karma logs
+aggregateAndStoreKarma = (joinedReports, logPath, onBrowserStack) => {
+  // Construct logUrl function; returns nothing by default
+  let logUrlFunction = () => {
+    return '';
+  };
+  if (onBrowserStack) {
+    logUrlFunction = (reports) => {
+      let logUrlreport = reports.filter((report) => {
+        return report.state === 'custom' && report.spec === 'logUrl';
+      });
+      return logUrlreport[0].message;
+    }
+  }
+  aggregateAndStore(joinedReports, logPath, logUrlFunction);
+};
+
+// Perform log aggregation and store logs; general function
+aggregateAndStore = (joinedReports, logPath, logUrlFunction) => {
   // Store merged reports
   console.log('[ReportSummarizer.cjs] write "report" logs');
   writeJsonAndCsv(logPath + '/' + 'report', joinedReports);
-  // Construct logUrl function; returns nothing by default
-  let logUrlFunction = () => {
-      return '';
-    };
-    if (onBrowserStack) {
-      logUrlFunction = (reports) => {
-        // Get test name
-        let testName = reports[0].suite;
-        let buildName = buildPrefix + testName;
-        let buildId = buildNamesToBuildIdsMap[buildName];
-        // Find log entry with sessionId
-        let sessionIdEntries = reports.filter((report) => {
-          return report.state === 'custom' && report.spec === 'sessionId';
-        });
-        if (sessionIdEntries.length > 1) {
-          // Found multiple entries; error
-          throw new Error('[ReportSummarizer.cjs] During logUrlFunction, found ' + sessionIdEntries.length + ' sessionId entries');
-        } else if (sessionIdEntries.length === 0) {
-          // Found no entries; no logs on Browserstack
-          return '';
-        } else {
-          // Found one entry, return URL to BrowserStack logs
-          return '' +
-            'https://automate.browserstack.com/dashboard/v2/builds/' +
-            buildId +
-            '/sessions/' +
-            sessionIdEntries[0].message;
-        }
-      }
-    }      
   // Summarize reports
   let aggregations = aggregate(joinedReports, ['platform'], logUrlFunction);
   // Store summaries
@@ -339,8 +394,9 @@ aggregateAndStore = function(joinedReports, logPath, onBrowserStack, buildPrefix
 module.exports = { 
   writeJsonAndCsv: writeJsonAndCsv,
   writeXLSX: writeXLSX,
-  merge: merge,
+  mergeWdio: mergeWdio,
   mergeKarma: mergeKarma,
   aggregate: aggregate,
-  aggregateAndStore: aggregateAndStore
+  aggregateAndStoreWdio: aggregateAndStoreWdio,
+  aggregateAndStoreKarma: aggregateAndStoreKarma
 };

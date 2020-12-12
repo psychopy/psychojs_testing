@@ -118,9 +118,13 @@ parseTestrunCLIOptions = () => {
 
   // Get test CLI option
   let test = parseOption({cli: 'test'}, false);
+  test = test === undefined? 'all_tests': test;
+  console.log('[CLIParser.cjs] testrun is ' + test);
 
   // Get testrun CLI option
   let testrun = parseOption({cli: 'testrun'}, false);
+  testrun = testrun === undefined? test: testrun;
+  console.log('[CLIParser.cjs] testrun is ' + testrun);
 
   // Get branch from CLI or GITHUB_REF
   const branch = parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);

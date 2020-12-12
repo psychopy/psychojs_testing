@@ -9,13 +9,12 @@ let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseT
 
 // Construct test and specFile
 let specFile;
-if (test === undefined) {
-  test = 'all_tests';
+if (test === 'all_tests') {
   specFile = '*.js';
 } else {
   specFile = test + '.js';
 }
-console.log('[karma.conf.cjs] test is ' + test);
+console.log('[karma.conf.cjs] specFile is ' + specFile);
 
 // Construct testrun
 testrun = testrun === undefined? test: testrun;
@@ -115,7 +114,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // Concurrency level
     // how many browser should be started simultaneous

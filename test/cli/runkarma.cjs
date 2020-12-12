@@ -10,6 +10,10 @@ const ReportSummarizer = require('./../shared/ReportSummarizer.cjs');
 // Get CLI options
 let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
+// Construct buildName
+const buildName = BrowserStack.createBuildName(branch, testrun, test);
+console.log('[runkarma.cjs] buildName is ' + buildName);
+
 // Clean up logs
 Paths.cleanupTemporaryDirectories([
   [Paths.dir_tmp_unit, true]
@@ -17,7 +21,7 @@ Paths.cleanupTemporaryDirectories([
 
 // Delete BrowserStack logs
 if (server === 'bs') {
-  BrowserStack.deleteOneBuild('PsychoJS_unit', BrowserStack.createBuildName(branch, testrun, test));
+  BrowserStack.deleteOneBuild('PsychoJS_unit', buildName);
 }
 
 (async () => {
@@ -36,14 +40,22 @@ if (server === 'bs') {
   } catch (e) {
     console.log(e.message);
   }
+  // Get sessions and store them
+  if (server == 'bs') {
+    const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', 'thomas:all_tests:all_tests');
+    fs.writeFileSync(
+      './.tmp_unit/sessions.json',
+      JSON.stringify(sessions)
+    );  
+  }
   // Summarize reports
-  let joinedReports = ReportSummarizer.mergeKarma();
-  ReportSummarizer.writeJsonAndCsv('./.tmp_unit' + '/report', joinedReports);
+  let joinedReports = ReportSummarizer.mergeKarma(server === 'bs');
+//  ReportSummarizer.writeJsonAndCsv('./.tmp_unit' + '/report', joinedReports);
   // Aggregate
-  ReportSummarizer.aggregateAndStore(
+  ReportSummarizer.aggregateAndStoreKarma(
     joinedReports,
     './.tmp_unit', 
-    false
+    server === 'bs'
   );
 
   // If upload enabled, update stager
