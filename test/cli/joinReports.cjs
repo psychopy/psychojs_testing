@@ -45,7 +45,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
 
     // Add buildId to map
     buildName = BrowserStack.createBuildName(branch, testrun, test);
-    let buildIds = BrowserStack.getBuildIds((build) => {
+    let buildIds = BrowserStack.getBuildIds('PsychoJS_e2e', (build) => {
       return build.name === buildName;
     });
     if (buildIds.length !== 1) {
