@@ -155,7 +155,7 @@ waitUntilReady = async() => {
     // Check every 10 seconds if BrowserStack is still busy        
     console.log('[BrowserStack.cjs] BrowserStack is busy; waiting 10 seconds');
     browserStackBusy = await new Promise((resolve, reject) => {
-      setTimeout(() => resolve(BrowserStack.isBusy()), 10000)
+      setTimeout(() => resolve(isBusy()), 10000)
     });
   }
 }
