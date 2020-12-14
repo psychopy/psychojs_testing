@@ -48,7 +48,7 @@ getBuildsByProjectId = (projectId) => {
 
 // Get build IDs that match filterFunction
 getBuildIds  = (projectName, filterFunction) => {
-  console.log('[BrowserStack.cjs] getting buildIds');
+  console.log('[BrowserStack.cjs] Getting buildIds');
   // Get all builds of projectName
   let projectId = getProjectIdByName(projectName);
   // No project? No builds
@@ -65,6 +65,7 @@ getBuildIds  = (projectName, filterFunction) => {
 };
 
 getSessionsByBuildName = (projectName, buildName) => {
+  console.log('[BrowserStack.cjs] Getting sessions from build with buildName ' + buildName);
   // Get build with buildName
   let buildIds = getBuildIds(projectName, (build) => {
     return build.name === buildName;
@@ -75,8 +76,19 @@ getSessionsByBuildName = (projectName, buildName) => {
   } else if (buildIds.length > 1) {
     throw new Error('[BrowserStack.cjs] Found ' + buildId.length + ' builds on BrowserStack with name ' + buildName);
   }
-  // Get sessions
-  let sessions = JSON.parse(child_process.execSync(curlCommand('builds/' + buildIds[0] + '/sessions.json')));
+  // Get sessions; keep on querying until no sessions returned by BrowserStack
+  let sessions = [], limit = 100, offset = 0;
+  let newSessions, sessionsLeft = true;
+  while (sessionsLeft) {
+    newSessions = JSON.parse(child_process.execSync(curlCommand('builds/' + buildIds[0] + '/sessions.json?limit=' + limit + '^&offset=' + offset)));
+    console.log('[BrowserStack.cjs] Adding ' + newSessions.length + ' sessions');
+    sessions = sessions.concat(newSessions);
+    if (newSessions.length === limit) {
+      offset += limit;
+    } else {
+      sessionsLeft = false;
+    }
+  }
   return sessions;
 };
 
