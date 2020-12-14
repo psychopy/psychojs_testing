@@ -42,7 +42,7 @@ if (server === 'bs') {
   }
   // Get sessions and store them
   if (server == 'bs') {
-    const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', 'thomas:all_tests:all_tests');
+    const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', buildName);
     fs.writeFileSync(
       './.tmp_unit/sessions.json',
       JSON.stringify(sessions)
