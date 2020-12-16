@@ -55,8 +55,8 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   }
   console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
   // Create a tmp folder if it doesn't exist yet
-  if (!fs.existsSync(Paths.dir_tmp)) {
-    fs.mkdirSync(Paths.dir_tmp);
+  if (!fs.existsSync(Paths.dir_tmp_e2e)) {
+    fs.mkdirSync(Paths.dir_tmp_e2e);
   };  
   // Create a logs_joined folder if it doesn't exist yet
   if (!fs.existsSync(Paths.dir_logs_joined)) {
