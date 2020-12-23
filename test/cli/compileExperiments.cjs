@@ -69,7 +69,6 @@ console.log('[compileExperiments.cjs] upload is ' + upload);
       '--outfile ' + experimentPath + '/' + experiment + '.js ' +
       '--version 2020.2.6';
     child_process.execSync(compileCommand);
-    //console.log(compileCommand);
   }
 
   if (upload) {
