@@ -391,7 +391,10 @@ export class PsychoJS
 		{
 			// this._gui.dialog({ error: { ...response, error } });
 			this._gui.dialog({error: Object.assign(response, {error})});
-		}
+    }
+    
+    // Hide the root div
+    document.getElementById('root').style.display = 'none';
 	}
 
 
