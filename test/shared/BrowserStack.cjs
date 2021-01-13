@@ -13,14 +13,14 @@ curlCommand = (postfix, infix = '') => {
     CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent) + 
     '" ' +
     infix +
-    ' https://api.browserstack.com/automate/' +
+    ' https://api.browserstack.com/' +
     postfix;
 };
 
 getProjectIdByName = (projectName) => {
   console.log('[BrowserStack.cjs] finding projectId with projectName ' + projectName);
   // Query projects
-  let projects = JSON.parse(child_process.execSync(curlCommand('projects.json')));
+  let projects = JSON.parse(child_process.execSync(curlCommand('automate/projects.json')));
   console.log('[BrowserStack.cjs] ' + projects.length + ' projects in total');
   // Project with matching name
   const matchingProject = projects.filter((project) => {
@@ -40,7 +40,7 @@ getProjectIdByName = (projectName) => {
 getBuildsByProjectId = (projectId) => {
   console.log('[BrowserStack.cjs] finding builds with projectId ' + projectId);
   // Query project details
-  let projectDetails = JSON.parse(child_process.execSync(curlCommand('projects/' + projectId + '.json')));
+  let projectDetails = JSON.parse(child_process.execSync(curlCommand('automate/projects/' + projectId + '.json')));
   // Return builds
   console.log('[BrowserStack.cjs] ' + projectDetails.project.builds.length + ' builds in total');
   return projectDetails.project.builds;
@@ -64,7 +64,24 @@ getBuildIds  = (projectName, filterFunction) => {
   return filteredBuildIds;
 };
 
+// Terminate workers of a build (only works with karma tests)
+terminateWorkersByBuildName = (projectName, buildName) => {
+  console.log('[BrowserStack.cjs] Terminating workers of build with buildName ' + buildName);
+  let sessions = getSessionsByBuildName(projectName, buildName);
+  let workerIds = sessions.map((session) => {
+    return JSON.parse(session.automation_session.name)[1];
+  });
+  console.log('[BrowserStack.cjs] Terminating ' + workerIds.length + ' workers');
+  for (let workerId of workerIds) {
+    console.log(child_process.execSync(curlCommand(
+      '5/worker/' + workerId,
+      '-X DELETE'
+    )).toString());    
+  }
+};
+
 getSessionsByBuildName = (projectName, buildName) => {
+// Get sesions matching a buildName
   console.log('[BrowserStack.cjs] Getting sessions from build with buildName ' + buildName);
   // Get build with buildName
   let buildIds = getBuildIds(projectName, (build) => {
@@ -80,8 +97,8 @@ getSessionsByBuildName = (projectName, buildName) => {
   let sessions = [], limit = 100, offset = 0;
   let newSessions, sessionsLeft = true;
   while (sessionsLeft) {
-    newSessions = JSON.parse(child_process.execSync(curlCommand('builds/' + buildIds[0] + '/sessions.json?limit=' + limit + '^&offset=' + offset)));
-    console.log('[BrowserStack.cjs] Adding ' + newSessions.length + ' sessions');
+    newSessions = JSON.parse(child_process.execSync(curlCommand('automate/builds/' + buildIds[0] + '/sessions.json?limit=' + limit + '^&offset=' + offset)));
+    console.log('[BrowserStack.cjs] Retrieving ' + newSessions.length + ' sessions');
     sessions = sessions.concat(newSessions);
     if (newSessions.length === limit) {
       offset += limit;
@@ -117,7 +134,7 @@ deleteBuilds = (projectName, filterFunction) => {
   for (let buildIdToDelete of buildIdsToDelete) {
     console.log('[BrowserStack.cjs] deleting build with buildId ' + JSON.stringify(buildIdToDelete));
     child_process.execSync(curlCommand(
-      'builds/' + buildIdToDelete + '.json',
+      'automate/builds/' + buildIdToDelete + '.json',
       '-X DELETE'
     ));
   }
@@ -126,7 +143,7 @@ deleteBuilds = (projectName, filterFunction) => {
 // Get all available browsers
 getBrowsers = () => {
   console.log('[BrowserStack.cjs] getting all available capabilities');
-  let browsers = JSON.parse(child_process.execSync(curlCommand('browsers.json')));
+  let browsers = JSON.parse(child_process.execSync(curlCommand('automate/browsers.json')));
   return browsers;
 };
 
@@ -156,7 +173,7 @@ deleteAllBranchesExcept = (projectName, branchNames) => {
 
 // Returns true of any sessions are running or queued
 isBusy = () => {
-  let plan = JSON.parse(child_process.execSync(curlCommand('plan.json')));
+  let plan = JSON.parse(child_process.execSync(curlCommand('automate/plan.json')));
   return plan.parallel_sessions_running > 0 || plan.queued_sessions > 0;
 }
 
@@ -199,6 +216,7 @@ module.exports = {
   deleteOneBuild: deleteOneBuild,
   deleteAllBranchesExcept: deleteAllBranchesExcept,
   deleteAllBuildsStartingWith: deleteAllBuildsStartingWith,
+  terminateWorkersByBuildName: terminateWorkersByBuildName,
   createBuildName: createBuildName,
   isBusy: isBusy,
   waitUntilReady: waitUntilReady
