@@ -43,14 +43,14 @@ describe('ae2e_text', () => {
       "id": "my_pointer",
       "parameters": {"pointerType": browser.getPointerType()},
       "actions": [
-        // Pointer down at [0,0] for 1000 ms
-        {"type": "pointerMove", "duration": 0, "x": transformX(0), "y":  transformY(0), origin: 'viewport'},
+        // Pointer down at [0,0.3] for 1000 ms
+        {"type": "pointerMove", "duration": 0, "x": transformX(0), "y":  transformY(0.3), origin: 'viewport'},
         {"type": "pointerDown", "duration": 0, "button": 0},
         {"type": "pause", "duration": 1000},
-        // Move to [-0.5, 0] over 1000 ms
-        {"type": "pointerMove", "duration": 1000, "x": transformX(-0.5), "y":  transformY(0), origin: 'viewport'},
-        // Move to [0.5, 0] over 2000 ms        
-        {"type": "pointerMove", "duration": 2000, "x": transformX(0.5), "y":  transformY(0), origin: 'viewport'},
+        // Move to [-0.5, 0.3] over 1000 ms
+        {"type": "pointerMove", "duration": 1000, "x": transformX(-0.5), "y":  transformY(0.3), origin: 'viewport'},
+        // Move to [0.5, 0.3] over 2000 ms        
+        {"type": "pointerMove", "duration": 2000, "x": transformX(0.5), "y":  transformY(0.3), origin: 'viewport'},
         // Release
         {"type": "pointerUp", "duration": 0, "button": 0}
       ]
