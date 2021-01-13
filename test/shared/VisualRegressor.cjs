@@ -9,6 +9,7 @@ const Paths = require('./Paths.cjs');
 
 const colorsToRed = [
   Buffer.from([255,0,0]),
+  Buffer.from([253,1,0]),
   Buffer.from([234,51,35]), 
   Buffer.from([254,0,0])
 ];
