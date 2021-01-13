@@ -95,7 +95,7 @@ exports.config = {
   // Framework settings
   framework: 'jasmine',
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: server === 'bs' ? 0:0,//2 : 0,
+  specFileRetries: server === 'bs' ? 2: 0,
   // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
   specFileRetriesDeferred: true,
   // Options to be passed to Jasmine.
