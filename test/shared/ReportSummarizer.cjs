@@ -308,6 +308,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
       );
       failedRow.log_url = logUrl;
       failedRow.suite = failedTest.suite;
+      failedRow.spec = failedTest.spec;
       failedRow.message = failedTest.message;
       return failedRow;
     }));
