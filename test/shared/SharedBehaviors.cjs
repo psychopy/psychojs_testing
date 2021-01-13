@@ -1,17 +1,5 @@
 const Mustache = require('mustache');
-// experimentUrls = {
-//   e2e_calibration: 'https://run.pavlovia.org/tpronk/e2e_calibration/',
-//   e2e_code: 'https://run.pavlovia.org/tpronk/e2e_code/html/',
-//   e2e_conditions: 'https://run.pavlovia.org/tpronk/e2e_conditions/html/',
-//   e2e_img: 'https://run.pavlovia.org/thewhodidthis/e2e_img/html/',
-//   e2e_polygon: 'https://run.pavlovia.org/tpronk/e2e_polygon/html/',
-//   e2e_sound: 'https://run.pavlovia.org/tpronk/e2e_sound/html/',
-//   e2e_text: 'https://run.pavlovia.org/tpronk/e2e_text/html/',
-//   e2e_textbox: 'https://run.pavlovia.org/tpronk/e2e_textbox/html/',
-//   e2e_video: 'https://run.pavlovia.org/tpronk/e2e_video/',
-//   e2e_combined: 'https://run.pavlovia.org/tpronk/e2e_combined/html/',
-//   int_gonogo: 'https://run.pavlovia.org/tpronk/int_gonogo/',
-// };
+
 getExperimentUrl = (experiment) => {
   return Mustache.render(browser.getBaseUrl(), {experiment: experiment});
 };
@@ -66,12 +54,12 @@ getViewportResolutions = () => {
   } else {
     width = viewport['window.innerWidth'];
     height = viewport['window.innerHeight'];
-  }  
+  } 
   viewport.transformX = function(x) {
-    return x * width;
+    return Math.round((0.5 + x) * width);
   }
   viewport.transformY = function(y) {
-    return y * height;
+    return Math.round((0.5 - y) * height);
   }
   return viewport;
 };
@@ -89,7 +77,7 @@ tapAtCoordinate = (x, y) => {
     "id": "my_pointer",
     "parameters": {"pointerType": browser.getPointerType()},
     "actions": [
-      {"type": "pointerMove", "duration": 0, "x": Math.round(x), "y":  Math.round(y), origin: 'viewport'},
+      {"type": "pointerMove", "duration": 0, "x": x, "y":  y, origin: 'viewport'},
       {"type": "pointerDown", "duration": 0, "button": 0},
       {"type": "pause", "duration": 200},
       {"type": "pointerUp", "duration": 0, "button": 0}
@@ -127,8 +115,8 @@ performCalibrationProcedure = (screenshots = false) => {
   // Wait for confirmation we're at the first calibration routine
   waitForReport('calibration_0');
   // Perform first calibration tap
-  actionX.push(viewport.transformX(0.25));
-  actionY.push(viewport.transformY(0.25));
+  actionX.push(viewport.transformX(-0.25));
+  actionY.push(viewport.transformY(-0.25));
   tapAtCoordinate(actionX[0], actionY[0]);
   // Wait for confirmation we're at the next first calibration routine
   waitForReport('calibration_1');
@@ -142,8 +130,8 @@ performCalibrationProcedure = (screenshots = false) => {
 
   // *** Second tap
   // Perform second calibration tap
-  actionX.push(viewport.transformX(0.5));
-  actionY.push(viewport.transformY(0.5));
+  actionX.push(viewport.transformX(0.25));
+  actionY.push(viewport.transformY(0.25));
   tapAtCoordinate(actionX[1], actionY[1]);
   // Wait for confirmation we're at the verification routine
   waitForReport('verification');
@@ -161,10 +149,10 @@ performCalibrationProcedure = (screenshots = false) => {
   coefY = (actionY[0] - actionY[1]) / (canvasY[0] - canvasY[1]);
   interceptY = actionY[0] - coefY * canvasY[0];
   transformX = function(x) {
-    return interceptX + coefX * x;
+    return Math.round(interceptX + coefX * x);
   }
   transformY = function(y) {
-    return interceptY + coefY * y;
+    return Math.round(interceptY + coefY * y);
   }
 
   // *** Verification tap
