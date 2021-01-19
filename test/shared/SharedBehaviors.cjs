@@ -14,14 +14,14 @@ getExperimentUrl = (experiment) => {
 */
 performPavloviaPrelude = (waitForCanvas = true, resourceTimeout = 20000) => {
   // Wait for root element and OK button  
-  $('#root').waitForExist({timeout: 10000, timeoutMsg: 'root not found'});
-  $('#buttonOk').waitForExist({timeout: 10000, timeoutMsg: 'buttonOK not found'});
+  $('#root').waitForExist({timeout: 10000, timeoutMsg: 'Could not find div #root in HTML'});
+  $('#buttonOk').waitForExist({timeout: 10000, timeoutMsg: 'Could not find #buttonOK in HTML'});
   // Wait until resource have loaded, then click OK
-  $('#buttonOk').waitForEnabled({timeout: resourceTimeout, timeoutMsg: 'buttonOK not enabled'});
+  $('#buttonOk').waitForEnabled({timeout: resourceTimeout, timeoutMsg: '#buttonOK was not enabled within ' + resourceTimeout + ' ms'});
   $('#buttonOk').click();    
   // Wait for canvas, then wait 3 seconds for any status bars to disappear after full-screen is enabled
   if (waitForCanvas) {
-    $('<canvas />').waitForExist({timeoutMsg: 'canvas not found'});
+    $('<canvas />').waitForExist({timeoutMsg: 'Could not find canvas element in HTML'});
   }
   browser.pause(3000);
 };
@@ -191,7 +191,7 @@ performCalibrationProcedure = (screenshots = false) => {
 waitForReport = (value) => {
   browser.waitUntil(() => {
     return $('<body>').getAttribute('data-report') === value;
-  }, {timeoutMsg: 'data-report not ' + value});
+  }, {timeoutMsg: 'Attribute data-report of body in HTML was not ' + value});
 };
 
 
