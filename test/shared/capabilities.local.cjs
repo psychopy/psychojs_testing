@@ -32,14 +32,14 @@ module.exports = {
         logPath: Paths.dir_logs_selenium,
         installArgs: {
           drivers: {
-            chrome: { version: ' 87.0.4280.88' },
+            chrome: { version: '87.0.4280.88' },
             firefox: { version: '0.26.0' },
             MicrosoftEdge: { version: '84.0.522.40' }
           }
         },
         args: {
           drivers: {
-            chrome: { version: ' 87.0.4280.88' },
+            chrome: { version: '87.0.4280.88' },
             firefox: { version: '0.26.0' },
             MicrosoftEdge: { version: '84.0.522.40' }
           }
