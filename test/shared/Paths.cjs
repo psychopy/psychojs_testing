@@ -21,7 +21,6 @@ module.exports = {
   dir_experiments:         './.tmp_experiments',
   
   dir_counterexample_imgs: './test/counterexample_imgs',
-  url_reference_imgs:      'https://staging.psychopy.org/reference_imgs',
 
   subdir_report_e2e:       'report_e2e',
   subdir_report_unit:      'report_unit',

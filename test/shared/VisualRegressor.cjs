@@ -103,17 +103,19 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
   };
 };
 
-let getReferenceImg = async (prefix) => {
+let getReferenceImg = async (experimentName, screenshotName) => {
+  console.log(Paths.dir_experiments + '/' + experimentName + '/reference_imgs/' + screenshotName + '.png') 
   try {
-    referenceImg = await Jimp.read(Paths.url_reference_imgs + '/' + prefix + '.png');
-    console.log('[VisualRegressor.cjs] Found reference image for prefix ' + prefix);
+    referenceImg = await Jimp.read(Paths.dir_experiments + '/' + experimentName + '/reference_imgs/' + screenshotName + '.png');
+    console.log('[VisualRegressor.cjs] Found reference image for screenshotName ' + screenshotName);
     return referenceImg;
   } catch(e) {
-    console.log('[VisualRegressor.cjs] No reference image for prefix ' + prefix);
+    console.log('[VisualRegressor.cjs] No reference image for screenshotName ' + screenshotName);
     return null;
   };
 }
 
+// Old function for bulk comparison of screenshots; not used anymore
 let compareScreenshotsWithReferences = async (validate) => {
   // If true, at least one comparison failed
   failed = false;
@@ -135,7 +137,7 @@ let compareScreenshotsWithReferences = async (validate) => {
     referenceImg = null;
     // Read reference img
     try {
-      referenceImg = await Jimp.read(Paths.url_reference_imgs + '/' + prefix + '.png');
+      referenceImg = await Jimp.read(Paths.dir_experiments + '/' + experimentName + '/reference_imgs/' + screenshotName + '.png');
       console.log('[VisualRegressor.cjs] Found reference image for prefix ' + prefix);
       // Filter out screenshot filenames with matching prefix
       screenshotFilenames = allScreenshotFilenames.filter(function (screenshotFilename) {

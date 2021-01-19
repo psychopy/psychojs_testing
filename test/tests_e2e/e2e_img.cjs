@@ -20,7 +20,7 @@ module.exports = {
       SharedBehaviors.waitForReport(testName);
       // Wait a moment, then take screenshot
       //browser.pause(200);    
-      rms = browser.compareScreenshot(testName);
+      rms = browser.compareScreenshot('e2e_img', testName);
       expect(rms).toBeLessThanOrEqual(50, {message: 'Visual regression of screenshot ' + testName + ' gave an RMS > 50'});
       // Next routine
       SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));

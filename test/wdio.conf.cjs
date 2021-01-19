@@ -220,25 +220,25 @@ exports.config = {
       return server === 'local';
     });    
     // Making screenshots and saving them
-    browser.addCommand('writeJimpImg', (img, name) => {
-      img.write(Paths.dir_screenshots_raw + '/' + name + '#' + browser.getPlatformName() + '.png');
+    browser.addCommand('writeJimpImg', (img, experimentName, screenshotName) => {
+      img.write(Paths.dir_screenshots_raw + '/' + screenshotName + '#' + experimentName + '#' + browser.getPlatformName() + '.png');
     });
     browser.addCommand('getJimpScreenshot', async () => {
       let screenshotBase64 = await browser.takeScreenshot();
       return (await Jimp.read(new Buffer.from(screenshotBase64, 'base64')));
     });
-    browser.addCommand('writeScreenshot', (name) => {
-      browser.writeJimpImg(browser.getJimpScreenshot(), name);
+    browser.addCommand('writeScreenshot', (experimentName, screenshotName) => {
+      browser.writeJimpImg(browser.getJimpScreenshot(), experimentName, screenshotName);
     });
     // Perform a visual regression test
-    browser.addCommand('compareScreenshot', async (name) => {
+    browser.addCommand('compareScreenshot', async (experimentName, screenshotName) => {
       try {
         // Make screenshot
         let screenshotImg = await browser.getJimpScreenshot();
         // Write screenshot to file
-        browser.writeJimpImg(screenshotImg, name);
+        browser.writeJimpImg(screenshotImg, experimentName, screenshotName);
         // Get reference
-        let referenceImg = await VisualRegressor.getReferenceImg(name);
+        let referenceImg = await VisualRegressor.getReferenceImg(experimentName, screenshotName);
         // If reference available, perform comparison
         if (referenceImg === null) {
           // No reference; test passed
@@ -249,12 +249,12 @@ exports.config = {
           let comparisonResult = await VisualRegressor.compareScreenshotWithReference(
             screenshotImg,
             referenceImg,
-            name + '#' + platformName + '.png'
+            screenshotName + '#' + platformName + '.png'
           );
           // Add results to log
           for (let comparisonResultKey in comparisonResult) {
             browser.logAdd(
-              name + '.' + comparisonResultKey,
+              screenshotName + '.' + comparisonResultKey,
               comparisonResult[comparisonResultKey]
             );
           }

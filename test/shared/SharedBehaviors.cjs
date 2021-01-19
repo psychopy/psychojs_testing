@@ -122,7 +122,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('calibration_1');
   // Take a screenshot
   if (screenshots) {
-    browser.writeScreenshot('afterc0');
+    browser.writeScreenshot('e2e_calibration', 'afterc0');
   }
   // Store first canvas coordinates
   canvasX.push($('<body>').getAttribute('data-x'));
@@ -137,7 +137,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('verification');
   // Take a screenshot
   if (screenshots) {  
-    browser.writeScreenshot('afterc1');
+    browser.writeScreenshot('e2e_calibration', 'afterc1');
   }
   // Store second canvas coordinates  
   canvasX.push($('<body>').getAttribute('data-x'));
@@ -162,7 +162,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('verification_feedback');
   // Take a screenshot
   if (screenshots) {  
-    browser.writeScreenshot('afterv');
+    browser.writeScreenshot('e2e_calibration', 'afterv');
   }
   // Record deviation in canvas coordinates
   deviationX = Number($('<body>').getAttribute('data-x')) - 0.25;
