@@ -3,10 +3,11 @@ import path from 'path';
 import fs from 'fs';
 import { minify } from 'terser';
 import babel from '@rollup/plugin-babel';
+import pkg from './package.json';
 
 // Manually set default version here for easier
 // diffing when comparing to original build script output
-const { VERSION: version = '2020.2' } = process.env;
+const { VERSION: version = pkg.version } = process.env;
 
 // Enabled in the original, even though
 // source maps missing for sample provided
@@ -48,6 +49,23 @@ const footer = `
 PsychoJS = core.PsychoJS;
 TrialHandler = data.TrialHandler;
 Scheduler = util.Scheduler;`;
+
+const plugins = [
+	babel({
+		babelHelpers: 'bundled',
+		exclude: 'node_modules/**',
+		include: `${destination}/*.iife.js`
+	}),
+	minifier({
+		compress: false,
+		mangle: false,
+		output: {
+			beautify: true
+		},
+		sourceMap: false,
+		toplevel: false
+	})
+];
 
 // List source directory contents
 const components = fs.readdirSync(source)
@@ -119,33 +137,33 @@ const components = fs.readdirSync(source)
 					]
 				}
 			],
-			plugins: [
-				babel({
-					babelHelpers: 'bundled',
-					exclude: 'node_modules/**',
-					include: `${destination}/*.iife.js`
-				}),
-				minifier({
-					compress: false,
-					mangle: false,
-					output: {
-						beautify: true
-					},
-					sourceMap: false,
-					toplevel: false
-				})
-			]
+			plugins
 		})
 	);
 
-export default [ ...components ];
+export default [
+	...components,
+	{
+		// Add a UMD build for Thomas
+		input: `${source}/index.js`,
+		onwarn,
+		output: {
+			file: `${destination}/psychojs-${version}.umd.js`,
+			format: 'umd',
+			name: 'psychojs'
+		},
+		plugins
+	}
+];
 
 // https://rollupjs.org/guide/en/#onwarn
-function onwarn(message) {
-	// Skip circular dependecy warnings
-	if (message.code !== 'CIRCULAR_DEPENDENCY') {
-		console.warn('(!)', message.toString());
+function onwarn(message, warn) {
+	// Skip circular dependency warnings
+	if (message.code === 'CIRCULAR_DEPENDENCY') {
+		return;
 	}
+
+	warn(message);
 }
 
 // Helper for extracting module name from contents array by rollup id (path to file)

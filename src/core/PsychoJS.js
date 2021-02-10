@@ -353,8 +353,8 @@ export class PsychoJS
 				window.addEventListener('beforeunload', this.beforeunloadCallback);
 
 
-				// when the user closes the tab or browser, we attempt to close the session, optionally save the results,
-				// and release the WebGL context
+				// when the user closes the tab or browser, we attempt to close the session,
+				// optionally save the results, and release the WebGL context
 				// note: we communicate with the server using the Beacon API
 				const self = this;
 				window.addEventListener('unload', (event) =>
@@ -391,10 +391,7 @@ export class PsychoJS
 		{
 			// this._gui.dialog({ error: { ...response, error } });
 			this._gui.dialog({error: Object.assign(response, {error})});
-    }
-    
-    // Hide the root div
-    document.getElementById('root').style.display = 'none';
+		}
 	}
 
 
@@ -488,8 +485,11 @@ export class PsychoJS
 			});
 			if (isCompleted || this._config.experiment.saveIncompleteResults)
 			{
-				await this._experiment.save();
-				await this._logger.flush();
+				if (!this._serverMsg.has('__noOutput'))
+				{
+					await this._experiment.save();
+					await this._logger.flush();
+				}
 			}
 
 			// close the session:
@@ -549,7 +549,10 @@ export class PsychoJS
 	 */
 	async _configure(configURL, name)
 	{
-		const response = {origin: 'PsychoJS.configure', context: 'when configuring PsychoJS for the experiment'};
+		const response = {
+			origin: 'PsychoJS.configure',
+			context: 'when configuring PsychoJS for the experiment'
+		};
 
 		try
 		{
@@ -562,8 +565,8 @@ export class PsychoJS
 				const serverResponse = await this._serverManager.getConfiguration(configURL);
 				this._config = serverResponse.config;
 
-				// legacy experiments had a psychoJsManager block instead of a pavlovia block, and the URL
-				// pointed to https://pavlovia.org/server
+				// legacy experiments had a psychoJsManager block instead of a pavlovia block,
+				// and the URL pointed to https://pavlovia.org/server
 				if ('psychoJsManager' in this._config)
 				{
 					delete this._config.psychoJsManager;
@@ -604,7 +607,7 @@ export class PsychoJS
 					environment: ExperimentHandler.Environment.LOCAL,
 					experiment: {
 						name,
-						saveFormat: "none", // ExperimentHandler.SaveFormat.CSV,
+						saveFormat: ExperimentHandler.SaveFormat.CSV,
 						saveIncompleteResults: true
 					}
 				};
