@@ -1,7 +1,7 @@
 const Mustache = require('mustache');
 
 getExperimentUrl = (experiment) => {
-  return Mustache.render(browser.getBaseUrl(), {experiment: experiment});
+  return Mustache.render(browser.getBaseUrl() + '?__noOutput', {experiment: experiment});
 };
 
 /**
@@ -248,6 +248,7 @@ module.exports = {
     'e2e_img',
     'e2e_polygons',
     'e2e_slider',
+    'e2e_slider_combinatorial',
     'e2e_sound',
     'e2e_text',
     'e2e_textbox',

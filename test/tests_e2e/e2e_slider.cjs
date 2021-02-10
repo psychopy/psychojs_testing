@@ -22,14 +22,14 @@ module.exports = {
     SharedBehaviors.waitForReport('intro_trial');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
     // slider_trial_1: Move slider to -0.25    
-    SharedBehaviors.waitForReport('slider_trial_1');    
+    SharedBehaviors.waitForReport('slider_trial');    
     pointerActions([
       {"type": "pointerMove", "duration": 0, "x": calibration.transformX(0), "y":  calibration.transformY(0.3), origin: 'viewport'},
       {"type": "pointerDown", "duration": 0, "button": 0},
       {"type": "pointerMove", "duration": 1000, "x": calibration.transformX(-0.2), "y":  calibration.transformY(0.3), origin: 'viewport'},
       //{"type": "pointerUp", "duration": 0, "button": 0}
     ]);
-    browser.writeScreenshot('slider_at_-0.2');
+    browser.writeScreenshot('e2e_slider', 'slider_at_-0.2');
     /*
     // slider_trial_2: Move slider to 0.5
     SharedBehaviors.waitForReport('slider_trial_2');    
