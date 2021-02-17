@@ -1,6 +1,7 @@
 // Modules
 const fs = require('fs');
 const BrowserStack = require('./BrowserStack.cjs');
+const BrowserStack = require('./GlobMatcher.cjs');
 const Paths = require('./Paths.cjs');
 
 // Returns index of highest number in array that is not NaN
@@ -15,14 +16,6 @@ const indexOfMax = (values) => {
   }
   return maxIndex;
 };
-
-// For pattern matching of strings with * and . wildcards
-// From: https://stackoverflow.com/questions/26246601/wildcard-string-comparison-in-javascript
-const wildTest = (wildcard, str) => {
-  let w = wildcard.replace(/[.+^${}()|[\]\\]/g, '\\$&'); // regexp escape 
-  const re = new RegExp(`^${w.replace(/\*/g,'.*').replace(/\?/g,'.')}$`,'i');
-  return re.test(str); // remove last 'i' above to have case sensitive
-}
 
 // Returns browsers from BrowserStack after basic filtering
 const getBrowsers = () => {
@@ -126,14 +119,14 @@ filterCapabilities = (capabilities, platformPattern, subset, platformFunction) =
     if (subset) {
       matchesFilter = false;
       for (let platformSubset of platformSubsets) {
-        matchesFilter = matchesFilter || wildTest(platformSubset, platform);
+        matchesFilter = matchesFilter || GlobMatcher.match(platformSubset, platform);
       }
     } else {
       matchesFilter = true;
     }
     // Filter on platformPattern
     if (matchesFilter) {
-      matchesFilter = wildTest(platformPattern, platform);
+      matchesFilter = GlobMatcher.match(platformPattern, platform);
     }
     return matchesFilter;
   });

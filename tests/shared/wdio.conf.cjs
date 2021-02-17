@@ -1,24 +1,24 @@
 // Modules 
 const fs = require('fs');
 const Jimp = require('jimp');
-const VisualRegressor = require('./shared/VisualRegressor.cjs');
-const ReportSummarizer = require('./shared/ReportSummarizer.cjs');
-const BrowserStack = require('./shared/BrowserStack.cjs');
-const Stager = require('./shared/Stager.cjs');
-const Paths = require('./shared/Paths.cjs');
-const CLIParser = require('./shared/CLIParser.cjs');
+const VisualRegressor = require('./VisualRegressor.cjs');
+const ReportSummarizer = require('./ReportSummarizer.cjs');
+const BrowserStack = require('./BrowserStack.cjs');
+const Stager = require('./Stager.cjs');
+const Paths = require('./Paths.cjs');
+const CLIParser = require('./CLIParser.cjs');
+const TestCollector = require('./TestCollector.cjs');
 
 // *** Parse CLI arguments
 let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
-// Construct test and specFile
-let specFile;
-if (test === 'all_tests') {
-  specFile = 'all_tests'
-} else {
-  specFile = 'single_test';
-}
-console.log('[wdio.conf.cjs] specFile is ' + specFile);
+// Get label and construct tests
+let label = parseOption({cli: 'label'});
+let tests = TestCollector.collectTests(label).wdio;
+console.log('[wdio.conf.cjs] tests are ' + JSON.stringify(tests));
+
+// Construct testrun (2 remove!!!)
+testrun = testrun === undefined? label: testrun;
 
 // Construct buildName (for browserStack logs)
 const buildName = BrowserStack.createBuildName(branch, testrun, test);
@@ -38,7 +38,7 @@ if (url !== undefined) {
 console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
 
 // Include capability generator module
-const CapabilityGenerator = require('./shared/capabilities.' + server + '.cjs');
+const CapabilityGenerator = require('./capabilities.' + server + '.cjs');
 
 // *** WebdriverIO config
 exports.config = {
@@ -56,7 +56,7 @@ exports.config = {
   runner: 'local',
 
   // Test files & patterns to include & exclude
-  specs: ['./test/specs_e2e/' + specFile + '.cjs'],
+  specs: ['./tests/shared/wdio_specfile.cjs'],
   exclude: [],
   //
   // ===================
@@ -282,8 +282,13 @@ exports.config = {
     });
 
     // Get test
-    browser.addCommand('getTest', () => {
-      return test;
+    browser.addCommand('getLabel', () => {
+      return label;
+    });
+    browser.addCommand('getTests', () => {
+      console.log('getTests');
+      console.log(tests);
+      return tests;
     });
 
     // Print current sessionId and platformName
@@ -305,7 +310,7 @@ exports.config = {
   onComplete: async function (exitCode, config, capabilities, results) {
     try {
        // Merge reports
-      let joinedReports = ReportSummarizer.mergeWdio(['custom', specFile], test);
+      let joinedReports = ReportSummarizer.mergeWdio(['custom', 'wdio_specfile'], test);
       // Construct buildPrefix and map of buildNames to buildIds
       let buildNamesToBuildIdsMap = {}, buildPrefix = '';
       if (server === 'bs') {

@@ -24,6 +24,8 @@ performPavloviaPrelude = (waitForCanvas = true, resourceTimeout = 20000) => {
     $('<canvas />').waitForExist({timeoutMsg: 'Could not find canvas element in HTML'});
   }
   browser.pause(3000);
+  // Return rough calibration 
+  return getViewportResolutions();
 };
 
 /**

@@ -1,0 +1,5 @@
+{
+  "test_framework": "wdio",
+  "labels": ["e2e_code", "wdio", "batch", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)"
+}

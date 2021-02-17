@@ -3,6 +3,8 @@ const fs = require('fs');
 
 // Paths to temporary folders, image folders, and URLs
 module.exports = {
+  // Karma assumes this is path relative to one directory higher than the one containing karma.conf.js
+  dir_tmp_unit_karma:      '../.tmp_unit', 
   dir_tmp_unit:            './.tmp_unit',
   dir_tmp_e2e:             './.tmp_e2e',
   dir_tmp_browsers:        './.tmp_browsers',
@@ -19,8 +21,9 @@ module.exports = {
   dir_screenshots_scaled:  './.tmp_e2e/screenshots_scaled',  
   
   dir_experiments:         './.tmp_experiments',
-  
-  dir_counterexample_imgs: './test/counterexample_imgs',
+
+  dir_tests:               './tests',
+  dir_counterexample_imgs: './tests/counterexample_imgs',
 
   subdir_report_e2e:       'report_e2e',
   subdir_report_unit:      'report_unit',

@@ -1,28 +1,28 @@
 // Karma configuration
 // Generated on Tue Dec 01 2020 14:30:27 GMT+0000 (Greenwich Mean Time)
-const CLIParser = require('./shared/CLIParser.cjs');
-const BrowserStack = require('./shared/BrowserStack.cjs');
-const Paths = require('./shared/Paths.cjs');
+const CLIParser = require('./CLIParser.cjs');
+const BrowserStack = require('./BrowserStack.cjs');
+const Paths = require('./Paths.cjs');
+const TestCollector = require('./TestCollector.cjs');
 
 // *** Parse CLI arguments
 let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
-// Construct test and specFile
-let specFile;
-if (test === 'all_tests') {
-  specFile = '*.js';
-} else {
-  specFile = test + '.js';
-}
-console.log('[karma.conf.cjs] specFile is ' + specFile);
+// Get label and construct specFiles
+let label = parseOption({cli: 'label'});
+let tests = TestCollector.collectTests(label).karma;
+let specFiles = tests.map((test) => {
+  return {pattern: test, type: 'module'};
+});
+console.log('[karma.conf.cjs] specFiles are ' + JSON.stringify(specFiles));
 
-// Construct testrun
-testrun = testrun === undefined? test: testrun;
+// Construct testrun (2 remove!!!)
+testrun = testrun === undefined? label: testrun;
 
 // Construct browsers
 let customLaunchers, browsers;
 if (server === 'bs') {
-  customLaunchers = require('./shared/capabilities.' + server + '.cjs').getApiCapabilities(platform, subset);
+  customLaunchers = require('./capabilities.' + server + '.cjs').getApiCapabilities(platform, subset);
 } else {
   customLaunchers = {
     local_local_chrome_local: {
@@ -71,9 +71,8 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
       {pattern: 'dist/*.js', type: 'module', included: false},
-      {pattern: 'src/root.html', type: 'dom'},
-      {pattern: 'test/specs_unit/' + specFile, type: 'module'},
-    ],
+      {pattern: 'src/root.html', type: 'dom'}
+    ].concat(specFiles),
 
 
     // list of files / patterns to exclude
@@ -92,8 +91,8 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: server === 'bs'? ['dots', 'json', 'BrowserStack']: ['dots', 'json'],
     jsonReporter: {
-      stdout: false,
-      outputFile: Paths.dir_tmp_unit + '/results.json'
+      stdout: true,
+      outputFile: Paths.dir_tmp_unit_karma + '/results.json'
     },
 
     // web server port

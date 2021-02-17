@@ -1,14 +1,11 @@
-const SharedBehaviors = require('../shared/SharedBehaviors.cjs');
+const SharedBehaviors = require('../../tests/shared/SharedBehaviors.cjs');
 
 module.exports = {
-  run: (calibration = null) => {
+  run: () => {
     // Navigate to experiment and perform prelude
     browser.url(SharedBehaviors.getExperimentUrl('e2e_polygons'));
-    SharedBehaviors.performPavloviaPrelude();
-    // If no calibration specified, get from viewport
-    if (calibration === null) {
-      calibration = SharedBehaviors.getViewportResolutions();    
-    }
+    // Rough calibration
+    let calibration = SharedBehaviors.performPavloviaPrelude();
     // Tap past intro screen
     SharedBehaviors.waitForReport('intro_trial');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));

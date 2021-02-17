@@ -1,0 +1,6 @@
+{
+  "test_framework": "wdio",
+  "labels": ["e2e_slider_combinatorial", "wdio", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "fine_calibration": true
+}
