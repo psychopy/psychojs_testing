@@ -1,7 +1,7 @@
 // Modules
 const fs = require('fs');
 const BrowserStack = require('./BrowserStack.cjs');
-const BrowserStack = require('./GlobMatcher.cjs');
+const GlobMatcher = require('./GlobMatcher.cjs');
 const Paths = require('./Paths.cjs');
 
 // Returns index of highest number in array that is not NaN
