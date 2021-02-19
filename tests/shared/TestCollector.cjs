@@ -15,6 +15,7 @@ collectTests = (label) => {
     {'karma': [], 'wdio': [], 'fine_calibration': false},
     false
   );
+  /*
   // Check if all filenames are unique
   let filenamesWithPath = results.wdio.concat(results.karma);
   let filenames = filenamesWithPath.map(testNameFromPath);
@@ -32,6 +33,7 @@ collectTests = (label) => {
   if (duplicates.length > 0) {
     throw new Error('Duplicate filenames not allowed for tests. Found these duplicates: ' + JSON.stringify(duplicates));
   }
+  */
 
   // Collect tests for current label and return them
   return collectTestsRecursive(
@@ -40,6 +42,83 @@ collectTests = (label) => {
     {'karma': [], 'wdio': [], 'fine_calibration': false}
   );
 };
+
+// Parse a config file
+// - if current config does not match label, returns undefined
+// - if current config does match label, returns parsed config
+parseConfig = (label, path) => {
+  let config;
+  try {
+    config = JSON.parse(
+      fs.readFileSync(path + '/config.json').toString()
+    );  
+  } catch (e) {
+    throw new Error(
+      'Error in test-configuration: JSON in ' + 
+      path + 
+      '/config.json could not be parsed'
+    );
+  }
+  // Check if there is a labels property
+  if (!config.hasOwnProperty('labels')) {
+    throw new Error(
+      'Error in test-configuration: ' +
+      path + 
+      '/config.json did not have a "labels" property'
+    );
+  }
+  // Label matches? if not, stop
+  labelMatches = config.labels.some((labelToMatch) => {
+    return GlobMatcher.match(label, labelToMatch);
+  });
+  if (!labelMatches) {
+    return;
+  }
+  // Remove leading './' from config.path
+  config.path = path.substring(2, path.length);
+  // Parse testscript_file
+  if (!fs.existsSync(path + '/' + config.testscript_file)) {
+    throw new Error(
+      'Error in test-configuration: ' + 
+      path + 
+      '/config.json has "testscript_file" property ' + 
+      JSON.stringify(config.testscript_file) +
+      ', but I could not find this file at ' +
+      path + '/' + config.testscript_file
+    );
+  }
+  // *** Parse test_framework
+  // karma-specific parsing; nothing so far
+  if (config.test_framework === 'karma') {
+  // wdio-specific parsing
+  } else if (config.test_framework === 'wdio') {
+    // Check if experiment_file exists
+    if (!fs.existsSync(path + '/' + config.experiment_file)) {
+      throw new Error(
+        'Error in test-configuration: ' + 
+        path + 
+        '/config.json has "experiment_file" property ' + 
+        JSON.stringify(config.experiment_file) +
+        ', but I could not find this file at ' +
+        path + '/' + config.experiment_file
+      );
+    }
+  // Invalid value for test_framework
+  } else {
+    throw new Error(
+      'Error in test-configuration: ' + 
+      path + 
+      '/config.json has "test_framework" property that was missing or not recognized (found ' + 
+      JSON.stringify(config.test_framework) + 
+      ' but expected "karma" or "wdio")'
+    );
+  }
+  // Parse fine_calibration
+  config.fine_calibration = config.hasOwnProperty('fine_calibration') && config.hasOwnProperty('fine_calibration') === true;
+  // Done
+  return config;
+};
+
 
 // Recursively collects tests tests from tests directory and not-ignored subdirectories whose labels include label.
 // Arguments:
@@ -57,106 +136,36 @@ collectTests = (label) => {
 // - Whether the .json (config) file has a test_framework property that is either 'karma' or 'wdio'
 // - Whether the .json (config) file with test_framework === "karma" has a matching .cjs file (.cjs is for wdio)
 // - Whether the .json (config) file with test_framework === "wdio" has a matching .cjs file (.js is for karma)
-collectTestsRecursive = (label, path, results, adjustPath = true) => {
-  // Contents of current sub-directory
-  let dirContents = fs.readdirSync(path);
-  // All config files
-  let configFiles = dirContents.filter((dirContent) => {
-    return dirContent.endsWith('.json');
-  });
-  // All test-script files
-  let testScriptFiles = dirContents.filter((dirContent) => {
-    return dirContent.endsWith('.js') | dirContent.endsWith('.cjs');
-  });
-  // Mismatch between number of configFiles and testScriptFiles?
-  if (configFiles.length !== testScriptFiles.length) {
-    throw new Error(
-      'In directory ' + path + ' I found ' + configFiles.length + 
-      ' config files (ending with .json), but ' + testScriptFiles.length + 
-      ' test-script files files (ending with .js or .cjs)'
-    );
-  }
-  // All test-script files found via config files
-  let testScriptsFound = [];
-  // Parse each config file
-  let config, dirContentWithPath, testScriptFile, labelMatches;
-  for (let configFile of configFiles) {
-    dirContentWithPath = path + '/' + configFile;
-    try {
-      config = JSON.parse(
-        fs.readFileSync(dirContentWithPath).toString()
-      );  
-    } catch (e) {
-      throw new Error('JSON in test config file ' + dirContentWithPath + ' could not be parsed');
+collectTestsRecursive = (label, path, results) => {
+  // This directory contains a config.json, parse it
+  if (fs.existsSync(path + '/config.json')) {
+    // Parse config and add to results
+    let config = parseConfig(label, path);
+    if (config !== undefined) {
+      results[config.test_framework].push(config);
+      results.fine_calibration = results.fine_calibration || config.fine_calibration;
     }
-    // Check if there is a label property
-    if (!config.hasOwnProperty('labels')) {
-      throw new Error('Test config file ' + dirContentWithPath + ' did not have a "labels" property');
-    }
-    // Label matches? check if test-script file exists and add to results
-    labelMatches = config.labels.some((labelToMatch) => {
-      return GlobMatcher.match(label, labelToMatch);
+  // This directory does not contain a config.json, parse subdirectories
+  } else {
+    // Directories to ignore during test-collection
+    const directoriesToIgnore = [
+      Paths.dir_tests + '/shared',
+      Paths.dir_tests + '/cli',
+      Paths.dir_tests + '/staging'
+    ];
+    // Parse each subdirectory
+    let dirContents = fs.readdirSync(path);    
+    let subDirs = dirContents.filter((subDir) => {
+      return fs.lstatSync(path + '/' + subDir).isDirectory()
     });
-    if (labelMatches) {
-      if (config.test_framework === 'karma') {
-        // karma test: path relative to root of repo, js extension
-        testScriptFile = dirContentWithPath.substring(0, dirContentWithPath.length - ".json".length) + '.js';
-        if (!fs.existsSync(testScriptFile)) {
-          throw new Error('Test config file ' + dirContentWithPath + ' with test_framework === "karma" did not have a matching test-script file ' + testScriptFile);
-        }
-        results[config.test_framework].push(
-          dirContentWithPath.substring(0, dirContentWithPath.length - ".json".length) +
-          '.js'
-        );
-      } else if (config.test_framework === 'wdio') {
-        // wdio test: path relative to ./tests/shared, cjs extension
-        testScriptFile = dirContentWithPath.substring(0, dirContentWithPath.length - ".json".length) + '.cjs';
-        if (!fs.existsSync(testScriptFile)) {
-          throw new Error('Test config file ' + dirContentWithPath + ' with test_framework === "wdio" did not have a matching test-script file ' + testScriptFile);
-        }
-        // Relative paths if adjustPath === true
-        if (adjustPath) {
-          results[config.test_framework].push(
-            '../..' +
-            dirContentWithPath.substring(1, dirContentWithPath.length - ".json".length) +
-            '.cjs'
-          );
-        } else {
-          results[config.test_framework].push(
-            dirContentWithPath.substring(0, dirContentWithPath.length - ".json".length) +
-            '.cjs'
-          );
-        }
-        // If fine_calibration property exists and is true, set results.fine_calibration to true
-        if (config.hasOwnProperty('fine_calibration') && config.hasOwnProperty('fine_calibration') === true) {
-          results.fine_calibration = true;
-        }
-      } else {
-        throw new Error('Test config file ' + dirContentWithPath + ' had a "test_framework" property that was missing or not recognized (found ' + JSON.stringify(config.test_framework) + ' but expected "karma" or "wdio")');
+    for (let subDir of subDirs) {
+      if (!directoriesToIgnore.includes(path + '/' + subDir)) {
+        results = collectTestsRecursive(label, path + '/' + subDir, results);
       }
-    }
-  }
-  // Directories to ignore during test-collection
-  const directoriesToIgnore = [
-    Paths.dir_tests + '/shared',
-    Paths.dir_tests + '/cli',
-    Paths.dir_tests + '/staging'
-  ];
-  // Parse each subdirectory
-  let subDirs = dirContents.filter((dirContent) => {
-    dirContentWithPath = path + '/' + dirContent;
-    return fs.lstatSync(dirContentWithPath).isDirectory()
-  });
-  for (let subDir of subDirs) {
-    dirContentWithPath = path + '/' + subDir;
-    if (!directoriesToIgnore.includes(dirContentWithPath)) {
-      results = collectTestsRecursive(label, dirContentWithPath, results, adjustPath);
     }
   }
   return results;
 };
-
-
 
 // Extracts test name from a path & filename (i.e. from ./tests/my_test.cjs it returns my_test)
 testNameFromPath = (path) => {
