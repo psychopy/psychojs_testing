@@ -2,7 +2,7 @@
  * Slider Stimulus.
  *
  * @author Alain Pitiot
- * @version 2020.2
+ * @version 2021.1.0
  * @copyright (c) 2017-2020 Ilixa Ltd. (http://ilixa.com) (c) 2020 Open Science Tools Ltd. (https://opensciencetools.org)
  * @license Distributed under the terms of the MIT License
  */
@@ -65,7 +65,7 @@ import {PsychoJS} from "../core/PsychoJS";
  */
 export class Slider extends util.mix(VisualStim).with(ColorMixin, WindowMixin)
 {
-	constructor({name, win, pos, size, ori, units, color, contrast, opacity, style, ticks, labels, labelHeight, granularity, flip, readOnly, font, bold, italic, fontSize, compact, clipMask, autoDraw, autoLog} = {})
+	constructor({name, win, pos, size, ori, units, color, contrast, opacity, style, ticks, labels, granularity, flip, readOnly, font, bold, italic, fontSize, compact, clipMask, autoDraw, autoLog} = {})
 	{
 		super({name, win, units, ori, opacity, pos, size, clipMask, autoDraw, autoLog});
 
@@ -149,12 +149,6 @@ export class Slider extends util.mix(VisualStim).with(ColorMixin, WindowMixin)
 			'italic',
 			italic,
 			false,
-			this._onChange(true, true)
-		);
-		this._addAttribute(
-			'labelHeight',
-			labelHeight,
-			undefined,
 			this._onChange(true, true)
 		);
 		this._addAttribute(
@@ -412,6 +406,7 @@ export class Slider extends util.mix(VisualStim).with(ColorMixin, WindowMixin)
 		// Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY
 
 		// estimate the position of the labels:
+		
 		this._labelPositions_px = new Array(this._labels.length);
 		const labelTextStyle = this._getTextStyle();
 		let prevLabelBounds = null;
