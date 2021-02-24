@@ -6,6 +6,9 @@ module.exports = {
   // Karma assumes this is path relative to one directory higher than the one containing karma.conf.js
   dir_tmp_unit_karma:      '../.tmp_unit', 
   dir_tmp_unit:            './.tmp_unit',
+  // Path to staging directory (compiled test-experiments)
+  dir_staging:             './tests/staging',
+
   dir_tmp_e2e:             './.tmp_e2e',
   dir_tmp_browsers:        './.tmp_browsers',
   dir_logs_capabilities:   './.tmp_e2e/logs_capabilities',

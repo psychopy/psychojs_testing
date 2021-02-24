@@ -3,8 +3,9 @@
 // Modules
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers');
+const NameSanitizer = require('./NameSanitizer.cjs');
 
-// List of functions to process environment variables
+// List of functions for CLI options that need special treatment
 const processors = {
   // Return branch; last element of slash-separated string in github_ref
   GITHUB_REF: function(processMe) {
@@ -15,9 +16,9 @@ const processors = {
   platform: function(processMe) {
     let argv = yargs(hideBin(process.argv)).argv;
     let startIndex = 1;
-    // Karma workaround, start parsing unnamed arguments after conf.cjs
-    if (argv._.indexOf('tests/karma.conf.cjs') !== -1) {
-      startIndex = argv._.indexOf('tests/karma.conf.cjs') + 1;
+    // Karma workaround, start parsing unnamed arguments after tests/shared/karma.conf.cjs
+    if (argv._.indexOf('tests/shared/karma.conf.cjs') !== -1) {
+      startIndex = argv._.indexOf('tests/shared/karma.conf.cjs') + 1;
     }
     if (processMe !== '*' && argv._.length > startIndex) {
       return processMe + ' ' + argv._.slice(startIndex, argv._.length).join(' ');
@@ -106,31 +107,32 @@ parseTestrunCLIOptions = () => {
   }
   console.log('[CLIParser.cjs] server is ' + server);
 
-  // Get upload CLI option
-  let upload = parseOption({cli: 'upload'}, false);
-  upload = upload !== undefined;
-  console.log('[CLIParser.cjs] upload is ' + upload);
+  // Get uploadReport CLI option
+  let uploadReport = parseOption({cli: 'uploadReport'}, false);
+  uploadReport = uploadReport !== undefined;
+  console.log('[CLIParser.cjs] uploadReport is ' + uploadReport);
 
   // Get platform CLI option
-  let platform = parseOption({cli: 'platform'}, false);
-  platform = platform === undefined? '*': platform;
+  let platform = parseOption({cli: 'platform'});
   console.log('[CLIParser.cjs] platform is ' + platform);
 
-  // Get test CLI option
-  let test = parseOption({cli: 'test'}, false);
-  test = test === undefined? 'all_tests': test;
-  console.log('[CLIParser.cjs] testrun is ' + test);
+  // Get label CLI option
+  let label = parseOption({cli: 'label'});  
+  label = NameSanitizer.sanitize(label);
+  console.log('[CLIParser.cjs] label is ' + label);
 
   // Get testrun CLI option
   let testrun = parseOption({cli: 'testrun'}, false);
-  testrun = testrun === undefined? test: testrun;
+  testrun = testrun === undefined? label: testrun;
+  testrun = NameSanitizer.sanitize(testrun);
   console.log('[CLIParser.cjs] testrun is ' + testrun);
 
   // Get branch from CLI or GITHUB_REF
-  const branch = parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);
-  if ((upload || server === 'bs') && branch === undefined) {
-    throw new Error('[CLIParser.cjs] upload was enabled or server was bs, but branch was not defined');
+  let branch = parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);
+  if ((uploadReport || server === 'bs') && branch === undefined) {
+    throw new Error('[CLIParser.cjs] uploadReport was enabled or server was bs, but branch was not defined');
   }
+  branch = NameSanitizer.sanitize(branch);
   console.log('[CLIParser.cjs] branch is ' + branch);
 
   // Get subset from CLI
@@ -138,7 +140,7 @@ parseTestrunCLIOptions = () => {
   subset = subset !== undefined;
   console.log('[CLIParser.cjs] subset is ' + subset);
 
-  return [server, upload, platform, test, testrun, branch, subset];
+  return [server, uploadReport, platform, label, testrun, branch, subset];
 };
 
 

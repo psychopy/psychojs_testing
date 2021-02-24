@@ -1,5 +1,0 @@
-{
-  "test_framework": "wdio",
-  "labels": ["int_gonogo", "wdio", "all"],
-  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)"
-}

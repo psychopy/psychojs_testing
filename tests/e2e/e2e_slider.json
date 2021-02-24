@@ -1,6 +1,0 @@
-{
-  "test_framework": "wdio",
-  "labels": ["e2e_slider", "wdio", "batch", "all"],
-  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
-  "fine_calibration": true
-}

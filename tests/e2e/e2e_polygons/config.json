@@ -1,0 +1,7 @@
+{
+  "test_framework": "wdio",
+  "labels": ["e2e_polygons", "wdio", "batch", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "e2e_polygons.cjs",
+  "experiment_file": "e2e_polygons.psyexp"
+}

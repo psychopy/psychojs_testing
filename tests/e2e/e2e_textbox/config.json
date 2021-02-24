@@ -1,0 +1,9 @@
+{
+  "test_framework": "wdio",
+  "labels": ["e2e_textbox", "wdio", "batch", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "e2e_textbox.cjs",
+  "experiment_file": "e2e_textbox.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/support/e2e_textbox/html/",
+  "fine_calibration": true
+}

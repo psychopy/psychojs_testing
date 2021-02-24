@@ -1,6 +1,7 @@
 // Modules 
 const fs = require('fs');
 const Jimp = require('jimp');
+const Mustache = require('mustache');
 const VisualRegressor = require('./VisualRegressor.cjs');
 const ReportSummarizer = require('./ReportSummarizer.cjs');
 const BrowserStack = require('./BrowserStack.cjs');
@@ -10,32 +11,26 @@ const CLIParser = require('./CLIParser.cjs');
 const TestCollector = require('./TestCollector.cjs');
 
 // *** Parse CLI arguments
-let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
-// Get label and construct tests
-let label = parseOption({cli: 'label'});
+// Construct tests
 let tests = TestCollector.collectTests(label).wdio;
-console.log('[wdio.conf.cjs] tests are ' + JSON.stringify(tests));
+console.log('[wdio.conf.cjs] Running ' + tests.length + ' tests');
 
 // Construct testrun (2 remove!!!)
 testrun = testrun === undefined? label: testrun;
 
 // Construct buildName (for browserStack logs)
-const buildName = BrowserStack.createBuildName(branch, testrun, test);
+const buildName = BrowserStack.createBuildName(branch, testrun, label);
 console.log('[wdio.conf.cjs] buildName is ' + buildName);
 
+// Get pavlovia CLI option
+let pavlovia = parseOption({cli: 'pavlovia'}, false);
+pavlovia = pavlovia === undefined? false: pavlovia;
+console.log('[wdio.conf.cjs] pavlovia is ' + pavlovia);
+
 // Get url CLI option and construct baseUrl
-let url = parseOption({cli: 'url'}, false);
-// Default url is stager/branch/{{experiment}}
-if (url !== undefined) {
-  baseUrl = url;
-} else {
-    if (branch === undefined) {
-      throw new Error('[wdio.conf.cjs] url nor branch were specified, so baseUrl could not be constructed');
-    }
-    baseUrl = 'https://staging.psychopy.org/experiments/html/' + branch + '/{{experiment}}';
-}
-console.log('[wdio.conf.cjs] baseUrl is ' + baseUrl);
+let url = parseOption({cli: 'url'});
 
 // Include capability generator module
 const CapabilityGenerator = require('./capabilities.' + server + '.cjs');
@@ -265,10 +260,6 @@ exports.config = {
         console.log('\x1b[31m' + e.stack + '\x1b[0m');
       }
     });
-    // Get current branch
-    browser.addCommand('getBaseUrl', () => {
-      return baseUrl;
-    });
 
     // Managing custom log-file
     browser.addCommand('logInit', () => {
@@ -281,10 +272,58 @@ exports.config = {
       return browser.capabilities.customLogs;
     });
 
-    // Get test
+    // Get label
     browser.addCommand('getLabel', () => {
       return label;
     });
+
+    // Set and get test config
+    browser.addCommand('setTestConfig', (testConfig) => {
+      browser.capabilities.testConfig = testConfig;
+    });
+    browser.addCommand('getTestConfig', () => {
+      return browser.capabilities.testConfig;
+    });
+
+    // Get URL of test experiment
+    browser.addCommand('getExperimentUrl', () => {
+      let baseUrl;
+      switch (url) {
+        // Url points to staging server; construct using branch
+        case 'stager':
+          if (branch === undefined) {
+            throw new Error('[wdio.conf.cjs] url was "stager", but no branch was specified, so baseUrl could not be constructed');
+          }
+          baseUrl = 'https://staging.psychopy.org/experiments/html/' + branch + '/{{experiment}}';
+          break;
+        // Url points to pavlovia server; get from test config
+        case 'pavlovia':
+          // Note that in the browser.capabilities object, slashes get replaced by their HTML entities (&#x2F;), hence we convert those back again       
+          if (browser.capabilities.testConfig.pavlovia_url === undefined) {
+            throw new Error(
+              '[wdio.conf.cjs] url was "pavlovia", but no pavlovia_url could be found in ' +
+              browser.capabilities.testConfig.path + '/config.json'
+            );
+          }
+          baseUrl = browser.capabilities.testConfig.pavlovia_url.replace(/&#x2F;/g, '/');
+          break;
+        // Url points to local webserver; assume 'https://localhost/psychojs/{{experiment}}
+        case 'local':
+          baseUrl = 'http://localhost/psychojs/{{experiment}}';
+          break;
+        // url is a template
+        default:
+          baseUrl = url;
+          break;
+      }
+      // Construct URL
+      // Note that in the browser.capabilities object, slashes get replaced by their HTML entities (&#x2F;), hence we convert those back again
+      let experimentUrl = Mustache.render(baseUrl + '?__noOutput', {experiment: browser.capabilities.testConfig.path}).replace(/&#x2F;/g, '/');
+      console.log('[wdio.conf.js] experimentUrl is ' + experimentUrl);
+      return experimentUrl;
+    });
+
+
     browser.addCommand('getTests', () => {
       console.log('getTests');
       console.log(tests);
@@ -310,7 +349,7 @@ exports.config = {
   onComplete: async function (exitCode, config, capabilities, results) {
     try {
        // Merge reports
-      let joinedReports = ReportSummarizer.mergeWdio(['custom', 'wdio_specfile'], test);
+      let joinedReports = ReportSummarizer.mergeWdio(['custom', 'wdio_specfile'], label);
       // Construct buildPrefix and map of buildNames to buildIds
       let buildNamesToBuildIdsMap = {}, buildPrefix = '';
       if (server === 'bs') {
@@ -333,8 +372,8 @@ exports.config = {
         buildNamesToBuildIdsMap
       );
       // If upload enabled, update stager
-      if (upload) {
-        const stagerPath = Stager.createReportPath(branch, testrun, test);
+      if (uploadReport) {
+        const stagerPath = Stager.createReportPath(branch, testrun, label);
         console.log('[wdio.conf.cjs] stagerPath is ' + stagerPath);
         // Delete old logs
         console.log('[wdio.conf.cjs] Deleting old reports on Stager');
@@ -350,10 +389,5 @@ exports.config = {
   },
 
   afterTest: function (test, context, { error, result, duration, passed, retries }) {
-    // console.log('afterTest');
-    // console.log(test);
-    // console.log(context);
-    // console.log(error);
-    // console.log(result);
   }
 }

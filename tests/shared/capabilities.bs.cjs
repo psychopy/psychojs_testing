@@ -1,7 +1,7 @@
 // Modules
 const fs = require('fs');
 const BrowserStack = require('./BrowserStack.cjs');
-const GlobMatcher = require('./GlobMatcher.cjs');
+const minimatch = require('minimatch');
 const Paths = require('./Paths.cjs');
 
 // Returns index of highest number in array that is not NaN
@@ -119,14 +119,14 @@ filterCapabilities = (capabilities, platformPattern, subset, platformFunction) =
     if (subset) {
       matchesFilter = false;
       for (let platformSubset of platformSubsets) {
-        matchesFilter = matchesFilter || GlobMatcher.match(platformSubset, platform);
+        matchesFilter = matchesFilter || minimatch(platform.toLowerCase(), platformSubset.toLowerCase());
       }
     } else {
       matchesFilter = true;
     }
     // Filter on platformPattern
     if (matchesFilter) {
-      matchesFilter = GlobMatcher.match(platformPattern, platform);
+      matchesFilter = minimatch(platform.toLowerCase(), platformPattern.toLowerCase());
     }
     return matchesFilter;
   });
@@ -202,7 +202,7 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
   capabilities = filterCapabilities(capabilities, platformPattern, subset, (capability) => {
     return capability['bstack:options'].sessionName;
   });
-  //console.log(capabilities);
+  console.log('[capabilities.bs.cjs] Filtered out ' + capabilities.length + ' platforms');
   return capabilities;
 }
 
@@ -229,7 +229,7 @@ const getApiCapabilities = (platformPattern, subset) => {
   for (capability of capabilities) {
     customLaunchers[capability.displayName] = capability;
   }
-  //console.log(capabilities);
+  console.log('[capabilities.bs.cjs] Filtered out ' + capabilities.length + ' platforms');
   return customLaunchers;
 }
 

@@ -2,6 +2,7 @@ node_modules/
 nbproject/
 test/reference_imgs/
 test/counterexample_imgs/
+tests/staging
 .tmp_capabilities/
 .tmp_browsers/
 .tmp_e2e/

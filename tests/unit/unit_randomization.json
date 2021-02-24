@@ -1,5 +1,0 @@
-{
-  "test_framework": "karma",
-  "labels": ["unit_randomization", "karma", "batch", "all"],
-  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)"
-}

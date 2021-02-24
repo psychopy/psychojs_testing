@@ -1,9 +1,3 @@
-const Mustache = require('mustache');
-
-getExperimentUrl = (experiment) => {
-  return Mustache.render(browser.getBaseUrl() + '?__noOutput', {experiment: experiment});
-};
-
 /**
  * Goes through the Pavlovia loading procedure that precedes a PsychoJS experiment:
  *
@@ -211,11 +205,13 @@ waitForReport = (value) => {
  */  
 performCalibrationExperiment = (screenshots = false) => {
   // Navigate to experiment and perform prelude
-  browser.url(getExperimentUrl('e2e_calibration'));
+  browser.url(browser.getExperimentUrl());
   performPavloviaPrelude();
 
   // Perform calibration procedure, store results
   calibration = performCalibrationProcedure(screenshots);
+  //console.log("Shared performCalibration");
+  //console.log(calibration);
   browser.logAdd('window.innerWidth', calibration.viewport['window.innerWidth']);
   browser.logAdd('window.innerHeight', calibration.viewport['window.innerHeight']);
   browser.logAdd('window.devicePixelRatio', calibration.viewport['window.devicePixelRatio']);
@@ -232,6 +228,8 @@ performCalibrationExperiment = (screenshots = false) => {
   tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
   waitForReport('FINISHED');
 
+  //console.log('performCalibrationExperiment');
+  
   // Return results
   return calibration;
 };
@@ -243,7 +241,6 @@ module.exports = {
   tapAtCoordinate: tapAtCoordinate,
   performCalibrationExperiment: performCalibrationExperiment,
   waitForReport: waitForReport,
-  getExperimentUrl: getExperimentUrl,
   tests: [
     'e2e_code',
     'e2e_conditions',

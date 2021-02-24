@@ -6,15 +6,15 @@ const Paths = require('./Paths.cjs');
 const TestCollector = require('./TestCollector.cjs');
 
 // *** Parse CLI arguments
-let [server, upload, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+let [server, uploadReport, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
 // Get label and construct specFiles
 let label = parseOption({cli: 'label'});
-let tests = TestCollector.collectTests(label).karma;
-let specFiles = tests.map((test) => {
-  return {pattern: test, type: 'module'};
+let tests = TestCollector.collectTests(label);
+let specFiles = tests.karma.map((test) => {
+  return {pattern: test.path + '/' + test.testscript_file, type: 'module'};
 });
-console.log('[karma.conf.cjs] specFiles are ' + JSON.stringify(specFiles));
+console.log('[karma.conf.cjs] running ' + specFiles.length + ' specFiles');
 
 // Construct testrun (2 remove!!!)
 testrun = testrun === undefined? label: testrun;
@@ -32,7 +32,6 @@ if (server === 'bs') {
   };
 }
 browsers = Object.keys(customLaunchers);  
-console.log('[karma.conf.js] running tests on ' + browsers.length + ' platforms');
 
 module.exports = function(config) {
   config.set({
@@ -58,7 +57,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css', type: 'css'},
-      {pattern: 'dist/psychojs.css', type: 'css'},
+      {pattern: '../dist/psychojs.css', type: 'css'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.1/seedrandom.min.js', type: 'js'},
@@ -70,8 +69,8 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.74/Tone.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
-      {pattern: 'dist/*.js', type: 'module', included: false},
-      {pattern: 'src/root.html', type: 'dom'}
+      {pattern: '../dist/*.js', type: 'module', included: false},
+      {pattern: '../src/root.html', type: 'dom'}
     ].concat(specFiles),
 
 
