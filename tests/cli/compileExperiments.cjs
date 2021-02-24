@@ -1,83 +1,43 @@
-// Download experiments from stager, compile psyexp file, and upload
+// Compile experiments from psyexp to JS
 
 // Modules
 const Paths = require('../shared/Paths.cjs');
-const Stager = require('../shared/Stager.cjs');
 const CLIParser = require('../shared/CLIParser.cjs');
-const path = require('path');
+const TestCollector = require('../shared/TestCollector.cjs');
 const child_process = require('child_process');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 // Get path to psychopy
 const psychopyPath = CLIParser.parseOption({env: 'PSYCHOPY_PATH'});
 console.log('[compileExperiments.cjs] psychopyPath is ' + psychopyPath);
 
-// Get download CLI option (download psyexp files from stager?)
-let download = CLIParser.parseOption({cli: 'download'}, false);
-download = download !== undefined;
-console.log('[compileExperiments.cjs] download is ' + download);
-
-// Get upload CLI option (upload psyexp files compiled to JS to stager?)
-let upload = CLIParser.parseOption({cli: 'upload'}, false);
-upload = upload !== undefined;
-console.log('[compileExperiments.cjs] upload is ' + upload);
+// Get label and collect experiments
+let label = CLIParser.parseOption({cli: 'label'});
+let tests = TestCollector.collectTests(label, true);
 
 // Perform compilation
 (async () => {
-  if (download) {
-    console.log('[compileExperiments.cjs] cleaning up temporary folders');
-    // Delete experiments directory (it not empty)
-    try {
-      fs.rmdirSync(Paths.dir_experiments, {recursive: true});
-    } catch (e) {}
-    // Recreate experiments directory (with workaround for Windows)
-    let dirCreated = false;
-    // Keep trying for 10 seconds
-    let startTime = new Date().getTime();
-    while (!dirCreated) {
-      try {
-        fs.mkdirSync(Paths.dir_experiments);
-        dirCreated = true;
-      } catch (e) {
-        // 10 seconds passed? Throw error
-        if ((new Date().getTime()) - startTime > 10000) {
-          throw (e);
-        }
-      }
-    }
+  // Copy and compile each experiment
+  console.log('[compileExperiments.cjs] Compiling ' + tests.wdio.length + ' experiments');
 
-    // Download experiments
-    console.log('[compileExperiments.cjs] downloading experiments');
-    downloadResults = await Stager.ftpRequest((client, basePath) => {
-      return client.downloadDir(basePath + '/experiments/psyexp', Paths.dir_experiments);
-    }, true);
-  }
-  
-  // List of  experiments
-  let experiments = fs.readdirSync(Paths.dir_experiments);
-  console.log('[compileExperiments.cjs] compiling ' + experiments.length + ' experiments');
-
-  // Local path to directory of current experiment
-  let experimentPath, compileCommand;
-  // For each experiment, compile psyexp (if applicable) index.html and copy dist/ to lib/
-  for (let experiment of experiments) {
-    console.log('[compileExperiments.cjs] compiling psyexp for ' + experiment);
-    experimentPath = path.resolve(Paths.dir_experiments + '/' + experiment);
+  for (let test of tests.wdio) {
+    console.log('[compileExperiments.cjs] Copying ' + test.path);
+    // Copy experiment to staging
+    fs.copySync(
+      Paths.dir_tests + '/' + test.path, 
+      Paths.dir_staging + '/' + test.path
+    );
+    // Remove config and test-script
+    fs.removeSync(Paths.dir_staging + '/' + test.path + '/config.json');
+    fs.removeSync(Paths.dir_staging + '/' + test.path + '/' + test.testscript_file);
+    // Compile psyexp
+    console.log('[compileExperiments.cjs] Compiling psyexp for ' + test.path);
     compileCommand = '' +
       'python ' + psychopyPath + '/psychopy/scripts/psyexpCompile.py ' + 
-      experimentPath + '/' + experiment + '.psyexp ' +
-      '--outfile ' + experimentPath + '/' + experiment + '.js ' +
-      '--version 2020.2.6';
+      Paths.dir_staging + '/' + test.path + '/' + test.experiment_file +
+      ' --outfile ' + Paths.dir_staging + '/' + test.path + '/' + 
+      test.experiment_file.substring(0, test.experiment_file.length - '.psyexp'.length) + '.js';
     child_process.execSync(compileCommand);
-  }
-
-  if (upload) {
-    // Upload compiled experiments to stager
-    console.log('[compileExperiments.cjs] uploading experiments');
-    Stager.uploadDirectory(
-      Paths.dir_experiments,
-      'experiments/js'
-    )
   }
 })();
 
