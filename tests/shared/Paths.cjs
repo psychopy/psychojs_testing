@@ -10,7 +10,7 @@ module.exports = {
   dir_staging:             './tests/staging',
 
   dir_tmp_e2e:             './.tmp_e2e',
-  dir_tmp_browsers:        './.tmp_browsers',
+  dir_cache:               './tests/cache',
   dir_logs_capabilities:   './.tmp_e2e/logs_capabilities',
   dir_logs_json:           './.tmp_e2e/logs_json',
   dir_logs_joined:         './.tmp_e2e/logs_joined',

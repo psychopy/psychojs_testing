@@ -130,7 +130,7 @@ exports.config = {
       // *** Clean up temporary directories
       Paths.cleanupTemporaryDirectories([
         [Paths.dir_tmp_e2e, false],
-        [Paths.dir_tmp_browsers, true],
+        [Paths.dir_cache, true],
         [Paths.dir_logs_capabilities, true],
         [Paths.dir_logs_joined, true],
         [Paths.dir_logs_json, true],

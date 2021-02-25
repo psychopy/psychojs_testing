@@ -20,16 +20,16 @@ const indexOfMax = (values) => {
 // Returns browsers from BrowserStack after basic filtering
 const getBrowsers = () => {
   // Get all available browsers from local HDD (cachedBrowsersFile), otherwise cache from BrowserStack's REST API
-  const cachedBrowsersFile = Paths.dir_tmp_browsers + '/browsers.json';
+  const cachedBrowsersFile = Paths.dir_cache + '/browsers.json';
   let allBrowsers;
   if (fs.existsSync(cachedBrowsersFile)) {
     allBrowsers = JSON.parse(fs.readFileSync(cachedBrowsersFile));
   } else {
     allBrowsers = BrowserStack.getBrowsers();
     // Workaround for constructing directories (since log cleanup may not have been performed yet)
-    if (!fs.existsSync(Paths.dir_tmp_browsers)) {
-      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_tmp_browsers)
-      fs.mkdirSync(Paths.dir_tmp_browsers);
+    if (!fs.existsSync(Paths.dir_cache)) {
+      console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_cache)
+      fs.mkdirSync(Paths.dir_cache);
     }  
     fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
   }
