@@ -118,7 +118,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('calibration_1');
   // Take a screenshot
   if (screenshots) {
-    browser.writeScreenshot('e2e_calibration', 'afterc0');
+    browser.writeScreenshot('wdio_calibration', 'afterc0');
   }
   // Store first canvas coordinates
   canvasX.push($('<body>').getAttribute('data-x'));
@@ -133,7 +133,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('verification');
   // Take a screenshot
   if (screenshots) {  
-    browser.writeScreenshot('e2e_calibration', 'afterc1');
+    browser.writeScreenshot('wdio_calibration', 'afterc1');
   }
   // Store second canvas coordinates  
   canvasX.push($('<body>').getAttribute('data-x'));
@@ -158,7 +158,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('verification_feedback');
   // Take a screenshot
   if (screenshots) {  
-    browser.writeScreenshot('e2e_calibration', 'afterv');
+    browser.writeScreenshot('wdio_calibration', 'afterv');
   }
   // Record deviation in canvas coordinates
   deviationX = Number($('<body>').getAttribute('data-x')) - 0.25;
@@ -242,15 +242,15 @@ module.exports = {
   performCalibrationExperiment: performCalibrationExperiment,
   waitForReport: waitForReport,
   tests: [
-    'e2e_code',
-    'e2e_conditions',
-    'e2e_img',
-    'e2e_polygons',
-    'e2e_slider',
-    'e2e_slider_combinatorial',
-    'e2e_sound',
-    'e2e_text',
-    'e2e_textbox',
-    'e2e_video'
+    'wdio_code',
+    'wdio_conditions',
+    'wdio_img',
+    'wdio_polygons',
+    'wdio_slider',
+    'wdio_slider_combinatorial',
+    'wdio_sound',
+    'wdio_text',
+    'wdio_textbox',
+    'wdio_video'
   ]
 };

@@ -1,6 +1,0 @@
-{
-  "test_framework": "karma",
-  "labels": ["unit_formattedString", "karma", "batch", "all"],
-  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
-  "testscript_file": "unit_formattedString.js"
-}

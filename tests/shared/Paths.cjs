@@ -4,31 +4,31 @@ const fs = require('fs');
 // Paths to temporary folders, image folders, and URLs
 module.exports = {
   // Karma assumes this is path relative to one directory higher than the one containing karma.conf.js
-  dir_tmp_unit_karma:      '../.tmp_unit', 
-  dir_tmp_unit:            './.tmp_unit',
+  dir_tmp_unit_karma:      '../tests/results/logs_karma', 
+  dir_tmp_unit:            './tests/results/logs_karma',
   // Path to staging directory (compiled test-experiments)
   dir_staging:             './tests/staging',
-
-  dir_tmp_e2e:             './.tmp_e2e',
   dir_cache:               './tests/cache',
-  dir_logs_capabilities:   './.tmp_e2e/logs_capabilities',
-  dir_logs_json:           './.tmp_e2e/logs_json',
-  dir_logs_joined:         './.tmp_e2e/logs_joined',
-  dir_logs_processed:      './.tmp_e2e/logs_processed',
-  subdir_logs_processed:   'logs_processed',
-  dir_logs_wdio:            './.tmp_e2e/logs_wdio',
-  dir_logs_selenium:       './.tmp_e2e/logs_selenium',
+
+  dir_tmp_wdio:            './tests/results',  
+  dir_logs_capabilities:   './tests/results/logs_capabilities',
+  dir_logs_json:           './tests/results/logs_json',
+  dir_logs_joined:         './tests/results/logs_joined',
+  dir_logs_processed:      './tests/results/logs_processed',
+  dir_logs_wdio:           './tests/results/logs_wdio',
+  dir_logs_selenium:       './tests/results/logs_selenium',
   
-  dir_screenshots_cutout:  './.tmp_e2e/screenshots_cutout',
-  dir_screenshots_raw:     './.tmp_e2e/screenshots_raw',
-  dir_screenshots_scaled:  './.tmp_e2e/screenshots_scaled',  
+  dir_screenshots_cutout:  './tests/results/screenshots_cutout',
+  dir_screenshots_raw:     './tests/results/screenshots_raw',
+  dir_screenshots_scaled:  './tests/results/screenshots_scaled',  
   
-  dir_experiments:         './.tmp_experiments',
+  //dir_experiments:         './.tmp_experiments',
 
   dir_tests:               './tests',
   dir_counterexample_imgs: './tests/counterexample_imgs',
 
-  subdir_report_e2e:       'report_e2e',
+  subdir_logs_processed:   'logs_processed',
+  subdir_report_wdio:      'report_wdio',
   subdir_report_unit:      'report_unit',
 
   cleanupTemporaryDirectories: function(pathsToClean) {

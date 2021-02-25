@@ -20,7 +20,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   console.log('[joinReports.cjs] Inventorizing tests');
   // Get all testruns of branch
   let listResults = await Stager.ftpRequest((client, basePath) => {
-    return client.list(basePath + '/' + Paths.subdir_report_e2e + '/' + Stager.createReportPath(branch, testrun));
+    return client.list(basePath + '/' + Paths.subdir_report_wdio + '/' + Stager.createReportPath(branch, testrun));
   }, false);
   // Filter out directories
   listResults = listResults.filter((listResult) => {
@@ -38,14 +38,14 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
     console.log('[joinReports.cjs] Adding test ' + test);
     // Add test to joinedReports
     getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/' + Paths.subdir_report_e2e + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_logs_processed + '/report.json');
+      return client.get(basePath + '/' + Paths.subdir_report_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_logs_processed + '/report.json');
     }, false);
     report = JSON.parse(getResults);
     joinedReports = joinedReports.concat(report);
 
     // Add buildId to map
     buildName = BrowserStack.createBuildName(branch, testrun, test);
-    let buildIds = BrowserStack.getBuildIds('PsychoJS_e2e', (build) => {
+    let buildIds = BrowserStack.getBuildIds('PsychoJS_wdio', (build) => {
       return build.name === buildName;
     });
     if (buildIds.length !== 1) {
@@ -55,8 +55,8 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   }
   console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
   // Create a tmp folder if it doesn't exist yet
-  if (!fs.existsSync(Paths.dir_tmp_e2e)) {
-    fs.mkdirSync(Paths.dir_tmp_e2e);
+  if (!fs.existsSync(Paths.dir_tmp_wdio)) {
+    fs.mkdirSync(Paths.dir_tmp_wdio);
   };  
   // Create a logs_joined folder if it doesn't exist yet
   if (!fs.existsSync(Paths.dir_logs_joined)) {
@@ -71,7 +71,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   );
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
-  await Stager.uploadDirectory(Paths.dir_logs_joined, Paths.subdir_report_e2e + '/'  + Stager.createReportPath(branch, testrun));
+  await Stager.uploadDirectory(Paths.dir_logs_joined, Paths.subdir_report_wdio + '/'  + Stager.createReportPath(branch, testrun));
 })();
 
 

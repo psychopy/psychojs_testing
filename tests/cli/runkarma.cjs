@@ -44,7 +44,7 @@ if (server === 'bs') {
   if (server == 'bs') {
     const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', buildName);
     fs.writeFileSync(
-      './.tmp_unit/sessions.json',
+      Paths.dir_tmp_unit,
       JSON.stringify(sessions)
     );  
   }
@@ -54,7 +54,7 @@ if (server === 'bs') {
   // Aggregate
   ReportSummarizer.aggregateAndStoreKarma(
     joinedReports,
-    './.tmp_unit', 
+    Paths.dir_tmp_unit, 
     server === 'bs'
   );
 

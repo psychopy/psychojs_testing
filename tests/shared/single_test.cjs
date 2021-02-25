@@ -4,7 +4,7 @@ describe('single_test', () => {
   it('get_test', () => {
     console.log('[single_test.cjs] get_test')
     test = browser.getTest();
-    testFunction = require('../tests_e2e/' + test + '.cjs').run;
+    testFunction = require('../tests_wdio/' + test + '.cjs').run;
   });
   it('run_test', () => {
     console.log('[single_test.cjs] ' + test)

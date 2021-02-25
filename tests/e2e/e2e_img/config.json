@@ -1,7 +1,0 @@
-{
-  "test_framework": "wdio",
-  "labels": ["e2e_img", "wdio", "batch", "all"],
-  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
-  "testscript_file": "e2e_img.cjs",
-  "experiment_file": "e2e_img.psyexp"
-}

@@ -129,7 +129,7 @@ exports.config = {
     try {
       // *** Clean up temporary directories
       Paths.cleanupTemporaryDirectories([
-        [Paths.dir_tmp_e2e, false],
+        [Paths.dir_tmp_wdio, false],
         [Paths.dir_cache, true],
         [Paths.dir_logs_capabilities, true],
         [Paths.dir_logs_joined, true],
@@ -144,7 +144,7 @@ exports.config = {
       // *** Delete old BrowserStack logs
       if (server === 'bs') {
         console.log('[wdio.conf.cjs] Deleting BrowserStack logs');
-        BrowserStack.deleteOneBuild('PsychoJS_e2e', buildName);
+        BrowserStack.deleteOneBuild('PsychoJS_wdio', buildName);
       }
       // *** Log all capabilities
       fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
@@ -356,7 +356,7 @@ exports.config = {
         // buildPrefix
         buildPrefix = BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true);
         // buildNamesToBuildIdsMap
-        let buildIds = BrowserStack.getBuildIds('PsychoJS_e2e', (build) => {
+        let buildIds = BrowserStack.getBuildIds('PsychoJS_wdio', (build) => {
           return build.name === buildName;
         });
         if (buildIds.length !== 1) {
@@ -377,10 +377,10 @@ exports.config = {
         console.log('[wdio.conf.cjs] stagerPath is ' + stagerPath);
         // Delete old logs
         console.log('[wdio.conf.cjs] Deleting old reports on Stager');
-        await Stager.deleteDirectory(Paths.subdir_report_e2e + '/' + stagerPath);
+        await Stager.deleteDirectory(Paths.subdir_report_wdio + '/' + stagerPath);
         // Upload logs
         console.log('[wdio.conf.cjs] Uploading new reports to Stager');
-        await Stager.uploadDirectory(Paths.dir_tmp_e2e, Paths.subdir_report_e2e + '/' + stagerPath);
+        await Stager.uploadDirectory(Paths.dir_tmp_wdio, Paths.subdir_report_wdio + '/' + stagerPath);
       }
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');

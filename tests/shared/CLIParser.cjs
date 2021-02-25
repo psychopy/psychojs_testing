@@ -98,7 +98,7 @@ parseOption = (sources = {}, required = true, logLevel = logFull) => {
   return optionValue;
 }
 
-// Parse CLI options for running e2e and unit testruns
+// Parse CLI options for running wdio and unit testruns
 parseTestrunCLIOptions = () => {
   // Get server CLI option
   const server = parseOption({cli: 'server'});
