@@ -1,5 +1,5 @@
 // Runs karma tests and processes logs after testrun
-const fs = require('fs');
+const fs = require('fs-extra');
 const child_process = require('child_process');
 const CLIParser = require('./../shared/CLIParser.cjs');
 const BrowserStack = require('./../shared/BrowserStack.cjs');
@@ -43,7 +43,7 @@ if (server === 'bs') {
   // Get sessions and store them
   if (server == 'bs') {
     const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', buildName);
-    fs.writeFileSync(
+    fs.outputFileSync(
       Paths.dir_tmp_unit,
       JSON.stringify(sessions)
     );  

@@ -66,7 +66,7 @@ let includes = fs.readdirSync('./dist');
       )
     }
 
-    fs.writeFileSync(
+    fs.outputFileSync(
       Paths.dir_staging + '/' + test.path + '/index.html', 
       compiled
     );

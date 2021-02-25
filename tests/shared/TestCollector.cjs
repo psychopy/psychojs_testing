@@ -2,7 +2,7 @@
 const Paths = require('./Paths.cjs');
 const NameSanitizer = require('./NameSanitizer.cjs');
 const minimatch = require('minimatch');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 // Recursively collects all tests from tests directory and not-ignored subdirectories whose labels include label.
 // Additionally, it performs the following checks:

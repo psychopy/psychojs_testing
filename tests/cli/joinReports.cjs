@@ -4,7 +4,7 @@
 // Modules
 const Stager = require('../shared/Stager.cjs');
 const ReportSummarizer = require('../shared/ReportSummarizer.cjs');
-const fs = require('fs');
+const fs = require('fs-extra');
 const Paths = require('../shared/Paths.cjs');
 const CLIParser = require('../shared/CLIParser.cjs');
 const BrowserStack = require('../shared/BrowserStack.cjs');

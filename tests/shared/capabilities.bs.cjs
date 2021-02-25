@@ -1,5 +1,5 @@
 // Modules
-const fs = require('fs');
+const fs = require('fs-extra');
 const BrowserStack = require('./BrowserStack.cjs');
 const minimatch = require('minimatch');
 const Paths = require('./Paths.cjs');
@@ -31,7 +31,7 @@ const getBrowsers = () => {
       console.log('[capabilities.bs.cjs] Creating directory: ' + Paths.dir_cache)
       fs.mkdirSync(Paths.dir_cache);
     }  
-    fs.writeFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
+    fs.outputFileSync(cachedBrowsersFile, JSON.stringify(allBrowsers));
   }
   // Select browsers that match these filters
   let browserFilters = [

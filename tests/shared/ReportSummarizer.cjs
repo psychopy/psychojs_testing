@@ -1,5 +1,5 @@
 // *** Modules
-const fs = require('fs');
+const fs = require('fs-extra');
 const json2csv = require('json2csv');
 const XLSX = require('xlsx');
 const Paths = require('./Paths.cjs');
@@ -8,13 +8,13 @@ const Paths = require('./Paths.cjs');
 // Write a JSON array to a JSON and CSV file
 writeJsonAndCsv = (filePrefix, output) => {
   // Store output as JSON
-  fs.writeFileSync(
+  fs.outputFileSync(
     filePrefix + '.json',
     JSON.stringify(output)
   );
   // Store output as CSV (if any output exists)
   let csvOutput = output.length > 0? json2csv.parse(output): '';
-  fs.writeFileSync(
+  fs.outputFileSync(
     filePrefix + '.csv',
     csvOutput
   );

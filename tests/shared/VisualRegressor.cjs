@@ -3,7 +3,7 @@
 // *** Modules
 const Jimp = require('jimp');
 const replaceColor = require('replace-color')
-const fs = require('fs');
+const fs = require('fs-extra');
 const json2csv = require('json2csv');
 const Paths = require('./Paths.cjs');
 
@@ -35,7 +35,7 @@ let sdOfDifferences = (expected, observed, dropAlpha = true) => {
 };
         
 // Compare two images
-let compareScreenshotWithReference = async (screenshotImg, referenceImg, screenshotFilename) => {
+let compareScreenshotWithReference = async (screenshotImg, referenceImg, path, screenshotFilename) => {
   // Preliminary cutout borders
   let top = screenshotImg.bitmap.height;
   let bottom = 0;
@@ -82,7 +82,7 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
       width,
       height
     );
-    cutoutImg.write(Paths.dir_screenshots_cutout + '/' + screenshotFilename);
+    cutoutImg.write(Paths.dir_screenshots_cutout + '/' + path + '/' + screenshotFilename + '.png');
   } catch (e) {
     cutoutSuccess = false;
     console.log(
@@ -92,7 +92,7 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
   }
   // Resize cutout to reference
   cutoutImg = await cutoutImg.resize(referenceImg.bitmap.width, referenceImg.bitmap.width);
-  cutoutImg.write(Paths.dir_screenshots_scaled + '/' + screenshotFilename);
+  cutoutImg.write(Paths.dir_screenshots_scaled + '/' + path + '/' + screenshotFilename + '.png');
   // Compare
   let rms = sdOfDifferences(referenceImg, cutoutImg);
   // Return results
@@ -103,10 +103,10 @@ let compareScreenshotWithReference = async (screenshotImg, referenceImg, screens
   };
 };
 
-let getReferenceImg = async (experimentName, screenshotName) => {
-  console.log(Paths.dir_experiments + '/' + experimentName + '/reference_imgs/' + screenshotName + '.png') 
+let getReferenceImg = async (path, screenshotName) => {
+  console.log(Paths.dir_tests + '/' + path + '/references/' + screenshotName + '.png') 
   try {
-    referenceImg = await Jimp.read(Paths.dir_experiments + '/' + experimentName + '/reference_imgs/' + screenshotName + '.png');
+    referenceImg = await Jimp.read(Paths.dir_tests + '/' + path + '/references/' + screenshotName + '.png');
     console.log('[VisualRegressor.cjs] Found reference image for screenshotName ' + screenshotName);
     return referenceImg;
   } catch(e) {
@@ -190,13 +190,13 @@ let compareScreenshotsWithReferences = async (validate) => {
     }
   }  
   // Store output as JSON
-  fs.writeFileSync(
+  fs.outputFileSync(
     Paths.dir_logs_processed + '/' + 'screenshot_stats.json',
     JSON.stringify(results)
   );
   // Store output as CSV
   if (results.length > 0) {
-    fs.writeFileSync(
+    fs.outputFileSync(
       Paths.dir_logs_processed + '/' + 'screenshot_stats.csv',
       json2csv.parse(results)
     );  

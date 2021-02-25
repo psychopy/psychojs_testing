@@ -1,5 +1,5 @@
 // Modules 
-const fs = require('fs');
+const fs = require('fs-extra');
 const Jimp = require('jimp');
 const Mustache = require('mustache');
 const VisualRegressor = require('./VisualRegressor.cjs');
@@ -129,7 +129,6 @@ exports.config = {
     try {
       // *** Clean up temporary directories
       Paths.cleanupTemporaryDirectories([
-        [Paths.dir_tmp_wdio, false],
         [Paths.dir_cache, true],
         [Paths.dir_logs_capabilities, true],
         [Paths.dir_logs_joined, true],
@@ -147,7 +146,7 @@ exports.config = {
         BrowserStack.deleteOneBuild('PsychoJS_wdio', buildName);
       }
       // *** Log all capabilities
-      fs.writeFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
+      fs.outputFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');
       process.exit(1);
@@ -215,25 +214,25 @@ exports.config = {
       return server === 'local';
     });    
     // Making screenshots and saving them
-    browser.addCommand('writeJimpImg', (img, experimentName, screenshotName) => {
-      img.write(Paths.dir_screenshots_raw + '/' + screenshotName + '#' + experimentName + '#' + browser.getPlatformName() + '.png');
+    browser.addCommand('writeJimpImg', (img, path, screenshotName) => {
+      img.write(Paths.dir_screenshots_raw + '/' + path + '/' + screenshotName + '#' + browser.getPlatformName() + '.png');
     });
     browser.addCommand('getJimpScreenshot', async () => {
       let screenshotBase64 = await browser.takeScreenshot();
       return (await Jimp.read(new Buffer.from(screenshotBase64, 'base64')));
     });
-    browser.addCommand('writeScreenshot', (experimentName, screenshotName) => {
-      browser.writeJimpImg(browser.getJimpScreenshot(), experimentName, screenshotName);
+    browser.addCommand('writeScreenshot', (path, screenshotName) => {
+      browser.writeJimpImg(browser.getJimpScreenshot(), path, screenshotName);
     });
     // Perform a visual regression test
-    browser.addCommand('compareScreenshot', async (experimentName, screenshotName) => {
+    browser.addCommand('compareScreenshot', async (screenshotName) => {
       try {
         // Make screenshot
         let screenshotImg = await browser.getJimpScreenshot();
         // Write screenshot to file
-        browser.writeJimpImg(screenshotImg, experimentName, screenshotName);
+        browser.writeJimpImg(screenshotImg, browser.capabilities.testConfig.path, screenshotName);
         // Get reference
-        let referenceImg = await VisualRegressor.getReferenceImg(experimentName, screenshotName);
+        let referenceImg = await VisualRegressor.getReferenceImg(browser.capabilities.testConfig.path, screenshotName);
         // If reference available, perform comparison
         if (referenceImg === null) {
           // No reference; test passed
@@ -244,7 +243,8 @@ exports.config = {
           let comparisonResult = await VisualRegressor.compareScreenshotWithReference(
             screenshotImg,
             referenceImg,
-            screenshotName + '#' + platformName + '.png'
+            browser.capabilities.testConfig.path,
+            screenshotName + '#' + platformName 
           );
           // Add results to log
           for (let comparisonResultKey in comparisonResult) {
