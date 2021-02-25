@@ -11,8 +11,8 @@ describe('wdio_specfile', () => {
   let calibration, testFunction;
   // Fine calibration required? Run calibration experiment
   if (tests.fine_calibration) {
-    it('e2e_calibration', () => {
-      let calibrationTest = TestCollector.collectTests('e2e_calibration').wdio[0];
+    it('wdio_calibration', () => {
+      let calibrationTest = TestCollector.collectTests('wdio_calibration').wdio[0];
       browser.setTestConfig(calibrationTest);
       console.log('[wdio_specfile.cjs] ' + calibrationTest.path);
       calibration = SharedBehaviors.performCalibrationExperiment();

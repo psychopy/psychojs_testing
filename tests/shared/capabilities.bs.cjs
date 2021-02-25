@@ -159,7 +159,7 @@ const getWebdriverCapabilities = (buildName, platformPattern, subset) => {
 
   // Additional browserstack options tos add to each capability
   const generalOptions = {
-    projectName: 'PsychoJS_e2e',
+    projectName: 'PsychoJS_wdio',
     buildName: buildName,
     video: 'true',
     debug: 'true',

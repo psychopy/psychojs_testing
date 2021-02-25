@@ -19,11 +19,11 @@ const pseudoBranches = argv._;
   let branchNames = GitHub.getBranchNames().concat(pseudoBranches);
 
   console.log('[syncWithGithub.cjs] deleting BrowserStack logs');
-  BrowserStack.deleteAllBranchesExcept('PsychoJS_e2e', branchNames);
+  BrowserStack.deleteAllBranchesExcept('PsychoJS_wdio', branchNames);
   BrowserStack.deleteAllBranchesExcept('PsychoJS_unit', branchNames);
   
   console.log('[syncWithGithub.cjs] deleting staging server reports');
-  await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_e2e, branchNames);
+  await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_wdio, branchNames);
   await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_unit, branchNames);
 
   console.log('[syncWithGithub.cjs] deleting staging server html experiments');

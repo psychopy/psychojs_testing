@@ -40,14 +40,14 @@ collectTests = (label, addCalibration = false) => {
     Paths.dir_tests
   );
 
-  // If tests.fine_calibration is true and addCalibration is true, add e2e_calibration to tests.wdio (if not already there)
+  // If tests.fine_calibration is true and addCalibration is true, add wdio_calibration to tests.wdio (if not already there)
   if (tests.fine_calibration && addCalibration) {
     let hasCalibration = tests.wdio.reduce((hasCalibration, test) => {
-      return hasCalibration || test.labels.includes('e2e_calibration');
+      return hasCalibration || test.labels.includes('wdio_calibration');
     }, false);
     if (!hasCalibration) {
       let calibrationTest = collectTestsRecursive(
-        'e2e_calibration',
+        'wdio_calibration',
         Paths.dir_tests
       );
       tests.wdio = tests.wdio.concat(calibrationTest.wdio);
