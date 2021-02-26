@@ -31,35 +31,17 @@ module.exports = {
   subdir_report_wdio:      'report_wdio',
   subdir_report_unit:      'report_unit',
 
-  cleanupTemporaryDirectories: function(pathsToClean) {
+  recreateDirectories: function(pathsToClean) {
     for (let path of pathsToClean) {
-      console.log('[Paths.cjs] Re-creating directory ' + path[0]);
+      console.log('[Paths.cjs] Re-creating directory ' + path);
       try {
-        fs.removeSync(path[0]);
-        fs.mkdirSync(path[0]);
+        fs.removeSync(path);
+        fs.mkdirSync(path);
       } catch {
-        errorMessage = '[Paths.cjs] Could not delete file ' + file;
+        errorMessage = '[Paths.cjs] Could not re-create directory ' + path;
         console.log('\x1b[31m' + errorMessage + '\x1b[0m');
         throw new Error(errorMessage);            
       }
-      /*
-      if (!fs.existsSync(path[0])) {
-
-        
-      } else {
-        // Only delete files if second element of path is true
-        if (path[1]) {
-          console.log('[Paths.cjs] Deleting files in directory ' + path[0]);
-          files = fs.readdirSync(path[0]);
-          for (let file of files) {
-            
-              fs.unlinkSync(path[0] + '/' + file);
-            } catch (e) {
-            }
-          }
-        }
-      }
-      */
     }
   }
 };
