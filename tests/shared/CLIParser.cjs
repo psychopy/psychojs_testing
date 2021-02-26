@@ -113,7 +113,10 @@ parseTestrunCLIOptions = () => {
   console.log('[CLIParser.cjs] uploadReport is ' + uploadReport);
 
   // Get platform CLI option
-  let platform = parseOption({cli: 'platform'});
+  let platform = parseOption({cli: 'platform'}, false);
+  if (server === 'bs' && platform === undefined) {
+    throw new Error('[CLIParser.cjs] server was bs, but platform was not defined');
+  }
   console.log('[CLIParser.cjs] platform is ' + platform);
 
   // Get label CLI option
@@ -132,8 +135,10 @@ parseTestrunCLIOptions = () => {
   if ((uploadReport || server === 'bs') && branch === undefined) {
     throw new Error('[CLIParser.cjs] uploadReport was enabled or server was bs, but branch was not defined');
   }
-  branch = NameSanitizer.sanitize(branch);
-  console.log('[CLIParser.cjs] branch is ' + branch);
+  if (branch !== undefined) {
+    branch = NameSanitizer.sanitize(branch);
+    console.log('[CLIParser.cjs] branch is ' + branch);
+  }
 
   // Get subset from CLI
   let subset =  parseOption({cli: 'subset'}, false);
