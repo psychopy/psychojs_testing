@@ -15,8 +15,9 @@ const buildName = BrowserStack.createBuildName(branch, testrun, test);
 console.log('[runkarma.cjs] buildName is ' + buildName);
 
 // Clean up logs
-Paths.cleanupTemporaryDirectories([
-  [Paths.dir_tmp_unit, true]
+Paths.recreateDirectories([
+  Paths.dir_tmp_wdio,
+  Paths.dir_tmp_unit
 ]);
 
 // Delete BrowserStack logs

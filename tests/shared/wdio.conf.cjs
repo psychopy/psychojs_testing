@@ -128,17 +128,18 @@ exports.config = {
   onPrepare: async function (config, capabilities) {
     try {
       // *** Clean up temporary directories
-      Paths.cleanupTemporaryDirectories([
-        [Paths.dir_cache, true],
-        [Paths.dir_logs_capabilities, true],
-        [Paths.dir_logs_joined, true],
-        [Paths.dir_logs_json, true],
-        [Paths.dir_logs_processed, true],
-        [Paths.dir_logs_wdio, true],
-        [Paths.dir_logs_selenium, true],
-        [Paths.dir_screenshots_cutout, true],
-        [Paths.dir_screenshots_raw, true],
-        [Paths.dir_screenshots_scaled, true]
+      Paths.recreateDirectories([
+        Paths.dir_tmp_wdio,
+        Paths.dir_cache,
+        Paths.dir_logs_capabilities,
+        Paths.dir_logs_joined,
+        Paths.dir_logs_json,
+        Paths.dir_logs_processed,
+        Paths.dir_logs_wdio,
+        Paths.dir_logs_selenium,
+        Paths.dir_screenshots_cutout,
+        Paths.dir_screenshots_raw,
+        Paths.dir_screenshots_scaled
       ]);    
       // *** Delete old BrowserStack logs
       if (server === 'bs') {
