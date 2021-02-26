@@ -2,7 +2,7 @@
  * Image Stimulus.
  *
  * @author Alain Pitiot
- * @version 2020.2
+ * @version 2021.1.0
  * @copyright (c) 2017-2020 Ilixa Ltd. (http://ilixa.com) (c) 2020 Open Science Tools Ltd. (https://opensciencetools.org)
  * @license Distributed under the terms of the MIT License
  */
@@ -255,7 +255,11 @@ export class ImageStim extends util.mix(VisualStim).with(ColorMixin)
 
 			if (typeof this._pixi !== 'undefined')
 			{
-				this._pixi.destroy(true);
+				this._pixi.destroy({
+					children: true,
+					texture: true,
+					baseTexture: false
+				});
 			}
 			this._pixi = undefined;
 
@@ -265,14 +269,13 @@ export class ImageStim extends util.mix(VisualStim).with(ColorMixin)
 				return;
 			}
 
-			this._texture = new PIXI.Texture(new PIXI.BaseTexture(this._image));
-			this._pixi = new PIXI.Sprite(this._texture);
+			this._texture = PIXI.Texture.from(this._image);
+			this._pixi = PIXI.Sprite.from(this._texture);
 
 			// add a mask if need be:
 			if (typeof this._mask !== 'undefined')
 			{
-				this._maskTexture = new PIXI.Texture(new PIXI.BaseTexture(this._mask));
-				this._pixi.mask = new PIXI.Sprite(this._maskTexture);
+				this._pixi.mask = PIXI.Sprite.from(this._mask);
 
 				// a 0.5, 0.5 anchor is required for the mask to be aligned with the image
 				this._pixi.mask.anchor.x = 0.5;

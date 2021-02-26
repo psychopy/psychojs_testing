@@ -1,14 +1,7 @@
 node_modules/
-nbproject/
-test/reference_imgs/
-test/counterexample_imgs/
-.tmp_capabilities/
-.tmp_browsers/
-.tmp_e2e/
-.tmp_experiments/
-.tmp_unit/
-.vs/
-.vscode/
+tests/staging
+tests/cache
+tests/results
 dist/
 docs/
 debug.log

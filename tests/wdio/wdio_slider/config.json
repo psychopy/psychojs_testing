@@ -1,0 +1,8 @@
+{
+  "test_framework": "wdio",
+  "labels": ["wdio_slider", "wdio", "batch", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "wdio_slider.cjs",
+  "experiment_file": "wdio_slider.psyexp",
+  "fine_calibration": true
+}
