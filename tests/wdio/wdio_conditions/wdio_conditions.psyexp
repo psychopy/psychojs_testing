@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" ?>
-<PsychoPy2experiment encoding="utf-8" version="2021.1.0">
+<PsychoPy2experiment encoding="utf-8" version="2021.1.2">
   <Settings>
     <Param name="Audio latency priority" updates="None" val="use prefs" valType="str"/>
     <Param name="Audio lib" updates="None" val="use prefs" valType="str"/>
@@ -350,7 +350,7 @@
     <LoopInitiator loopType="TrialHandler" name="random_csv">
       <Param name="Selected rows" updates="None" val="" valType="str"/>
       <Param name="conditions" updates="None" val="[OrderedDict([('id', 'c1'), ('word', 1)]), OrderedDict([('id', 'c2'), ('word', 2)]), OrderedDict([('id', 'c3'), ('word', 3)]), OrderedDict([('id', 'c4'), ('word', 4)])]" valType="str"/>
-      <Param name="conditionsFile" updates="None" val="conditions\conditions.csv" valType="str"/>
+      <Param name="conditionsFile" updates="None" val="resources\conditions.csv" valType="str"/>
       <Param name="endPoints" updates="None" val="[0, 1]" valType="num"/>
       <Param name="isTrials" updates="None" val="True" valType="bool"/>
       <Param name="loopType" updates="None" val="random" valType="str"/>
@@ -363,8 +363,8 @@
     <Routine name="intro_random_xlsx"/>
     <LoopInitiator loopType="TrialHandler" name="random_xlsx">
       <Param name="Selected rows" updates="None" val="" valType="str"/>
-      <Param name="conditions" updates="None" val="[OrderedDict([('id', 'c1'), ('word', 1)]), OrderedDict([('id', 'c2'), ('word', 2)]), OrderedDict([('id', 'c3'), ('word', 3)]), OrderedDict([('id', 'c4'), ('word', 4)])]" valType="str"/>
-      <Param name="conditionsFile" updates="None" val="conditions\conditions.xlsx" valType="str"/>
+      <Param name="conditions" updates="None" val="[{'id': 'c1', 'word': 'A'}, {'id': 'c2', 'word': 'B'}]" valType="str"/>
+      <Param name="conditionsFile" updates="None" val="resources\conditions.xlsx" valType="str"/>
       <Param name="endPoints" updates="None" val="[0, 1]" valType="num"/>
       <Param name="isTrials" updates="None" val="True" valType="bool"/>
       <Param name="loopType" updates="None" val="random" valType="str"/>
@@ -378,7 +378,7 @@
     <LoopInitiator loopType="TrialHandler" name="random_funky">
       <Param name="Selected rows" updates="None" val="0:2" valType="str"/>
       <Param name="conditions" updates="None" val="[OrderedDict([('id', 'c1'), ('word', 1)]), OrderedDict([('id', 'c2'), ('word', 2)]), OrderedDict([('id', 'c3'), ('word', 3)]), OrderedDict([('id', 'c4'), ('word', 4)])]" valType="str"/>
-      <Param name="conditionsFile" updates="None" val="conditions\conditions.csv" valType="str"/>
+      <Param name="conditionsFile" updates="None" val="resources\conditions.csv" valType="str"/>
       <Param name="endPoints" updates="None" val="[0, 1]" valType="num"/>
       <Param name="isTrials" updates="None" val="True" valType="bool"/>
       <Param name="loopType" updates="None" val="fullRandom" valType="str"/>

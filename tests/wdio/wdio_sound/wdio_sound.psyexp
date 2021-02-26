@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" ?>
-<PsychoPy2experiment encoding="utf-8" version="2021.1.0">
+<PsychoPy2experiment encoding="utf-8" version="2021.1.2">
   <Settings>
     <Param name="Audio latency priority" updates="None" val="use prefs" valType="str"/>
     <Param name="Audio lib" updates="None" val="use prefs" valType="str"/>
@@ -102,7 +102,7 @@
         <Param name="hamming" updates="constant" val="True" valType="bool"/>
         <Param name="name" updates="None" val="mushroom" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
-        <Param name="sound" updates="constant" val="audio/mushroom.mp3" valType="str"/>
+        <Param name="sound" updates="constant" val="resources/mushroom.mp3" valType="str"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0" valType="code"/>

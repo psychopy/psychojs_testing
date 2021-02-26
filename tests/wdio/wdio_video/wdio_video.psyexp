@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" ?>
-<PsychoPy2experiment encoding="utf-8" version="2021.1.0">
+<PsychoPy2experiment encoding="utf-8" version="2021.1.2">
   <Settings>
     <Param name="Audio latency priority" updates="None" val="use prefs" valType="str"/>
     <Param name="Audio lib" updates="None" val="use prefs" valType="str"/>
@@ -131,7 +131,7 @@
         <Param name="durationEstim" updates="None" val="" valType="code"/>
         <Param name="forceEndRoutine" updates="constant" val="False" valType="bool"/>
         <Param name="loop" updates="None" val="True" valType="bool"/>
-        <Param name="movie" updates="constant" val="video/green_square.mp4" valType="str"/>
+        <Param name="movie" updates="constant" val="resources/green_square.mp4" valType="str"/>
         <Param name="name" updates="None" val="movie" valType="code"/>
         <Param name="opacity" updates="constant" val="1" valType="code"/>
         <Param name="ori" updates="constant" val="0" valType="code"/>
