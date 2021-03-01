@@ -27,9 +27,10 @@ let tests = TestCollector.collectTests(label, true);
       Paths.dir_tests + '/' + test.path, 
       Paths.dir_staging + '/' + test.path
     );
-    // Remove config and test-script
+    // Remove config, test-script, and references
     fs.removeSync(Paths.dir_staging + '/' + test.path + '/config.json');
     fs.removeSync(Paths.dir_staging + '/' + test.path + '/' + test.testscript_file);
+    fs.removeSync(Paths.dir_staging + '/' + test.path + '/references');
     // Compile psyexp
     console.log('[compileExperiments.cjs] Compiling psyexp for ' + test.path);
     compileCommand = '' +
@@ -37,6 +38,7 @@ let tests = TestCollector.collectTests(label, true);
       Paths.dir_staging + '/' + test.path + '/' + test.experiment_file +
       ' --outfile ' + Paths.dir_staging + '/' + test.path + '/' + 
       test.experiment_file.substring(0, test.experiment_file.length - '.psyexp'.length) + '.js';
+    console.log(compileCommand)          
     child_process.execSync(compileCommand);
   }
 })();
