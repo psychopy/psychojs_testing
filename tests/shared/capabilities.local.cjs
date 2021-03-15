@@ -10,17 +10,6 @@ module.exports = {
       }
     };
 
-    // Trying out window WAD
-    capability = JSON.parse(JSON.stringify(generalSettings));
-    capability['bstack:options'] = {
-      sessionName: 'local_local_windows_local'
-    };
-    capability.platformName = 'windows';
-    capability['appium:deviceName'] = 'WindowsPC';
-    capability['appium:app'] = 'testing';
-    return [capability];
-
-    /*
     let browsers = [
       'chrome'//, 'firefox'//, 'MicrosoftEdge'
     ];
@@ -34,7 +23,6 @@ module.exports = {
       output.push(capability);
     }
     return output;
-    */
   },
 
   // getWdioServices; services for local Selenium server
@@ -45,14 +33,14 @@ module.exports = {
         logPath: Paths.dir_results_selenium,
         installArgs: {
           drivers: {
-            chrome: { version: '87.0.4280.88' },
+            chrome: { version: '89.0.4389.82' },
             firefox: { version: '0.26.0' },
             MicrosoftEdge: { version: '84.0.522.40' }
           }
         },
         args: {
           drivers: {
-            chrome: { version: '87.0.4280.88' },
+            chrome: { version: '89.0.4389.82' },
             firefox: { version: '0.26.0' },
             MicrosoftEdge: { version: '84.0.522.40' }
           }
