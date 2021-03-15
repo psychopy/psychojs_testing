@@ -28,7 +28,7 @@ let tests = TestCollector.collectTests(label, true);
       Paths.dir_staging + '/' + test.path
     );
     // Remove config, test-script, and references
-    fs.removeSync(Paths.dir_staging + '/' + test.path + '/config.json');
+    fs.removeSync(Paths.dir_staging + '/' + test.path + '/testconfig.json');
     fs.removeSync(Paths.dir_staging + '/' + test.path + '/' + test.testscript_file);
     fs.removeSync(Paths.dir_staging + '/' + test.path + '/references');
     // Compile psyexp
