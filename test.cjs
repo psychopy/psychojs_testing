@@ -43,6 +43,11 @@ if (tests.karma.length > 0) {
 
 // Any wdio tests? Deploy experiments and run them
 if (tests.wdio.length > 0) {
+  // Check if uploadExperiments is enabled when target == stager
+  if (parseOption({cli: 'url'}) == 'stager' && !parseOption({cli: 'uploadExperiments'})) {
+    throw new Error('[test.cjs] The target CLI option was "stager" but uploadExperiments was disabled. Please enable uploadExperiments')
+  }
+
   // Deploy experiments
   child_process.execSync(
     'node tests/cli/deployExperiments.cjs ' + cliString,
