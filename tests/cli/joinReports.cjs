@@ -55,23 +55,23 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   }
   console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
   // Create a tmp folder if it doesn't exist yet
-  if (!fs.existsSync(Paths.dir_tmp_wdio)) {
-    fs.mkdirSync(Paths.dir_tmp_wdio);
+  if (!fs.existsSync(Paths.dir_results)) {
+    fs.mkdirSync(Paths.dir_results);
   };  
   // Create a logs_joined folder if it doesn't exist yet
-  if (!fs.existsSync(Paths.dir_logs_joined)) {
-    fs.mkdirSync(Paths.dir_logs_joined);
+  if (!fs.existsSync(Paths.dir_results_joined)) {
+    fs.mkdirSync(Paths.dir_results_joined);
   };    
   ReportSummarizer.aggregateAndStoreWdio(
     joinedReports,
-    Paths.dir_logs_joined,
+    Paths.dir_results_joined,
     true, 
     BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true),
     buildNamesToBuildIdsMap
   );
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
-  await Stager.uploadDirectory(Paths.dir_logs_joined, Paths.subdir_report_wdio + '/'  + Stager.createReportPath(branch, testrun));
+  await Stager.uploadDirectory(Paths.dir_results_joined, Paths.subdir_report_wdio + '/'  + Stager.createReportPath(branch, testrun));
 })();
 
 

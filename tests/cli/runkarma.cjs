@@ -16,9 +16,11 @@ console.log('[runkarma.cjs] buildName is ' + buildName);
 
 // Clean up logs
 Paths.recreateDirectories([
-  Paths.dir_tmp_wdio,
-  Paths.dir_tmp_unit
-]);
+  Paths.dir_results
+], false);
+Paths.recreateDirectories([
+  Paths.dir_results_karma
+], true);
 
 // Delete BrowserStack logs
 if (server === 'bs') {
@@ -45,7 +47,7 @@ if (server === 'bs') {
   if (server == 'bs') {
     const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', buildName);
     fs.outputFileSync(
-      Paths.dir_tmp_unit,
+      Paths.dir_results_karma,
       JSON.stringify(sessions)
     );  
   }
@@ -55,7 +57,7 @@ if (server === 'bs') {
   // Aggregate
   ReportSummarizer.aggregateAndStoreKarma(
     joinedReports,
-    Paths.dir_tmp_unit, 
+    Paths.dir_results_karma, 
     server === 'bs'
   );
 
@@ -68,6 +70,6 @@ if (server === 'bs') {
     await Stager.deleteDirectory(Paths.subdir_report_unit + '/' + stagerPath);
     // Upload logs
     console.log('[runkarma.cjs] Uploading new reports to Stager');
-    await Stager.uploadDirectory(Paths.dir_tmp_unit, Paths.subdir_report_unit + '/' + stagerPath);
+    await Stager.uploadDirectory(Paths.dir_results_karma, Paths.subdir_report_unit + '/' + stagerPath);
   }
 })();
