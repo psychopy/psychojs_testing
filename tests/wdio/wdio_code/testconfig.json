@@ -3,5 +3,7 @@
   "labels": ["wdio_code", "wdio", "batch", "all"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_code.cjs",
-  "experiment_file": "wdio_code.psyexp"
+  "experiment_file": "wdio_code.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_code",
+  "description": "Presents a code component which executes code on each of it's tabs"
 }

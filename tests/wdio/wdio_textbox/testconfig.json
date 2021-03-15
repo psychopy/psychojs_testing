@@ -4,6 +4,7 @@
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_textbox.cjs",
   "experiment_file": "wdio_textbox.psyexp",
-  "pavlovia_url": "https://run.pavlovia.org/support/wdio_textbox/html/",
-  "fine_calibration": true
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_textbox",
+  "fine_calibration": true,
+  "description": "Presents an editable textbox, then shows what was typed in"
 }

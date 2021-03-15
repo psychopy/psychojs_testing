@@ -1,0 +1,9 @@
+{
+  "test_framework": "wdio",
+  "labels": ["wdio_calibration"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "wdio_calibration.cjs",
+  "experiment_file": "wdio_calibration.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_calibration",
+  "description": "Maps clicks on the canvas to PsychoJS height coordinates, which can be used to calibrate pointer actions."
+}

@@ -3,5 +3,7 @@
   "labels": ["wdio_img", "wdio", "batch", "all"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_img.cjs",
-  "experiment_file": "wdio_img.psyexp"
+  "experiment_file": "wdio_img.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_img",
+  "description": "Presents a JPG and PNG image, both straight and rotated by 5 degrees"
 }

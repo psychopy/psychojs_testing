@@ -58,7 +58,7 @@ mergeKarma = (onBrowserStack) => {
   let sessionMap = {}
   if (onBrowserStack) {
     let sessions = JSON.parse(
-      fs.readFileSync(Paths.dir_tmp_unit + '/sessions.json').toString()
+      fs.readFileSync(Paths.dir_results_karma + '/sessions.json').toString()
     );  
     let splitName, logUrl;
     for (let session of sessions) {
@@ -72,8 +72,8 @@ mergeKarma = (onBrowserStack) => {
   }
   // Read JSON file with karma logs
   let json = JSON.parse(
-    //fs.readFileSync(Paths.dir_tmp_unit + '/results.json').toString()
-    fs.readFileSync(Paths.dir_tmp_unit + '/results.json').toString()
+    //fs.readFileSync(Paths.dir_results_karma + '/results.json').toString()
+    fs.readFileSync(Paths.dir_results_karma + '/results.json').toString()
   );  
   // Capability_ids: browser IDs
   let capability_ids = Object.keys(json.browsers);
@@ -170,7 +170,7 @@ mergeWdio = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
 
   // *** Process JSON reporter files
   // List of JSON reporter log filenames
-  let filenames = fs.readdirSync(Paths.dir_logs_json).sort();
+  let filenames = fs.readdirSync(Paths.dir_results_json).sort();
   // Converted logs
   let joinedReports = [];
   // Raw JSON reporter log
@@ -194,7 +194,7 @@ mergeWdio = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
     // Read and parse file to JSON
     try {
       json = JSON.parse(
-        fs.readFileSync(Paths.dir_logs_json + '/' + filename).toString()
+        fs.readFileSync(Paths.dir_results_json + '/' + filename).toString()
       );
       console.log('[ReportSummarizer.cjs] read ' + filename);
       // Add sessionId
@@ -220,7 +220,7 @@ mergeWdio = (suiteFrom = [], suiteTo = 'unnamed_suite') => {
   // *** Add entries for logs we couldn't process; these should add up to the number of platforms not present in processed lgos
   // Read capabilities
   capabilities = JSON.parse(
-    fs.readFileSync(Paths.dir_logs_capabilities + '/capabilities.json').toString()
+    fs.readFileSync(Paths.dir_results_capabilities + '/capabilities.json').toString()
   );  
   // allPlatforms; all those found in capabilities
   let allPlatforms = capabilities.map((capability) => {

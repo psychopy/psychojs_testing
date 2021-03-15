@@ -191,13 +191,13 @@ let compareScreenshotsWithReferences = async (validate) => {
   }  
   // Store output as JSON
   fs.outputFileSync(
-    Paths.dir_logs_processed + '/' + 'screenshot_stats.json',
+    Paths.dir_results_processed + '/' + 'screenshot_stats.json',
     JSON.stringify(results)
   );
   // Store output as CSV
   if (results.length > 0) {
     fs.outputFileSync(
-      Paths.dir_logs_processed + '/' + 'screenshot_stats.csv',
+      Paths.dir_results_processed + '/' + 'screenshot_stats.csv',
       json2csv.parse(results)
     );  
   }

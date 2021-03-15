@@ -9,6 +9,18 @@ module.exports = {
         resolution: 'local'
       }
     };
+
+    // Trying out window WAD
+    capability = JSON.parse(JSON.stringify(generalSettings));
+    capability['bstack:options'] = {
+      sessionName: 'local_local_windows_local'
+    };
+    capability.platformName = 'windows';
+    capability['appium:deviceName'] = 'WindowsPC';
+    capability['appium:app'] = 'testing';
+    return [capability];
+
+    /*
     let browsers = [
       'chrome'//, 'firefox'//, 'MicrosoftEdge'
     ];
@@ -22,6 +34,7 @@ module.exports = {
       output.push(capability);
     }
     return output;
+    */
   },
 
   // getWdioServices; services for local Selenium server
@@ -29,7 +42,7 @@ module.exports = {
     return [
       // Selenium-standalone; takes care of local browserdrivers 
       ['selenium-standalone', {
-        logPath: Paths.dir_logs_selenium,
+        logPath: Paths.dir_results_selenium,
         installArgs: {
           drivers: {
             chrome: { version: '87.0.4280.88' },

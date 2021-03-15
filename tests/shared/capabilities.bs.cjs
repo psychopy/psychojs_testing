@@ -38,7 +38,7 @@ const getBrowsers = () => {
     { 
       os: ['Windows'], 
       os_version: ['7', '8.1', '10'], 
-      browser: ['chrome', 'edge', 'firefox', 'ie']
+      browser: ['chrome', 'edge', 'firefox'] //, 'ie']
     },
     {
       os: ['OS X'], 

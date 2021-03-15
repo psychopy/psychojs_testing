@@ -125,8 +125,8 @@
         <Param name="storeHistory" updates="constant" val="False" valType="bool"/>
         <Param name="storeRating" updates="constant" val="True" valType="bool"/>
         <Param name="storeRatingTime" updates="constant" val="True" valType="bool"/>
-        <Param name="styleTweaks" updates="constant" val="[]" valType="list"/>
-        <Param name="styles" updates="constant" val="['rating']" valType="fixedList"/>
+        <Param name="styleTweaks" updates="constant" val="()" valType="list"/>
+        <Param name="styles" updates="constant" val="rating" valType="fixedList"/>
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
         <Param name="ticks" updates="constant" val="(1, 2, 3, 4, 5)" valType="list"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>

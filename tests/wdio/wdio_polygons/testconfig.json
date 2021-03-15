@@ -3,5 +3,7 @@
   "labels": ["wdio_polygons", "wdio", "batch", "all"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_polygons.cjs",
-  "experiment_file": "wdio_polygons.psyexp"
+  "experiment_file": "wdio_polygons.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_polygons",
+  "description": "Presents a bunch of Polygons, both straight and rotated by 5 degrees"
 }

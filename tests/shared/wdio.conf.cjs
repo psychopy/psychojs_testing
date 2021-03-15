@@ -73,7 +73,7 @@ exports.config = {
     '@wdio/applitools-service': 'warn',
     '@wdio/browserstack-service': 'warn'
   },
-  outputDir: Paths.dir_logs_wdio,
+  outputDir: Paths.dir_results_wdio,
 
   // Give up after X tests have failed (0 - don't bail)
   bail: 0,
@@ -112,7 +112,7 @@ exports.config = {
   reporters: [
     'dot',
     ['json', {
-      outputDir: Paths.dir_logs_json,
+      outputDir: Paths.dir_results_json,
       stdout: false
     }]
   ],
@@ -129,25 +129,28 @@ exports.config = {
     try {
       // *** Clean up temporary directories
       Paths.recreateDirectories([
-        Paths.dir_tmp_wdio,
+        Paths.dir_results,
+      ], false);
+      Paths.recreateDirectories([
+        Paths.dir_results,
         Paths.dir_cache,
-        Paths.dir_logs_capabilities,
-        Paths.dir_logs_joined,
-        Paths.dir_logs_json,
-        Paths.dir_logs_processed,
-        Paths.dir_logs_wdio,
-        Paths.dir_logs_selenium,
+        Paths.dir_results_capabilities,
+        Paths.dir_results_joined,
+        Paths.dir_results_json,
+        Paths.dir_results_processed,
+        Paths.dir_results_wdio,
+        Paths.dir_results_selenium,
         Paths.dir_screenshots_cutout,
         Paths.dir_screenshots_raw,
         Paths.dir_screenshots_scaled
-      ]);    
+      ], true);    
       // *** Delete old BrowserStack logs
       if (server === 'bs') {
         console.log('[wdio.conf.cjs] Deleting BrowserStack logs');
         BrowserStack.deleteOneBuild('PsychoJS_wdio', buildName);
       }
       // *** Log all capabilities
-      fs.outputFileSync(Paths.dir_logs_capabilities + '/capabilities.json', JSON.stringify(capabilities));
+      fs.outputFileSync(Paths.dir_results_capabilities + '/capabilities.json', JSON.stringify(capabilities));
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');
       process.exit(1);
@@ -222,8 +225,12 @@ exports.config = {
       let screenshotBase64 = await browser.takeScreenshot();
       return (await Jimp.read(new Buffer.from(screenshotBase64, 'base64')));
     });
-    browser.addCommand('writeScreenshot', (path, screenshotName) => {
-      browser.writeJimpImg(browser.getJimpScreenshot(), path, screenshotName);
+    browser.addCommand('writeScreenshot', (screenshotName) => {
+      browser.writeJimpImg(
+        browser.getJimpScreenshot(), 
+        browser.capabilities.testConfig.path,
+        screenshotName
+      );
     });
     // Perform a visual regression test
     browser.addCommand('compareScreenshot', async (screenshotName) => {
@@ -303,7 +310,7 @@ exports.config = {
           if (browser.capabilities.testConfig.pavlovia_url === undefined) {
             throw new Error(
               '[wdio.conf.cjs] url was "pavlovia", but no pavlovia_url could be found in ' +
-              browser.capabilities.testConfig.path + '/config.json'
+              browser.capabilities.testConfig.path + '/testconfig.json'
             );
           }
           baseUrl = browser.capabilities.testConfig.pavlovia_url.replace(/&#x2F;/g, '/');
@@ -367,7 +374,7 @@ exports.config = {
       }
       ReportSummarizer.aggregateAndStoreWdio(
         joinedReports,
-        Paths.dir_logs_processed, 
+        Paths.dir_results_processed, 
         server === 'bs',
         buildPrefix,
         buildNamesToBuildIdsMap
@@ -381,7 +388,7 @@ exports.config = {
         await Stager.deleteDirectory(Paths.subdir_report_wdio + '/' + stagerPath);
         // Upload logs
         console.log('[wdio.conf.cjs] Uploading new reports to Stager');
-        await Stager.uploadDirectory(Paths.dir_tmp_wdio, Paths.subdir_report_wdio + '/' + stagerPath);
+        await Stager.uploadDirectory(Paths.dir_results, Paths.subdir_report_wdio + '/' + stagerPath);
       }
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');

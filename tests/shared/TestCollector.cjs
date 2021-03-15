@@ -76,15 +76,15 @@ collectTests = (label, addCalibration = false) => {
 // - Whether the .json (config) file with test_framework === "karma" has a matching .cjs file (.cjs is for wdio)
 // - Whether the .json (config) file with test_framework === "wdio" has a matching .cjs file (.js is for karma)
 collectTestsRecursive = (label, path, results = {'karma': [], 'wdio': [], 'fine_calibration': false}) => {
-  // This directory contains a config.json, parse it
-  if (fs.existsSync(path + '/config.json')) {
+  // This directory contains a testconfig.json, parse it
+  if (fs.existsSync(path + '/testconfig.json')) {
     // Parse config and add to results
     let config = parseConfig(label, path);
     if (config !== undefined) {
       results[config.test_framework].push(config);
       results.fine_calibration = results.fine_calibration || config.fine_calibration;
     }
-  // This directory does not contain a config.json, parse subdirectories
+  // This directory does not contain a testconfig.json, parse subdirectories
   } else {
     // Directories to ignore during test-collection
     const directoriesToIgnore = [
@@ -113,13 +113,13 @@ parseConfig = (label, path) => {
   let config;
   try {
     config = JSON.parse(
-      fs.readFileSync(path + '/config.json').toString()
+      fs.readFileSync(path + '/testconfig.json').toString()
     );  
   } catch (e) {
     throw new Error(
       'Error in test-configuration: JSON in ' + 
       path + 
-      '/config.json could not be parsed'
+      '/testconfig.json could not be parsed'
     );
   }
   // Check if there is a labels property
@@ -127,19 +127,27 @@ parseConfig = (label, path) => {
     throw new Error(
       'Error in test-configuration: ' +
       path + 
-      '/config.json did not have a "labels" property'
+      '/testconfig.json did not have a "labels" property'
     );
   }
   // Check if labels are valid and any match label. No matches? stop
   labelMatches = config.labels.some((labelToMatch) => {
     NameSanitizer.validate(
-      'one of the labels in ' + path + '/config.json',
+      'one of the labels in ' + path + '/testconfig.json',
       labelToMatch
     );
     return minimatch(labelToMatch, label);
   });
   if (!labelMatches) {
     return;
+  }
+  // Check if there is a description property
+  if (!config.hasOwnProperty('description')) {
+    throw new Error(
+      'Error in test-configuration: ' +
+      path + 
+      '/testconfig.json did not have a "description" property'
+    );
   }
   // Remove leading './tests/' from config.path
   config.path = path.substring(
@@ -151,7 +159,7 @@ parseConfig = (label, path) => {
     throw new Error(
       'Error in test-configuration: ' + 
       path + 
-      '/config.json has "testscript_file" property ' + 
+      '/testconfig.json has "testscript_file" property ' + 
       JSON.stringify(config.testscript_file) +
       ', but I could not find this file at ' +
       path + '/' + config.testscript_file
@@ -167,7 +175,7 @@ parseConfig = (label, path) => {
       throw new Error(
         'Error in test-configuration: ' + 
         path + 
-        '/config.json has "experiment_file" property ' + 
+        '/testconfig.json has "experiment_file" property ' + 
         JSON.stringify(config.experiment_file) +
         ', but I could not find this file at ' +
         path + '/' + config.experiment_file
@@ -178,7 +186,7 @@ parseConfig = (label, path) => {
     throw new Error(
       'Error in test-configuration: ' + 
       path + 
-      '/config.json has "test_framework" property that was missing or not recognized (found ' + 
+      '/testconfig.json has "test_framework" property that was missing or not recognized (found ' + 
       JSON.stringify(config.test_framework) + 
       ' but expected "karma" or "wdio")'
     );

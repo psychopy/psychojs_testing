@@ -3,5 +3,7 @@
   "labels": ["wdio_sound", "wdio", "batch", "all"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_sound.cjs",
-  "experiment_file": "wdio_sound.psyexp"
+  "experiment_file": "wdio_sound.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_sound",
+  "description": "Presents a sound stimulus"
 }
