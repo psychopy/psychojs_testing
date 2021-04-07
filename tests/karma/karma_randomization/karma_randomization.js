@@ -1,6 +1,7 @@
-import * as util from './../../dist/util-2021.1.2.js';
-import {TrialHandler} from './../../dist/data-2021.1.2.js';
-import { PsychoJS } from './../../dist/core-2021.1.2.js';
+//import * as util from '../../../dist/util-2021.1.2.js';
+import * as util from '/util.js';
+import {TrialHandler} from '/data.js';
+import { PsychoJS } from '/core.js';
 
 // *** GLOBALS
 // Polyfill for Array.flat. From: https://github.com/jonathantneal/array-flat-polyfill
