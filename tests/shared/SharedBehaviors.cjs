@@ -12,7 +12,9 @@ performPavloviaPrelude = (waitForCanvas = true, resourceTimeout = 20000) => {
   $('#buttonOk').waitForExist({timeout: 10000, timeoutMsg: 'Could not find #buttonOK in HTML'});
   // Wait until resource have loaded, then click OK
   $('#buttonOk').waitForEnabled({timeout: resourceTimeout, timeoutMsg: '#buttonOK was not enabled within ' + resourceTimeout + ' ms'});
+  browser.pause(1000);
   $('#buttonOk').click();    
+  //browser.pause(100000);      
   // Wait for canvas, then wait 3 seconds for any status bars to disappear after full-screen is enabled
   if (waitForCanvas) {
     $('<canvas />').waitForExist({timeoutMsg: 'Could not find canvas element in HTML'});
@@ -234,6 +236,47 @@ performCalibrationExperiment = (screenshots = false) => {
   return calibration;
 };
 
+/**
+ * Resizes window and adapts calibration
+ * @function
+ * @public
+ * @param {boolean} before - true: actions before calibration experiment starts. false: actions that resize and adapt calibration
+ * @returns {Function} callback for appropriate phase
+ */  
+resize = (before) => {
+  if (before) {
+    return function() {
+      if (!browser.isMobile) {
+        let stopFullScreenSuccess = browser.execute(function() {
+          try {
+            psychoJS.window.closeFullScreen();
+          } catch (e) {
+            return false;
+          }
+          return true;
+        });
+        if (!stopFullScreenSuccess) {
+          throw new Error('Failed exiting fullscreen');
+        }
+        browser.resizeWindow(500,300);
+        /*
+        browser.performActions([{
+          "type": "key",
+          "id": "press",
+          "actions": [
+            {"type": "keyDown", "value": '\uE03B'},
+            {"type": "keyUp", "value": '\uE03B'}
+          ]
+        }]);
+        */
+        browser.keys('F11');
+        //browser.maximizeWindow();
+        console.log("PRESSED ESC");
+      }
+    }
+  }
+};
+
 module.exports = {
   //experimentUrls: experimentUrls,
   performPavloviaPrelude: performPavloviaPrelude,
@@ -241,6 +284,7 @@ module.exports = {
   tapAtCoordinate: tapAtCoordinate,
   performCalibrationExperiment: performCalibrationExperiment,
   waitForReport: waitForReport,
+  resize: resize/*,
   tests: [
     'wdio_code',
     'wdio_conditions',
@@ -252,5 +296,5 @@ module.exports = {
     'wdio_text',
     'wdio_textbox',
     'wdio_video'
-  ]
+  ]*/
 };

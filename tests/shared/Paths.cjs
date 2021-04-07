@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 // Paths to temporary folders, image folders, and URLs
 module.exports = {
   // Logs of karma; karma itself assumes this is path relative to one directory higher than the one containing karma.conf.js
-  dir_results_karma_relative:      '../tests/results/logs_karma', 
   dir_results_karma:            './tests/results/logs_karma',
 
   // Path to staging directory (compiled test-experiments)
@@ -44,10 +43,8 @@ module.exports = {
         if (!fs.existsSync(path)) {
           fs.mkdirSync(path);
         }
-      } catch {
-        errorMessage = '[Paths.cjs] Could not re-create directory ' + path;
-        console.log('\x1b[31m' + errorMessage + '\x1b[0m');
-        throw new Error(errorMessage);            
+      } catch (e) {
+        throw new Error('[Paths.cjs] Could not re-create directory ' + path + ', because ' + e.message);            
       }
     }
   }

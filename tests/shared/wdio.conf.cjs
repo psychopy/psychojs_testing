@@ -24,12 +24,7 @@ testrun = testrun === undefined? label: testrun;
 const buildName = BrowserStack.createBuildName(branch, testrun, label);
 console.log('[wdio.conf.cjs] buildName is ' + buildName);
 
-// Get pavlovia CLI option
-let pavlovia = parseOption({cli: 'pavlovia'}, false);
-pavlovia = pavlovia === undefined? false: pavlovia;
-console.log('[wdio.conf.cjs] pavlovia is ' + pavlovia);
-
-// Get url CLI option and construct baseUrl
+// Get url CLI option 
 let url = parseOption({cli: 'url'});
 
 // Include capability generator module
@@ -94,7 +89,7 @@ exports.config = {
   // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
   specFileRetriesDeferred: true,
   // Options to be passed to Jasmine.
-  jasmineNodeOpts: {
+  jasmineOpts: {
     // Jasmine default timeout
     defaultTimeoutInterval: 90000,
     // Fail whole suite after first failed spec
@@ -129,17 +124,17 @@ exports.config = {
     try {
       // *** Clean up temporary directories
       Paths.recreateDirectories([
-        Paths.dir_results,
+        Paths.dir_results
       ], false);
       Paths.recreateDirectories([
-        Paths.dir_results,
+        //Paths.dir_results,
         Paths.dir_cache,
         Paths.dir_results_capabilities,
         Paths.dir_results_joined,
         Paths.dir_results_json,
         Paths.dir_results_processed,
-        Paths.dir_results_wdio,
         Paths.dir_results_selenium,
+        Paths.dir_results_wdio,                
         Paths.dir_screenshots_cutout,
         Paths.dir_screenshots_raw,
         Paths.dir_screenshots_scaled

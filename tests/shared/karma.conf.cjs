@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Tue Dec 01 2020 14:30:27 GMT+0000 (Greenwich Mean Time)
+const fs = require('fs-extra');
 const CLIParser = require('./CLIParser.cjs');
 const BrowserStack = require('./BrowserStack.cjs');
 const Paths = require('./Paths.cjs');
@@ -12,12 +12,9 @@ let [server, uploadReport, platform, test, testrun, branch, subset] = CLIParser.
 let label = parseOption({cli: 'label'});
 let tests = TestCollector.collectTests(label);
 let specFiles = tests.karma.map((test) => {
-  return {pattern: test.path + '/' + test.testscript_file, type: 'module'};
+  return {pattern: 'tests/' + test.path + '/' + test.testscript_file, type: 'module'};
 });
 console.log('[karma.conf.cjs] running ' + specFiles.length + ' specFiles');
-
-// Construct testrun (2 remove!!!)
-testrun = testrun === undefined? label: testrun;
 
 // Construct browsers
 let customLaunchers, browsers;
@@ -32,6 +29,25 @@ if (server === 'bs') {
   };
 }
 browsers = Object.keys(customLaunchers);  
+
+// Construct proxies for each JS and CCS file in dist 
+// E.g., from within the browser dist/util-2021.1.3.js can be referenced as /util.js and as /util-2021.1.3.js
+let libraryFiles = fs.readdirSync('dist');
+let cssFiles = []; 
+let libraryProxies = {};
+for (let libraryFile of libraryFiles) {
+  // Ends with umd.js? Ignore
+  if (libraryFile.endsWith('umd.js')) { 
+  // Ends with css? Add to cssFiles   
+  } else if (libraryFile.endsWith('css')) {
+    cssFiles.push({pattern: 'dist/' + libraryFile, type: 'css'});
+  // Else, make a proxy
+  } else {
+    // Get the part before the '-', that + '.js' is the proxy
+    libraryProxies['/' + libraryFile.split('-')[0] + '.js'] = 'http://localhost:9876/base/dist/' + libraryFile;
+    libraryProxies['/' + libraryFile] = 'http://localhost:9876/base/dist/' + libraryFile;
+  }
+}
 
 module.exports = function(config) {
   config.set({
@@ -48,7 +64,7 @@ module.exports = function(config) {
     browsers: browsers,
     
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '..',
+    basePath: '../..',
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -57,7 +73,6 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css', type: 'css'},
-      {pattern: '../dist/psychojs.css', type: 'css'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.1/seedrandom.min.js', type: 'js'},
@@ -69,10 +84,11 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.74/Tone.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
-      {pattern: '../dist/*.js', type: 'module', included: false},
-      {pattern: '../src/root.html', type: 'dom'}
-    ].concat(specFiles),
+      {pattern: 'dist/*.js', type: 'module', included: false, served: true},
+      {pattern: 'src/root.html', type: 'dom'}
+    ].concat(cssFiles).concat(specFiles),
 
+    proxies: libraryProxies,  
 
     // list of files / patterns to exclude
     exclude: [
@@ -91,7 +107,7 @@ module.exports = function(config) {
     reporters: server === 'bs'? ['dots', 'json', 'BrowserStack']: ['dots', 'json'],
     jsonReporter: {
       //stdout: true,
-      outputFile: Paths.dir_results_karma_relative + '/results.json'
+      outputFile: Paths.dir_results_karma + '/results.json'
     },
 
     // web server port
