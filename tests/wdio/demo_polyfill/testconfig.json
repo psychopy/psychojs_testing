@@ -1,0 +1,9 @@
+{
+  "test_framework": "wdio",
+  "labels": ["demo_polyfill", "batch", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "demo_polyfill.cjs",
+  "experiment_file": "demo_polyfill.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/demo_polyfill",
+  "description": "Start the demo_polyfill experiment, which runs a whole bunch of tests, then check whether the experiment finishes"
+}

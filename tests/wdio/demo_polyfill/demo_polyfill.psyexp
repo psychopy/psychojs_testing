@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" ?>
+<PsychoPy2experiment encoding="utf-8" version="2021.1.3">
+  <Settings>
+    <Param name="Audio latency priority" updates="None" val="use prefs" valType="str"/>
+    <Param name="Audio lib" updates="None" val="use prefs" valType="str"/>
+    <Param name="Completed URL" updates="None" val="" valType="str"/>
+    <Param name="Data file delimiter" updates="None" val="auto" valType="str"/>
+    <Param name="Data filename" updates="None" val="u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])" valType="code"/>
+    <Param name="Enable Escape" updates="None" val="True" valType="bool"/>
+    <Param name="Experiment info" updates="None" val="{'participant': '', 'session': '001'}" valType="code"/>
+    <Param name="Force stereo" updates="None" val="True" valType="bool"/>
+    <Param name="Full-screen window" updates="None" val="True" valType="bool"/>
+    <Param name="HTML path" updates="None" val="" valType="str"/>
+    <Param name="Incomplete URL" updates="None" val="" valType="str"/>
+    <Param name="Monitor" updates="None" val="testMonitor" valType="str"/>
+    <Param name="Resources" updates="None" val="[]" valType="list"/>
+    <Param name="Save csv file" updates="None" val="False" valType="bool"/>
+    <Param name="Save excel file" updates="None" val="False" valType="bool"/>
+    <Param name="Save log file" updates="None" val="True" valType="bool"/>
+    <Param name="Save psydat file" updates="None" val="True" valType="bool"/>
+    <Param name="Save wide csv file" updates="None" val="True" valType="bool"/>
+    <Param name="Screen" updates="None" val="1" valType="num"/>
+    <Param name="Show info dlg" updates="None" val="True" valType="bool"/>
+    <Param name="Show mouse" updates="None" val="False" valType="bool"/>
+    <Param name="Units" updates="None" val="height" valType="str"/>
+    <Param name="Use version" updates="None" val="" valType="str"/>
+    <Param name="Window size (pixels)" updates="None" val="[1680, 1050]" valType="list"/>
+    <Param name="blendMode" updates="None" val="avg" valType="str"/>
+    <Param name="color" updates="None" val="$[0,0,0]" valType="color"/>
+    <Param name="colorSpace" updates="None" val="rgb" valType="str"/>
+    <Param name="expName" updates="None" val="untitled" valType="str"/>
+    <Param name="exportHTML" updates="None" val="on Sync" valType="str"/>
+    <Param name="logging level" updates="None" val="exp" valType="code"/>
+  </Settings>
+  <Routines>
+    <Routine name="import_polyfill">
+      <CodeComponent name="code_JS">
+        <Param name="Before Experiment" updates="constant" val="print(average([1,2]))" valType="extendedCode"/>
+        <Param name="Before JS Experiment" updates="constant" val="// Import the polyfill&amp;#10;import PsychoPolyFill from './PsychoPolyfill.js';" valType="extendedCode"/>
+        <Param name="Begin Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin JS Experiment" updates="constant" val="// Initialize the polyfill&amp;#10;PsychoPolyFill(expInfo.psychopyVersion, psychoJS, util);&amp;#10;" valType="extendedCode"/>
+        <Param name="Begin JS Routine" updates="constant" val="// The line of code below is only for our automated testing system&amp;#10;document.body.setAttribute('data-report', 'intro_trial');" valType="extendedCode"/>
+        <Param name="Begin Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Code Type" updates="None" val="JS" valType="str"/>
+        <Param name="Each Frame" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Each JS Frame" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End JS Experiment" updates="constant" val="// The line of code below is only for our automated testing system&amp;#10;document.body.setAttribute('data-report', 'FINISHED');" valType="extendedCode"/>
+        <Param name="End JS Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="disabled" updates="None" val="False" valType="bool"/>
+        <Param name="name" updates="None" val="code_JS" valType="code"/>
+      </CodeComponent>
+    </Routine>
+    <Routine name="run_tests">
+      <TextComponent name="test_text">
+        <Param name="color" updates="constant" val="white" valType="color"/>
+        <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
+        <Param name="contrast" updates="constant" val="1" valType="num"/>
+        <Param name="disabled" updates="None" val="False" valType="bool"/>
+        <Param name="durationEstim" updates="None" val="" valType="num"/>
+        <Param name="flip" updates="constant" val="None" valType="str"/>
+        <Param name="font" updates="constant" val="Open Sans" valType="str"/>
+        <Param name="languageStyle" updates="None" val="LTR" valType="str"/>
+        <Param name="letterHeight" updates="constant" val="0.1" valType="num"/>
+        <Param name="name" updates="None" val="test_text" valType="code"/>
+        <Param name="opacity" updates="constant" val="" valType="num"/>
+        <Param name="ori" updates="constant" val="0" valType="num"/>
+        <Param name="pos" updates="constant" val="(0, 0)" valType="list"/>
+        <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
+        <Param name="startEstim" updates="None" val="" valType="num"/>
+        <Param name="startType" updates="None" val="time (s)" valType="str"/>
+        <Param name="startVal" updates="None" val="0.0" valType="num"/>
+        <Param name="stopType" updates="None" val="duration (s)" valType="str"/>
+        <Param name="stopVal" updates="constant" val="1.0" valType="num"/>
+        <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
+        <Param name="text" updates="constant" val="Running tests of PsychoPolyfill..." valType="str"/>
+        <Param name="units" updates="None" val="from exp settings" valType="str"/>
+        <Param name="wrapWidth" updates="constant" val="" valType="num"/>
+      </TextComponent>
+      <CodeComponent name="test_code">
+        <Param name="Before Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Before JS Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin JS Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin JS Routine" updates="constant" val="// *******************************&amp;#10;// *** Tests of PsychoPolyfill ***&amp;#10;// *******************************&amp;#10;&amp;#10;// Sort a couple of numbers&amp;#10;if (JSON.stringify(sort([4.3, 1, 2])) !== JSON.stringify([1, 2, 4.3])) {&amp;#10;    throw new Error('Failed sorting [4.3, 1, 2]');&amp;#10;}&amp;#10;// Sort a couple of strings&amp;#10;if (JSON.stringify(sort(['a', 'b', 'ab'])) !== JSON.stringify(['a', 'ab', 'b'])) {&amp;#10;    throw new Error('Failed sorting [\'a\', \'b\', \'ab\']');&amp;#10;}&amp;#10;// Sort a mix of numbers and string; should throw an error&amp;#10;try {&amp;#10;    sort([1, 2, 'a']);&amp;#10;    throw new Error('Sorting [1, 2, \'a\'] should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;// A haystack with an assortment of different types of values&amp;#10;let haystack = [1, 1, 2, 3, 'word', null, undefined, NaN, true, [1, 2, 3], {a:2}, function() {}];&amp;#10;&amp;#10;// Test count function&amp;#10;if (haystack.count(1) !== 2) {&amp;#10;    throw new Error('Did not count 2 occurences of 1 in haystack');&amp;#10;}&amp;#10;if (haystack.count('word') !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of \'word\' in haystack');&amp;#10;}&amp;#10;if (haystack.count(null) !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of null in haystack');&amp;#10;}&amp;#10;if (haystack.count(undefined) !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of undefined in haystack');&amp;#10;}&amp;#10;if (haystack.count(NaN) !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of NaN in haystack');&amp;#10;}&amp;#10;if (haystack.count(true) !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of true in haystack');&amp;#10;}&amp;#10;if (haystack.count([1,2,3]) !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of [1,2,3] in haystack');&amp;#10;}&amp;#10;if (haystack.count({a:2}) !== 1) {&amp;#10;    throw new Error('Did not count 1 occurence of {a:2} in haystack');&amp;#10;}&amp;#10;try {&amp;#10;    haystack.count(function() {});&amp;#10;    throw new Error('Counting function() {} should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;try {&amp;#10;    haystack.count(Symbol('a'));&amp;#10;    throw new Error('Counting Symbol(\'a\') should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;// Test index function&amp;#10;if (haystack.index({a:2}) !== 10) {&amp;#10;    throw new Error('Did not find the index of {a:2} a position 10');&amp;#10;}&amp;#10;try {&amp;#10;    haystack.index('missing');&amp;#10;    throw new Error('Finding the index of \'missing\' should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;// Test randint function&amp;#10;checkRandomInteger = (checkMe, low, high, context) =&gt; {&amp;#10;}&amp;#10;// Generate and check a bunch of random integers&amp;#10;let checkMe, low = 4, high = 8;&amp;#10;for (let i = 0; i &lt; 1000; i++) {&amp;#10;    checkMe = randint(low, high);&amp;#10;    if (!Number.isInteger(checkMe)) {&amp;#10;        throw new Error('Calling randint yielded a number that was not an integer');&amp;#10;    }&amp;#10;    if (checkMe &lt; low) {&amp;#10;        throw new Error('Calling randint yielded a number that was &lt; ' + low);&amp;#10;    }&amp;#10;    if (checkMe &gt;= high) {&amp;#10;        throw new Error('Calling randint yielded a number that was &gt;= ' + high);&amp;#10;    }&amp;#10;}&amp;#10;// Check errors thrown calling randint with invalid arguments&amp;#10;try {&amp;#10;    randint('a', 8);&amp;#10;    throw new Error('Calling randint(\'a\', 8) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    randint(8, 'a');&amp;#10;    throw new Error('Calling randint(8, \'a\') should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    randint(8, 8.1);&amp;#10;    throw new Error('Calling randint(8, 8.1) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    randint(1, 2, 3);&amp;#10;    throw new Error('Calling randint(1, 2, 3) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;// Test range&amp;#10;if (JSON.stringify(range(5)) !== JSON.stringify([0, 1, 2, 3, 4])) {&amp;#10;    throw new Error('range(5) did not yield [0, 1, 2, 3, 4]');&amp;#10;}&amp;#10;if (JSON.stringify(range(1, 1)) !== JSON.stringify([])) {&amp;#10;    throw new Error('range(1, 1) did not yield []');&amp;#10;}&amp;#10;if (JSON.stringify(range(1, 5)) !== JSON.stringify([1, 2, 3, 4])) {&amp;#10;    throw new Error('range(1, 5) did not yield [1, 2, 3, 4]');&amp;#10;}&amp;#10;if (JSON.stringify(range(1, 5, 2)) !== JSON.stringify([1, 3])) {&amp;#10;    throw new Error('range(1, 5, 2) did not yield [1, 3]');&amp;#10;}&amp;#10;try {&amp;#10;    range(1.1);&amp;#10;    throw new Error('Calling range(1.1) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    range(1, 1.1);&amp;#10;    throw new Error('Calling range(1, 1.1) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    range(1, 1, 1.1);&amp;#10;    throw new Error('Calling range(1, 1, 1.1) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    range(1, 2, 3, 4);&amp;#10;    throw new Error('Calling range(1, 2, 3, 4) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;// Test sum&amp;#10;if (sum([1,2,3]) !== 6) {&amp;#10;    throw new Error('sum([1,2,3]) did not yield 6');&amp;#10;}&amp;#10;if (sum([1,2,3], 2) !== 8) {&amp;#10;    throw new Error('sum([1,2,3], 2) did not yield 8');&amp;#10;}&amp;#10;try {&amp;#10;    sum('hello');&amp;#10;    throw new Error('Calling sum(\'hello\') should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    sum([1,2,'a']);&amp;#10;    throw new Error('Calling sum([1,2,\'a\']) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    sum([1,2,3], 'hello');&amp;#10;    throw new Error('Calling sum([1,2,3], \'hello\') should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    sum({a:3});&amp;#10;    throw new Error('Calling sum({a:3}) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    sum([1,2,3], 2, 2);&amp;#10;    throw new Error('Calling sum([1,2,3], 2, 2) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;&amp;#10;&amp;#10;// Test average&amp;#10;if (average([1,2,3]) !== 2) {&amp;#10;    throw new Error('average([1,2,3]) did not yield 2');&amp;#10;}&amp;#10;try {&amp;#10;    average('hello');&amp;#10;    throw new Error('Calling average(\'hello\') should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    average([1,2,'a']);&amp;#10;    throw new Error('Calling average([1,2,\'a\']) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;try {&amp;#10;    average([1,2,3], 2);&amp;#10;    throw new Error('Calling average([1,2,3], 2) should throw an Error, but it did not');&amp;#10;} catch (e) {}&amp;#10;" valType="extendedCode"/>
+        <Param name="Begin Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Code Type" updates="None" val="JS" valType="str"/>
+        <Param name="Each Frame" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Each JS Frame" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End JS Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End JS Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="disabled" updates="None" val="False" valType="bool"/>
+        <Param name="name" updates="None" val="test_code" valType="code"/>
+      </CodeComponent>
+    </Routine>
+  </Routines>
+  <Flow>
+    <Routine name="import_polyfill"/>
+    <Routine name="run_tests"/>
+  </Flow>
+</PsychoPy2experiment>
