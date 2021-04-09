@@ -11,6 +11,7 @@ const Mustache = require('mustache');
 const CLIParser = require('../shared/CLIParser.cjs');
 const TestCollector = require('../shared/TestCollector.cjs');
 const NameSanitizer = require('../shared/NameSanitizer.cjs');
+const psychoJSVersion = require('../../package.json').version;
 
 // const path = require('path');
 
@@ -49,7 +50,8 @@ let includes = fs.readdirSync('./dist');
     console.log('[deployExperiments.cjs] Deploying ' + test.path);
 
     // Compile and write index.html
-    let compiled = Mustache.render(template, { 
+    let compiled = Mustache.render(template, {
+      psychoJSVersion: psychoJSVersion, 
       rootNode: rootNode,
       experiment: test.experiment_file.substring(0, test.experiment_file.length - '.psyexp'.length)
     });
