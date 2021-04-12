@@ -44,12 +44,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Sync BS logs and Stager with GitHub 
-        run: node test/cli/syncWithGitHub.cjs alain sotiri thomas
+        run: node tests/cli/syncWithGitHub.cjs alain sotiri thomas
       - name: Delete old test logs 
-        run: node test/cli/deleteLogs.cjs --testrun all_devices
+        run: node tests/cli/deleteLogs.cjs --testrun all_devices
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node test/cli/tabulateTests.cjs --label all --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label all --outputFormat paths)"
   e2e_tests:
     name: Run e2e tests
     needs: [prepare]
