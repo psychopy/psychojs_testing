@@ -51,7 +51,7 @@ jobs:
         id: get_tests
         run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label all --outputFormat paths)"
   e2e_tests:
-    name: Run e2e tests
+    name: Test 
     needs: [prepare]
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -86,4 +86,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio tests/wdio.conf.cjs --server bs --upload --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10*
+        run: npx wdio tests/shared/wdio.conf.cjs --server bs --upload --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10*
