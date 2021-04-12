@@ -49,7 +49,7 @@ jobs:
         run: node tests/cli/deleteLogs.cjs --testrun all_devices
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label wdio --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label all --outputFormat paths)"
   e2e_tests:
     name: Test 
     needs: [prepare]
