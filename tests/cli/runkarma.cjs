@@ -37,7 +37,7 @@ if (server === 'bs') {
   try {
     // String of options passed to this script; we pass these on to karma.conf.js
     let cliString = process.argv.slice(2, process.argv.length).join(' ');
-    child_process.execSync('karma ' + cliString, { 
+    child_process.execSync('npx karma ' + cliString, { 
       stdio: ['inherit', 'inherit', 'inherit']
     });
   } catch (e) {
