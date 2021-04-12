@@ -38,7 +38,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
     console.log('[joinReports.cjs] Adding test ' + test);
     // Add test to joinedReports
     getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/' + Paths.subdir_report_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_logs_processed + '/report.json');
+      return client.get(basePath + '/' + Paths.subdir_report_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_results_processed + '/report.json');
     }, false);
     report = JSON.parse(getResults);
     joinedReports = joinedReports.concat(report);
