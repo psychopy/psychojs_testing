@@ -10,6 +10,9 @@ const json2md = require('json2md');
 const Paths = require('../shared/Paths.cjs');
 const fs= require('fs-extra');
 
+process.stdout.write(JSON.stringify(['this', 'is', 'a', 'test']));
+process.exit();
+
 // CLI Options
 // Tests matching label option
 let tests = TestCollector.collectTests(parseOption({cli: 'label'}));
