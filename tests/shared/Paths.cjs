@@ -7,11 +7,11 @@ module.exports = {
   dir_results_karma:            './tests/results/logs_karma',
 
   // Path to staging directory (compiled test-experiments)
-  dir_staging:             './tests/staging',
-  dir_cache:               './tests/cache',
+  dir_staging:                 './tests/staging',
+  dir_cache:                   './tests/cache',
 
   // Logs wdio
-  dir_results:             './tests/results',  
+  dir_results:                './tests/results',  
   dir_results_capabilities:   './tests/results/logs_capabilities',
   dir_results_json:           './tests/results/logs_json',
   dir_results_joined:         './tests/results/logs_joined',
@@ -19,16 +19,16 @@ module.exports = {
   dir_results_wdio:           './tests/results/logs_wdio',
   dir_results_selenium:       './tests/results/logs_selenium',
   
-  dir_screenshots_cutout:  './tests/results/screenshots_cutout',
-  dir_screenshots_raw:     './tests/results/screenshots_raw',
-  dir_screenshots_scaled:  './tests/results/screenshots_scaled',  
+  dir_screenshots_cutout:     './tests/results/screenshots_cutout',
+  dir_screenshots_raw:        './tests/results/screenshots_raw',
+  dir_screenshots_scaled:     './tests/results/screenshots_scaled',  
   
-  dir_tests:               './tests',
-  dir_counterexample_imgs: './tests/counterexample_imgs',
+  dir_tests:                  './tests',
+  dir_counterexample_imgs:    './tests/counterexample_imgs',
 
   subdir_results_processed:   'logs_processed',
-  subdir_report_wdio:      'report_wdio',
-  subdir_report_unit:      'report_unit',
+  subdir_report_wdio:         'report_wdio',
+  subdir_report_karma:        'report_karma',
 
   // Recreates directories in paths. The argument remove determines 
   // whether a directory should (true) be deleted and then created again or

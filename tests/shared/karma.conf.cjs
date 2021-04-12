@@ -55,7 +55,7 @@ module.exports = function(config) {
     {
       username: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent): undefined,
       accessKey: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent): undefined,
-      project: 'PsychoJS_unit',
+      project: 'PsychoJS_karma',
       build: BrowserStack.createBuildName(branch, testrun, test)
     },
 

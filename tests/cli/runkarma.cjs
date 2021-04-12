@@ -67,9 +67,9 @@ if (server === 'bs') {
     console.log('[runkarma.cjs] stagerPath is ' + stagerPath);
     // Delete old logs
     console.log('[runkarma.cjs] Deleting old reports on Stager');
-    await Stager.deleteDirectory(Paths.subdir_report_unit + '/' + stagerPath);
+    await Stager.deleteDirectory(Paths.subdir_report_karma + '/' + stagerPath);
     // Upload logs
     console.log('[runkarma.cjs] Uploading new reports to Stager');
-    await Stager.uploadDirectory(Paths.dir_results_karma, Paths.subdir_report_unit + '/' + stagerPath);
+    await Stager.uploadDirectory(Paths.dir_results_karma, Paths.subdir_report_karma + '/' + stagerPath);
   }
 })();

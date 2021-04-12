@@ -6,6 +6,7 @@
 const GitHub = require('../shared/GitHub.cjs');
 const BrowserStack = require('../shared/BrowserStack.cjs');
 const Stager = require('../shared/Stager.cjs');
+const Paths = require('../shared/Paths.cjs');
 
 // Get pseudoBranches; list of unnamed CLI options
 const yargs = require('yargs/yargs')
@@ -20,11 +21,11 @@ const pseudoBranches = argv._;
 
   console.log('[syncWithGithub.cjs] deleting BrowserStack logs');
   BrowserStack.deleteAllBranchesExcept('PsychoJS_wdio', branchNames);
-  BrowserStack.deleteAllBranchesExcept('PsychoJS_unit', branchNames);
+  BrowserStack.deleteAllBranchesExcept('PsychoJS_karma', branchNames);
   
   console.log('[syncWithGithub.cjs] deleting staging server reports');
   await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_wdio, branchNames);
-  await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_unit, branchNames);
+  await Stager.deleteAllDirectoriesExcept(Paths.subdir_report_karma, branchNames);
 
   console.log('[syncWithGithub.cjs] deleting staging server html experiments');
   await Stager.deleteAllDirectoriesExcept('experiments/html', branchNames);

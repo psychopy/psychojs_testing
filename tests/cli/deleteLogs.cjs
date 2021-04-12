@@ -14,9 +14,9 @@ const test = CLIParser.parseOption({cli: 'test'}, false);
 // Delete BrowserStack logs
 const buildPrefix = BrowserStack.createBuildName(branch, testrun, test);
 BrowserStack.deleteAllBuildsStartingWith('PscyhoJS_wdio', buildPrefix);
-BrowserStack.deleteAllBuildsStartingWith('PscyhoJS_unit', buildPrefix);
+BrowserStack.deleteAllBuildsStartingWith('PscyhoJS_karma', buildPrefix);
 
 // Delete Stager reports
 const stagerPath = Stager.createReportPath(branch, testrun, test);
 Stager.deleteDirectory(Paths.subdir_report_wdio + '/' + stagerPath);
-Stager.deleteDirectory(Paths.subdir_report_unit + '/' + stagerPath);
+Stager.deleteDirectory(Paths.subdir_report_karma + '/' + stagerPath);
