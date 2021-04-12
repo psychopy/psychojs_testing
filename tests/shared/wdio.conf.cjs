@@ -9,6 +9,7 @@ const Stager = require('./Stager.cjs');
 const Paths = require('./Paths.cjs');
 const CLIParser = require('./CLIParser.cjs');
 const TestCollector = require('./TestCollector.cjs');
+const NameSanitizer = require('./NameSanitizer.cjs');
 
 // *** Parse CLI arguments
 let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();

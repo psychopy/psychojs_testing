@@ -3,7 +3,6 @@
 // Modules
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers');
-const NameSanitizer = require('./NameSanitizer.cjs');
 
 // List of functions for CLI options that need special treatment
 const processors = {
@@ -121,7 +120,7 @@ parseTestrunCLIOptions = () => {
 
   // Get label CLI option
   let label = parseOption({cli: 'label'});  
-  label = NameSanitizer.sanitize(label);
+  //label = NameSanitizer.sanitize(label);
   console.log('[CLIParser.cjs] label is ' + label);
 
   // Get testrun CLI option
