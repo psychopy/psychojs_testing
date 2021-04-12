@@ -8,12 +8,12 @@ module.exports = {
     if (!regExp.test(value)) {
       throw new Error(
         '[NameSanitizer.cjs] The value ' + JSON.stringify(value) + ' for ' + option + 
-        ' was invalid; may only contain '
+        ' was invalid; may only contain letters, numbers, dots and underscores'
       );
     }
     return true;
   },
   sanitize: (value) => {
-    return value.replace(/[^a-zA-Z0-9\._]/g, '');
+    return value.replace(/[^a-zA-Z0-9\._]/g, '.');
   }
 };

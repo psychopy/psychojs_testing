@@ -68,6 +68,10 @@ deleteAllDirectoriesExcept = async (containingDirectory, directoriesToKeep) => {
     console.log('[Stager.cjs] listing directories at ' + basePath + '/' + containingDirectory);
     return client.list(basePath + '/' + containingDirectory);
   }, false);
+  if (listResults === undefined) {
+    console.log('[Stager.cjs] Found no directories on staging server; skipping deletion');
+    return;
+  }
   console.log('[Stager.cjs] ' + listResults.length + ' directories on staging server');
   let allDirectories = listResults.map((listResult) => {
     return listResult.name;

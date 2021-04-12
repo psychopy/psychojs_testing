@@ -14,30 +14,21 @@ collectTests = (label, addCalibration = false) => {
     '*',
     Paths.dir_tests
   );
-  /*
-  // Check if all filenames are unique
-  let filenamesWithPath = results.wdio.concat(results.karma);
-  let filenames = filenamesWithPath.map(testNameFromPath);
-  // true for every duplicate
-  let isDuplicate = filenames.map((filenameToCheck) => {
-    return filenames.reduce((count, filename) => {
-      return count + (filename === filenameToCheck? 1: 0);
-    }, 0) > 1;
-  });
-  // filenamesWithPaths for every duplicate
-  let duplicates = filenamesWithPath.filter((filenameWithPath, index) => {
-    return isDuplicate[index];
-  });
-  // Error if any duplicates found
-  if (duplicates.length > 0) {
-    throw new Error('Duplicate filenames not allowed for tests. Found these duplicates: ' + JSON.stringify(duplicates));
+
+  // If label contains any slashes, assume it's a path
+  let labelToFind, basePath;
+  if (label.includes('/')) {
+    labelToFind = '*';
+    basePath = Paths.dir_tests + '/' + label;
+  } else {
+    labelToFind = label;
+    basePath = Paths.dir_tests;
   }
-  */
 
   // Collect tests for current label and return them
   let tests = collectTestsRecursive(
-    label,
-    Paths.dir_tests
+    labelToFind,
+    basePath
   );
 
   // If tests.fine_calibration is true and addCalibration is true, add wdio_calibration to tests.wdio (if not already there)

@@ -16,6 +16,7 @@ let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser
 // Construct tests
 let tests = TestCollector.collectTests(label).wdio;
 console.log('[wdio.conf.cjs] Running ' + tests.length + ' tests');
+label = NameSanitizer.sanitize(label);
 
 // Construct testrun (2 remove!!!)
 testrun = testrun === undefined? label: testrun;
