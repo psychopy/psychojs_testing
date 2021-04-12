@@ -106,7 +106,7 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: server === 'bs'? ['dots', 'json', 'BrowserStack']: ['dots', 'json'],
     jsonReporter: {
-      //stdout: true,
+      stdout: false,
       outputFile: Paths.dir_results_karma + '/results.json'
     },
 

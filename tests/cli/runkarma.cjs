@@ -24,7 +24,7 @@ Paths.recreateDirectories([
 
 // Delete BrowserStack logs
 if (server === 'bs') {
-  BrowserStack.deleteOneBuild('PsychoJS_unit', buildName);
+  BrowserStack.deleteOneBuild('PsychoJS_karma', buildName);
 }
 
 (async () => {
@@ -45,9 +45,9 @@ if (server === 'bs') {
   }
   // Get sessions and store them
   if (server == 'bs') {
-    const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_unit', buildName);
+    const sessions = BrowserStack.getSessionsByBuildName('PsychoJS_karma', buildName);
     fs.outputFileSync(
-      Paths.dir_results_karma,
+      Paths.dir_results_karma + '/sessions.json',
       JSON.stringify(sessions)
     );  
   }
