@@ -1,4 +1,5 @@
-// Parses options provided via the environment and/or a CLI optoin
+// Parses options provided via the environment and/or a CLI option
+const NameSanitizer = require('./NameSanitizer.cjs');
 
 // Modules
 const yargs = require('yargs/yargs')
