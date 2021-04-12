@@ -25,7 +25,8 @@ if (outputFormat == 'paths') {
   }).concat(tests.wdio.map((test) => {
     return test.path;
   }));
-  process.stdout.write(JSON.stringify(paths));
+  //process.stdout.write(JSON.stringify(paths));
+  process.stdout.write(JSON.stringify(['this', 'is', 'a', 'test']));
 } else {
   // Prepare karma tests for tabulation
   let karmaTests = tests.karma.map((test) => {
