@@ -49,7 +49,7 @@ jobs:
         run: node tests/cli/deleteLogs.cjs --testrun all_devices
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label wdio --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label all --outputFormat paths)"
   e2e_tests:
     name: Test 
     needs: [prepare]
@@ -86,7 +86,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: npx wdio tests/shared/wdio.conf.cjs --server bs --upload --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10* --uploadReport
+        run: node test.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10* --uploadReport
+        # run: npx wdio tests/shared/wdio.conf.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10* --uploadReport
   join_reports:
     name: Join reports
     needs: [e2e_tests]
