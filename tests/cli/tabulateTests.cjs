@@ -10,26 +10,23 @@ const json2md = require('json2md');
 const Paths = require('../shared/Paths.cjs');
 const fs= require('fs-extra');
 
-process.stdout.write(JSON.stringify(['this', 'is', 'a', 'test']));
-process.exit();
-
 // CLI Options
 // Tests matching label option
-let tests = TestCollector.collectTests(parseOption({cli: 'label'}));
+let tests = TestCollector.collectTests(parseOption({cli: 'label'}, true, CLIParser.logSilent));
 // Output format (markdown table or paths)
-let outputFormat = parseOption({cli: 'outputFormat'});
+let outputFormat = parseOption({cli: 'outputFormat'}, true, CLIParser.logSilent);
 if (!['table', 'paths'].includes(outputFormat)) {
   throw new Error('CLI option outputFormat was ' + outputFormat + ', but it should be either "table" or "paths');
 }
 
+// Depending on output format, output an array of paths or a markdown table
 if (outputFormat == 'paths') {
   let paths = tests.karma.map((test) => {
     return test.path;
   }).concat(tests.wdio.map((test) => {
     return test.path;
   }));
-  //process.stdout.write(JSON.stringify(paths));
-  process.stdout.write(JSON.stringify(['this', 'is', 'a', 'test']));
+  process.stdout.write(JSON.stringify(paths));
 } else {
   // Prepare karma tests for tabulation
   let karmaTests = tests.karma.map((test) => {
