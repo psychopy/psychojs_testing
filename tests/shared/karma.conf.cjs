@@ -6,10 +6,9 @@ const Paths = require('./Paths.cjs');
 const TestCollector = require('./TestCollector.cjs');
 
 // *** Parse CLI arguments
-let [server, uploadReport, platform, test, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
 // Get label and construct specFiles
-let label = parseOption({cli: 'label'});
 let tests = TestCollector.collectTests(label);
 let specFiles = tests.karma.map((test) => {
   return {pattern: 'tests/' + test.path + '/' + test.testscript_file, type: 'module'};
