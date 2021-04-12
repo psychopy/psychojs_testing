@@ -60,5 +60,30 @@ jobs:
       matrix: 
         test: ${{fromJson(needs.prepare.outputs.tests)}}
     steps:
-      - name: Dummy step
+      - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install modules
+        run: npm ci
+      - name: Turnstyle (wait for other workflows to complete)
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run e2e_test ${{ matrix.test }}
+        run: npx wdio tests/wdio.conf.cjs --server bs --upload --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10*
