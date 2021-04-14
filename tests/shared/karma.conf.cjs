@@ -4,6 +4,7 @@ const CLIParser = require('./CLIParser.cjs');
 const BrowserStack = require('./BrowserStack.cjs');
 const Paths = require('./Paths.cjs');
 const TestCollector = require('./TestCollector.cjs');
+const NameSanitizer = require('./../shared/NameSanitizer.cjs');
 
 // *** Parse CLI arguments
 let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
@@ -55,7 +56,7 @@ module.exports = function(config) {
       username: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent): undefined,
       accessKey: server === 'bs'? CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent): undefined,
       project: 'PsychoJS_karma',
-      build: BrowserStack.createBuildName(branch, testrun, test)
+      build: BrowserStack.createBuildName(branch, testrun, NameSanitizer.sanitize(label))
     },
 
     // define browsers

@@ -36,7 +36,7 @@ let tests = TestCollector.collectTests(parseOption({cli: 'label'}));
 // Any karma tests? Run them
 if (tests.karma.length > 0) {
   child_process.execSync(
-    'node tests/cli/runkarma.cjs start tests/shared/karma.conf.cjs ' + cliString,
+    'node tests/cli/runkarma.cjs ' + cliString,
     execSyncOptions  
   );
 }
