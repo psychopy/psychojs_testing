@@ -11,8 +11,9 @@ const NameSanitizer = require('./../shared/NameSanitizer.cjs');
 // Get CLI options
 let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 // Construct buildName
+let buildName = undefined;
 if (server === 'bs') {
-  const buildName = BrowserStack.createBuildName(branch, testrun, NameSanitizer.sanitize(label));
+  buildName = BrowserStack.createBuildName(branch, testrun, NameSanitizer.sanitize(label));
   console.log('[runkarma.cjs] buildName is ' + buildName);
 }
 
