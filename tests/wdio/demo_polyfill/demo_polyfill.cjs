@@ -6,7 +6,7 @@ module.exports = {
     browser.url(browser.getExperimentUrl());
 
     // Rough calibration
-    let calibration = SharedBehaviors.performPavloviaPrelude();
+    let calibration = SharedBehaviors.performPavloviaPrelude(waitForCanvas = false);
 
     // Tap past intro screen
     //SharedBehaviors.waitForReport('intro_trial');
