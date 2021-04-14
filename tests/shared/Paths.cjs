@@ -26,9 +26,11 @@ module.exports = {
   dir_tests:                  './tests',
   dir_counterexample_imgs:    './tests/counterexample_imgs',
 
-  subdir_results_processed:   'logs_processed',
-  subdir_report_wdio:         'report_wdio',
-  subdir_report_karma:        'report_karma',
+  subdir_logs_processed:      'logs_processed',
+  subdir_logs_karma:          'logs_karma',
+  subdir_results:             'results',
+  subdir_results_wdio:        'results_wdio',
+  subdir_results_karma:       'results_karma',
 
   // Recreates directories in paths. The argument remove determines 
   // whether a directory should (true) be deleted and then created again or

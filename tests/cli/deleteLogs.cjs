@@ -18,5 +18,5 @@ BrowserStack.deleteAllBuildsStartingWith('PscyhoJS_karma', buildPrefix);
 
 // Delete Stager reports
 const stagerPath = Stager.createReportPath(branch, testrun, test);
-Stager.deleteDirectory(Paths.subdir_report_wdio + '/' + stagerPath);
+Stager.deleteDirectory(Paths.subdir_results_wdio + '/' + stagerPath);
 Stager.deleteDirectory(Paths.subdir_report_karma + '/' + stagerPath);

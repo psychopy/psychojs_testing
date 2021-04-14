@@ -20,7 +20,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   console.log('[joinReports.cjs] Inventorizing tests');
   // Get all testruns of branch
   let listResults = await Stager.ftpRequest((client, basePath) => {
-    return client.list(basePath + '/' + Paths.subdir_report_wdio + '/' + Stager.createReportPath(branch, testrun));
+    return client.list(basePath + '/' + Paths.subdir_results_wdio + '/' + Stager.createReportPath(branch, testrun));
   }, false);
   // Filter out directories
   listResults = listResults.filter((listResult) => {
@@ -38,7 +38,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
     console.log('[joinReports.cjs] Adding test ' + test);
     // Add test to joinedReports
     getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/' + Paths.subdir_report_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_results_processed + '/report.json');
+      return client.get(basePath + '/' + Paths.subdir_results_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_results_processed + '/report.json');
     }, false);
     report = JSON.parse(getResults);
     joinedReports = joinedReports.concat(report);
@@ -71,7 +71,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   );
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
-  await Stager.uploadDirectory(Paths.dir_results_joined, Paths.subdir_report_wdio + '/'  + Stager.createReportPath(branch, testrun));
+  await Stager.uploadDirectory(Paths.dir_results_joined, Paths.subdir_results_wdio + '/'  + Stager.createReportPath(branch, testrun));
 })();
 
 

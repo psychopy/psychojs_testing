@@ -6,13 +6,15 @@ const BrowserStack = require('./../shared/BrowserStack.cjs');
 const Stager = require('./../shared/Stager.cjs');
 const Paths = require('./../shared/Paths.cjs');
 const ReportSummarizer = require('./../shared/ReportSummarizer.cjs');
+const NameSanitizer = require('./../shared/NameSanitizer.cjs');
 
 // Get CLI options
 let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
-label = NameSanitizer.sanitize(label);
 // Construct buildName
-const buildName = BrowserStack.createBuildName(branch, testrun, label);
-console.log('[runkarma.cjs] buildName is ' + buildName);
+if (server === 'bs') {
+  const buildName = BrowserStack.createBuildName(branch, testrun, NameSanitizer.sanitize(label));
+  console.log('[runkarma.cjs] buildName is ' + buildName);
+}
 
 // Clean up logs
 Paths.recreateDirectories([
@@ -37,7 +39,7 @@ if (server === 'bs') {
   try {
     // String of options passed to this script; we pass these on to karma.conf.js
     let cliString = process.argv.slice(2, process.argv.length).join(' ');
-    child_process.execSync('npx karma ' + cliString, { 
+    child_process.execSync('npx karma start tests/shared/karma.conf.cjs ' + cliString, { 
       stdio: ['inherit', 'inherit', 'inherit']
     });
   } catch (e) {
@@ -63,13 +65,13 @@ if (server === 'bs') {
 
   // If uploadReport enabled, update stager
   if (uploadReport) {
-    const stagerPath = Stager.createReportPath(branch, testrun, label);
+    const stagerPath = Stager.createReportPath(branch, testrun, NameSanitizer.sanitize(label));
     console.log('[runkarma.cjs] stagerPath is ' + stagerPath);
     // Delete old logs
     console.log('[runkarma.cjs] Deleting old reports on Stager');
-    await Stager.deleteDirectory(Paths.subdir_report_karma + '/' + stagerPath);
+    await Stager.deleteDirectory(Paths.subdir_results_karma + '/' + stagerPath);
     // Upload logs
     console.log('[runkarma.cjs] Uploading new reports to Stager');
-    await Stager.uploadDirectory(Paths.dir_results_karma, Paths.subdir_report_karma + '/' + stagerPath);
+    await Stager.uploadDirectory(Paths.dir_results_karma, Paths.subdir_results_karma + '/' + stagerPath);
   }
 })();

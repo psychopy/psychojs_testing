@@ -17,14 +17,16 @@ let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser
 // Construct tests
 let tests = TestCollector.collectTests(label).wdio;
 console.log('[wdio.conf.cjs] Running ' + tests.length + ' tests');
-label = NameSanitizer.sanitize(label);
 
 // Construct testrun (2 remove!!!)
 testrun = testrun === undefined? label: testrun;
 
 // Construct buildName (for browserStack logs)
-const buildName = BrowserStack.createBuildName(branch, testrun, label);
-console.log('[wdio.conf.cjs] buildName is ' + buildName);
+let buildName = undefined;
+if (server === 'bs') {
+  buildName = BrowserStack.createBuildName(branch, testrun, NameSanitizer.sanitize(label));
+  console.log('[wdio.conf.cjs] buildName is ' + buildName);
+}
 
 // Get url CLI option 
 let url = parseOption({cli: 'url'});
@@ -378,14 +380,14 @@ exports.config = {
       );
       // If upload enabled, update stager
       if (uploadReport) {
-        const stagerPath = Stager.createReportPath(branch, testrun, label);
+        const stagerPath = Stager.createReportPath(branch, testrun, NameSanitizer.sanitize(label));
         console.log('[wdio.conf.cjs] stagerPath is ' + stagerPath);
         // Delete old logs
         console.log('[wdio.conf.cjs] Deleting old reports on Stager');
-        await Stager.deleteDirectory(Paths.subdir_report_wdio + '/' + stagerPath);
+        await Stager.deleteDirectory(Paths.subdir_results_wdio + '/' + stagerPath);
         // Upload logs
         console.log('[wdio.conf.cjs] Uploading new reports to Stager');
-        await Stager.uploadDirectory(Paths.dir_results, Paths.subdir_report_wdio + '/' + stagerPath);
+        await Stager.uploadDirectory(Paths.dir_results, Paths.subdir_results_wdio + '/' + stagerPath);
       }
     } catch (e) {
       console.log('\x1b[31m' + e.stack + '\x1b[0m');
