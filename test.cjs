@@ -31,7 +31,7 @@ child_process.execSync(
 );
 
 // Collect tests
-let tests = TestCollector.collectTests(parseOption({cli: 'label'}));
+let tests = TestCollector.collectTests(CLIParser.parseOption({cli: 'label'}));
 
 // Any karma tests? Run them
 if (tests.karma.length > 0) {
@@ -44,7 +44,7 @@ if (tests.karma.length > 0) {
 // Any wdio tests? Deploy experiments and run them
 if (tests.wdio.length > 0) {
   // Check if uploadExperiments is enabled when target == stager
-  if (parseOption({cli: 'url'}) == 'stager' && !parseOption({cli: 'uploadExperiments'})) {
+  if (parseOption({cli: 'url'}) == 'stager' && !CLIParser.parseOption({cli: 'uploadExperiments'})) {
     throw new Error('[test.cjs] The target CLI option was "stager" but uploadExperiments was disabled. Please enable uploadExperiments')
   }
 

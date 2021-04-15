@@ -2,7 +2,11 @@
 
 // Modules
 const CLIParser = require('./tests/shared/CLIParser.cjs');
-const TestCollector = require('./tests/shared/TestCollector.cjs');
 
-let label = CLIParser.parseOption({cli: 'platform'});
-console.log(label);
+let test = CLIParser.parseOption({cli: 'platform'});
+console.log(test);
+
+let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+console.log(platform);
+
+console.log(process.env);
