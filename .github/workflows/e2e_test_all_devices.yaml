@@ -50,6 +50,41 @@ jobs:
       - name: Get tests
         id: get_tests
         run: echo "::set-output name=tests::$(node tests/cli/tabulateTests.cjs --label all --outputFormat paths)"
+  e2e_tests:
+    name: Test 
+    needs: [prepare]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      max-parallel: 1
+      matrix: 
+        test: ${{fromJson(needs.prepare.outputs.tests)}}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install modules
+        run: npm ci
+      - name: Turnstyle (wait for other workflows to complete)
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: test1
         run: echo *
       - name: test2
@@ -62,15 +97,39 @@ jobs:
         run: echo "*"
       - name: test6
         run: echo "\*"
-      - name: testnode1
-        run: node test2.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform * --uploadReport
-      - name: testnode2
-        run: node test2.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform \* --uploadReport
-      - name: testnode3
-        run: node test2.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform '*' --uploadReport
-      - name: testnode4
-        run: node test2.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform '\*' --uploadReport
-      - name: testnode5
-        run: node test2.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform "*" --uploadReport
-      - name: testnode6
-        run: node test2.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform "\*" --uploadReport
+      - name: Run e2e_test ${{ matrix.test }}
+        run: node test.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform \* --uploadReport
+        # run: npx wdio tests/shared/wdio.conf.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10* --uploadReport
+  join_reports:
+    name: Join reports
+    needs: [e2e_tests]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install modules
+        run: npm ci
+      - name: Turnstyle (wait for other workflows to complete)
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Join reports
+        run: node tests/cli/joinReports.cjs --testrun all_devices
