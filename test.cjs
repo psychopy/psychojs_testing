@@ -13,18 +13,7 @@ if (!(['local', 'stager'].includes(target))) {
 }
 */
 // String of options passed to this script; we pass these on to child processes
-let cliString = process.argv.slice(2, process.argv.length).join(' ');
-
-// In case we're NOT running on a Windows Command Line, escape any wildcards so that they don't get expanded to filenames
-// For bash, we check whether there is SHELL property, for GitHub Actions, whether there is a GITHUB_ACTIONS property
-let bash = process.env.SHELL !== undefined || process.env.GITHUB_ACTIONS !== undefined;
-if (bash) {
-  console.log(cliString);
-  console.log('[test.cjs] Non-Windows Command Line shell detected, so we are escaping * and ? wildcards with \\');
-  cliString = cliString.replace('*', '\\*');
-  cliString = cliString.replace('?', '\\?');
-  console.log(cliString);
-}
+let cliString = CLIParser.constructCLIString(2);
 
 // execSync options
 let execSyncOptions = { 

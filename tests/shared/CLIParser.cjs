@@ -148,6 +148,21 @@ parseTestrunCLIOptions = () => {
   return [server, uploadReport, platform, label, testrun, branch, subset];
 };
 
+// Construct CLI string from process.argv, starting at startingIndex, escaping wildcards if we don't run Windows Command Line
+constructCLIString = function(startingIndex) {
+  console.log('[CLIParser.cjs] Constructing CLI string');
+  let cliString = process.argv.slice(startingIndex, process.argv.length).join(' ');
+
+  // In case we're NOT running on a Windows Command Line, escape any wildcards so that they don't get expanded to filenames
+  // For bash, we check whether there is SHELL property, for GitHub Actions, whether there is a GITHUB_ACTIONS property
+  let bash = process.env.SHELL !== undefined || process.env.GITHUB_ACTIONS !== undefined;
+  if (bash) {
+    console.log('[CLIParser.cjs] Non-Windows shell detected, so we are escaping * and ? wildcards');
+    cliString = cliString.replace('*', '\\*');
+    cliString = cliString.replace('?', '\\?');
+  }
+  return cliString;
+}
 
 module.exports = {
   processors: processors,
@@ -155,5 +170,6 @@ module.exports = {
   logFull: logFull,
   logCensor: logCensor,
   logSilent: logSilent,
-  parseTestrunCLIOptions: parseTestrunCLIOptions
+  parseTestrunCLIOptions: parseTestrunCLIOptions,
+  constructCLIString: constructCLIString
 };
