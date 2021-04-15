@@ -86,7 +86,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e_test ${{ matrix.test }}
-        run: node test.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform "*" --uploadReport
+        run: node test.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform \* --uploadReport
         # run: npx wdio tests/shared/wdio.conf.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10* --uploadReport
   join_reports:
     name: Join reports
