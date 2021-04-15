@@ -63,14 +63,15 @@ jobs:
       - name: test6
         run: echo "\*"
       - name: testnode1
-        run: node --platform *
+        run: node test2.cjs --platform *
       - name: testnode2
-        run: node --platform \*
+        run: node test2.cjs --platform \*
       - name: testnode3
-        run: node --platform '*'
+        run: node test2.cjs --platform '*'
       - name: testnode4
-        run: node --platform '\*'
+        run: node test2.cjs --platform '\*'
       - name: testnode5
-        run: node --platform "*"
+        run: node test2.cjs --platform "*"
       - name: testnode6
-        run: node --platform "\*"
+        run: node test2.cjs --platform "\*"
+
