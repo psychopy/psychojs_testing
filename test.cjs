@@ -19,9 +19,11 @@ let cliString = process.argv.slice(2, process.argv.length).join(' ');
 // For bash, we check whether there is SHELL property, for GitHub Actions, whether there is a GITHUB_ACTIONS property
 let bash = process.env.SHELL !== undefined || process.env.GITHUB_ACTIONS !== undefined;
 if (bash) {
+  console.log(cliString);
   console.log('[test.cjs] Non-Windows Command Line shell detected, so we are escaping * and ? wildcards with \\');
   cliString = cliString.replace('*', '\\*');
   cliString = cliString.replace('?', '\\?');
+  console.log(cliString);
 }
 
 // execSync options
