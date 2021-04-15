@@ -29,6 +29,8 @@ let execSyncOptions = {
   stdio: ['inherit', 'inherit', 'inherit']
 };
 
+console.log('[test.cjs] Building library');
+
 // Compile library
 child_process.execSync(
   'npm run build:css', 
@@ -44,6 +46,7 @@ let tests = TestCollector.collectTests(CLIParser.parseOption({cli: 'label'}));
 
 // Any karma tests? Run them
 if (tests.karma.length > 0) {
+  console.log('[test.cjs] Starting karma tests');
   child_process.execSync(
     'node tests/cli/runkarma.cjs ' + cliString,
     execSyncOptions  
@@ -52,6 +55,7 @@ if (tests.karma.length > 0) {
 
 // Any wdio tests? Deploy experiments and run them
 if (tests.wdio.length > 0) {
+  console.log('[test.cjs] Starting wdio tests');
   // Check if uploadExperiments is enabled when target == stager
   if (parseOption({cli: 'url'}) == 'stager' && !CLIParser.parseOption({cli: 'uploadExperiments'})) {
     throw new Error('[test.cjs] The target CLI option was "stager" but uploadExperiments was disabled. Please enable uploadExperiments')
