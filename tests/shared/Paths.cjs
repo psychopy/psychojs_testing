@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 module.exports = {
   // Logs of karma; karma itself assumes this is path relative to one directory higher than the one containing karma.conf.js
   dir_results_karma:            './tests/results/logs_karma',
+  subdir_results_karma:          'logs_karma',
 
   // Path to staging directory (compiled test-experiments)
   dir_staging:                 './tests/staging',
@@ -16,6 +17,7 @@ module.exports = {
   dir_results_json:           './tests/results/logs_json',
   dir_results_joined:         './tests/results/logs_joined',
   dir_results_processed:      './tests/results/logs_processed',
+  subdir_results_processed:   'logs_processed',    
   dir_results_wdio:           './tests/results/logs_wdio',
   dir_results_selenium:       './tests/results/logs_selenium',
   
@@ -26,11 +28,9 @@ module.exports = {
   dir_tests:                  './tests',
   dir_counterexample_imgs:    './tests/counterexample_imgs',
 
-  subdir_logs_processed:      'logs_processed',
-  subdir_logs_karma:          'logs_karma',
-  subdir_results:             'results',
   subdir_results_wdio:        'results_wdio',
   subdir_results_karma:       'results_karma',
+  subdir_results_joined:      'results_joined',
 
   // Recreates directories in paths. The argument remove determines 
   // whether a directory should (true) be deleted and then created again or
