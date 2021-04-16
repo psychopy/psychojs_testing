@@ -56,7 +56,7 @@ if (server === 'bs') {
   }
   // Summarize reports
   let joinedReports = ReportSummarizer.mergeKarma(server === 'bs');
-//  ReportSummarizer.writeJsonAndCsv('./.tmp_unit' + '/report', joinedReports);
+
   // Aggregate
   ReportSummarizer.aggregateAndStoreKarma(
     joinedReports,
