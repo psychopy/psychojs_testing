@@ -23,12 +23,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Checkout repo
+      - name: Checkout this repo
         uses: actions/checkout@v2
-      - name: Cache node modules
+      - name: Cache node modules of this repo
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-node-modules-this
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -36,8 +36,26 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install modules
+      - name: Install modules of this repo
         run: npm ci
+        
+      - name: Checkout psychojs repo
+        uses: actions/checkout@v2
+        with:
+          repository: psychopy/psychojs
+          path: psychojs
+      - name: Cache node modules of psychojs repo
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules-psychojs
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+       
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
         with:
