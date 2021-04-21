@@ -9,6 +9,10 @@ const NameSanitizer = require('./../shared/NameSanitizer.cjs');
 // *** Parse CLI arguments
 let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
+// Get psychoJSPath
+const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
+console.log('[test.cjs] psychoJSPath is ' + psychoJSPath);
+
 // Get label and construct specFiles
 let tests = TestCollector.collectTests(label);
 let specFiles = tests.karma.map((test) => {
@@ -32,7 +36,7 @@ browsers = Object.keys(customLaunchers);
 
 // Construct proxies for each JS and CCS file in dist 
 // E.g., from within the browser dist/util-2021.1.3.js can be referenced as /util.js and as /util-2021.1.3.js
-let libraryFiles = fs.readdirSync('dist');
+let libraryFiles = fs.readdirSync(psychoJSPath + '/dist');
 let cssFiles = []; 
 let libraryProxies = {};
 for (let libraryFile of libraryFiles) {
@@ -40,7 +44,7 @@ for (let libraryFile of libraryFiles) {
   if (libraryFile.endsWith('umd.js')) { 
   // Ends with css? Add to cssFiles   
   } else if (libraryFile.endsWith('css')) {
-    cssFiles.push({pattern: 'dist/' + libraryFile, type: 'css'});
+    cssFiles.push({pattern: psychoJSPath + '/dist/' + libraryFile, type: 'css'});
   // Else, make a proxy
   } else {
     // Get the part before the '-', that + '.js' is the proxy
@@ -84,7 +88,7 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.74/Tone.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
-      {pattern: 'dist/*.js', type: 'module', included: false, served: true},
+      {pattern: /*psychoJSPath + */ 'dist/*.js', type: 'module', included: true, served: true},
       {pattern: 'tests/shared/root.html', type: 'dom'}
     ].concat(cssFiles).concat(specFiles),
 

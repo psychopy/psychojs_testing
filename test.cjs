@@ -5,13 +5,10 @@ const child_process = require('child_process');
 const CLIParser = require('./tests/shared/CLIParser.cjs');
 const TestCollector = require('./tests/shared/TestCollector.cjs');
 
-// Get target option: local or stager
-/*
-let target = parseOption({cli: 'target'}, false);
-if (!(['local', 'stager'].includes(target))) {
-  throw new Error('[test.cjs] The target option (' + target + ') was not recognized. Use "local" for local selenium and web-server or "stager" for BrowserStack and stager.');
-}
-*/
+// Get psychoJSPath
+const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
+console.log('[test.cjs] psychoJSPath is ' + psychoJSPath);
+
 // String of options passed to this script; we pass these on to child processes
 let cliString = CLIParser.constructCLIString(2);
 
@@ -24,11 +21,11 @@ console.log('[test.cjs] Building library');
 
 // Compile library
 child_process.execSync(
-  'npm run build:css', 
+  'npm --prefix ' + psychoJSPath + ' run build:css', 
   execSyncOptions
 );
 child_process.execSync(
-  'npm run build:js', 
+  'npm --prefix ' + psychoJSPath + ' run build:js', 
   execSyncOptions
 );
 

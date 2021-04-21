@@ -74,6 +74,7 @@
     "mustache": "^4.1.0",
     "replace-color": "^2.3.0",
     "wdio-json-reporter": "^2.0.0",
+    "xlsx": "^0.16.9",
     "yargs": "^16.2.0"
   },
   "jshintConfig": {
