@@ -11,9 +11,15 @@ const Mustache = require('mustache');
 const CLIParser = require('../shared/CLIParser.cjs');
 const TestCollector = require('../shared/TestCollector.cjs');
 const NameSanitizer = require('../shared/NameSanitizer.cjs');
-const psychoJSVersion = require('../../package.json').version;
 
-// const path = require('path');
+
+// Get psychoJSPath
+const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
+console.log('[test.cjs] psychoJSPath is ' + psychoJSPath);
+
+// Get psychoJSVersion
+const psychoJSVersion = require(psychoJSPath + '/package.json').version;
+console.log('[test.cjs] psychoJSVersion is ' + psychoJSVersion);
 
 // Get uploadExperiments CLI option
 let uploadExperiments = CLIParser.parseOption({cli: 'uploadExperiments'}, false);
@@ -34,11 +40,9 @@ label = NameSanitizer.sanitize(label);
 let tests = TestCollector.collectTests(label, true);
 
 // Get template
-let template = fs.readFileSync('./src/index.html', 'utf8');
+let template = fs.readFileSync('./tests/shared/index.html', 'utf8');
 // Get root node (it's in a separate file for injecting in karma tests)
-let rootNode = fs.readFileSync('./src/root.html', 'utf8');
-// Get includes
-let includes = fs.readdirSync('./dist');
+let rootNode = fs.readFileSync('./tests/shared/root.html', 'utf8');
 
 // Perform deployment
 (async () => {
@@ -75,7 +79,7 @@ let includes = fs.readdirSync('./dist');
 
     // Copy dist/ to lib/
     fs.copySync(
-      './dist',
+      psychoJSPath + '/dist',
       Paths.dir_staging + '/' + test.path + '/lib'
     );
   }

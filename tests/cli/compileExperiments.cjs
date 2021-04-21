@@ -21,8 +21,11 @@ let tests = TestCollector.collectTests(label, true);
   console.log('[compileExperiments.cjs] Compiling ' + tests.wdio.length + ' experiments');
 
   for (let test of tests.wdio) {
-    console.log('[compileExperiments.cjs] Copying ' + test.path);
+    // Re-create path
+    console.log('[compileExperiments.cjs] Re-creating ' + test.path);
+    Paths.recreateDirectories([Paths.dir_staging + '/' + test.path], true);
     // Copy experiment to staging
+    console.log('[compileExperiments.cjs] Copying ' + test.path);
     fs.copySync(
       Paths.dir_tests + '/' + test.path, 
       Paths.dir_staging + '/' + test.path
