@@ -19,6 +19,7 @@ jobs:
     outputs:
       tests: ${{steps.get_tests.outputs.tests}} 
     steps:
+      # START: install this repo
       - name: Setup node
         uses: actions/setup-node@v1
         with:
@@ -38,30 +39,15 @@ jobs:
             ${{ runner.os }}-:  
       - name: Install modules of this repo
         run: npm ci
-        
-      - name: Checkout psychojs repo
-        uses: actions/checkout@v2
-        with:
-          repository: psychopy/psychojs
-          path: psychojs
-      - name: Cache node modules of psychojs repo
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules-psychojs
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-:  
-       
+      # END: install this repo
+      
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
         with:
           poll-interval-seconds: 10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Sync BS logs and Stager with GitHub 
         run: node tests/cli/syncWithGitHub.cjs alain sotiri thomas
       - name: Delete old test logs 
@@ -79,16 +65,17 @@ jobs:
       matrix: 
         test: ${{fromJson(needs.prepare.outputs.tests)}}
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      # START: install this repo
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Cache node modules
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+      - name: Cache node modules of this repo
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-node-modules-this
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -96,27 +83,37 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install modules
+      - name: Install modules of this repo
         run: npm ci
+      # END: install this repo
+      
+      # START: install psychojs
+      - name: Checkout psychojs repo
+        uses: actions/checkout@v2
+        with:
+          repository: psychopy/psychojs
+          path: psychojs
+      - name: Cache node modules of psychojs repo
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules-psychojs
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      # END: install psychojs
+       
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
         with:
           poll-interval-seconds: 10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: test1
-        run: echo *
-      - name: test2
-        run: echo \*
-      - name: test3
-        run: echo '*'
-      - name: test4
-        run: echo '\*'
-      - name: test5
-        run: echo "*"
-      - name: test6
-        run: echo "\*"
-      - name: Run e2e_test ${{ matrix.test }}
+
+      - name: Run test ${{ matrix.test }}
         run: node test.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform \* --uploadReport
         # run: npx wdio tests/shared/wdio.conf.cjs --server bs --testrun all_devices --label ${{ matrix.test }} --url pavlovia --platform *Windows*10* --uploadReport
   join_reports:
@@ -125,16 +122,17 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      # START: install this repo
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Cache node modules
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+      - name: Cache node modules of this repo
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-node-modules-this
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -142,8 +140,10 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install modules
+      - name: Install modules of this repo
         run: npm ci
+      # END: install this repo
+      
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
         with:
