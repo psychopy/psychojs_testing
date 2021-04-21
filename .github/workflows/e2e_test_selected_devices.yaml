@@ -86,11 +86,7 @@ jobs:
       # START: run tests
       - name: LS1
         run: ls -l
-      - name: CD psychojs_tests
-        run: cd psychojs_tests
-      - name: LS2
-        run: ls -l
-        
+        working-directory: ./psychojs_tests
 #      - name: Run e2e_test selected_devices
 #        run: node test.cjs --server bs --testrun selected_devices --url pavlovia  --platform *Windows*Chrome* --uploadReport --label wdio_code 
       # END: run tests
