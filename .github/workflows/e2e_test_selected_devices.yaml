@@ -70,7 +70,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install modules of this repo
+      - name: Install psychojs
         run: npm --prefix psychojs ci
       # END: install psychojs
       
@@ -86,6 +86,9 @@ jobs:
       # START: run tests
       - name: CD psychojs_tests
         run: cd psychojs_tests
-      - name: Run e2e_test selected_devices
-        run: node test.cjs --server bs --testrun selected_devices --url pavlovia  --platform *Windows*Chrome* --uploadReport --label wdio_code 
+      - name: LS
+        run: ls -l
+        
+#      - name: Run e2e_test selected_devices
+#        run: node test.cjs --server bs --testrun selected_devices --url pavlovia  --platform *Windows*Chrome* --uploadReport --label wdio_code 
       # END: run tests
