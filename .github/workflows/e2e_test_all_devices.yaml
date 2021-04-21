@@ -10,7 +10,7 @@ env:
   STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
   STAGING_PORT: ${{ secrets.STAGING_PORT }}
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
-  PSYCHOJS_PATH: '../psychojs'
+  PSYCHOJS_PATH: '../../psychojs'
 
 jobs:
   prepare:
