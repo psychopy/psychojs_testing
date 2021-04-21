@@ -91,7 +91,7 @@ jobs:
       - name: Checkout psychojs repo
         uses: actions/checkout@v2
         with:
-          repository: psychopy/psychojs
+          repository: tpronk/psychojs
           path: psychojs
       - name: Cache node modules of psychojs repo
         uses: actions/cache@v2
