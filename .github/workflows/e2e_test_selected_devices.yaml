@@ -84,9 +84,11 @@ jobs:
       # END: wait for other workflows to complete          
       
       # START: run tests
+      - name: LS1
+        run: ls -l
       - name: CD psychojs_tests
         run: cd psychojs_tests
-      - name: LS
+      - name: LS2
         run: ls -l
         
 #      - name: Run e2e_test selected_devices
