@@ -1,9 +1,9 @@
 name: e2e test selected_devices
 on:
-  push:
-    branches: '**'
-  pull_request:
-    branches: '**'
+#  push:
+#    branches: '**'
+#  pull_request:
+#    branches: '**'
   workflow_dispatch:
     inputs:
       repo:
