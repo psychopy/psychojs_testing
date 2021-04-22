@@ -2,8 +2,8 @@
 
 // Modules
 const child_process = require('child_process');
-const CLIParser = require('./tests/shared/CLIParser.cjs');
-const TestCollector = require('./tests/shared/TestCollector.cjs');
+const CLIParser = require('./scripts/shared/CLIParser.cjs');
+const TestCollector = require('./scripts/shared/TestCollector.cjs');
 
 // Get psychoJSPath
 const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
@@ -36,7 +36,7 @@ let tests = TestCollector.collectTests(CLIParser.parseOption({cli: 'label'}));
 if (tests.karma.length > 0) {
   console.log('[test.cjs] Starting karma tests');
   child_process.execSync(
-    'node tests/cli/runkarma.cjs ' + cliString,
+    'node scripts/cli/runkarma.cjs ' + cliString,
     execSyncOptions  
   );
 }
@@ -51,13 +51,13 @@ if (tests.wdio.length > 0) {
 
   // Deploy experiments
   child_process.execSync(
-    'node tests/cli/deployExperiments.cjs ' + cliString,
+    'node scripts/cli/deployExperiments.cjs ' + cliString,
     execSyncOptions
   );
 
   // Run e2e tests
   child_process.execSync(
-   'npx wdio tests/shared/wdio.conf.cjs ' + cliString,
+   'npx wdio scripts/shared/wdio.conf.cjs ' + cliString,
     execSyncOptions
   );
 }

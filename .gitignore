@@ -1,8 +1,8 @@
-node_modules/
-tests/staging
-tests/cache
-tests/results
+cache/
 dist/
 docs/
+node_modules/
+results/
+staging/
 debug.log
 local.log
