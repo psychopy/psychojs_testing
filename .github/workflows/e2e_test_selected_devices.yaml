@@ -1,15 +1,15 @@
 name: e2e test selected_devices
 on:
-  push:
-    branches: '**'
-  pull_request:
-    branches: '**'
+#  push:
+#    branches: '**'
+#  pull_request:
+#    branches: '**'
   workflow_dispatch:
     inputs:
       repo:
         description: 'Repository'
         required: true
-        default: 'tpronk/e2e_robot'
+        default: 'tpronk/psychojs'
       ref:
         description: 'Branch/tag/SHA (default branch if empty)'
         required: false
@@ -23,34 +23,68 @@ jobs:
       STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
       STAGING_PORT: ${{ secrets.STAGING_PORT }}
       STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+      PSYCHOJS_PATH: '/home/runner/work/e2e_robot/e2e_robot/psychojs'
+      
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ github.event.inputs.repo || 'tpronk/e2e_robot' }}
-          ref: ${{ github.event.inputs.ref }}
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Cache node modules
+          
+      # START: install psychojs_tests
+      - name: Checkout psychojs_tests
+        uses: actions/checkout@v2
+        with:
+          repository: tpronk/e2e_robot
+          path: psychojs_tests
+      - name: Cache modules psychojs_tests
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-modules-psychojs_tests
         with:
-          path: ~/.npm
+          path: ~/psychojs_tests/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install modules
-        run: npm ci
+      - name: Install psychojs_tests
+        run: npm --prefix psychojs_tests ci
+      # END: install psychojs_tests
+    
+      # START: install psychojs
+      - name: Checkout psychojs
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.inputs.repo || 'tpronk/psychojs' }}
+          ref: ${{ github.event.inputs.ref }}
+          path: psychojs
+      - name: Cache modules psychojs
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-modules-psychojs
+        with:
+          path: ~/psychojs/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-:  
+      - name: Install psychojs
+        run: npm --prefix psychojs ci
+      # END: install psychojs
+      
+      # START: wait for other workflows to complete
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
         with:
           poll-interval-seconds: 10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # END: wait for other workflows to complete          
+      
+      # START: run tests
       - name: Run e2e_test selected_devices
-        run: npx wdio test/wdio.conf.cjs --server bs --upload --subset --testrun selected_devices --url https://run.pavlovia.org/tpronk/{{experiment}}/html
+        run: node test.cjs --server bs --testrun selected_devices --url pavlovia  --platform *Windows*Chrome* --uploadReport --label wdio_code 
+        working-directory: ./psychojs_tests        
+      # END: run tests
