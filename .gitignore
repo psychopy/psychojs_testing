@@ -4,6 +4,5 @@ dist/
 docs/
 node_modules/
 results/
-compiled_experiments/
 debug.log
 local.log
