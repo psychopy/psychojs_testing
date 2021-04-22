@@ -4,29 +4,28 @@ const fs = require('fs-extra');
 // Paths to temporary folders, image folders, and URLs
 module.exports = {
   // Logs of karma; karma itself assumes this is path relative to one directory higher than the one containing karma.conf.js
-  dir_results_karma:            './tests/results/logs_karma',
+  dir_results_karma:            './results/logs_karma',
   subdir_results_karma:          'logs_karma',
 
   // Path to staging directory (compiled test-experiments)
-  dir_staging:                 './tests/staging',
-  dir_cache:                   './tests/cache',
+  dir_staging:                 './staging',
+  dir_cache:                   './cache',
 
   // Logs wdio
-  dir_results:                './tests/results',  
-  dir_results_capabilities:   './tests/results/logs_capabilities',
-  dir_results_json:           './tests/results/logs_json',
-  dir_results_joined:         './tests/results/logs_joined',
-  dir_results_processed:      './tests/results/logs_processed',
+  dir_results:                './results',  
+  dir_results_capabilities:   './results/logs_capabilities',
+  dir_results_json:           './results/logs_json',
+  dir_results_joined:         './results/logs_joined',
+  dir_results_processed:      './results/logs_processed',
   subdir_results_processed:   'logs_processed',    
-  dir_results_wdio:           './tests/results/logs_wdio',
-  dir_results_selenium:       './tests/results/logs_selenium',
+  dir_results_wdio:           './results/logs_wdio',
+  dir_results_selenium:       './results/logs_selenium',
   
-  dir_screenshots_cutout:     './tests/results/screenshots_cutout',
-  dir_screenshots_raw:        './tests/results/screenshots_raw',
-  dir_screenshots_scaled:     './tests/results/screenshots_scaled',  
+  dir_screenshots_cutout:     './results/screenshots_cutout',
+  dir_screenshots_raw:        './results/screenshots_raw',
+  dir_screenshots_scaled:     './results/screenshots_scaled',  
   
   dir_tests:                  './tests',
-  dir_counterexample_imgs:    './tests/counterexample_imgs',
 
   subdir_results_wdio:        'results_wdio',
   subdir_results_karma:       'results_karma',
