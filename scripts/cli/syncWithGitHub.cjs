@@ -26,6 +26,7 @@ const pseudoBranches = argv._;
   console.log('[syncWithGithub.cjs] deleting staging server reports');
   await Stager.deleteAllDirectoriesExcept(Paths.subdir_results_wdio, branchNames);
   await Stager.deleteAllDirectoriesExcept(Paths.subdir_results_karma, branchNames);
+  await Stager.deleteAllDirectoriesExcept(Paths.subdir_results_joined, branchNames);
 
   console.log('[syncWithGithub.cjs] deleting staging server html experiments');
   await Stager.deleteAllDirectoriesExcept('experiments', branchNames);
