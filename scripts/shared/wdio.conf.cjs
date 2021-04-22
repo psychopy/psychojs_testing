@@ -301,7 +301,7 @@ exports.config = {
           if (branch === undefined) {
             throw new Error('[wdio.conf.cjs] url was "stager", but no branch was specified, so baseUrl could not be constructed');
           }
-          baseUrl = 'https://staging.psychopy.org/experiments/html/' + branch + '/{{experiment}}';
+          baseUrl = 'https://staging.psychopy.org/experiments/' + branch + '/{{experiment}}';
           break;
         // Url points to pavlovia server; get from test config
         case 'pavlovia':

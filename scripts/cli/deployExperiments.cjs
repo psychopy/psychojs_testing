@@ -36,7 +36,6 @@ if (uploadExperiments) {
 
 // Get label and collect experiments
 let label = CLIParser.parseOption({cli: 'label'});
-label = NameSanitizer.sanitize(label);
 let tests = TestCollector.collectTests(label, true);
 
 // Get template
@@ -88,11 +87,11 @@ let rootNode = fs.readFileSync('./scripts/shared/root.html', 'utf8');
   if (uploadExperiments) {
     console.log('[deployExperiments.cjs] uploading experiments');
     await Stager.deleteDirectory(
-      'experiments/html/' + branch
+      'experiments/' + branch
     );
     await Stager.uploadDirectory(
       Paths.dir_staging,
-      'experiments/html/' + branch
+      'experiments/' + branch
     )
   }
 })();
