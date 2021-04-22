@@ -16,9 +16,9 @@ const processors = {
   platform: function(processMe) {
     let argv = yargs(hideBin(process.argv)).argv;
     let startIndex = 1;
-    // Karma workaround, start parsing unnamed arguments after tests/shared/karma.conf.cjs
-    if (argv._.indexOf('tests/shared/karma.conf.cjs') !== -1) {
-      startIndex = argv._.indexOf('tests/shared/karma.conf.cjs') + 1;
+    // Karma workaround, start parsing unnamed arguments after scripts/shared/karma.conf.cjs
+    if (argv._.indexOf('scripts/shared/karma.conf.cjs') !== -1) {
+      startIndex = argv._.indexOf('scripts/shared/karma.conf.cjs') + 1;
     }
     if (processMe !== '*' && argv._.length > startIndex) {
       return processMe + ' ' + argv._.slice(startIndex, argv._.length).join(' ');

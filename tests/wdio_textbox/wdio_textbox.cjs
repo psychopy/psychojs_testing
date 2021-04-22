@@ -1,5 +1,5 @@
 
-const SharedBehaviors = require('../../shared/SharedBehaviors.cjs');
+const SharedBehaviors = require('../../scripts/shared/SharedBehaviors.cjs');
 
 module.exports = {
   run: (calibration = null) => {

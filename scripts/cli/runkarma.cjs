@@ -52,7 +52,7 @@ if (server === 'bs') {
   try {
     // String of options passed to this script; we pass these on to karma.conf.js
     let cliString = CLIParser.constructCLIString(2);
-    child_process.execSync('npx karma start tests/shared/karma.conf.cjs ' + cliString, { 
+    child_process.execSync('npx karma start scripts/shared/karma.conf.cjs ' + cliString, { 
       stdio: ['inherit', 'inherit', 'inherit']
     });
   } catch (e) {

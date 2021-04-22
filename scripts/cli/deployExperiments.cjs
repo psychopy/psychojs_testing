@@ -40,9 +40,9 @@ label = NameSanitizer.sanitize(label);
 let tests = TestCollector.collectTests(label, true);
 
 // Get template
-let template = fs.readFileSync('./tests/shared/index.html', 'utf8');
+let template = fs.readFileSync('./scripts/shared/index.html', 'utf8');
 // Get root node (it's in a separate file for injecting in karma tests)
-let rootNode = fs.readFileSync('./tests/shared/root.html', 'utf8');
+let rootNode = fs.readFileSync('./scripts/shared/root.html', 'utf8');
 
 // Perform deployment
 (async () => {

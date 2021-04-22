@@ -50,7 +50,7 @@ exports.config = {
   runner: 'local',
 
   // Test files & patterns to include & exclude
-  specs: ['./tests/shared/wdio_specfile.cjs'],
+  specs: ['./scripts/shared/wdio_specfile.cjs'],
   exclude: [],
   //
   // ===================

@@ -85,7 +85,7 @@ module.exports = function(config) {
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
       {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
       {pattern: 'dist/*.js', type: 'module', included: false, served: true},
-      {pattern: 'tests/shared/root.html', type: 'dom'}
+      {pattern: 'scripts/shared/root.html', type: 'dom'}
     ].concat(cssFiles).concat(specFiles),
 
     proxies: libraryProxies,  

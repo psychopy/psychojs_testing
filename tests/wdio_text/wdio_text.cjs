@@ -1,4 +1,4 @@
-const SharedBehaviors = require('../../shared/SharedBehaviors.cjs');
+const SharedBehaviors = require('../../scripts/shared/SharedBehaviors.cjs');
 
 module.exports = {
   run: () => {
@@ -7,11 +7,11 @@ module.exports = {
     // Rough calibration
     let calibration = SharedBehaviors.performPavloviaPrelude();
     // Tap past intro screen
-    SharedBehaviors.waitForReport('intro_trial');
+    SharedBehaviors.waitForReport('STARTED');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
     // Make screenshots of test1 to test6
-    for (let test_i = 1; test_i <= 2; test_i++) {
-      testName = 'polygon' + test_i;      
+    for (let test_i = 1; test_i <= 6; test_i++) {
+      testName = 'text' + test_i;      
       // Wait for confirmation we're at the next test routine
       SharedBehaviors.waitForReport(testName);
       // Wait a moment, then take screenshot

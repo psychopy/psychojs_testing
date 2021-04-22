@@ -23,7 +23,7 @@ describe('wdio_specfile', () => {
     it(test.path, () => {
       console.log('[wdio_specfile.cjs] ' + test.path);
       browser.setTestConfig(test);
-      testFunction = require('../' + test.path + '/' + test.testscript_file).run;
+      testFunction = require('../../tests/' + test.path + '/' + test.testscript_file).run;
       testFunction(calibration);
     });
   }
