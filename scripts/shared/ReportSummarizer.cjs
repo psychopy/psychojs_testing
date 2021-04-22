@@ -263,20 +263,29 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
   let capabilities;
   // Filtered logs
   let customLogs;
-  // Extract unique capability IDs from joinedReports
-  capabilities = joinedReports.map((row) => {
-    return row.capability_id;
+  // Platforms
+  let platforms = joinedReports.filter((row) => {
+    return row.spec == 'platform'
+  }).map((row) => {
+    return row.message
   });
-  capabilities = Array.from(new Set(capabilities));
-  // For each unique capability, aggregate data
-  for(let capability of capabilities) {
+  platforms = Array.from(new Set(platforms));
+
+  // For each unique platform, aggregate data
+  for(let platform of platforms) {
+    // Get list of capability IDs that belong to this platform
+    capabilities = joinedReports.filter((row) => {
+      return row.spec == 'platform' && row.message == platform;
+    }).map((row) => {
+      return row.capability_id;
+    });
+    capabilities = Array.from(new Set(capabilities));
+
     // *** Create summary
     summary = {};
-    // Add capability_id
-    summary.capability_id = capability;
     // Add customLogs
     customLogs = joinedReports.filter(function (row) {
-      return row.capability_id === capability && row.state === 'custom' && customLogsToAdd.includes(row.spec)
+      return capabilities.includes(row.capability_id) && row.state === 'custom' && customLogsToAdd.includes(row.spec)
     });
     for (let customLog of customLogs) {
       summary[customLog.spec] = customLog.message
@@ -284,7 +293,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
     // Count passed, failed, skipped
     for (let state of ['passed', 'failed', 'skipped']) {
       summary[state] = joinedReports.filter(function (row) {
-        return row.capability_id === capability && row.state === state
+        return capabilities.includes(row.capability_id)  && row.state === state
       }).length;
     }
     // Add to summaries
@@ -293,7 +302,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
     // *** Create failed
     // All failed tests of this capability
     failedTests = joinedReports.filter(function (row) {
-      return row.capability_id === capability && row.state === 'failed'
+      return capabilities.includes(row.capability_id)  && row.state === 'failed'
     });    
     failed = failed.concat(failedTests.map((failedTest) => {
       let failedRow = {};
@@ -303,7 +312,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
       }
       let logUrl = logUrlFunction(
         joinedReports.filter(function (row) {
-          return row.capability_id === capability && row.suite === failedTest.suite;
+          return capabilities.includes(row.capability_id)  && row.suite === failedTest.suite;
         })
       );
       failedRow.log_url = logUrl;
