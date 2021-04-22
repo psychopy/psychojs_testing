@@ -43,26 +43,39 @@ let template = fs.readFileSync('./scripts/shared/index.html', 'utf8');
 // Get root node (it's in a separate file for injecting in karma tests)
 let rootNode = fs.readFileSync('./scripts/shared/root.html', 'utf8');
 
+// Re-create deployedpiled directory
+Paths.recreateDirectories([Paths.dir_deployed], false);
+
 // Perform deployment
 (async () => {
-  // Copy and compile each experiment
+  // Copy and deploy each experiment
   console.log('[deployExperiments.cjs] Deploying ' + tests.wdio.length + ' experiments');
 
   let jsExperiment;
   for (let test of tests.wdio) {
+    // Re-create path
+    console.log('[deployExperiments.cjs] Re-creating ' + test.path);
+    Paths.recreateDirectories([Paths.dir_deployed + '/' + test.path], true);
+    // Copy experiment to deployed
+    console.log('[compileExperiments.cjs] Copying ' + test.path);
+    fs.copySync(
+      Paths.dir_compiled + '/' + test.path,      
+      Paths.dir_deployed + '/' + test.path
+    );
+
     console.log('[deployExperiments.cjs] Deploying ' + test.path);
 
     // Compile and write index.html
-    let compiled = Mustache.render(template, {
+    let deployedIndex = Mustache.render(template, {
       psychoJSVersion: psychoJSVersion, 
       rootNode: rootNode,
       experiment: test.experiment_file.substring(0, test.experiment_file.length - '.psyexp'.length)
     });
+
     // Check if JS version of experiment exists
     jsExperiment = 
-    Paths.dir_staging + '/' + test.path + '/' +
+      Paths.dir_deployed + '/' + test.path + '/' +
       test.experiment_file.substring(0, test.experiment_file.length - '.psyexp'.length) + '.js';
-    console.log(jsExperiment);
     if (!fs.existsSync(jsExperiment)) {
       throw new Error(
         'Error deploying ' + test.path + '. Could not find ' +
@@ -72,14 +85,14 @@ let rootNode = fs.readFileSync('./scripts/shared/root.html', 'utf8');
     }
 
     fs.outputFileSync(
-      Paths.dir_staging + '/' + test.path + '/index.html', 
-      compiled
+      Paths.dir_deployed + '/' + test.path + '/index.html', 
+      deployedIndex
     );
 
     // Copy dist/ to lib/
     fs.copySync(
       psychoJSPath + '/dist',
-      Paths.dir_staging + '/' + test.path + '/lib'
+      Paths.dir_deployed + '/' + test.path + '/lib'
     );
   }
 
@@ -90,7 +103,7 @@ let rootNode = fs.readFileSync('./scripts/shared/root.html', 'utf8');
       'experiments/' + branch
     );
     await Stager.uploadDirectory(
-      Paths.dir_staging,
+      Paths.dir_deployed,
       'experiments/' + branch
     )
   }

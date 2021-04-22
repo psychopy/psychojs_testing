@@ -4,11 +4,12 @@ const fs = require('fs-extra');
 // Paths to temporary folders, image folders, and URLs
 module.exports = {
   // Logs of karma; karma itself assumes this is path relative to one directory higher than the one containing karma.conf.js
-  dir_results_karma:            './results/logs_karma',
-  subdir_results_karma:          'logs_karma',
+  dir_results_karma:           './results/logs_karma',
+  subdir_results_karma:         'logs_karma',
 
   // Path to staging directory (compiled test-experiments)
-  dir_staging:                 './staging',
+  dir_compiled:                './compiled_experiments',
+  dir_deployed:                './deployed_experiments',
   dir_cache:                   './cache',
 
   // Logs wdio
