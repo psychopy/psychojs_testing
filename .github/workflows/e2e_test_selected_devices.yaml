@@ -85,6 +85,6 @@ jobs:
       
       # START: run tests
       - name: Run e2e_test selected_devices
-        run: node test.cjs --server bs --testrun selected_devices --url pavlovia  --platform *Windows*Chrome* --uploadReport --label wdio_code 
+        run: node test.cjs --server bs --testrun selected_devices --url stager  --platform *Windows*Chrome* --uploadExperiments --uploadResults --label wdio_code 
         working-directory: ./psychojs_tests        
       # END: run tests
