@@ -107,10 +107,10 @@ parseTestrunCLIOptions = () => {
   }
   console.log('[CLIParser.cjs] server is ' + server);
 
-  // Get uploadReport CLI option
-  let uploadReport = parseOption({cli: 'uploadReport'}, false);
-  uploadReport = uploadReport !== undefined;
-  console.log('[CLIParser.cjs] uploadReport is ' + uploadReport);
+  // Get uploadResults CLI option
+  let uploadResults = parseOption({cli: 'uploadResults'}, false);
+  uploadResults = uploadResults !== undefined;
+  console.log('[CLIParser.cjs] uploadResults is ' + uploadResults);
 
   // Get platform CLI option
   let platform = parseOption({cli: 'platform'}, false);
@@ -132,8 +132,8 @@ parseTestrunCLIOptions = () => {
 
   // Get branch from CLI or GITHUB_REF
   let branch = parseOption({cli: 'branch', env: 'GITHUB_REF'}, false);
-  if ((uploadReport || server === 'bs') && branch === undefined) {
-    throw new Error('[CLIParser.cjs] uploadReport was enabled or server was bs, but branch was not defined');
+  if ((uploadResults || server === 'bs') && branch === undefined) {
+    throw new Error('[CLIParser.cjs] uploadResults was enabled or server was bs, but branch was not defined');
   }
   if (branch !== undefined) {
     branch = NameSanitizer.sanitize(branch);
@@ -145,7 +145,7 @@ parseTestrunCLIOptions = () => {
   subset = subset !== undefined;
   console.log('[CLIParser.cjs] subset is ' + subset);
 
-  return [server, uploadReport, platform, label, testrun, branch, subset];
+  return [server, uploadResults, platform, label, testrun, branch, subset];
 };
 
 // Construct CLI string from process.argv, starting at startingIndex, escaping wildcards if we don't run Windows Command Line

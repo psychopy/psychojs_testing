@@ -12,7 +12,7 @@ const TestCollector = require('./TestCollector.cjs');
 const NameSanitizer = require('./NameSanitizer.cjs');
 
 // *** Parse CLI arguments
-let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+let [server, uploadResults, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
 // Construct tests
 let tests = TestCollector.collectTests(label).wdio;
@@ -379,7 +379,7 @@ exports.config = {
         buildNamesToBuildIdsMap
       );
       // If upload enabled, update stager
-      if (uploadReport) {
+      if (uploadResults) {
         const stagerPath = Stager.createReportPath(branch, testrun, NameSanitizer.sanitize(label));
         console.log('[wdio.conf.cjs] stagerPath is ' + stagerPath);
         // Delete old logs

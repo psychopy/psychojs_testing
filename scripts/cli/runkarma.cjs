@@ -9,7 +9,7 @@ const ReportSummarizer = require('./../shared/ReportSummarizer.cjs');
 const NameSanitizer = require('./../shared/NameSanitizer.cjs');
 
 // Get CLI options
-let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+let [server, uploadResults, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 // Construct buildName
 let buildName = undefined;
 if (server === 'bs') {
@@ -76,8 +76,8 @@ if (server === 'bs') {
     server === 'bs'
   );
 
-  // If uploadReport enabled, update stager
-  if (uploadReport) {
+  // If uploadResults enabled, update stager
+  if (uploadResults) {
     const stagerPath = Stager.createReportPath(branch, testrun, NameSanitizer.sanitize(label));
     console.log('[runkarma.cjs] stagerPath is ' + stagerPath);
     // Delete old logs

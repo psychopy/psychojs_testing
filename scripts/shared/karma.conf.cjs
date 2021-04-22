@@ -7,7 +7,7 @@ const TestCollector = require('./TestCollector.cjs');
 const NameSanitizer = require('./../shared/NameSanitizer.cjs');
 
 // *** Parse CLI arguments
-let [server, uploadReport, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
+let [server, uploadResults, platform, label, testrun, branch, subset] = CLIParser.parseTestrunCLIOptions();
 
 // Get label and construct specFiles
 let tests = TestCollector.collectTests(label);
