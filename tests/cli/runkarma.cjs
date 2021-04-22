@@ -28,7 +28,8 @@ Paths.recreateDirectories([
 
 // Copy dist from PsychoJS repo to this repo
 const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
-console.log('[runkarmatest.cjs] psychoJSPath is ' + psychoJSPath);
+console.log('[runkarma.cjs] psychoJSPath is ' + psychoJSPath);
+
 console.log('[runkarma.cjs] Copying dist from PsychoJS repo to this repo');
 // Copy dist/ to lib/
 fs.copySync(
