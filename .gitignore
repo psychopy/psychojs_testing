@@ -1,8 +1,9 @@
 cache/
+deployed_experiments/
 dist/
 docs/
 node_modules/
 results/
-staging/
+compiled_experiments/
 debug.log
 local.log
