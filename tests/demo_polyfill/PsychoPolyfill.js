@@ -26,7 +26,7 @@
 
 // Oldest and newest PsychoPy version of which we are sure that this version of PsychoPolyfill is compatible with
 const oldestVersion = '2021.1.0';
-const newestVersion = '2021.1.3';
+const newestVersion = '2021.1.4';
 // URL to page with assistance about this module
 const helpUrl = 'For more information, see https://gitlab.pavlovia.org/tpronk/demo_polyfill';
 
