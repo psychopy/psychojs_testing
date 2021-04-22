@@ -101,21 +101,15 @@ var mouse_4;
 var intro_random_csvClock;
 var text_random_csv;
 var mouse;
-var trial_csvClock;
+var trialClock;
 var text;
 var mouse_5;
 var intro_random_xlsxClock;
 var text_random_xlsx;
 var mouse_2;
-var trial_xlsxClock;
-var text_3;
-var mouse_6;
 var intro_random_funkyClock;
 var text_fullRandom;
 var mouse_3;
-var trial_funkyClock;
-var text_4;
-var mouse_7;
 var globalClock;
 var routineTimer;
 function experimentInit() {
@@ -153,8 +147,8 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse.mouseClock = new util.Clock();
-  // Initialize components for Routine "trial_csv"
-  trial_csvClock = new util.Clock();
+  // Initialize components for Routine "trial"
+  trialClock = new util.Clock();
   text = new visual.TextStim({
     win: psychoJS.window,
     name: 'text',
@@ -187,11 +181,11 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_2.mouseClock = new util.Clock();
-  // Initialize components for Routine "trial_xlsx"
-  trial_xlsxClock = new util.Clock();
-  text_3 = new visual.TextStim({
+  // Initialize components for Routine "trial"
+  trialClock = new util.Clock();
+  text = new visual.TextStim({
     win: psychoJS.window,
-    name: 'text_3',
+    name: 'text',
     text: '',
     font: 'Arial',
     units: undefined, 
@@ -200,10 +194,10 @@ function experimentInit() {
     depth: 0.0 
   });
   
-  mouse_6 = new core.Mouse({
+  mouse_5 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_6.mouseClock = new util.Clock();
+  mouse_5.mouseClock = new util.Clock();
   // Initialize components for Routine "intro_random_funky"
   intro_random_funkyClock = new util.Clock();
   text_fullRandom = new visual.TextStim({
@@ -221,11 +215,11 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_3.mouseClock = new util.Clock();
-  // Initialize components for Routine "trial_funky"
-  trial_funkyClock = new util.Clock();
-  text_4 = new visual.TextStim({
+  // Initialize components for Routine "trial"
+  trialClock = new util.Clock();
+  text = new visual.TextStim({
     win: psychoJS.window,
-    name: 'text_4',
+    name: 'text',
     text: '',
     font: 'Arial',
     units: undefined, 
@@ -234,10 +228,10 @@ function experimentInit() {
     depth: 0.0 
   });
   
-  mouse_7 = new core.Mouse({
+  mouse_5 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_7.mouseClock = new util.Clock();
+  mouse_5.mouseClock = new util.Clock();
   // Create some handy timers
   globalClock = new util.Clock();  // to track the time since experiment started
   routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
@@ -488,7 +482,7 @@ function random_csvLoopBegin(random_csvLoopScheduler) {
   // set up handler to look after randomisation of conditions etc
   random_csv = new TrialHandler({
     psychoJS: psychoJS,
-    nReps: 1, method: TrialHandler.Method.SEQUENTIAL,
+    nReps: 1, method: TrialHandler.Method.RANDOM,
     extraInfo: expInfo, originPath: undefined,
     trialList: 'resources/conditions.csv',
     seed: 42, name: 'random_csv'
@@ -501,9 +495,9 @@ function random_csvLoopBegin(random_csvLoopScheduler) {
     const snapshot = random_csv.getSnapshot();
 
     random_csvLoopScheduler.add(importConditions(snapshot));
-    random_csvLoopScheduler.add(trial_csvRoutineBegin(snapshot));
-    random_csvLoopScheduler.add(trial_csvRoutineEachFrame(snapshot));
-    random_csvLoopScheduler.add(trial_csvRoutineEnd(snapshot));
+    random_csvLoopScheduler.add(trialRoutineBegin(snapshot));
+    random_csvLoopScheduler.add(trialRoutineEachFrame(snapshot));
+    random_csvLoopScheduler.add(trialRoutineEnd(snapshot));
     random_csvLoopScheduler.add(endLoopIteration(random_csvLoopScheduler, snapshot));
   });
 
@@ -536,9 +530,9 @@ function random_xlsxLoopBegin(random_xlsxLoopScheduler) {
     const snapshot = random_xlsx.getSnapshot();
 
     random_xlsxLoopScheduler.add(importConditions(snapshot));
-    random_xlsxLoopScheduler.add(trial_xlsxRoutineBegin(snapshot));
-    random_xlsxLoopScheduler.add(trial_xlsxRoutineEachFrame(snapshot));
-    random_xlsxLoopScheduler.add(trial_xlsxRoutineEnd(snapshot));
+    random_xlsxLoopScheduler.add(trialRoutineBegin(snapshot));
+    random_xlsxLoopScheduler.add(trialRoutineEachFrame(snapshot));
+    random_xlsxLoopScheduler.add(trialRoutineEnd(snapshot));
     random_xlsxLoopScheduler.add(endLoopIteration(random_xlsxLoopScheduler, snapshot));
   });
 
@@ -571,9 +565,9 @@ function random_funkyLoopBegin(random_funkyLoopScheduler) {
     const snapshot = random_funky.getSnapshot();
 
     random_funkyLoopScheduler.add(importConditions(snapshot));
-    random_funkyLoopScheduler.add(trial_funkyRoutineBegin(snapshot));
-    random_funkyLoopScheduler.add(trial_funkyRoutineEachFrame(snapshot));
-    random_funkyLoopScheduler.add(trial_funkyRoutineEnd(snapshot));
+    random_funkyLoopScheduler.add(trialRoutineBegin(snapshot));
+    random_funkyLoopScheduler.add(trialRoutineEachFrame(snapshot));
+    random_funkyLoopScheduler.add(trialRoutineEnd(snapshot));
     random_funkyLoopScheduler.add(endLoopIteration(random_funkyLoopScheduler, snapshot));
   });
 
@@ -588,40 +582,42 @@ function random_funkyLoopEnd() {
 }
 
 
-var trial_csvComponents;
-function trial_csvRoutineBegin(snapshot) {
+var trialComponents;
+function trialRoutineBegin(snapshot) {
   return function () {
-    //------Prepare to start Routine 'trial_csv'-------
+    //------Prepare to start Routine 'trial'-------
     t = 0;
-    trial_csvClock.reset(); // clock
+    trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     text.setText(word);
     document.body.setAttribute('data-report', window.counter + '_' + word);
-    console.log(JSON.stringify({ 
-        'trialList': random_csv.trialList,
-        'thisIndex': random_csv.thisIndex,
-        'nTotal': random_csv.nTotal,
-        'nRemaining': random_csv.nRemaining,
-        'thisN': random_csv.thisN,
-        'thisRepN': random_csv.thisRepN,
-        'thisTrialN': random_csv.thisTrialN,
-        'thisTrial': random_csv.thisTrial,
-        'finished': random_csv.finished,
-        'extraInfo': random_csv.extraInfo,
-        'origin': random_csv.origin
-    }));
-    console.log(snapshot);
+    console.log(random_csv.thisTrialN);
+    //console.log({ 
+    //    'counter' : counter,
+    //    'word' : word,
+    ////    'trialList': random_csv.trialList,
+    //    'thisIndex': random_csv.thisIndex,
+    //    'nTotal': random_csv.nTotal,
+    //    'nRemaining': random_csv.nRemaining,
+    //    'thisN': random_csv.thisN,
+    //    'thisRepN': random_csv.thisRepN,
+    //    'thisTrialN': random_csv.thisTrialN,
+    //    'thisTrial': random_csv.thisTrial,
+    //    'finished': random_csv.finished
+    ////    'extraInfo': random_csv.extraInfo,
+    ////    'origin': random_csv.origin
+    //});
     window.counter++;
     // setup some python lists for storing info about the mouse_5
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
-    trial_csvComponents = [];
-    trial_csvComponents.push(text);
-    trial_csvComponents.push(mouse_5);
+    trialComponents = [];
+    trialComponents.push(text);
+    trialComponents.push(mouse_5);
     
-    trial_csvComponents.forEach( function(thisComponent) {
+    trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -630,11 +626,11 @@ function trial_csvRoutineBegin(snapshot) {
 }
 
 
-function trial_csvRoutineEachFrame(snapshot) {
+function trialRoutineEachFrame(snapshot) {
   return function () {
-    //------Loop for each frame of Routine 'trial_csv'-------
+    //------Loop for each frame of Routine 'trial'-------
     // get current time
-    t = trial_csvClock.getTime();
+    t = trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -678,7 +674,7 @@ function trial_csvRoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    trial_csvComponents.forEach( function(thisComponent) {
+    trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -694,10 +690,10 @@ function trial_csvRoutineEachFrame(snapshot) {
 }
 
 
-function trial_csvRoutineEnd(snapshot) {
+function trialRoutineEnd(snapshot) {
   return function () {
-    //------Ending Routine 'trial_csv'-------
-    trial_csvComponents.forEach( function(thisComponent) {
+    //------Ending Routine 'trial'-------
+    trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -710,7 +706,7 @@ function trial_csvRoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_5.leftButton', _mouseButtons[0]);
     psychoJS.experiment.addData('mouse_5.midButton', _mouseButtons[1]);
     psychoJS.experiment.addData('mouse_5.rightButton', _mouseButtons[2]);
-    // the Routine "trial_csv" was not non-slip safe, so reset the non-slip timer
+    // the Routine "trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -832,135 +828,6 @@ function intro_random_xlsxRoutineEnd(snapshot) {
 }
 
 
-var trial_xlsxComponents;
-function trial_xlsxRoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'trial_xlsx'-------
-    t = 0;
-    trial_xlsxClock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    text_3.setText(word);
-    document.body.setAttribute('data-report', window.counter + '_' + word);
-    console.log(JSON.stringify({ 
-        'trialList': random_xlsx.trialList,
-        'thisIndex': random_xlsx.thisIndex,
-        'nTotal': random_xlsx.nTotal,
-        'nRemaining': random_xlsx.nRemaining,
-        'thisN': random_xlsx.thisN,
-        'thisRepN': random_xlsx.thisRepN,
-        'thisTrialN': random_xlsx.thisTrialN,
-        'thisTrial': random_xlsx.thisTrial,
-        'finished': random_xlsx.finished,
-        'extraInfo': random_xlsx.extraInfo,
-        'origin': random_xlsx.origin
-    }));
-    window.counter++;
-    // setup some python lists for storing info about the mouse_6
-    gotValidClick = false; // until a click is received
-    // keep track of which components have finished
-    trial_xlsxComponents = [];
-    trial_xlsxComponents.push(text_3);
-    trial_xlsxComponents.push(mouse_6);
-    
-    trial_xlsxComponents.forEach( function(thisComponent) {
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-       });
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function trial_xlsxRoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'trial_xlsx'-------
-    // get current time
-    t = trial_xlsxClock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    
-    // *text_3* updates
-    if (t >= 0 && text_3.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      text_3.tStart = t;  // (not accounting for frame time here)
-      text_3.frameNStart = frameN;  // exact frame index
-      
-      text_3.setAutoDraw(true);
-    }
-
-    // *mouse_6* updates
-    if (t >= 0.0 && mouse_6.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      mouse_6.tStart = t;  // (not accounting for frame time here)
-      mouse_6.frameNStart = frameN;  // exact frame index
-      
-      mouse_6.status = PsychoJS.Status.STARTED;
-      mouse_6.mouseClock.reset();
-      prevButtonState = mouse_6.getPressed();  // if button is down already this ISN'T a new click
-      }
-    if (mouse_6.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_6.getPressed();
-      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
-        prevButtonState = _mouseButtons;
-        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
-          // abort routine on response
-          continueRoutine = false;
-        }
-      }
-    }
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    trial_xlsxComponents.forEach( function(thisComponent) {
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-      }
-    });
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function trial_xlsxRoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'trial_xlsx'-------
-    trial_xlsxComponents.forEach( function(thisComponent) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    });
-    // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_6.getPos();
-    _mouseButtons = mouse_6.getPressed();
-    psychoJS.experiment.addData('mouse_6.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_6.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_6.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_6.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_6.rightButton', _mouseButtons[2]);
-    // the Routine "trial_xlsx" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
 var intro_random_funkyComponents;
 function intro_random_funkyRoutineBegin(snapshot) {
   return function () {
@@ -1075,135 +942,6 @@ function intro_random_funkyRoutineEnd(snapshot) {
 }
 
 
-var trial_funkyComponents;
-function trial_funkyRoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'trial_funky'-------
-    t = 0;
-    trial_funkyClock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    text_4.setText(word);
-    document.body.setAttribute('data-report', window.counter + '_' + word);
-    console.log(JSON.stringify({ 
-        'trialList': random_funky.trialList,
-        'thisIndex': random_funky.thisIndex,
-        'nTotal': random_funky.nTotal,
-        'nRemaining': random_funky.nRemaining,
-        'thisN': random_funky.thisN,
-        'thisRepN': random_funky.thisRepN,
-        'thisTrialN': random_funky.thisTrialN,
-        'thisTrial': random_funky.thisTrial,
-        'finished': random_funky.finished,
-        'extraInfo': random_funky.extraInfo,
-        'origin': random_funky.origin
-    }));
-    window.counter++;
-    // setup some python lists for storing info about the mouse_7
-    gotValidClick = false; // until a click is received
-    // keep track of which components have finished
-    trial_funkyComponents = [];
-    trial_funkyComponents.push(text_4);
-    trial_funkyComponents.push(mouse_7);
-    
-    trial_funkyComponents.forEach( function(thisComponent) {
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-       });
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function trial_funkyRoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'trial_funky'-------
-    // get current time
-    t = trial_funkyClock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    
-    // *text_4* updates
-    if (t >= 0 && text_4.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      text_4.tStart = t;  // (not accounting for frame time here)
-      text_4.frameNStart = frameN;  // exact frame index
-      
-      text_4.setAutoDraw(true);
-    }
-
-    // *mouse_7* updates
-    if (t >= 0.0 && mouse_7.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      mouse_7.tStart = t;  // (not accounting for frame time here)
-      mouse_7.frameNStart = frameN;  // exact frame index
-      
-      mouse_7.status = PsychoJS.Status.STARTED;
-      mouse_7.mouseClock.reset();
-      prevButtonState = mouse_7.getPressed();  // if button is down already this ISN'T a new click
-      }
-    if (mouse_7.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_7.getPressed();
-      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
-        prevButtonState = _mouseButtons;
-        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
-          // abort routine on response
-          continueRoutine = false;
-        }
-      }
-    }
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    trial_funkyComponents.forEach( function(thisComponent) {
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-      }
-    });
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function trial_funkyRoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'trial_funky'-------
-    trial_funkyComponents.forEach( function(thisComponent) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    });
-    // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_7.getPos();
-    _mouseButtons = mouse_7.getPressed();
-    psychoJS.experiment.addData('mouse_7.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_7.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_7.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_7.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_7.rightButton', _mouseButtons[2]);
-    // the Routine "trial_funky" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
   return function () {
@@ -1245,17 +983,13 @@ function quitPsychoJS(message, isCompleted) {
   
   
   
+  
+  
   document.body.setAttribute(
       'data-trialsData', 
       JSON.stringify(psychoJS.experiment._trialsData)
   );
   document.body.setAttribute('data-report', 'FINISHED');
-  
-  
-  
-  
-  
-  
   
   
   
