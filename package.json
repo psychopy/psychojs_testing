@@ -1,57 +1,11 @@
 {
-  "name": "psychojs",
-  "version": "2021.1.2",
+  "name": "psychojs_testing",
+  "version": "1.0.0",
   "private": true,
-  "description": "Helps run in-browser neuroscience, psychology, and psychophysics experiments",
+  "description": "Scripts for automated testing of PsychoJS",
   "license": "MIT",
   "author": {
-    "name": "Alain Pitiot"
-  },
-  "type": "module",
-  "main": "src/index.js",
-  "scripts": {
-    "build": "npm run build:js && npm run build:css && npm run build:docs",
-    "build:css": "postcss -o dist/psychojs.css src/index.css",
-    "build:docs": "jsdoc src -r -d docs",
-    "build:js": "rollup -c",
-    "lint": "npm run lint:js && npm run lint:css",
-    "lint:css": "stylelint src/**/*.css",
-    "lint:js": "jshint rollup.config.js src/**/*.js",
-    "start": "npm run build",
-    "go": "set VERSION=2020.2 && rollup -c && node test/cli/deployExperiments.cjs"
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "modules": false,
-          "targets": {
-            "ie": 11
-          },
-          "spec": true,
-          "forceAllTransforms": true,
-          "debug": true
-        }
-      ]
-    ]
-  },
-  "browserslist": [
-    "last 2 versions"
-  ],
-  "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "no-descending-specificity": [
-        true,
-        {
-          "severity": "warning"
-        }
-      ]
-    }
-  },
-  "dependencies": {
-    "ssh2-sftp-client": "^6.0.1"
+    "name": "Thomas Pronk"
   },
   "devDependencies": {
     "@wdio/cli": "^7.2.2",
@@ -73,19 +27,9 @@
     "karma-json-reporter": "^1.2.1",
     "mustache": "^4.1.0",
     "replace-color": "^2.3.0",
+    "ssh2-sftp-client": "^6.0.1",    
     "wdio-json-reporter": "^2.0.0",
     "xlsx": "^0.16.9",
     "yargs": "^16.2.0"
-  },
-  "jshintConfig": {
-    "esversion": 8
-  },
-  "postcss": {
-    "plugins": {
-      "postcss-preset-env": {},
-      "cssnano": {
-        "autoprefixer": false
-      }
-    }
   }
 }
