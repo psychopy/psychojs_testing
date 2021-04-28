@@ -27,7 +27,7 @@
     "karma-json-reporter": "^1.2.1",
     "mustache": "^4.1.0",
     "replace-color": "^2.3.0",
-    "ssh2-sftp-client": "^6.0.1",    
+    "ssh2-sftp-client": "^6.0.1",
     "wdio-json-reporter": "^2.0.0",
     "xlsx": "^0.16.9",
     "yargs": "^16.2.0"
