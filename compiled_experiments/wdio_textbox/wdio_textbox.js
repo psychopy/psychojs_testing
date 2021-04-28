@@ -31,6 +31,8 @@ let expName = 'wdio_textbox';  // from the Builder filename that created this sc
 let expInfo = {'participant': '', 'session': '001'};
 
 // Start code blocks for 'Before Experiment'
+// Expose psychoJS to the browser window
+window.psychoJS = psychoJS;
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -50,15 +52,12 @@ flowScheduler.add(intro_trialRoutineEnd());
 flowScheduler.add(textbox_trial1RoutineBegin());
 flowScheduler.add(textbox_trial1RoutineEachFrame());
 flowScheduler.add(textbox_trial1RoutineEnd());
-flowScheduler.add(feedback1RoutineBegin());
-flowScheduler.add(feedback1RoutineEachFrame());
-flowScheduler.add(feedback1RoutineEnd());
+flowScheduler.add(intro_trial2RoutineBegin());
+flowScheduler.add(intro_trial2RoutineEachFrame());
+flowScheduler.add(intro_trial2RoutineEnd());
 flowScheduler.add(textbox_trial2RoutineBegin());
 flowScheduler.add(textbox_trial2RoutineEachFrame());
 flowScheduler.add(textbox_trial2RoutineEnd());
-flowScheduler.add(feedback2RoutineBegin());
-flowScheduler.add(feedback2RoutineEachFrame());
-flowScheduler.add(feedback2RoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
@@ -102,16 +101,13 @@ var textbox_trial1Clock;
 var textbox1;
 var button_submit1;
 var mouse_resp1;
-var feedback1Clock;
+var intro_trial2Clock;
 var feedback_text1;
 var feedback_keyboard1;
 var textbox_trial2Clock;
 var textbox2;
 var button_submit2;
 var mouse_resp2;
-var feedback2Clock;
-var feedback_text2;
-var feedback_mouse2;
 var globalClock;
 var routineTimer;
 function experimentInit() {
@@ -165,8 +161,8 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_resp1.mouseClock = new util.Clock();
-  // Initialize components for Routine "feedback1"
-  feedback1Clock = new util.Clock();
+  // Initialize components for Routine "intro_trial2"
+  intro_trial2Clock = new util.Clock();
   feedback_text1 = new visual.TextStim({
     win: psychoJS.window,
     name: 'feedback_text1',
@@ -213,23 +209,6 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_resp2.mouseClock = new util.Clock();
-  // Initialize components for Routine "feedback2"
-  feedback2Clock = new util.Clock();
-  feedback_text2 = new visual.TextStim({
-    win: psychoJS.window,
-    name: 'feedback_text2',
-    text: '',
-    font: 'Arial',
-    units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
-    color: new util.Color('white'),  opacity: 1,
-    depth: 0.0 
-  });
-  
-  feedback_mouse2 = new core.Mouse({
-    win: psychoJS.window,
-  });
-  feedback_mouse2.mouseClock = new util.Clock();
   // Create some handy timers
   globalClock = new util.Clock();  // to track the time since experiment started
   routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
@@ -497,27 +476,27 @@ function textbox_trial1RoutineEnd(snapshot) {
 
 
 var _feedback_keyboard1_allKeys;
-var feedback1Components;
-function feedback1RoutineBegin(snapshot) {
+var intro_trial2Components;
+function intro_trial2RoutineBegin(snapshot) {
   return function () {
-    //------Prepare to start Routine 'feedback1'-------
+    //------Prepare to start Routine 'intro_trial2'-------
     t = 0;
-    feedback1Clock.reset(); // clock
+    intro_trial2Clock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    feedback_text1.setText(textbox1.getText());
+    feedback_text1.setText('Press a key to continue...');
     document.body.setAttribute('data-output', textbox1.getText());
-    document.body.setAttribute('data-report', 'feedback1');
+    document.body.setAttribute('data-report', 'intro_trial2');
     feedback_keyboard1.keys = undefined;
     feedback_keyboard1.rt = undefined;
     _feedback_keyboard1_allKeys = [];
     // keep track of which components have finished
-    feedback1Components = [];
-    feedback1Components.push(feedback_text1);
-    feedback1Components.push(feedback_keyboard1);
+    intro_trial2Components = [];
+    intro_trial2Components.push(feedback_text1);
+    intro_trial2Components.push(feedback_keyboard1);
     
-    for (const thisComponent of feedback1Components)
+    for (const thisComponent of intro_trial2Components)
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
     return Scheduler.Event.NEXT;
@@ -525,11 +504,11 @@ function feedback1RoutineBegin(snapshot) {
 }
 
 
-function feedback1RoutineEachFrame(snapshot) {
+function intro_trial2RoutineEachFrame(snapshot) {
   return function () {
-    //------Loop for each frame of Routine 'feedback1'-------
+    //------Loop for each frame of Routine 'intro_trial2'-------
     // get current time
-    t = feedback1Clock.getTime();
+    t = intro_trial2Clock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -577,7 +556,7 @@ function feedback1RoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of feedback1Components)
+    for (const thisComponent of intro_trial2Components)
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
         break;
@@ -593,10 +572,10 @@ function feedback1RoutineEachFrame(snapshot) {
 }
 
 
-function feedback1RoutineEnd(snapshot) {
+function intro_trial2RoutineEnd(snapshot) {
   return function () {
-    //------Ending Routine 'feedback1'-------
-    for (const thisComponent of feedback1Components) {
+    //------Ending Routine 'intro_trial2'-------
+    for (const thisComponent of intro_trial2Components) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -608,7 +587,7 @@ function feedback1RoutineEnd(snapshot) {
         }
     
     feedback_keyboard1.stop();
-    // the Routine "feedback1" was not non-slip safe, so reset the non-slip timer
+    // the Routine "intro_trial2" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -754,121 +733,6 @@ function textbox_trial2RoutineEnd(snapshot) {
 }
 
 
-var feedback2Components;
-function feedback2RoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'feedback2'-------
-    t = 0;
-    feedback2Clock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    feedback_text2.setText(textbox2.getText());
-    // setup some python lists for storing info about the feedback_mouse2
-    gotValidClick = false; // until a click is received
-    document.body.setAttribute('data-output', textbox2.getText());
-    document.body.setAttribute('data-report', 'feedback2');
-    // keep track of which components have finished
-    feedback2Components = [];
-    feedback2Components.push(feedback_text2);
-    feedback2Components.push(feedback_mouse2);
-    
-    for (const thisComponent of feedback2Components)
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function feedback2RoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'feedback2'-------
-    // get current time
-    t = feedback2Clock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    
-    // *feedback_text2* updates
-    if (t >= 0.0 && feedback_text2.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      feedback_text2.tStart = t;  // (not accounting for frame time here)
-      feedback_text2.frameNStart = frameN;  // exact frame index
-      
-      feedback_text2.setAutoDraw(true);
-    }
-
-    // *feedback_mouse2* updates
-    if (t >= 0.0 && feedback_mouse2.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      feedback_mouse2.tStart = t;  // (not accounting for frame time here)
-      feedback_mouse2.frameNStart = frameN;  // exact frame index
-      
-      feedback_mouse2.status = PsychoJS.Status.STARTED;
-      feedback_mouse2.mouseClock.reset();
-      prevButtonState = feedback_mouse2.getPressed();  // if button is down already this ISN'T a new click
-      }
-    if (feedback_mouse2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = feedback_mouse2.getPressed();
-      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
-        prevButtonState = _mouseButtons;
-        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
-          // abort routine on response
-          continueRoutine = false;
-        }
-      }
-    }
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of feedback2Components)
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-        break;
-      }
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function feedback2RoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'feedback2'-------
-    for (const thisComponent of feedback2Components) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    }
-    // store data for thisExp (ExperimentHandler)
-    _mouseXYs = feedback_mouse2.getPos();
-    _mouseButtons = feedback_mouse2.getPressed();
-    psychoJS.experiment.addData('feedback_mouse2.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('feedback_mouse2.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('feedback_mouse2.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('feedback_mouse2.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('feedback_mouse2.rightButton', _mouseButtons[2]);
-    // the Routine "feedback2" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
   return function () {
@@ -907,8 +771,6 @@ function quitPsychoJS(message, isCompleted) {
   }
   
   document.body.setAttribute('data-report', 'FINISHED');
-  
-  
   
   
   

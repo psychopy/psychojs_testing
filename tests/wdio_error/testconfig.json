@@ -1,0 +1,8 @@
+{
+  "test_framework": "wdio",
+  "labels": ["wdio_error", "batch", "all"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "wdio_error.cjs",
+  "experiment_file": "wdio_error.psyexp",
+  "description": "Triggers a semantic JS error and checks if the error is logged via data-error in the HTML body"
+}
