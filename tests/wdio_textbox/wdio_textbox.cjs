@@ -30,52 +30,53 @@ module.exports = {
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
 
     // *** textbox1
-    // type something in textbox, make screenshot
+    // type something in textbox, wait 100ms, make screenshot, submit
     SharedBehaviors.waitForReport('textbox1');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
     browser.performActions([{
       "type": "key",
-      "id": "hello",
-      "actions": typeText('hello')
+      "id": "test1",
+      "actions": typeText('test1')
     }]);
-    browser.writeScreenshot('textbox1_immediate');
-    browser.pause(1000);
-    browser.writeScreenshot('textbox1_delayed');
-    // Tap submit button (twice)
+    browser.pause(100);
+    //browser.writeScreenshot('textbox1');
+    browser.pause(100);
+    // Tap submit button (once)
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
     browser.pause(100);
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-    // Check what's in the textbox is what's typed in, then press "y"
-    SharedBehaviors.waitForReport('feedback1');
-    expect($('<body>').getAttribute('data-output')).toBe('hello');
+
+    // Go through intro2
+    SharedBehaviors.waitForReport('intro_trial2');
     browser.performActions([{
       "type": "key",
-      "id": "press",
+      "id": "intro_trial2",
       "actions": typeText('y')
     }]);
 
-    // *** textbox1
-    // type something in textbox, make screenshot
+    // *** textbox2
+    // type something in textbox, wait 100ms, make screenshot, submit
     SharedBehaviors.waitForReport('textbox2');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
     browser.performActions([{
       "type": "key",
-      "id": "goodbye",
-      "actions": typeText('goodbye')
+      "id": "test2",
+      "actions": typeText('test2')
     }]);
-    browser.writeScreenshot('textbox2_immediate');
     browser.pause(1000);
-    browser.writeScreenshot('textbox2_delayed');
-    // Tap submit button (twice)
+    //browser.writeScreenshot('textbox2');
+    // Tap submit button (once)
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-    browser.pause(100);
-    //SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-    // Check what's in the textbox is what's typed in, then press "y"
-    SharedBehaviors.waitForReport('feedback2');
-    expect($('<body>').getAttribute('data-output')).toBe('goodbye');
-    
-    // Finish experiment
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
+
+    // Wait until experiment finished
     SharedBehaviors.waitForReport('FINISHED');
+
+    // Check data
+    let data = browser.execute(function() {
+      return psychoJS.experiment._trialsData;
+    });        
+    console.log(data);
+    expect(data[0]['textbox1.text']).toBe('test1');
+    expect(data[0]['textbox2.text']).toBe('test2');
   }
 };
