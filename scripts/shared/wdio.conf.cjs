@@ -330,13 +330,6 @@ exports.config = {
       return experimentUrl;
     });
 
-
-    browser.addCommand('getTests', () => {
-      console.log('getTests');
-      console.log(tests);
-      return tests;
-    });
-
     // Print current sessionId and platformName
     console.log('sessionId is ' + browser.sessionId);
     console.log('platformName is ' + browser.getPlatformName())
@@ -345,6 +338,9 @@ exports.config = {
     browser.logAdd('platform', browser.getPlatformName())
     browser.logAdd('resolution', browser.getResolution());
   },
+
+  
+
   /**
    * Gets executed after all workers got shut down and the process is about to exit. An error
    * thrown in the onComplete hook will result in the test run failing.
@@ -396,5 +392,9 @@ exports.config = {
   },
 
   afterTest: function (test, context, { error, result, duration, passed, retries }) {
+    if (passed === false) {
+      let errorMessage = $('<body>').getAttribute('data-error');
+      browser.logAdd('error', errorMessage);
+    }
   }
 }

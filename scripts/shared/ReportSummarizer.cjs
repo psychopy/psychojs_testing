@@ -306,6 +306,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
     });    
     failed = failed.concat(failedTests.map((failedTest) => {
       let failedRow = {};
+      // Add default values for failed entries
       failedRow.capability_id = failedTest.capability_id;
       for (let customLog of customLogs) {
         failedRow[customLog.spec] = customLog.message;
@@ -319,6 +320,15 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
       failedRow.suite = failedTest.suite;
       failedRow.spec = failedTest.spec;
       failedRow.message = failedTest.message;
+      // Add error message, if any
+      let errorRow = joinedReports.filter((joinedReport) => {
+        return true &&
+          joinedReport.capability_id === failedTest.capability_id &&
+          joinedReport.suite === failedTest.suite &&
+          joinedReport.spec === 'error' &&
+          joinedReport.state === 'custom';
+      });
+      failedRow.error = errorRow.length === 0? '': errorRow[0].message;
       return failedRow;
     }));
   }
