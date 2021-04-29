@@ -11,8 +11,8 @@ on:
         required: true
         default: 'tpronk/psychojs'
       ref:
-        description: 'PsychoJS Branch/tag/SHA (default branch if empty)'
-        required: true
+        description: 'Branch/tag/SHA (default branch if empty)'
+        required: false
         default: ''
       testrun:
         description: 'testrun'
