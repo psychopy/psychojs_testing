@@ -7,6 +7,9 @@
   "author": {
     "name": "Thomas Pronk"
   },
+  "scripts": {
+    "start": "node test.cjs --server local --url local --label"
+  },
   "devDependencies": {
     "@wdio/cli": "^7.2.2",
     "@wdio/dot-reporter": "^7.2.1",
