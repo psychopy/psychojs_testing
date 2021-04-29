@@ -7,13 +7,29 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'Repository'
+        description: 'PscyhoJS Repository'
         required: true
         default: 'tpronk/psychojs'
       ref:
-        description: 'Branch/tag/SHA (default branch if empty)'
-        required: false
+        description: 'PsychoJS Branch/tag/SHA (default branch if empty)'
+        required: true
         default: ''
+      testrun:
+        description: 'testrun'
+        required: true
+        default: 'selected_devices'
+      subset:
+        description: 'subset'
+        required: true
+        default: 'true'
+      platform:
+        description: 'platform'
+        required: true
+        default: '\*'
+      label:
+        description: 'label'
+        required: true
+        default: 'all'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -85,6 +101,6 @@ jobs:
       
       # START: run tests
       - name: Run e2e_test selected_devices
-        run: node test.cjs --server bs --testrun selected_devices --url stager  --platform *Windows*Chrome* --uploadExperiments --uploadResults --label wdio_code 
+        run: node test.cjs --server bs --url stager --uploadExperiments --uploadResults --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --label ${{github.event.inputs.label}}
         working-directory: ./psychojs_tests        
       # END: run tests
