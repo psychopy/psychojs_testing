@@ -1,4 +1,4 @@
-name: e2e test selected_devices
+name: test selected_devices
 on:
 #  push:
 #    branches: '**'
@@ -39,7 +39,7 @@ jobs:
       STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
       STAGING_PORT: ${{ secrets.STAGING_PORT }}
       STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
-      PSYCHOJS_PATH: '/home/runner/work/e2e_robot/e2e_robot/psychojs'
+      PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
       
     steps:
       - name: Setup node
@@ -51,7 +51,7 @@ jobs:
       - name: Checkout psychojs_tests
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
+          repository: psychopy/psychojs_testing
           path: psychojs_tests
       - name: Cache modules psychojs_tests
         uses: actions/cache@v2
@@ -100,7 +100,7 @@ jobs:
       # END: wait for other workflows to complete          
       
       # START: run tests
-      - name: Run e2e_test selected_devices
+      - name: Run tests
         run: node test.cjs --server bs --url stager --uploadExperiments --uploadResults --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --label ${{github.event.inputs.label}}
         working-directory: ./psychojs_tests        
       # END: run tests
