@@ -1,4 +1,4 @@
-name: test selected_devices
+name: test_selected_devices
 on:
 #  push:
 #    branches: '**'
