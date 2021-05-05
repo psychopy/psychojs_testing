@@ -1,4 +1,4 @@
-name: e2e test all_devices
+name: test_all_devices
 on:
   schedule:
     - cron: '5 8 * * sun'
