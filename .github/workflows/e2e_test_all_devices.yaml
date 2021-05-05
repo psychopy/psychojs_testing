@@ -23,7 +23,7 @@ jobs:
       - name: Checkout psychojs_tests
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
+          repository: psychopy/psychojs_tests
           path: psychojs_tests
       - name: Cache modules psychojs_tests
         uses: actions/cache@v2
@@ -77,7 +77,7 @@ jobs:
       - name: Checkout psychojs_tests
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
+          repository: psychopy/psychojs_tests
           path: psychojs_tests
       - name: Cache modules psychojs_tests
         uses: actions/cache@v2
@@ -141,7 +141,7 @@ jobs:
       - name: Checkout psychojs_tests
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
+          repository: psychopy/psychojs_tests
           path: psychojs_tests
       - name: Cache modules psychojs_tests
         uses: actions/cache@v2
