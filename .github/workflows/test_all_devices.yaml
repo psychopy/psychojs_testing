@@ -79,7 +79,7 @@ jobs:
         working-directory: ./psychojs_testing
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label --label ${{github.event.inputs.label}} --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label ${{github.event.inputs.label}} --outputFormat paths)"
         working-directory: ./psychojs_testing
 
   tests:
