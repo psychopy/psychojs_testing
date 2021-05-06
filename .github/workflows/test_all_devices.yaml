@@ -15,11 +15,11 @@ on:
       testrun:
         description: 'testrun'
         required: true
-        default: 'selected_devices'
+        default: 'all_devices'
       subset:
         description: 'subset'
         required: true
-        default: 'true'
+        default: 'false'
       platform:
         description: 'platform'
         required: true
