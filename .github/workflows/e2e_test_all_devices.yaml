@@ -3,7 +3,26 @@ on:
   schedule:
     - cron: '5 8 * * sun'
   workflow_dispatch:
-
+      repo:
+        description: 'PscyhoJS Repository'
+        required: true
+        default: 'tpronk/psychojs'
+      ref:
+        description: 'Branch/tag/SHA (default branch if empty)'
+        required: false
+        default: ''
+      testrun:
+        description: 'testrun'
+        required: true
+        default: 'selected_devices'
+      subset:
+        description: 'subset'
+        required: true
+        default: 'true'
+      platform:
+        description: 'platform'
+        required: true
+        default: '\*'
 env:
   BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
   BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
@@ -51,7 +70,7 @@ jobs:
         run: node scripts/cli/syncWithGitHub.cjs alain sotiri thomas
         working-directory: ./psychojs_testing
       - name: Delete old test logs 
-        run: node scripts/cli/deleteLogs.cjs --testrun all_devices
+        run: node scripts/cli/deleteLogs.cjs --testrun ${{github.event.inputs.testrun}}
         working-directory: ./psychojs_testing
       - name: Get tests
         id: get_tests
@@ -98,8 +117,8 @@ jobs:
       - name: Checkout psychojs
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.repo || 'tpronk/psychojs' }}
-          ref: ${{ github.event.inputs.ref }}
+          repository: ${{github.event.inputs.repo}}
+          ref: ${{github.event.inputs.ref}}
           path: psychojs
       - name: Cache modules psychojs
         uses: actions/cache@v2
@@ -127,7 +146,7 @@ jobs:
       
       # START: run tests
       - name: Run e2e_test selected_devices
-        run: node test.cjs --server bs --testrun all_devices --url stager --platform \* --uploadExperiments --uploadResults --label ${{ matrix.test }}
+        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --platform \* --uploadExperiments --uploadResults --label ${{matrix.test}}
         working-directory: ./psychojs_testing        
       # END: run tests
 
@@ -165,5 +184,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Join reports
-        run: node scripts/cli/joinReports.cjs --testrun all_devices
+        run: node scripts/cli/joinReports.cjs --testrun ${{github.event.inputs.testrun}} 
         working-directory: ./psychojs_testing   
