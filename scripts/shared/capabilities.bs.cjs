@@ -42,7 +42,7 @@ const getBrowsers = () => {
     },
     {
       os: ['OS X'], 
-      os_version: ['Catalina', 'Mojave', 'High Sierra'], 
+      os_version: ['Big Sur', 'Catalina', 'Mojave', 'High Sierra'], 
       browser: ['chrome', 'edge', 'firefox', 'safari']
     },
     {
