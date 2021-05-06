@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '5 8 * * sun'
   workflow_dispatch:
+    inputs:
       repo:
         description: 'PscyhoJS Repository'
         required: true
@@ -145,7 +146,7 @@ jobs:
       # END: wait for other workflows to complete          
       
       # START: run tests
-      - name: Run e2e_test selected_devices
+      - name: Run test
         run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --platform \* --uploadExperiments --uploadResults --label ${{matrix.test}}
         working-directory: ./psychojs_testing        
       # END: run tests
