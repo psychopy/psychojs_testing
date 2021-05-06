@@ -1,16 +1,36 @@
-name: e2e test all_devices
+name: test_all_devices
 on:
   schedule:
     - cron: '5 8 * * sun'
   workflow_dispatch:
-
+    inputs:
+      repo:
+        description: 'PscyhoJS Repository'
+        required: true
+        default: 'tpronk/psychojs'
+      ref:
+        description: 'Branch/tag/SHA (default branch if empty)'
+        required: false
+        default: ''
+      testrun:
+        description: 'testrun'
+        required: true
+        default: 'all_devices'
+      subset:
+        description: 'subset'
+        required: true
+        default: 'false'
+      platform:
+        description: 'platform'
+        required: true
+        default: '\*'
 env:
   BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
   BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
   STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
   STAGING_PORT: ${{ secrets.STAGING_PORT }}
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
-  PSYCHOJS_PATH: '/home/runner/work/e2e_robot/e2e_robot/psychojs'
+  PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
 
 jobs:
   prepare:
@@ -19,26 +39,26 @@ jobs:
     outputs:
       tests: ${{steps.get_tests.outputs.tests}} 
     steps:
-      # START: install psychojs_tests
-      - name: Checkout psychojs_tests
+      # START: install psychojs_testing
+      - name: Checkout psychojs_testing
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
-          path: psychojs_tests
-      - name: Cache modules psychojs_tests
+          repository: psychopy/psychojs_testing
+          path: psychojs_testing
+      - name: Cache modules psychojs_testing
         uses: actions/cache@v2
         env:
-          cache-name: cache-modules-psychojs_tests
+          cache-name: cache-modules-psychojs_testing
         with:
-          path: ~/psychojs_tests/.npm
+          path: ~/psychojs_testing/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install psychojs_tests
-        run: npm --prefix psychojs_tests ci
-      # END: install psychojs_tests
+      - name: Install psychojs_testing
+        run: npm --prefix psychojs_testing ci
+      # END: install psychojs_testing
       
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
@@ -49,14 +69,14 @@ jobs:
       
       - name: Sync BS logs and Stager with GitHub 
         run: node scripts/cli/syncWithGitHub.cjs alain sotiri thomas
-        working-directory: ./psychojs_tests        
+        working-directory: ./psychojs_testing
       - name: Delete old test logs 
-        run: node scripts/cli/deleteLogs.cjs --testrun all_devices
-        working-directory: ./psychojs_tests        
+        run: node scripts/cli/deleteLogs.cjs --testrun ${{github.event.inputs.testrun}}
+        working-directory: ./psychojs_testing
       - name: Get tests
         id: get_tests
         run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label all --outputFormat paths)"
-        working-directory: ./psychojs_tests        
+        working-directory: ./psychojs_testing
 
   tests:
     name: Test 
@@ -73,33 +93,33 @@ jobs:
         with:
           node-version: '12'
           
-      # START: install psychojs_tests
-      - name: Checkout psychojs_tests
+      # START: install psychojs_testing
+      - name: Checkout psychojs_testing
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
-          path: psychojs_tests
-      - name: Cache modules psychojs_tests
+          repository: psychopy/psychojs_testing
+          path: psychojs_testing
+      - name: Cache modules psychojs_testing
         uses: actions/cache@v2
         env:
-          cache-name: cache-modules-psychojs_tests
+          cache-name: cache-modules-psychojs_testing
         with:
-          path: ~/psychojs_tests/.npm
+          path: ~/psychojs_testing/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install psychojs_tests
-        run: npm --prefix psychojs_tests ci
-      # END: install psychojs_tests
+      - name: Install psychojs_testing
+        run: npm --prefix psychojs_testing ci
+      # END: install psychojs_testing
     
       # START: install psychojs
       - name: Checkout psychojs
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.repo || 'tpronk/psychojs' }}
-          ref: ${{ github.event.inputs.ref }}
+          repository: ${{github.event.inputs.repo}}
+          ref: ${{github.event.inputs.ref}}
           path: psychojs
       - name: Cache modules psychojs
         uses: actions/cache@v2
@@ -126,9 +146,9 @@ jobs:
       # END: wait for other workflows to complete          
       
       # START: run tests
-      - name: Run e2e_test selected_devices
-        run: node test.cjs --server bs --testrun all_devices --url stager --platform \* --uploadExperiments --uploadResults --label ${{ matrix.test }}
-        working-directory: ./psychojs_tests        
+      - name: Run test
+        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --platform \* --uploadExperiments --uploadResults --label ${{matrix.test}}
+        working-directory: ./psychojs_testing        
       # END: run tests
 
   join_reports:
@@ -137,26 +157,26 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      # START: install psychojs_tests
-      - name: Checkout psychojs_tests
+      # START: install psychojs_testing
+      - name: Checkout psychojs_testing
         uses: actions/checkout@v2
         with:
-          repository: tpronk/e2e_robot
-          path: psychojs_tests
-      - name: Cache modules psychojs_tests
+          repository: psychopy/psychojs_testing
+          path: psychojs_testing
+      - name: Cache modules psychojs_testing
         uses: actions/cache@v2
         env:
-          cache-name: cache-modules-psychojs_tests
+          cache-name: cache-modules-psychojs_testing
         with:
-          path: ~/psychojs_tests/.npm
+          path: ~/psychojs_testing/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-:  
-      - name: Install psychojs_tests
-        run: npm --prefix psychojs_tests ci
-      # END: install psychojs_tests
+      - name: Install psychojs_testing
+        run: npm --prefix psychojs_testing ci
+      # END: install psychojs_testing
       
       - name: Turnstyle (wait for other workflows to complete)
         uses: softprops/turnstyle@v1
@@ -165,5 +185,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Join reports
-        run: node scripts/cli/joinReports.cjs --testrun all_devices
-        working-directory: ./psychojs_tests   
+        run: node scripts/cli/joinReports.cjs --testrun ${{github.event.inputs.testrun}} 
+        working-directory: ./psychojs_testing   
