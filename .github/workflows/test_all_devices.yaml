@@ -147,7 +147,7 @@ jobs:
       
       # START: run tests
       - name: Run test
-        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --platform \* --uploadExperiments --uploadResults --label ${{matrix.test}}
+        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --uploadExperiments --uploadResults --label ${{matrix.test}}
         working-directory: ./psychojs_testing        
       # END: run tests
 
