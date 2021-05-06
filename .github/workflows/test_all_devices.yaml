@@ -24,6 +24,10 @@ on:
         description: 'platform'
         required: true
         default: '\*'
+      label:
+        description: 'label'
+        required: true
+        default: 'all'        
 env:
   BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
   BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
@@ -75,7 +79,7 @@ jobs:
         working-directory: ./psychojs_testing
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label all --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label --label ${{github.event.inputs.label}} --outputFormat paths)"
         working-directory: ./psychojs_testing
 
   tests:
