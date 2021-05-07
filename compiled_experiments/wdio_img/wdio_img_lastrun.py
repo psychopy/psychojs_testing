@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2021.1.4),
-    on May 07, 2021, at 12:02
+    on May 07, 2021, at 13:20
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -94,7 +94,7 @@ mouse.mouseClock = core.Clock()
 kitten_png_trialClock = core.Clock()
 background_2 = visual.Rect(
     win=win, name='background_2',
-    width=(0.9, 0.9)[0], height=(0.9, 0.9)[1],
+    width=(0.85, 0.85)[0], height=(0.85, 0.85)[1],
     ori=0, pos=(0, 0),
     lineWidth=0,     colorSpace='rgb',  lineColor=[1,1,1], fillColor=[1,-1,-1],
     opacity=1, depth=0.0, interpolate=True)
@@ -102,7 +102,7 @@ kitten_png = visual.ImageStim(
     win=win,
     name='kitten_png', 
     image='resources/kitten_png.png', mask=None,
-    ori=0, pos=(0, 0), size=(0.81, 0.81),
+    ori=0, pos=(0, 0), size=(0.765, 0.765),
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=-1.0)
