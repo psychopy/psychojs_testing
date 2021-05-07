@@ -37,31 +37,35 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   listResults = await Stager.ftpRequest((client, basePath) => {
     return client.list(basePath + '/' + Paths.subdir_results_karma + '/' + Stager.createReportPath(branch, testrun));
   }, false);
-  // Filter out directories
-  listResults = listResults.filter((listResult) => {
-    return listResult.type === 'd';
-  });
-  // Get names of tests
-  tests = listResults.map((listResult) => {
-    return listResult.name;
-  })
-  console.log('[joinReports.cjs] Found ' + tests.length + ' karma tests');
-  // Merge reports of each test together
-  joinedReports = [];
-  for (let test of tests) {
-    console.log('[joinReports.cjs] Adding karma test ' + test);
-    // Add test to joinedReports
-    getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/' + Paths.subdir_results_karma + '/' + Stager.createReportPath(branch, testrun, test) + '/report.json');
-    }, false);
-    report = JSON.parse(getResults);
-    joinedReports = joinedReports.concat(report);
+  if (listResults === undefined) {
+    console.log('[joinReports.cjs] No karma tests found on stager');
+  } else {
+    // Filter out directories
+    listResults = listResults.filter((listResult) => {
+      return listResult.type === 'd';
+    });
+    // Get names of tests
+    tests = listResults.map((listResult) => {
+      return listResult.name;
+    })
+    console.log('[joinReports.cjs] Found ' + tests.length + ' karma tests');
+    // Merge reports of each test together
+    joinedReports = [];
+    for (let test of tests) {
+      console.log('[joinReports.cjs] Adding karma test ' + test);
+      // Add test to joinedReports
+      getResults = await Stager.ftpRequest((client, basePath) => {
+        return client.get(basePath + '/' + Paths.subdir_results_karma + '/' + Stager.createReportPath(branch, testrun, test) + '/report.json');
+      }, false);
+      report = JSON.parse(getResults);
+      joinedReports = joinedReports.concat(report);
+    }
+    ReportSummarizer.aggregateAndStoreKarma(
+      joinedReports,
+      Paths.dir_results_joined + '/karma', 
+      true
+    );
   }
-  ReportSummarizer.aggregateAndStoreKarma(
-    joinedReports,
-    Paths.dir_results_joined + '/karma', 
-    true
-  );
 
   // *** WDIO reports
   console.log('[joinReports.cjs] Inventorizing wdio tests');
@@ -69,46 +73,50 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   listResults = await Stager.ftpRequest((client, basePath) => {
     return client.list(basePath + '/' + Paths.subdir_results_wdio + '/' + Stager.createReportPath(branch, testrun));
   }, false);
-  // Filter out directories
-  listResults = listResults.filter((listResult) => {
-    return listResult.type === 'd';
-  });
-  // Get names of tests
-  tests = listResults.map((listResult) => {
-    return listResult.name;
-  })
-  console.log('[joinReports.cjs] Found ' + tests.length + ' wdio tests');
-  // Merge reports of each test together
-  joinedReports = [];
-  let buildNamesToBuildIdsMap = {}, buildName;
-  for (let test of tests) {
-    console.log('[joinReports.cjs] Adding wdio test ' + test);
-    // Add test to joinedReports
-    getResults = await Stager.ftpRequest((client, basePath) => {
-      return client.get(basePath + '/' + Paths.subdir_results_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_results_processed + '/report.json');
-    }, false);
-    report = JSON.parse(getResults);
-    joinedReports = joinedReports.concat(report);
- 
-    // Add buildId to map
-    buildName = BrowserStack.createBuildName(branch, testrun, test);
-    let buildIds = BrowserStack.getBuildIds('PsychoJS_wdio', (build) => {
-      return build.name === buildName;
+  if (listResults === undefined) {
+    console.log('[joinReports.cjs] No wdio tests found on stager');
+  } else {
+    // Filter out directories
+    listResults = listResults.filter((listResult) => {
+      return listResult.type === 'd';
     });
-    if (buildIds.length !== 1) {
-      throw new Error('[wdio.conf.cjs] During onComplete, found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName);
+    // Get names of tests
+    tests = listResults.map((listResult) => {
+      return listResult.name;
+    })
+    console.log('[joinReports.cjs] Found ' + tests.length + ' wdio tests');
+    // Merge reports of each test together
+    joinedReports = [];
+    let buildNamesToBuildIdsMap = {}, buildName;
+    for (let test of tests) {
+      console.log('[joinReports.cjs] Adding wdio test ' + test);
+      // Add test to joinedReports
+      getResults = await Stager.ftpRequest((client, basePath) => {
+        return client.get(basePath + '/' + Paths.subdir_results_wdio + '/' + Stager.createReportPath(branch, testrun, test) + '/' + Paths.subdir_results_processed + '/report.json');
+      }, false);
+      report = JSON.parse(getResults);
+      joinedReports = joinedReports.concat(report);
+  
+      // Add buildId to map
+      buildName = BrowserStack.createBuildName(branch, testrun, test);
+      let buildIds = BrowserStack.getBuildIds('PsychoJS_wdio', (build) => {
+        return build.name === buildName;
+      });
+      if (buildIds.length !== 1) {
+        throw new Error('[wdio.conf.cjs] During onComplete, found ' + buildIds.length + ' builds on BrowserStack with name ' + buildName);
+      }
+      buildNamesToBuildIdsMap[buildName] = buildIds[0];
     }
-    buildNamesToBuildIdsMap[buildName] = buildIds[0];
+    console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
+    ReportSummarizer.aggregateAndStoreWdio(
+      joinedReports,
+      Paths.dir_results_joined + '/wdio',
+      true, 
+      BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true),
+      buildNamesToBuildIdsMap
+    );
   }
-  console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
-  ReportSummarizer.aggregateAndStoreWdio(
-    joinedReports,
-    Paths.dir_results_joined + '/wdio',
-    true, 
-    BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true),
-    buildNamesToBuildIdsMap
-  );
-
+  
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
   await Stager.uploadDirectory(Paths.dir_results_joined, Paths.subdir_results_joined + '/'  + Stager.createReportPath(branch, testrun));
