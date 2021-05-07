@@ -1,4 +1,4 @@
-# Starts up a separate BrowserStack session for each test that matches label. That's relatively slow, but also thorough,
+# Starts up a separate BrowserStack session for each combination of platform and test. That's relatively slow, but also thorough,
 # since a failed test does not abort any successive tests. By default, the tests matching label "all" are run on all included platfoms.
 name: test_thorough
 on:
