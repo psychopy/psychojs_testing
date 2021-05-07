@@ -129,7 +129,7 @@ function experimentInit() {
   kitten_png_trialClock = new util.Clock();
   background_2 = new visual.Rect ({
     win: psychoJS.window, name: 'background_2', 
-    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
+    width: [0.85, 0.85][0], height: [0.85, 0.85][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
@@ -140,7 +140,7 @@ function experimentInit() {
     win : psychoJS.window,
     name : 'kitten_png', units : undefined, 
     image : 'resources/kitten_png.png', mask : undefined,
-    ori : 0, pos : [0, 0], size : [0.81, 0.81],
+    ori : 0, pos : [0, 0], size : [0.765, 0.765],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
     texRes : 128, interpolate : true, depth : -1.0 
