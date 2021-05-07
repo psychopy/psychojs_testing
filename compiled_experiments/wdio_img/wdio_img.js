@@ -68,8 +68,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'resources/kitten_png.png', 'path': 'resources/kitten_png.png'},
-    {'name': 'resources/kitten_jpg.jpg', 'path': 'resources/kitten_jpg.jpg'}
+    {'name': 'resources/kitten_jpg.jpg', 'path': 'resources/kitten_jpg.jpg'},
+    {'name': 'resources/kitten_png.png', 'path': 'resources/kitten_png.png'}
   ]
 });
 
@@ -109,9 +109,11 @@ var background_3;
 var kitten_png5;
 var mouse_3;
 var kitten_jpg_trialClock;
+var background;
 var kitten_jpg;
 var mouse_4;
 var kitten_jpg5_trialClock;
+var background_4;
 var kitten_jpg5;
 var mouse_5;
 var globalClock;
@@ -138,7 +140,7 @@ function experimentInit() {
   kitten_png_trialClock = new util.Clock();
   background_2 = new visual.Rect ({
     win: psychoJS.window, name: 'background_2', 
-    width: [1, 1][0], height: [1, 1][1],
+    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
@@ -149,7 +151,7 @@ function experimentInit() {
     win : psychoJS.window,
     name : 'kitten_png', units : undefined, 
     image : 'resources/kitten_png.png', mask : undefined,
-    ori : 0, pos : [0, 0], size : [0.9, 0.9],
+    ori : 0, pos : [0, 0], size : [0.81, 0.81],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
     texRes : 128, interpolate : true, depth : -1.0 
@@ -162,7 +164,7 @@ function experimentInit() {
   kitten_png5_trialClock = new util.Clock();
   background_3 = new visual.Rect ({
     win: psychoJS.window, name: 'background_3', 
-    width: [1, 1][0], height: [1, 1][1],
+    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
@@ -173,7 +175,7 @@ function experimentInit() {
     win : psychoJS.window,
     name : 'kitten_png5', units : undefined, 
     image : 'resources/kitten_png.png', mask : undefined,
-    ori : 5, pos : [0, 0], size : [0.9, 0.9],
+    ori : 5, pos : [0, 0], size : [0.81, 0.81],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
     texRes : 128, interpolate : true, depth : -1.0 
@@ -184,14 +186,23 @@ function experimentInit() {
   mouse_3.mouseClock = new util.Clock();
   // Initialize components for Routine "kitten_jpg_trial"
   kitten_jpg_trialClock = new util.Clock();
+  background = new visual.Rect ({
+    win: psychoJS.window, name: 'background', 
+    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
+    ori: 0, pos: [0, 0],
+    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    fillColor: new util.Color([1, (- 1), (- 1)]),
+    opacity: 1, depth: 0, interpolate: true,
+  });
+  
   kitten_jpg = new visual.ImageStim({
     win : psychoJS.window,
     name : 'kitten_jpg', units : undefined, 
     image : 'resources/kitten_jpg.jpg', mask : undefined,
-    ori : 0, pos : [0, 0], size : [0.5, 0.5],
+    ori : 0, pos : [0, 0], size : [0.81, 0.81],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
-    texRes : 128, interpolate : true, depth : 0.0 
+    texRes : 128, interpolate : true, depth : -1.0 
   });
   mouse_4 = new core.Mouse({
     win: psychoJS.window,
@@ -199,14 +210,23 @@ function experimentInit() {
   mouse_4.mouseClock = new util.Clock();
   // Initialize components for Routine "kitten_jpg5_trial"
   kitten_jpg5_trialClock = new util.Clock();
+  background_4 = new visual.Rect ({
+    win: psychoJS.window, name: 'background_4', 
+    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
+    ori: 0, pos: [0, 0],
+    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    fillColor: new util.Color([1, (- 1), (- 1)]),
+    opacity: 1, depth: 0, interpolate: true,
+  });
+  
   kitten_jpg5 = new visual.ImageStim({
     win : psychoJS.window,
     name : 'kitten_jpg5', units : undefined, 
     image : 'resources/kitten_jpg.jpg', mask : undefined,
-    ori : 5, pos : [0, 0], size : [0.5, 0.5],
+    ori : 5, pos : [0, 0], size : [0.81, 0.81],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
-    texRes : 128, interpolate : true, depth : 0.0 
+    texRes : 128, interpolate : true, depth : -1.0 
   });
   mouse_5 = new core.Mouse({
     win: psychoJS.window,
@@ -603,6 +623,7 @@ function kitten_jpg_trialRoutineBegin(snapshot) {
     document.body.setAttribute('data-report', 'img3');
     // keep track of which components have finished
     kitten_jpg_trialComponents = [];
+    kitten_jpg_trialComponents.push(background);
     kitten_jpg_trialComponents.push(kitten_jpg);
     kitten_jpg_trialComponents.push(mouse_4);
     
@@ -621,6 +642,16 @@ function kitten_jpg_trialRoutineEachFrame(snapshot) {
     t = kitten_jpg_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
+    
+    // *background* updates
+    if (t >= 0.0 && background.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      background.tStart = t;  // (not accounting for frame time here)
+      background.frameNStart = frameN;  // exact frame index
+      
+      background.setAutoDraw(true);
+    }
+
     
     // *kitten_jpg* updates
     if (t >= 0.0 && kitten_jpg.status === PsychoJS.Status.NOT_STARTED) {
@@ -716,6 +747,7 @@ function kitten_jpg5_trialRoutineBegin(snapshot) {
     document.body.setAttribute('data-report', 'img4');
     // keep track of which components have finished
     kitten_jpg5_trialComponents = [];
+    kitten_jpg5_trialComponents.push(background_4);
     kitten_jpg5_trialComponents.push(kitten_jpg5);
     kitten_jpg5_trialComponents.push(mouse_5);
     
@@ -734,6 +766,16 @@ function kitten_jpg5_trialRoutineEachFrame(snapshot) {
     t = kitten_jpg5_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
+    
+    // *background_4* updates
+    if (t >= 0.0 && background_4.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      background_4.tStart = t;  // (not accounting for frame time here)
+      background_4.frameNStart = frameN;  // exact frame index
+      
+      background_4.setAutoDraw(true);
+    }
+
     
     // *kitten_jpg5* updates
     if (t >= 0.0 && kitten_jpg5.status === PsychoJS.Status.NOT_STARTED) {
