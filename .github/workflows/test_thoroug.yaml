@@ -24,7 +24,7 @@ on:
       testrun:
         description: 'testrun'
         required: true
-        default: env.DEFAULT_TESTRUN
+        default: {{env.DEFAULT_TESTRUN}}
       subset:
         description: 'subset'
         required: true
