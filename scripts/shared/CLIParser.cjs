@@ -142,7 +142,7 @@ parseTestrunCLIOptions = () => {
 
   // Get subset from CLI
   let subset =  parseOption({cli: 'subset'}, false);
-  subset = subset !== undefined && subset == true;
+  subset = subset !== undefined && subset === 'true';
   console.log('[CLIParser.cjs] subset is ' + subset);
 
   return [server, uploadResults, platform, label, testrun, branch, subset];
