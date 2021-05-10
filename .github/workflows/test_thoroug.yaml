@@ -24,7 +24,7 @@ on:
       testrun:
         description: 'testrun'
         required: true
-        default: 'all_devices'
+        default: env.DEFAULT_TESTRUN
       subset:
         description: 'subset'
         required: true
