@@ -7,22 +7,22 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'PscyhoJS Repository. Default: tpronk/psychojs'
+        description: 'PscyhoJS repo (tpronk/psychojs)'
         required: false
       ref:
-        description: 'Branch/tag/SHA. Default: default branch '
+        description: 'Branch/tag/SHA (default branch)'
         required: false
       testrun:
-        description: 'testrun. Default: test_thorough'
+        description: 'testrun (test_thorough)'
         required: false
       subset:
-        description: 'subset/ Default: false'
+        description: 'subset (false)'
         required: false
       platform:
-        description: 'platform. Default: \*'
+        description: 'platform (\*)'
         required: false
       label:
-        description: 'label. Default: all'
+        description: 'label (all)'
         required: false
 env:
   BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
