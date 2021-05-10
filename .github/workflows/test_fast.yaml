@@ -1,5 +1,5 @@
-# Starts up one BrowserStack session per platform, then runs each test in succession. That's relatively fast, but less thorough,
-# since a failed test aborts any successive tests. By default, the tests matching label "all" are run on all platfoms included in "subset".
+# Starts up one BrowserStack session per platform, then runs each test in succession. 
+# That's relatively fast, but less thorough, since a failed test aborts any successive tests.
 name: test_fast
 on:
 #  push:
