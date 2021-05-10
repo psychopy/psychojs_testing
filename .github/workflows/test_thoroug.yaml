@@ -32,7 +32,6 @@ env:
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
   PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
   DEFAULT_REPO: 'tpronk/psychojs'
-  DEFAULT_REF: ''
   DEFAULT_TESTRUN: 'test_thorough'
   DEFAULT_SUBSET: 'false'
   DEFAULT_PLATFORM: '\*'
@@ -76,11 +75,11 @@ jobs:
         run: node scripts/cli/syncWithGitHub.cjs alain sotiri thomas
         working-directory: ./psychojs_testing
       - name: Delete old test logs 
-        run: node scripts/cli/deleteLogs.cjs --testrun ${{github.event.inputs.testrun}}
+        run: node scripts/cli/deleteLogs.cjs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}}
         working-directory: ./psychojs_testing
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label ${{github.event.inputs.label}} --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label ${{github.event.inputs.label || env.DEFAULT_LABEL}} --outputFormat paths)"
         working-directory: ./psychojs_testing
 
   tests:
@@ -123,8 +122,8 @@ jobs:
       - name: Checkout psychojs
         uses: actions/checkout@v2
         with:
-          repository: ${{github.event.inputs.repo}}
-          ref: ${{github.event.inputs.ref}}
+          repository: ${{github.event.inputs.repo || env.DEFAULT_REPO}}
+          ref: ${{github.event.inputs.ref || env.DEFAULT_REF}}
           path: psychojs
       - name: Cache modules psychojs
         uses: actions/cache@v2
@@ -152,7 +151,7 @@ jobs:
       
       # START: run tests
       - name: Run test
-        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --uploadExperiments --uploadResults --label ${{matrix.test}}
+        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}} --subset ${{github.event.inputs.subset || env.DEFAULT_SUBSET}} --platform ${{github.event.inputs.platform || env.DEFAULT_PLATFORM}} --url stager --uploadExperiments --uploadResults --label ${{matrix.test}}
         working-directory: ./psychojs_testing        
       # END: run tests
 
@@ -190,5 +189,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Join reports
-        run: node scripts/cli/joinReports.cjs --testrun ${{github.event.inputs.testrun}} 
+        run: node scripts/cli/joinReports.cjs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}} 
         working-directory: ./psychojs_testing   
