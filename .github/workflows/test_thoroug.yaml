@@ -1,6 +1,13 @@
 # Starts up a separate BrowserStack session for each combination of platform and test. That's relatively slow, but also thorough,
 # since a failed test does not abort any successive tests. By default, the tests matching label "all" are run on all included platfoms.
 name: test_thorough
+env:
+  DEFAULT_REPO: 'tpronk/psychojs'
+  DEFAULT_REF: ''
+  DEFAULT_TESTRUN: 'test_thorough'
+  DEFAULT_SUBSET: 'false'
+  DEFAULT_PLATFORM: '\*'
+  DEFAULT_LABEL: 'all'
 on:
   schedule:
     - cron: '0 8 * * sun'
