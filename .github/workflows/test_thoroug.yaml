@@ -7,29 +7,23 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'PscyhoJS Repository'
-        required: true
-        default: 'tpronk/psychojs'
-      ref:
-        description: 'Branch/tag/SHA (default branch if empty)'
+        description: 'PscyhoJS repo (tpronk/psychojs)'
         required: false
-        default: ''
+      ref:
+        description: 'Branch/tag/SHA (default branch)'
+        required: false
       testrun:
-        description: 'testrun'
-        required: true
-        default: 'all_devices'
+        description: 'testrun (test_thorough)'
+        required: false
       subset:
-        description: 'subset'
-        required: true
-        default: 'false'
+        description: 'subset (false)'
+        required: false
       platform:
-        description: 'platform'
-        required: true
-        default: '\*'
+        description: 'platform (\*)'
+        required: false
       label:
-        description: 'label'
-        required: true
-        default: 'all'        
+        description: 'label (all)'
+        required: false
 env:
   BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
   BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
@@ -37,7 +31,11 @@ env:
   STAGING_PORT: ${{ secrets.STAGING_PORT }}
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
   PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
-
+  DEFAULT_REPO: 'tpronk/psychojs'
+  DEFAULT_TESTRUN: 'test_thorough'
+  DEFAULT_SUBSET: 'false'
+  DEFAULT_PLATFORM: '\*'
+  DEFAULT_LABEL: 'all'
 jobs:
   prepare:
     name: Clean up and get tests
@@ -77,11 +75,11 @@ jobs:
         run: node scripts/cli/syncWithGitHub.cjs alain sotiri thomas
         working-directory: ./psychojs_testing
       - name: Delete old test logs 
-        run: node scripts/cli/deleteLogs.cjs --testrun ${{github.event.inputs.testrun}}
+        run: node scripts/cli/deleteLogs.cjs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}}
         working-directory: ./psychojs_testing
       - name: Get tests
         id: get_tests
-        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label ${{github.event.inputs.label}} --outputFormat paths)"
+        run: echo "::set-output name=tests::$(node scripts/cli/tabulateTests.cjs --label ${{github.event.inputs.label || env.DEFAULT_LABEL}} --outputFormat paths)"
         working-directory: ./psychojs_testing
 
   tests:
@@ -124,7 +122,7 @@ jobs:
       - name: Checkout psychojs
         uses: actions/checkout@v2
         with:
-          repository: ${{github.event.inputs.repo}}
+          repository: ${{github.event.inputs.repo || env.DEFAULT_REPO}}
           ref: ${{github.event.inputs.ref}}
           path: psychojs
       - name: Cache modules psychojs
@@ -153,7 +151,7 @@ jobs:
       
       # START: run tests
       - name: Run test
-        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --url stager --uploadExperiments --uploadResults --label ${{matrix.test}}
+        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}} --subset ${{github.event.inputs.subset || env.DEFAULT_SUBSET}} --platform ${{github.event.inputs.platform || env.DEFAULT_PLATFORM}} --url stager --uploadExperiments --uploadResults --label ${{matrix.test}}
         working-directory: ./psychojs_testing        
       # END: run tests
 
@@ -191,5 +189,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Join reports
-        run: node scripts/cli/joinReports.cjs --testrun ${{github.event.inputs.testrun}} 
+        run: node scripts/cli/joinReports.cjs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}} 
         working-directory: ./psychojs_testing   
