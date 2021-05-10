@@ -9,40 +9,38 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'PscyhoJS Repository'
-        required: true
-        default: 'tpronk/psychojs'
-      ref:
-        description: 'Branch/tag/SHA (default branch if empty)'
+        description: 'PscyhoJS repo (tpronk/psychojs)'
         required: false
-        default: ''
+      ref:
+        description: 'Branch/tag/SHA (default branch)'
+        required: false
       testrun:
-        description: 'testrun'
-        required: true
-        default: 'selected_devices'
+        description: 'testrun (test_fast)'
+        required: false
       subset:
-        description: 'subset'
-        required: true
-        default: 'true'
+        description: 'subset (true)'
+        required: false
       platform:
-        description: 'platform'
-        required: true
-        default: '\*'
+        description: 'platform (\*)'
+        required: false
       label:
-        description: 'label'
-        required: true
-        default: 'all'
+        description: 'label (all)'
+        required: false
+env:
+  BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
+  BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+  STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+  STAGING_PORT: ${{ secrets.STAGING_PORT }}
+  STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+  PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
+  DEFAULT_REPO: 'tpronk/psychojs'
+  DEFAULT_TESTRUN: 'test_fast'
+  DEFAULT_SUBSET: 'true'
+  DEFAULT_PLATFORM: '\*'
+  DEFAULT_LABEL: 'all'
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      BROWSERSTACK_ACCESSKEY: ${{ secrets.BROWSERSTACK_ACCESSKEY }}
-      BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
-      STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
-      STAGING_PORT: ${{ secrets.STAGING_PORT }}
-      STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
-      PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
-      
     steps:
       - name: Setup node
         uses: actions/setup-node@v1
@@ -74,8 +72,8 @@ jobs:
       - name: Checkout psychojs
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.repo || 'tpronk/psychojs' }}
-          ref: ${{ github.event.inputs.ref }}
+          repository: ${{github.event.inputs.repo || env.DEFAULT_REPO}}
+          ref: ${{github.event.inputs.ref}}
           path: psychojs
       - name: Cache modules psychojs
         uses: actions/cache@v2
@@ -103,6 +101,6 @@ jobs:
       
       # START: run tests
       - name: Run tests
-        run: node test.cjs --server bs --url stager --uploadExperiments --uploadResults --testrun ${{github.event.inputs.testrun}} --subset ${{github.event.inputs.subset}} --platform ${{github.event.inputs.platform}} --label ${{github.event.inputs.label}}
+        run: node test.cjs --server bs --testrun ${{github.event.inputs.testrun || env.DEFAULT_TESTRUN}} --subset ${{github.event.inputs.subset || env.DEFAULT_SUBSET}} --platform ${{github.event.inputs.platform || env.DEFAULT_PLATFORM}} --url stager --uploadExperiments --uploadResults --label ${{github.event.inputs.label || env.DEFAULT_LABEL}}
         working-directory: ./psychojs_tests        
       # END: run tests
