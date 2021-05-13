@@ -238,6 +238,13 @@ exports.config = {
         let screenshotImg = await browser.getJimpScreenshot();
         // Write screenshot to file
         browser.writeJimpImg(screenshotImg, browser.capabilities.testConfig.path, screenshotName);
+
+        // If we're running Safari, skip visual regression
+        let platformName = await browser.getPlatformName();
+        if(platformName.includes('safari')) {
+          return true;
+        }
+
         // Get reference
         let referenceImg = await VisualRegressor.getReferenceImg(browser.capabilities.testConfig.path, screenshotName);
         // If reference available, perform comparison
@@ -246,7 +253,6 @@ exports.config = {
           return true;
         } else {
           // Yes reference, compare
-          let platformName = await browser.getPlatformName();
           let comparisonResult = await VisualRegressor.compareScreenshotWithReference(
             screenshotImg,
             referenceImg,
