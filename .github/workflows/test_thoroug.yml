@@ -1,16 +1,16 @@
-# Starts up a separate BrowserStack session for each combination of platform and test. That's relatively slow, but also thorough,
-# since a failed test does not abort any successive tests. By default, the tests matching label "all" are run on all included platfoms.
+# Starts up a separate BrowserStack session for each combination of platform and test. 
+# That's relatively slow, but also thorough, since a failed test does not abort any successive tests. 
 name: test_thorough
 on:
-  schedule:
-    - cron: '0 8 * * sun'
+  #schedule:
+  #  - cron: '0 8 * * sun'
   workflow_dispatch:
     inputs:
       repo:
-        description: 'PscyhoJS repo (tpronk/psychojs)'
+        description: 'PsychoJS repo (tpronk/psychojs)'
         required: false
       ref:
-        description: 'Branch/tag/SHA (default branch)'
+        description: 'branch/tag/SHA (default branch)'
         required: false
       testrun:
         description: 'testrun (test_thorough)'
@@ -30,7 +30,7 @@ env:
   STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
   STAGING_PORT: ${{ secrets.STAGING_PORT }}
   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
-  PSYCHOJS_PATH: '/home/runner/work/psychojs_testing/psychojs_testing/psychojs'
+  PSYCHOJS_PATH: '/home/runner/work/psychojs/psychojs/psychojs'
   DEFAULT_REPO: 'tpronk/psychojs'
   DEFAULT_TESTRUN: 'test_thorough'
   DEFAULT_SUBSET: 'false'
