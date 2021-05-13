@@ -42,7 +42,7 @@ const getBrowsers = () => {
     },
     {
       os: ['OS X'], 
-      os_version: ['Big Sur', 'Catalina', 'Mojave', 'High Sierra'], 
+      os_version: ['Big Sur', 'Catalina'], 
       browser: ['chrome', 'edge', 'firefox', 'safari']
     },
     {
@@ -137,10 +137,10 @@ const platformSubsets = [
   'Windows_10_chrome_*',
   'Windows_10_firefox_*',
   'Windows_10_edge_*',
-  'OS X_Catalina_chrome_*',
-  'OS X_Catalina_edge_*',
-  'OS X_Catalina_firefox_*',
-  'OS X_Catalina_safari_*',
+  'OS X_Big Sur_chrome_*',
+  'OS X_Big Sur_edge_*',
+  'OS X_Big Sur_firefox_*',
+  'OS X_Big Sur_safari_*',
   'android_11.0_Google Pixel 4_android',
   'android_10.0_Google Pixel 3_android',
   'android_9.0_Samsung Galaxy S9 Plus_android',
@@ -233,6 +233,22 @@ const getApiCapabilities = (platformPattern, subset) => {
   return customLaunchers;
 }
 
+const getJsonCapabilities = (platformPattern, subset) => {
+  // Get platforms in BrowserStack's browsers.json format
+  let browsers = getBrowsers();
+  // Add platform in our own format
+  let capabilities = browsers.map((browser) => {
+    browser.displayName = getPlatformFromBrowser(browser);
+    return browser;
+  });  
+  // Filter capabilities
+  capabilities = filterCapabilities(capabilities, platformPattern, subset, (capability) => {
+    return capability.displayName;
+  });
+  return capabilities;
+};
+
+
 // getWdioServices; no services required when running via BrowserStack
 const getWdioServices = () => {
   return [];
@@ -241,5 +257,6 @@ const getWdioServices = () => {
 module.exports = { 
   getWebdriverCapabilities: getWebdriverCapabilities,
   getApiCapabilities: getApiCapabilities,
-  getWdioServices: getWdioServices
+  getJsonCapabilities: getJsonCapabilities,
+  getWdioServices: getWdioServices,
 };
