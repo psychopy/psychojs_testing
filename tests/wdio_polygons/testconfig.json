@@ -1,6 +1,6 @@
 {
   "test_framework": "wdio",
-  "labels": ["wdio_polygons", "wdio", "batch", "all", "sound_test2", "sound_test4", "mp", "ps"],
+  "labels": ["wdio_polygons", "wdio", "thorough", "fast"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_polygons.cjs",
   "experiment_file": "wdio_polygons.psyexp",

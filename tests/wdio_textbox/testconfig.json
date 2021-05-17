@@ -1,6 +1,6 @@
 {
   "test_framework": "wdio",
-  "labels": ["wdio_textbox", "batch"],
+  "labels": ["wdio_textbox"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_textbox.cjs",
   "experiment_file": "wdio_textbox.psyexp",

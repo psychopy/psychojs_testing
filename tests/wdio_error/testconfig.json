@@ -1,6 +1,6 @@
 {
   "test_framework": "wdio",
-  "labels": ["wdio_error", "batch", "all", "sound_test1"],
+  "labels": ["wdio_error", "wdio", "thorough", "fast"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_error.cjs",
   "experiment_file": "wdio_error.psyexp",
