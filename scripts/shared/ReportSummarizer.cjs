@@ -339,6 +339,7 @@ aggregate = (joinedReports, customLogsToAdd, logUrlFunction) => {
 };
 
 // Perform log aggregation and store WDIO logs
+// Return true if the aggregated logs contain any entries for failed
 aggregateAndStoreWdio = (joinedReports, logPath, onBrowserStack, buildPrefix, buildNamesToBuildIdsMap) => {
   // Construct logUrl function; returns nothing by default
   let logUrlFunction = () => {
@@ -370,10 +371,11 @@ aggregateAndStoreWdio = (joinedReports, logPath, onBrowserStack, buildPrefix, bu
       }
     }
   }
-  aggregateAndStore(joinedReports, logPath, logUrlFunction);
+  return aggregateAndStore(joinedReports, logPath, logUrlFunction);
 };
 
 // Perform log aggregation and store karma logs
+// Return true if the aggregated logs contain any entries for failed
 aggregateAndStoreKarma = (joinedReports, logPath, onBrowserStack) => {
   // Construct logUrl function; returns nothing by default
   let logUrlFunction = () => {
@@ -387,10 +389,11 @@ aggregateAndStoreKarma = (joinedReports, logPath, onBrowserStack) => {
       return logUrlreport[0].message;
     }
   }
-  aggregateAndStore(joinedReports, logPath, logUrlFunction);
+  return aggregateAndStore(joinedReports, logPath, logUrlFunction);
 };
 
 // Perform log aggregation and store logs; general function
+// Return true if the aggregated logs contain any entries for failed
 aggregateAndStore = (joinedReports, logPath, logUrlFunction) => {
   // Store merged reports
   console.log('[ReportSummarizer.cjs] write "report" logs');
@@ -409,6 +412,7 @@ aggregateAndStore = (joinedReports, logPath, logUrlFunction) => {
     summary: aggregations.summaries,
     report: joinedReports
   });
+  return aggregations.failed.length > 0;
 };
 
 module.exports = { 

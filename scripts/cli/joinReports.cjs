@@ -17,6 +17,9 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
 
 // Join reports
 (async () => {
+  // Any failed tests?
+  let failed = false;
+  // Create directories we need for aggregating
   Paths.recreateDirectories(
     [Paths.dir_results],
     false
@@ -60,7 +63,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
       report = JSON.parse(getResults);
       joinedReports = joinedReports.concat(report);
     }
-    ReportSummarizer.aggregateAndStoreKarma(
+    failed = failed || ReportSummarizer.aggregateAndStoreKarma(
       joinedReports,
       Paths.dir_results_joined + '/karma', 
       true
@@ -108,7 +111,7 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
       buildNamesToBuildIdsMap[buildName] = buildIds[0];
     }
     console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
-    ReportSummarizer.aggregateAndStoreWdio(
+    failed = failed || ReportSummarizer.aggregateAndStoreWdio(
       joinedReports,
       Paths.dir_results_joined + '/wdio',
       true, 
@@ -120,6 +123,8 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
   // Upload to stager
   console.log('[joinReports.cjs] Uploading joined logs');
   await Stager.uploadDirectory(Paths.dir_results_joined, Paths.subdir_results_joined + '/'  + Stager.createReportPath(branch, testrun));
+
+  process.exit(failed? 1: 0);
 })();
 
 
