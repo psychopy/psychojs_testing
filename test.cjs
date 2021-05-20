@@ -12,6 +12,10 @@ console.log('[test.cjs] psychoJSPath is ' + psychoJSPath);
 // String of options passed to this script; we pass these on to child processes
 let cliString = CLIParser.constructCLIString(2);
 
+// See if actual testing is disabled
+let skiptests = CLIParser.parseOption({cli: 'skiptests'}, false);
+skiptests = skiptests !== undefined;
+
 // execSync options
 let execSyncOptions = { 
   stdio: ['inherit', 'inherit', 'inherit']
@@ -19,7 +23,7 @@ let execSyncOptions = {
 
 console.log('[test.cjs] Building library');
 
-// Compile library
+// Build library
 child_process.execSync(
   'npm --prefix ' + psychoJSPath + ' run build:css', 
   execSyncOptions
@@ -33,7 +37,7 @@ child_process.execSync(
 let tests = TestCollector.collectTests(CLIParser.parseOption({cli: 'label'}));
 
 // Any karma tests? Run them
-if (tests.karma.length > 0) {
+if (!skiptests && tests.karma.length > 0) {
   console.log('[test.cjs] Starting karma tests');
   child_process.execSync(
     'node scripts/cli/runkarma.cjs ' + cliString,
@@ -46,7 +50,7 @@ if (tests.wdio.length > 0) {
   console.log('[test.cjs] Starting wdio tests');
   // Check if uploadExperiments is enabled when target == stager
   if (parseOption({cli: 'url'}) == 'stager' && !CLIParser.parseOption({cli: 'uploadExperiments'})) {
-    throw new Error('[test.cjs] The target CLI option was "stager" but uploadExperiments was disabled. Please enable uploadExperiments')
+    throw new Error('[test.cjs] The url CLI option was "stager" but uploadExperiments was disabled. Please enable uploadExperiments')
   }
 
   // Deploy experiments
@@ -56,8 +60,18 @@ if (tests.wdio.length > 0) {
   );
 
   // Run e2e tests
-  child_process.execSync(
-   'npx wdio scripts/shared/wdio.conf.cjs ' + cliString,
-    execSyncOptions
-  );
+  if (!skiptests) {
+    child_process.execSync(
+    'npx wdio scripts/shared/wdio.conf.cjs ' + cliString,
+      execSyncOptions
+    );
+  }
+}
+console.log('[test.cjs] Done!');
+
+// Beep
+const beep = CLIParser.parseOption({cli: 'beep'}, false) !== undefined;
+if (beep) {
+  const beepbeep = require('beepbeep');
+  beepbeep(2);
 }

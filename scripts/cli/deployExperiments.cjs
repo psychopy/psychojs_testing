@@ -12,7 +12,6 @@ const CLIParser = require('../shared/CLIParser.cjs');
 const TestCollector = require('../shared/TestCollector.cjs');
 const NameSanitizer = require('../shared/NameSanitizer.cjs');
 
-
 // Get psychoJSPath
 const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
 console.log('[test.cjs] psychoJSPath is ' + psychoJSPath);
@@ -20,6 +19,9 @@ console.log('[test.cjs] psychoJSPath is ' + psychoJSPath);
 // Get psychoJSVersion
 const psychoJSVersion = require(psychoJSPath + '/package.json').version;
 console.log('[test.cjs] psychoJSVersion is ' + psychoJSVersion);
+
+// Get nocalibration
+const nocalibration = CLIParser.parseOption({cli: 'nocalibration'}, false) !== undefined;
 
 // Get uploadExperiments CLI option
 let uploadExperiments = CLIParser.parseOption({cli: 'uploadExperiments'}, false);
@@ -36,7 +38,7 @@ if (uploadExperiments) {
 
 // Get label and collect experiments
 let label = CLIParser.parseOption({cli: 'label'});
-let tests = TestCollector.collectTests(label, true);
+let tests = TestCollector.collectTests(label, !nocalibration);
 
 // Get template
 let template = fs.readFileSync('./scripts/shared/index.html', 'utf8');
