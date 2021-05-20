@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node test.cjs --server local --url local --label",
-    "watch": "npx onchange -i --await-write-finish 100 \"%PSYCHOJS_PATH%/src/**\" -- node test.cjs --nocalibration --skiptests --beep --url local --label"
+    "watch_psychojs_js": "npx onchange -i --await-write-finish 100 \"%PSYCHOJS_PATH%/src/**\" -- node test.cjs --nocalibration --nocss --skiptests --beep --url local --label",
+    "watch_psychojs_css": "npx onchange -i --await-write-finish 100 \"%PSYCHOJS_PATH%/src/**\" -- node test.cjs --nocalibration --nojs --skiptests --beep --url local --label",
+    "watch_experiment": "npx onchange -i --await-write-finish 100 \"tests/**/*.psyexp\" -- node test.cjs --nocalibration --nocss --nojs --compile --skiptests --beep --url local --label"
   },
   "devDependencies": {
     "@wdio/cli": "^7.2.2",

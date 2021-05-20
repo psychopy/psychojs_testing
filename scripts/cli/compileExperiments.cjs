@@ -11,9 +11,12 @@ const fs = require('fs-extra');
 const psychopyPath = CLIParser.parseOption({env: 'PSYCHOPY_PATH'});
 console.log('[compileExperiments.cjs] psychopyPath is ' + psychopyPath);
 
+// Get nocalibration
+const nocalibration = CLIParser.parseOption({cli: 'nocalibration'}, false) !== undefined;
+
 // Get label and collect experiments
 let label = CLIParser.parseOption({cli: 'label'});
-let tests = TestCollector.collectTests(label, true);
+let tests = TestCollector.collectTests(label, !nocalibration);
 
 // Re-create compiled directory
 Paths.recreateDirectories([Paths.dir_compiled], false);

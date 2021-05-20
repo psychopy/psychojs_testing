@@ -23,15 +23,20 @@ let execSyncOptions = {
 
 console.log('[test.cjs] Building library');
 
-// Build library
-child_process.execSync(
-  'npm --prefix ' + psychoJSPath + ' run build:css', 
-  execSyncOptions
-);
-child_process.execSync(
-  'npm --prefix ' + psychoJSPath + ' run build:js', 
-  execSyncOptions
-);
+// Build library: CSS
+if (CLIParser.parseOption({cli: 'nocss'}, false) === undefined) {
+  child_process.execSync(
+    'npm --prefix ' + psychoJSPath + ' run build:css', 
+    execSyncOptions
+  );
+}
+// Build library: JS
+if (CLIParser.parseOption({cli: 'nojs'}, false) === undefined) {
+  child_process.execSync(
+    'npm --prefix ' + psychoJSPath + ' run build:js', 
+    execSyncOptions
+  );
+}
 
 // Collect tests
 let tests = TestCollector.collectTests(CLIParser.parseOption({cli: 'label'}));
@@ -51,6 +56,14 @@ if (tests.wdio.length > 0) {
   // Check if uploadExperiments is enabled when target == stager
   if (parseOption({cli: 'url'}) == 'stager' && !CLIParser.parseOption({cli: 'uploadExperiments'})) {
     throw new Error('[test.cjs] The url CLI option was "stager" but uploadExperiments was disabled. Please enable uploadExperiments')
+  }
+
+  // Compile experiments
+  if (CLIParser.parseOption({cli: 'compile'}, false) !== undefined) {
+    child_process.execSync(
+      'node scripts/cli/compileExperiments.cjs ' + cliString,
+      execSyncOptions
+    );
   }
 
   // Deploy experiments
