@@ -90,8 +90,8 @@ var intro_trialClock;
 var text;
 var mouse;
 var slider_trialClock;
+var background_1;
 var slider;
-var button;
 var globalClock;
 var routineTimer;
 function experimentInit() {
@@ -114,23 +114,23 @@ function experimentInit() {
   mouse.mouseClock = new util.Clock();
   // Initialize components for Routine "slider_trial"
   slider_trialClock = new util.Clock();
+  background_1 = new visual.Rect ({
+    win: psychoJS.window, name: 'background_1', 
+    width: [0.8, 0.3][0], height: [0.8, 0.3][1],
+    ori: 0.0, pos: [0, 0],
+    lineWidth: 0.0, lineColor: new util.Color(undefined),
+    fillColor: new util.Color([1.0, (- 1.0), (- 1.0)]),
+    opacity: undefined, depth: 0, interpolate: true,
+  });
+  
   slider = new visual.Slider({
     win: psychoJS.window, name: 'slider',
-    size: [1.0, 0.1], pos: [0, 0.3], units: 'height',
+    size: [0.6, 0.1], pos: [0, 0], units: 'height',
     labels: ["left", "right"], ticks: [1, 2, 3, 4, 5],
     granularity: 0, style: ["RATING"],
     color: new util.Color('LightGray'), 
-    fontFamily: 'HelveticaBold', bold: true, italic: false, depth: 0, 
+    fontFamily: 'HelveticaBold', bold: true, italic: false, depth: -1, 
     flip: false,
-  });
-  
-  button = new visual.Rect ({
-    win: psychoJS.window, name: 'button', 
-    width: [0.1, 0.1][0], height: [0.1, 0.1][1],
-    ori: 0, pos: [0, 0.3],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([1, 1, 1]),
-    opacity: 1, depth: -1, interpolate: true,
   });
   
   // Create some handy timers
@@ -274,8 +274,8 @@ function slider_trialRoutineBegin(snapshot) {
     document.body.setAttribute('data-report', 'slider_trial');
     // keep track of which components have finished
     slider_trialComponents = [];
+    slider_trialComponents.push(background_1);
     slider_trialComponents.push(slider);
-    slider_trialComponents.push(button);
     
     for (const thisComponent of slider_trialComponents)
       if ('status' in thisComponent)
@@ -293,6 +293,16 @@ function slider_trialRoutineEachFrame(snapshot) {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
+    // *background_1* updates
+    if (t >= 0.0 && background_1.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      background_1.tStart = t;  // (not accounting for frame time here)
+      background_1.frameNStart = frameN;  // exact frame index
+      
+      background_1.setAutoDraw(true);
+    }
+
+    
     // *slider* updates
     if (t >= 0.0 && slider.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
@@ -306,16 +316,6 @@ function slider_trialRoutineEachFrame(snapshot) {
     // Check slider for response to end routine
     if (slider.getRating() !== undefined && slider.status === PsychoJS.Status.STARTED) {
       continueRoutine = false; }
-    
-    // *button* updates
-    if (t >= 0.0 && button.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      button.tStart = t;  // (not accounting for frame time here)
-      button.frameNStart = frameN;  // exact frame index
-      
-      button.setAutoDraw(true);
-    }
-
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
