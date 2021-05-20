@@ -59,12 +59,6 @@ flowScheduler.add(text3RoutineEnd());
 flowScheduler.add(text4RoutineBegin());
 flowScheduler.add(text4RoutineEachFrame());
 flowScheduler.add(text4RoutineEnd());
-flowScheduler.add(text5RoutineBegin());
-flowScheduler.add(text5RoutineEachFrame());
-flowScheduler.add(text5RoutineEnd());
-flowScheduler.add(text6RoutineBegin());
-flowScheduler.add(text6RoutineEachFrame());
-flowScheduler.add(text6RoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
@@ -102,32 +96,24 @@ function updateInfo() {
 
 
 var introductionClock;
-var text_introduction;
-var mouse_7;
+var text_intro;
+var mouse_intro;
 var text1Clock;
-var polygon;
+var polygon1;
 var turkish_arial;
-var mouse_2;
+var mouse1;
 var text2Clock;
-var polygon_2;
-var turkish_georgia;
-var mouse;
-var text3Clock;
-var polygon_3;
+var polygon2;
 var chinese_arial;
-var mouse_3;
-var text4Clock;
-var polygon_4;
-var chinese_georgia;
-var mouse_4;
-var text5Clock;
-var polygon_5;
+var mouse2;
+var text3Clock;
+var polygon3;
 var arabic_arial;
-var mouse_5;
-var text6Clock;
-var polygon_6;
-var arabic_georgia;
-var mouse_6;
+var mouse3;
+var text4Clock;
+var polygon4;
+var hebrew_arial;
+var mouse4;
 var globalClock;
 var routineTimer;
 function experimentInit() {
@@ -135,10 +121,10 @@ function experimentInit() {
   introductionClock = new util.Clock();
   document.body.setAttribute("data-report", "STARTED");
   
-  text_introduction = new visual.TextStim({
+  text_intro = new visual.TextStim({
     win: psychoJS.window,
-    name: 'text_introduction',
-    text: 'awdio_text\n\nThis test presents the following words in succession: "good morning" in Turkish (gunaydin), "hello" in Chinese (nihau), and "hello" in Arabic (merhaba). Note that each word, written in native script, has non-ASCII symbols in them.\n\nEach word is presented once in Arial font and once in Georgia font. You can continue to the next word by clicking anywhere in the canvas.\n\nClick to continue...',
+    name: 'text_intro',
+    text: 'awdio_text\n\nThis test presents the following words in succession: "good morning" in Turkish (gunaydin), "hello" in Chinese (nihau), in Arabic (merhaba), and in Hebrew (shalom). Note that each of these words, written in native script, has non-ASCII symbols in them.\n\nClick to continue...',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
@@ -146,14 +132,14 @@ function experimentInit() {
     depth: -1.0 
   });
   
-  mouse_7 = new core.Mouse({
+  mouse_intro = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_7.mouseClock = new util.Clock();
+  mouse_intro.mouseClock = new util.Clock();
   // Initialize components for Routine "text1"
   text1Clock = new util.Clock();
-  polygon = new visual.Rect ({
-    win: psychoJS.window, name: 'polygon', 
+  polygon1 = new visual.Rect ({
+    win: psychoJS.window, name: 'polygon1', 
     width: [0.9, 0.9][0], height: [0.9, 0.9][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
@@ -172,40 +158,14 @@ function experimentInit() {
     depth: -1.0 
   });
   
-  mouse_2 = new core.Mouse({
+  mouse1 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_2.mouseClock = new util.Clock();
+  mouse1.mouseClock = new util.Clock();
   // Initialize components for Routine "text2"
   text2Clock = new util.Clock();
-  polygon_2 = new visual.Rect ({
-    win: psychoJS.window, name: 'polygon_2', 
-    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
-    ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([1, (- 1), (- 1)]),
-    opacity: 1, depth: 0, interpolate: true,
-  });
-  
-  turkish_georgia = new visual.TextStim({
-    win: psychoJS.window,
-    name: 'turkish_georgia',
-    text: 'günaydın',
-    font: 'Georgia',
-    units: undefined, 
-    pos: [0, 0], height: 0.2,  wrapWidth: undefined, ori: 0,
-    color: new util.Color('white'),  opacity: 1,
-    depth: -1.0 
-  });
-  
-  mouse = new core.Mouse({
-    win: psychoJS.window,
-  });
-  mouse.mouseClock = new util.Clock();
-  // Initialize components for Routine "text3"
-  text3Clock = new util.Clock();
-  polygon_3 = new visual.Rect ({
-    win: psychoJS.window, name: 'polygon_3', 
+  polygon2 = new visual.Rect ({
+    win: psychoJS.window, name: 'polygon2', 
     width: [0.9, 0.9][0], height: [0.9, 0.9][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
@@ -224,40 +184,14 @@ function experimentInit() {
     depth: -1.0 
   });
   
-  mouse_3 = new core.Mouse({
+  mouse2 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_3.mouseClock = new util.Clock();
-  // Initialize components for Routine "text4"
-  text4Clock = new util.Clock();
-  polygon_4 = new visual.Rect ({
-    win: psychoJS.window, name: 'polygon_4', 
-    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
-    ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([1, (- 1), (- 1)]),
-    opacity: 1, depth: 0, interpolate: true,
-  });
-  
-  chinese_georgia = new visual.TextStim({
-    win: psychoJS.window,
-    name: 'chinese_georgia',
-    text: '你好',
-    font: 'Georgia',
-    units: undefined, 
-    pos: [0, 0], height: 0.2,  wrapWidth: undefined, ori: 0,
-    color: new util.Color('white'),  opacity: 1,
-    depth: -1.0 
-  });
-  
-  mouse_4 = new core.Mouse({
-    win: psychoJS.window,
-  });
-  mouse_4.mouseClock = new util.Clock();
-  // Initialize components for Routine "text5"
-  text5Clock = new util.Clock();
-  polygon_5 = new visual.Rect ({
-    win: psychoJS.window, name: 'polygon_5', 
+  mouse2.mouseClock = new util.Clock();
+  // Initialize components for Routine "text3"
+  text3Clock = new util.Clock();
+  polygon3 = new visual.Rect ({
+    win: psychoJS.window, name: 'polygon3', 
     width: [0.9, 0.9][0], height: [0.9, 0.9][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
@@ -276,14 +210,14 @@ function experimentInit() {
     depth: -1.0 
   });
   
-  mouse_5 = new core.Mouse({
+  mouse3 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_5.mouseClock = new util.Clock();
-  // Initialize components for Routine "text6"
-  text6Clock = new util.Clock();
-  polygon_6 = new visual.Rect ({
-    win: psychoJS.window, name: 'polygon_6', 
+  mouse3.mouseClock = new util.Clock();
+  // Initialize components for Routine "text4"
+  text4Clock = new util.Clock();
+  polygon4 = new visual.Rect ({
+    win: psychoJS.window, name: 'polygon4', 
     width: [0.9, 0.9][0], height: [0.9, 0.9][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
@@ -291,21 +225,21 @@ function experimentInit() {
     opacity: 1, depth: 0, interpolate: true,
   });
   
-  arabic_georgia = new visual.TextStim({
+  hebrew_arial = new visual.TextStim({
     win: psychoJS.window,
-    name: 'arabic_georgia',
-    text: 'مرحبا',
-    font: 'Georgia',
+    name: 'hebrew_arial',
+    text: 'שלום',
+    font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.2,  wrapWidth: undefined, ori: 0,
     color: new util.Color('white'),  opacity: 1,
     depth: -1.0 
   });
   
-  mouse_6 = new core.Mouse({
+  mouse4 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_6.mouseClock = new util.Clock();
+  mouse4.mouseClock = new util.Clock();
   // Create some handy timers
   globalClock = new util.Clock();  // to track the time since experiment started
   routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
@@ -327,12 +261,12 @@ function introductionRoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    // setup some python lists for storing info about the mouse_7
+    // setup some python lists for storing info about the mouse_intro
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     introductionComponents = [];
-    introductionComponents.push(text_introduction);
-    introductionComponents.push(mouse_7);
+    introductionComponents.push(text_intro);
+    introductionComponents.push(mouse_intro);
     
     for (const thisComponent of introductionComponents)
       if ('status' in thisComponent)
@@ -352,27 +286,27 @@ function introductionRoutineEachFrame(snapshot) {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *text_introduction* updates
-    if (t >= 0.0 && text_introduction.status === PsychoJS.Status.NOT_STARTED) {
+    // *text_intro* updates
+    if (t >= 0.0 && text_intro.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      text_introduction.tStart = t;  // (not accounting for frame time here)
-      text_introduction.frameNStart = frameN;  // exact frame index
+      text_intro.tStart = t;  // (not accounting for frame time here)
+      text_intro.frameNStart = frameN;  // exact frame index
       
-      text_introduction.setAutoDraw(true);
+      text_intro.setAutoDraw(true);
     }
 
-    // *mouse_7* updates
-    if (t >= 0.0 && mouse_7.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse_intro* updates
+    if (t >= 0.0 && mouse_intro.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_7.tStart = t;  // (not accounting for frame time here)
-      mouse_7.frameNStart = frameN;  // exact frame index
+      mouse_intro.tStart = t;  // (not accounting for frame time here)
+      mouse_intro.frameNStart = frameN;  // exact frame index
       
-      mouse_7.status = PsychoJS.Status.STARTED;
-      mouse_7.mouseClock.reset();
-      prevButtonState = mouse_7.getPressed();  // if button is down already this ISN'T a new click
+      mouse_intro.status = PsychoJS.Status.STARTED;
+      mouse_intro.mouseClock.reset();
+      prevButtonState = mouse_intro.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse_7.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_7.getPressed();
+    if (mouse_intro.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse_intro.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
@@ -418,13 +352,13 @@ function introductionRoutineEnd(snapshot) {
       }
     }
     // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_7.getPos();
-    _mouseButtons = mouse_7.getPressed();
-    psychoJS.experiment.addData('mouse_7.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_7.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_7.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_7.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_7.rightButton', _mouseButtons[2]);
+    _mouseXYs = mouse_intro.getPos();
+    _mouseButtons = mouse_intro.getPressed();
+    psychoJS.experiment.addData('mouse_intro.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse_intro.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse_intro.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse_intro.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse_intro.rightButton', _mouseButtons[2]);
     // the Routine "introduction" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -443,13 +377,13 @@ function text1RoutineBegin(snapshot) {
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     document.body.setAttribute('data-report', 'text1');
-    // setup some python lists for storing info about the mouse_2
+    // setup some python lists for storing info about the mouse1
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     text1Components = [];
-    text1Components.push(polygon);
+    text1Components.push(polygon1);
     text1Components.push(turkish_arial);
-    text1Components.push(mouse_2);
+    text1Components.push(mouse1);
     
     for (const thisComponent of text1Components)
       if ('status' in thisComponent)
@@ -467,13 +401,13 @@ function text1RoutineEachFrame(snapshot) {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *polygon* updates
-    if (t >= 0.0 && polygon.status === PsychoJS.Status.NOT_STARTED) {
+    // *polygon1* updates
+    if (t >= 0.0 && polygon1.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      polygon.tStart = t;  // (not accounting for frame time here)
-      polygon.frameNStart = frameN;  // exact frame index
+      polygon1.tStart = t;  // (not accounting for frame time here)
+      polygon1.frameNStart = frameN;  // exact frame index
       
-      polygon.setAutoDraw(true);
+      polygon1.setAutoDraw(true);
     }
 
     
@@ -486,18 +420,18 @@ function text1RoutineEachFrame(snapshot) {
       turkish_arial.setAutoDraw(true);
     }
 
-    // *mouse_2* updates
-    if (t >= 0.0 && mouse_2.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse1* updates
+    if (t >= 0.0 && mouse1.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_2.tStart = t;  // (not accounting for frame time here)
-      mouse_2.frameNStart = frameN;  // exact frame index
+      mouse1.tStart = t;  // (not accounting for frame time here)
+      mouse1.frameNStart = frameN;  // exact frame index
       
-      mouse_2.status = PsychoJS.Status.STARTED;
-      mouse_2.mouseClock.reset();
-      prevButtonState = mouse_2.getPressed();  // if button is down already this ISN'T a new click
+      mouse1.status = PsychoJS.Status.STARTED;
+      mouse1.mouseClock.reset();
+      prevButtonState = mouse1.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse_2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_2.getPressed();
+    if (mouse1.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse1.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
@@ -542,13 +476,13 @@ function text1RoutineEnd(snapshot) {
       }
     }
     // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_2.getPos();
-    _mouseButtons = mouse_2.getPressed();
-    psychoJS.experiment.addData('mouse_2.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_2.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_2.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_2.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_2.rightButton', _mouseButtons[2]);
+    _mouseXYs = mouse1.getPos();
+    _mouseButtons = mouse1.getPressed();
+    psychoJS.experiment.addData('mouse1.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse1.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse1.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse1.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse1.rightButton', _mouseButtons[2]);
     // the Routine "text1" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -567,13 +501,13 @@ function text2RoutineBegin(snapshot) {
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     document.body.setAttribute('data-report', 'text2');
-    // setup some python lists for storing info about the mouse
+    // setup some python lists for storing info about the mouse2
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     text2Components = [];
-    text2Components.push(polygon_2);
-    text2Components.push(turkish_georgia);
-    text2Components.push(mouse);
+    text2Components.push(polygon2);
+    text2Components.push(chinese_arial);
+    text2Components.push(mouse2);
     
     for (const thisComponent of text2Components)
       if ('status' in thisComponent)
@@ -591,37 +525,37 @@ function text2RoutineEachFrame(snapshot) {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *polygon_2* updates
-    if (t >= 0.0 && polygon_2.status === PsychoJS.Status.NOT_STARTED) {
+    // *polygon2* updates
+    if (t >= 0.0 && polygon2.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      polygon_2.tStart = t;  // (not accounting for frame time here)
-      polygon_2.frameNStart = frameN;  // exact frame index
+      polygon2.tStart = t;  // (not accounting for frame time here)
+      polygon2.frameNStart = frameN;  // exact frame index
       
-      polygon_2.setAutoDraw(true);
+      polygon2.setAutoDraw(true);
     }
 
     
-    // *turkish_georgia* updates
-    if (t >= 0.0 && turkish_georgia.status === PsychoJS.Status.NOT_STARTED) {
+    // *chinese_arial* updates
+    if (t >= 0.0 && chinese_arial.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      turkish_georgia.tStart = t;  // (not accounting for frame time here)
-      turkish_georgia.frameNStart = frameN;  // exact frame index
+      chinese_arial.tStart = t;  // (not accounting for frame time here)
+      chinese_arial.frameNStart = frameN;  // exact frame index
       
-      turkish_georgia.setAutoDraw(true);
+      chinese_arial.setAutoDraw(true);
     }
 
-    // *mouse* updates
-    if (t >= 0.0 && mouse.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse2* updates
+    if (t >= 0.0 && mouse2.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse.tStart = t;  // (not accounting for frame time here)
-      mouse.frameNStart = frameN;  // exact frame index
+      mouse2.tStart = t;  // (not accounting for frame time here)
+      mouse2.frameNStart = frameN;  // exact frame index
       
-      mouse.status = PsychoJS.Status.STARTED;
-      mouse.mouseClock.reset();
-      prevButtonState = mouse.getPressed();  // if button is down already this ISN'T a new click
+      mouse2.status = PsychoJS.Status.STARTED;
+      mouse2.mouseClock.reset();
+      prevButtonState = mouse2.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse.getPressed();
+    if (mouse2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse2.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
@@ -666,13 +600,13 @@ function text2RoutineEnd(snapshot) {
       }
     }
     // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse.getPos();
-    _mouseButtons = mouse.getPressed();
-    psychoJS.experiment.addData('mouse.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse.rightButton', _mouseButtons[2]);
+    _mouseXYs = mouse2.getPos();
+    _mouseButtons = mouse2.getPressed();
+    psychoJS.experiment.addData('mouse2.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse2.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse2.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse2.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse2.rightButton', _mouseButtons[2]);
     // the Routine "text2" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -691,13 +625,13 @@ function text3RoutineBegin(snapshot) {
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     document.body.setAttribute('data-report', 'text3');
-    // setup some python lists for storing info about the mouse_3
+    // setup some python lists for storing info about the mouse3
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     text3Components = [];
-    text3Components.push(polygon_3);
-    text3Components.push(chinese_arial);
-    text3Components.push(mouse_3);
+    text3Components.push(polygon3);
+    text3Components.push(arabic_arial);
+    text3Components.push(mouse3);
     
     for (const thisComponent of text3Components)
       if ('status' in thisComponent)
@@ -715,37 +649,37 @@ function text3RoutineEachFrame(snapshot) {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *polygon_3* updates
-    if (t >= 0.0 && polygon_3.status === PsychoJS.Status.NOT_STARTED) {
+    // *polygon3* updates
+    if (t >= 0.0 && polygon3.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      polygon_3.tStart = t;  // (not accounting for frame time here)
-      polygon_3.frameNStart = frameN;  // exact frame index
+      polygon3.tStart = t;  // (not accounting for frame time here)
+      polygon3.frameNStart = frameN;  // exact frame index
       
-      polygon_3.setAutoDraw(true);
+      polygon3.setAutoDraw(true);
     }
 
     
-    // *chinese_arial* updates
-    if (t >= 0.0 && chinese_arial.status === PsychoJS.Status.NOT_STARTED) {
+    // *arabic_arial* updates
+    if (t >= 0.0 && arabic_arial.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      chinese_arial.tStart = t;  // (not accounting for frame time here)
-      chinese_arial.frameNStart = frameN;  // exact frame index
+      arabic_arial.tStart = t;  // (not accounting for frame time here)
+      arabic_arial.frameNStart = frameN;  // exact frame index
       
-      chinese_arial.setAutoDraw(true);
+      arabic_arial.setAutoDraw(true);
     }
 
-    // *mouse_3* updates
-    if (t >= 0.0 && mouse_3.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse3* updates
+    if (t >= 0.0 && mouse3.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_3.tStart = t;  // (not accounting for frame time here)
-      mouse_3.frameNStart = frameN;  // exact frame index
+      mouse3.tStart = t;  // (not accounting for frame time here)
+      mouse3.frameNStart = frameN;  // exact frame index
       
-      mouse_3.status = PsychoJS.Status.STARTED;
-      mouse_3.mouseClock.reset();
-      prevButtonState = mouse_3.getPressed();  // if button is down already this ISN'T a new click
+      mouse3.status = PsychoJS.Status.STARTED;
+      mouse3.mouseClock.reset();
+      prevButtonState = mouse3.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse_3.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_3.getPressed();
+    if (mouse3.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse3.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
@@ -790,13 +724,13 @@ function text3RoutineEnd(snapshot) {
       }
     }
     // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_3.getPos();
-    _mouseButtons = mouse_3.getPressed();
-    psychoJS.experiment.addData('mouse_3.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_3.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_3.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_3.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_3.rightButton', _mouseButtons[2]);
+    _mouseXYs = mouse3.getPos();
+    _mouseButtons = mouse3.getPressed();
+    psychoJS.experiment.addData('mouse3.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse3.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse3.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse3.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse3.rightButton', _mouseButtons[2]);
     // the Routine "text3" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -815,13 +749,13 @@ function text4RoutineBegin(snapshot) {
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     document.body.setAttribute('data-report', 'text4');
-    // setup some python lists for storing info about the mouse_4
+    // setup some python lists for storing info about the mouse4
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     text4Components = [];
-    text4Components.push(polygon_4);
-    text4Components.push(chinese_georgia);
-    text4Components.push(mouse_4);
+    text4Components.push(polygon4);
+    text4Components.push(hebrew_arial);
+    text4Components.push(mouse4);
     
     for (const thisComponent of text4Components)
       if ('status' in thisComponent)
@@ -839,37 +773,37 @@ function text4RoutineEachFrame(snapshot) {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *polygon_4* updates
-    if (t >= 0.0 && polygon_4.status === PsychoJS.Status.NOT_STARTED) {
+    // *polygon4* updates
+    if (t >= 0.0 && polygon4.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      polygon_4.tStart = t;  // (not accounting for frame time here)
-      polygon_4.frameNStart = frameN;  // exact frame index
+      polygon4.tStart = t;  // (not accounting for frame time here)
+      polygon4.frameNStart = frameN;  // exact frame index
       
-      polygon_4.setAutoDraw(true);
+      polygon4.setAutoDraw(true);
     }
 
     
-    // *chinese_georgia* updates
-    if (t >= 0.0 && chinese_georgia.status === PsychoJS.Status.NOT_STARTED) {
+    // *hebrew_arial* updates
+    if (t >= 0.0 && hebrew_arial.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      chinese_georgia.tStart = t;  // (not accounting for frame time here)
-      chinese_georgia.frameNStart = frameN;  // exact frame index
+      hebrew_arial.tStart = t;  // (not accounting for frame time here)
+      hebrew_arial.frameNStart = frameN;  // exact frame index
       
-      chinese_georgia.setAutoDraw(true);
+      hebrew_arial.setAutoDraw(true);
     }
 
-    // *mouse_4* updates
-    if (t >= 0.0 && mouse_4.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse4* updates
+    if (t >= 0.0 && mouse4.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_4.tStart = t;  // (not accounting for frame time here)
-      mouse_4.frameNStart = frameN;  // exact frame index
+      mouse4.tStart = t;  // (not accounting for frame time here)
+      mouse4.frameNStart = frameN;  // exact frame index
       
-      mouse_4.status = PsychoJS.Status.STARTED;
-      mouse_4.mouseClock.reset();
-      prevButtonState = mouse_4.getPressed();  // if button is down already this ISN'T a new click
+      mouse4.status = PsychoJS.Status.STARTED;
+      mouse4.mouseClock.reset();
+      prevButtonState = mouse4.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse_4.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_4.getPressed();
+    if (mouse4.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse4.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
@@ -914,262 +848,14 @@ function text4RoutineEnd(snapshot) {
       }
     }
     // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_4.getPos();
-    _mouseButtons = mouse_4.getPressed();
-    psychoJS.experiment.addData('mouse_4.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_4.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_4.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_4.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_4.rightButton', _mouseButtons[2]);
+    _mouseXYs = mouse4.getPos();
+    _mouseButtons = mouse4.getPressed();
+    psychoJS.experiment.addData('mouse4.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse4.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse4.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse4.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse4.rightButton', _mouseButtons[2]);
     // the Routine "text4" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
-var text5Components;
-function text5RoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'text5'-------
-    t = 0;
-    text5Clock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    document.body.setAttribute('data-report', 'text5');
-    // setup some python lists for storing info about the mouse_5
-    gotValidClick = false; // until a click is received
-    // keep track of which components have finished
-    text5Components = [];
-    text5Components.push(polygon_5);
-    text5Components.push(arabic_arial);
-    text5Components.push(mouse_5);
-    
-    for (const thisComponent of text5Components)
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function text5RoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'text5'-------
-    // get current time
-    t = text5Clock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    
-    // *polygon_5* updates
-    if (t >= 0.0 && polygon_5.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      polygon_5.tStart = t;  // (not accounting for frame time here)
-      polygon_5.frameNStart = frameN;  // exact frame index
-      
-      polygon_5.setAutoDraw(true);
-    }
-
-    
-    // *arabic_arial* updates
-    if (t >= 0.0 && arabic_arial.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      arabic_arial.tStart = t;  // (not accounting for frame time here)
-      arabic_arial.frameNStart = frameN;  // exact frame index
-      
-      arabic_arial.setAutoDraw(true);
-    }
-
-    // *mouse_5* updates
-    if (t >= 0.0 && mouse_5.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      mouse_5.tStart = t;  // (not accounting for frame time here)
-      mouse_5.frameNStart = frameN;  // exact frame index
-      
-      mouse_5.status = PsychoJS.Status.STARTED;
-      mouse_5.mouseClock.reset();
-      prevButtonState = mouse_5.getPressed();  // if button is down already this ISN'T a new click
-      }
-    if (mouse_5.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_5.getPressed();
-      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
-        prevButtonState = _mouseButtons;
-        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
-          // abort routine on response
-          continueRoutine = false;
-        }
-      }
-    }
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of text5Components)
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-        break;
-      }
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function text5RoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'text5'-------
-    for (const thisComponent of text5Components) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    }
-    // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_5.getPos();
-    _mouseButtons = mouse_5.getPressed();
-    psychoJS.experiment.addData('mouse_5.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_5.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_5.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_5.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_5.rightButton', _mouseButtons[2]);
-    // the Routine "text5" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
-var text6Components;
-function text6RoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'text6'-------
-    t = 0;
-    text6Clock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    document.body.setAttribute('data-report', 'text6');
-    // setup some python lists for storing info about the mouse_6
-    gotValidClick = false; // until a click is received
-    // keep track of which components have finished
-    text6Components = [];
-    text6Components.push(polygon_6);
-    text6Components.push(arabic_georgia);
-    text6Components.push(mouse_6);
-    
-    for (const thisComponent of text6Components)
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function text6RoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'text6'-------
-    // get current time
-    t = text6Clock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    
-    // *polygon_6* updates
-    if (t >= 0.0 && polygon_6.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      polygon_6.tStart = t;  // (not accounting for frame time here)
-      polygon_6.frameNStart = frameN;  // exact frame index
-      
-      polygon_6.setAutoDraw(true);
-    }
-
-    
-    // *arabic_georgia* updates
-    if (t >= 0.0 && arabic_georgia.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      arabic_georgia.tStart = t;  // (not accounting for frame time here)
-      arabic_georgia.frameNStart = frameN;  // exact frame index
-      
-      arabic_georgia.setAutoDraw(true);
-    }
-
-    // *mouse_6* updates
-    if (t >= 0.0 && mouse_6.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      mouse_6.tStart = t;  // (not accounting for frame time here)
-      mouse_6.frameNStart = frameN;  // exact frame index
-      
-      mouse_6.status = PsychoJS.Status.STARTED;
-      mouse_6.mouseClock.reset();
-      prevButtonState = mouse_6.getPressed();  // if button is down already this ISN'T a new click
-      }
-    if (mouse_6.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_6.getPressed();
-      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
-        prevButtonState = _mouseButtons;
-        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
-          // abort routine on response
-          continueRoutine = false;
-        }
-      }
-    }
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    for (const thisComponent of text6Components)
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-        break;
-      }
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function text6RoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'text6'-------
-    for (const thisComponent of text6Components) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    }
-    // store data for thisExp (ExperimentHandler)
-    _mouseXYs = mouse_6.getPos();
-    _mouseButtons = mouse_6.getPressed();
-    psychoJS.experiment.addData('mouse_6.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_6.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_6.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_6.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_6.rightButton', _mouseButtons[2]);
-    // the Routine "text6" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -1215,10 +901,6 @@ function quitPsychoJS(message, isCompleted) {
   }
   
   document.body.setAttribute('data-report', 'FINISHED');
-  
-  
-  
-  
   
   
   
