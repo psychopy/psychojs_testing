@@ -55,7 +55,7 @@
         <Param name="stopType" updates="None" val="duration (s)" valType="str"/>
         <Param name="stopVal" updates="constant" val="" valType="code"/>
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
-        <Param name="text" updates="constant" val="wdio_img&amp;#10;&amp;#10;In this test, you should see a square image of a kitten with a pink ornament. &amp;#10;&amp;#10;The kitten is presented four times: (1) with a straight orientation, (2) rotated 5 degrees to the right, (3) straight again, and (4) rotated again. The first two times the kitten is a PNG image, the second two times JPG.&amp;#10;&amp;#10;Click anywhere to continue..." valType="extendedStr"/>
+        <Param name="text" updates="constant" val="wdio_img&amp;#10;&amp;#10;In this test, you should first see the OST logo (PNG), followed by a picture of a frozen lake (JPG). Each is presented twice: once with straight orientation and once rotated by 5 degrees.&amp;#10;&amp;#10;Click anywhere to continue..." valType="extendedStr"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
         <Param name="wrapWidth" updates="constant" val="" valType="code"/>
       </TextComponent>
@@ -95,7 +95,7 @@
         <Param name="name" updates="None" val="code" valType="code"/>
       </CodeComponent>
     </Routine>
-    <Routine name="kitten_png_trial">
+    <Routine name="ost_trial">
       <PolygonComponent name="background_2">
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -123,7 +123,7 @@
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
       </PolygonComponent>
-      <ImageComponent name="kitten_png">
+      <ImageComponent name="ost_image">
         <Param name="color" updates="constant" val="$[1,1,1]" valType="str"/>
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -131,10 +131,10 @@
         <Param name="durationEstim" updates="None" val="" valType="code"/>
         <Param name="flipHoriz" updates="constant" val="False" valType="bool"/>
         <Param name="flipVert" updates="constant" val="False" valType="bool"/>
-        <Param name="image" updates="constant" val="resources/kitten_png.png" valType="str"/>
+        <Param name="image" updates="constant" val="resources\ost.png" valType="str"/>
         <Param name="interpolate" updates="constant" val="linear" valType="str"/>
         <Param name="mask" updates="constant" val="None" valType="str"/>
-        <Param name="name" updates="None" val="kitten_png" valType="code"/>
+        <Param name="name" updates="None" val="ost_image" valType="code"/>
         <Param name="opacity" updates="constant" val="1" valType="code"/>
         <Param name="ori" updates="constant" val="0" valType="code"/>
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
@@ -185,7 +185,7 @@
         <Param name="name" updates="None" val="code_2" valType="code"/>
       </CodeComponent>
     </Routine>
-    <Routine name="kitten_png5_trial">
+    <Routine name="ost_or5_trial">
       <PolygonComponent name="background_3">
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -204,7 +204,7 @@
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
         <Param name="shape" updates="constant" val="rectangle" valType="str"/>
-        <Param name="size" updates="constant" val="(0.9, 0.9)" valType="code"/>
+        <Param name="size" updates="constant" val="(0.8, 0.8)" valType="code"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0.0" valType="code"/>
@@ -213,7 +213,7 @@
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
       </PolygonComponent>
-      <ImageComponent name="kitten_png5">
+      <ImageComponent name="ost_or5_image">
         <Param name="color" updates="constant" val="$[1,1,1]" valType="str"/>
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -221,15 +221,15 @@
         <Param name="durationEstim" updates="None" val="" valType="code"/>
         <Param name="flipHoriz" updates="constant" val="False" valType="bool"/>
         <Param name="flipVert" updates="constant" val="False" valType="bool"/>
-        <Param name="image" updates="constant" val="resources/kitten_png.png" valType="str"/>
+        <Param name="image" updates="constant" val="resources\ost.png" valType="str"/>
         <Param name="interpolate" updates="constant" val="linear" valType="str"/>
         <Param name="mask" updates="constant" val="None" valType="str"/>
-        <Param name="name" updates="None" val="kitten_png5" valType="code"/>
+        <Param name="name" updates="None" val="ost_or5_image" valType="code"/>
         <Param name="opacity" updates="constant" val="1" valType="code"/>
         <Param name="ori" updates="constant" val="5" valType="code"/>
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
-        <Param name="size" updates="constant" val="(0.81, 0.81)" valType="code"/>
+        <Param name="size" updates="constant" val="(0.72, 0.72)" valType="code"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0.0" valType="code"/>
@@ -275,7 +275,7 @@
         <Param name="name" updates="None" val="code_3" valType="code"/>
       </CodeComponent>
     </Routine>
-    <Routine name="kitten_jpg_trial">
+    <Routine name="landscape_trial">
       <PolygonComponent name="background">
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -294,7 +294,7 @@
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
         <Param name="shape" updates="constant" val="rectangle" valType="str"/>
-        <Param name="size" updates="constant" val="(0.9, 0.9)" valType="code"/>
+        <Param name="size" updates="constant" val="(0.8, 0.8)" valType="code"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0.0" valType="code"/>
@@ -303,7 +303,7 @@
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
       </PolygonComponent>
-      <ImageComponent name="kitten_jpg">
+      <ImageComponent name="landscape_image">
         <Param name="color" updates="constant" val="$[1,1,1]" valType="str"/>
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -311,15 +311,15 @@
         <Param name="durationEstim" updates="None" val="" valType="code"/>
         <Param name="flipHoriz" updates="constant" val="False" valType="bool"/>
         <Param name="flipVert" updates="constant" val="False" valType="bool"/>
-        <Param name="image" updates="constant" val="resources/kitten_jpg.jpg" valType="str"/>
+        <Param name="image" updates="constant" val="resources\landscape.jpg" valType="str"/>
         <Param name="interpolate" updates="constant" val="linear" valType="str"/>
         <Param name="mask" updates="constant" val="None" valType="str"/>
-        <Param name="name" updates="None" val="kitten_jpg" valType="code"/>
+        <Param name="name" updates="None" val="landscape_image" valType="code"/>
         <Param name="opacity" updates="constant" val="1" valType="code"/>
         <Param name="ori" updates="constant" val="0" valType="code"/>
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
-        <Param name="size" updates="constant" val="(0.81, 0.81)" valType="code"/>
+        <Param name="size" updates="constant" val="(0.72, 0.54)" valType="code"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0.0" valType="code"/>
@@ -365,7 +365,7 @@
         <Param name="name" updates="None" val="code_4" valType="code"/>
       </CodeComponent>
     </Routine>
-    <Routine name="kitten_jpg5_trial">
+    <Routine name="landscape_or5_trial">
       <PolygonComponent name="background_4">
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -384,7 +384,7 @@
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
         <Param name="shape" updates="constant" val="rectangle" valType="str"/>
-        <Param name="size" updates="constant" val="(0.9, 0.9)" valType="code"/>
+        <Param name="size" updates="constant" val="(0.8, 0.8)" valType="code"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0.0" valType="code"/>
@@ -393,7 +393,7 @@
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
       </PolygonComponent>
-      <ImageComponent name="kitten_jpg5">
+      <ImageComponent name="landscape_or5_image">
         <Param name="color" updates="constant" val="$[1,1,1]" valType="str"/>
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -401,15 +401,15 @@
         <Param name="durationEstim" updates="None" val="" valType="code"/>
         <Param name="flipHoriz" updates="constant" val="False" valType="bool"/>
         <Param name="flipVert" updates="constant" val="False" valType="bool"/>
-        <Param name="image" updates="constant" val="resources/kitten_jpg.jpg" valType="str"/>
+        <Param name="image" updates="constant" val="resources\landscape.jpg" valType="str"/>
         <Param name="interpolate" updates="constant" val="linear" valType="str"/>
         <Param name="mask" updates="constant" val="None" valType="str"/>
-        <Param name="name" updates="None" val="kitten_jpg5" valType="code"/>
+        <Param name="name" updates="None" val="landscape_or5_image" valType="code"/>
         <Param name="opacity" updates="constant" val="1" valType="code"/>
         <Param name="ori" updates="constant" val="5" valType="code"/>
         <Param name="pos" updates="constant" val="(0, 0)" valType="code"/>
         <Param name="saveStartStop" updates="None" val="True" valType="bool"/>
-        <Param name="size" updates="constant" val="(0.81, 0.81)" valType="code"/>
+        <Param name="size" updates="constant" val="(0.72, 0.54)" valType="code"/>
         <Param name="startEstim" updates="None" val="" valType="code"/>
         <Param name="startType" updates="None" val="time (s)" valType="str"/>
         <Param name="startVal" updates="None" val="0.0" valType="code"/>
@@ -458,9 +458,9 @@
   </Routines>
   <Flow>
     <Routine name="intro_trial"/>
-    <Routine name="kitten_png_trial"/>
-    <Routine name="kitten_png5_trial"/>
-    <Routine name="kitten_jpg_trial"/>
-    <Routine name="kitten_jpg5_trial"/>
+    <Routine name="ost_trial"/>
+    <Routine name="ost_or5_trial"/>
+    <Routine name="landscape_trial"/>
+    <Routine name="landscape_or5_trial"/>
   </Flow>
 </PsychoPy2experiment>
