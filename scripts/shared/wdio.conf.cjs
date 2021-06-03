@@ -166,8 +166,6 @@ exports.config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    */
   before: function (capabilities, specs) {
-    //console.log(this)
-
     // These function concern getting capabilities that are specified
     // in the config but not available in browser.capabilities during
     // the test run.
@@ -176,6 +174,15 @@ exports.config = {
     });
     browser.addCommand('getOsName', () => {
       return capabilities['bstack:options'].os;
+    });
+    browser.addCommand('getOsVersion', () => {
+      return capabilities['bstack:options'].osVersion;
+    });
+    browser.addCommand('getBrowserName', () => {
+      return capabilities.browserName;
+    });
+    browser.addCommand('getBrowserVersion', () => {
+      return capabilities.browserVersion;
     });
     browser.addCommand('getDeviceName', () => {
       return capabilities['bstack:options'].deviceName;
