@@ -1,6 +1,6 @@
 {
   "test_framework": "wdio",
-  "labels": ["demo_polyfill", "wdio", "full"],
+  "labels": ["demo_polyfill", "obsolete"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "demo_polyfill.cjs",
   "experiment_file": "demo_polyfill.psyexp",
