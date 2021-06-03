@@ -91,9 +91,9 @@ Paths.recreateDirectories([Paths.dir_deployed], false);
       deployedIndex
     );
 
-    // Copy dist/ to lib/
+    // Copy out/ to lib/
     fs.copySync(
-      psychoJSPath + '/dist',
+      psychoJSPath + '/out',
       Paths.dir_deployed + '/' + test.path + '/lib'
     );
   }

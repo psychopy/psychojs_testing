@@ -32,7 +32,7 @@ browsers = Object.keys(customLaunchers);
 
 // Construct proxies for each JS and CCS file in dist 
 // E.g., from within the browser dist/util-2021.1.3.js can be referenced as /util.js and as /util-2021.1.3.js
-let libraryFiles = fs.readdirSync('dist');
+let libraryFiles = fs.readdirSync('out');
 let cssFiles = []; 
 let libraryProxies = {};
 for (let libraryFile of libraryFiles) {
