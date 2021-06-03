@@ -72,7 +72,7 @@
         <Param name="stopType" updates="None" val="duration (s)" valType="str"/>
         <Param name="stopVal" updates="constant" val="" valType="code"/>
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
-        <Param name="text" updates="constant" val="awdio_text&amp;#10;&amp;#10;This test presents the following words in succession: &quot;good morning&quot; in Turkish (gunaydin), &quot;hello&quot; in Chinese (nihau), in Arabic (merhaba), and in Hebrew (shalom). Note that each of these words, written in native script, has non-ASCII symbols in them.&amp;#10;&amp;#10;Click to continue..." valType="extendedStr"/>
+        <Param name="text" updates="constant" val="wdio_text&amp;#10;&amp;#10;This test presents the following words in succession: &quot;many good mornings my dear&quot; in Turkish, and &quot;hello&quot; in Chinese, Arabic, and Hebrew. &amp;#10;&amp;#10;Click to continue..." valType="extendedStr"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
         <Param name="wrapWidth" updates="constant" val="" valType="code"/>
       </TextComponent>
@@ -144,7 +144,7 @@
         <Param name="stopType" updates="None" val="duration (s)" valType="str"/>
         <Param name="stopVal" updates="constant" val="" valType="code"/>
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
-        <Param name="text" updates="constant" val="günaydın" valType="extendedStr"/>
+        <Param name="text" updates="constant" val="çok güzel sabahlar aşkım" valType="extendedStr"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
         <Param name="wrapWidth" updates="constant" val="" valType="code"/>
       </TextComponent>
