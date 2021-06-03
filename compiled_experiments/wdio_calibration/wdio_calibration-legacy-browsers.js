@@ -150,7 +150,7 @@ async function experimentInit() {
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([1, (- 1), (- 1)]),
+    fillColor: new util.Color([(- 1), 1, (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
   
@@ -174,7 +174,7 @@ async function experimentInit() {
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([1, (- 1), (- 1)]),
+    fillColor: new util.Color([(- 1), (- 1), 1]),
     opacity: 1, depth: 0, interpolate: true,
   });
   
