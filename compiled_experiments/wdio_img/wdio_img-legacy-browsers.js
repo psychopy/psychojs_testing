@@ -2,6 +2,12 @@
  * Wdio_Img Test *
  *****************/
 
+
+// store info about the experiment session:
+let expName = 'wdio_img';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -14,12 +20,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_img';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -36,18 +36,18 @@ flowScheduler.add(experimentInit);
 flowScheduler.add(intro_trialRoutineBegin());
 flowScheduler.add(intro_trialRoutineEachFrame());
 flowScheduler.add(intro_trialRoutineEnd());
-flowScheduler.add(kitten_png_trialRoutineBegin());
-flowScheduler.add(kitten_png_trialRoutineEachFrame());
-flowScheduler.add(kitten_png_trialRoutineEnd());
-flowScheduler.add(kitten_png5_trialRoutineBegin());
-flowScheduler.add(kitten_png5_trialRoutineEachFrame());
-flowScheduler.add(kitten_png5_trialRoutineEnd());
-flowScheduler.add(kitten_jpg_trialRoutineBegin());
-flowScheduler.add(kitten_jpg_trialRoutineEachFrame());
-flowScheduler.add(kitten_jpg_trialRoutineEnd());
-flowScheduler.add(kitten_jpg5_trialRoutineBegin());
-flowScheduler.add(kitten_jpg5_trialRoutineEachFrame());
-flowScheduler.add(kitten_jpg5_trialRoutineEnd());
+flowScheduler.add(ost_trialRoutineBegin());
+flowScheduler.add(ost_trialRoutineEachFrame());
+flowScheduler.add(ost_trialRoutineEnd());
+flowScheduler.add(ost_or5_trialRoutineBegin());
+flowScheduler.add(ost_or5_trialRoutineEachFrame());
+flowScheduler.add(ost_or5_trialRoutineEnd());
+flowScheduler.add(landscape_trialRoutineBegin());
+flowScheduler.add(landscape_trialRoutineEachFrame());
+flowScheduler.add(landscape_trialRoutineEnd());
+flowScheduler.add(landscape_or5_trialRoutineBegin());
+flowScheduler.add(landscape_or5_trialRoutineEachFrame());
+flowScheduler.add(landscape_or5_trialRoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
@@ -57,8 +57,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'resources/kitten_jpg.jpg', 'path': 'resources/kitten_jpg.jpg'},
-    {'name': 'resources/kitten_png.png', 'path': 'resources/kitten_png.png'}
+    {'name': 'resources/ost.png', 'path': 'resources/ost.png'},
+    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'}
   ]
 });
 
@@ -66,10 +66,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -89,31 +89,31 @@ function updateInfo() {
 var intro_trialClock;
 var text;
 var mouse;
-var kitten_png_trialClock;
+var ost_trialClock;
 var background_2;
-var kitten_png;
+var ost_image;
 var mouse_2;
-var kitten_png5_trialClock;
+var ost_or5_trialClock;
 var background_3;
-var kitten_png5;
+var ost_or5_image;
 var mouse_3;
-var kitten_jpg_trialClock;
+var landscape_trialClock;
 var background;
-var kitten_jpg;
+var landscape_image;
 var mouse_4;
-var kitten_jpg5_trialClock;
+var landscape_or5_trialClock;
 var background_4;
-var kitten_jpg5;
+var landscape_or5_image;
 var mouse_5;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "intro_trial"
   intro_trialClock = new util.Clock();
   text = new visual.TextStim({
     win: psychoJS.window,
     name: 'text',
-    text: 'wdio_img\n\nIn this test, you should see a square image of a kitten with a pink ornament. \n\nThe kitten is presented four times: (1) with a straight orientation, (2) rotated 5 degrees to the right, (3) straight again, and (4) rotated again. The first two times the kitten is a PNG image, the second two times JPG.\n\nClick anywhere to continue...',
+    text: 'wdio_img\n\nIn this test, you should first see the OST logo (PNG), followed by a picture of a frozen lake (JPG). Each is presented twice: once with straight orientation and once rotated by 5 degrees.\n\nClick anywhere to continue...',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
@@ -125,8 +125,8 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse.mouseClock = new util.Clock();
-  // Initialize components for Routine "kitten_png_trial"
-  kitten_png_trialClock = new util.Clock();
+  // Initialize components for Routine "ost_trial"
+  ost_trialClock = new util.Clock();
   background_2 = new visual.Rect ({
     win: psychoJS.window, name: 'background_2', 
     width: [0.8, 0.8][0], height: [0.8, 0.8][1],
@@ -136,10 +136,10 @@ function experimentInit() {
     opacity: 1, depth: 0, interpolate: true,
   });
   
-  kitten_png = new visual.ImageStim({
+  ost_image = new visual.ImageStim({
     win : psychoJS.window,
-    name : 'kitten_png', units : undefined, 
-    image : 'resources/kitten_png.png', mask : undefined,
+    name : 'ost_image', units : undefined, 
+    image : 'resources\\ost.png', mask : undefined,
     ori : 0, pos : [0, 0], size : [0.72, 0.72],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
@@ -149,22 +149,22 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_2.mouseClock = new util.Clock();
-  // Initialize components for Routine "kitten_png5_trial"
-  kitten_png5_trialClock = new util.Clock();
+  // Initialize components for Routine "ost_or5_trial"
+  ost_or5_trialClock = new util.Clock();
   background_3 = new visual.Rect ({
     win: psychoJS.window, name: 'background_3', 
-    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
+    width: [0.8, 0.8][0], height: [0.8, 0.8][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
   
-  kitten_png5 = new visual.ImageStim({
+  ost_or5_image = new visual.ImageStim({
     win : psychoJS.window,
-    name : 'kitten_png5', units : undefined, 
-    image : 'resources/kitten_png.png', mask : undefined,
-    ori : 5, pos : [0, 0], size : [0.81, 0.81],
+    name : 'ost_or5_image', units : undefined, 
+    image : 'resources\\ost.png', mask : undefined,
+    ori : 5, pos : [0, 0], size : [0.72, 0.72],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
     texRes : 128, interpolate : true, depth : -1.0 
@@ -173,22 +173,22 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_3.mouseClock = new util.Clock();
-  // Initialize components for Routine "kitten_jpg_trial"
-  kitten_jpg_trialClock = new util.Clock();
+  // Initialize components for Routine "landscape_trial"
+  landscape_trialClock = new util.Clock();
   background = new visual.Rect ({
     win: psychoJS.window, name: 'background', 
-    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
+    width: [0.8, 0.8][0], height: [0.8, 0.8][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
   
-  kitten_jpg = new visual.ImageStim({
+  landscape_image = new visual.ImageStim({
     win : psychoJS.window,
-    name : 'kitten_jpg', units : undefined, 
-    image : 'resources/kitten_jpg.jpg', mask : undefined,
-    ori : 0, pos : [0, 0], size : [0.81, 0.81],
+    name : 'landscape_image', units : undefined, 
+    image : 'resources\\landscape.jpg', mask : undefined,
+    ori : 0, pos : [0, 0], size : [0.72, 0.54],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
     texRes : 128, interpolate : true, depth : -1.0 
@@ -197,22 +197,22 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_4.mouseClock = new util.Clock();
-  // Initialize components for Routine "kitten_jpg5_trial"
-  kitten_jpg5_trialClock = new util.Clock();
+  // Initialize components for Routine "landscape_or5_trial"
+  landscape_or5_trialClock = new util.Clock();
   background_4 = new visual.Rect ({
     win: psychoJS.window, name: 'background_4', 
-    width: [0.9, 0.9][0], height: [0.9, 0.9][1],
+    width: [0.8, 0.8][0], height: [0.8, 0.8][1],
     ori: 0, pos: [0, 0],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
   
-  kitten_jpg5 = new visual.ImageStim({
+  landscape_or5_image = new visual.ImageStim({
     win : psychoJS.window,
-    name : 'kitten_jpg5', units : undefined, 
-    image : 'resources/kitten_jpg.jpg', mask : undefined,
-    ori : 5, pos : [0, 0], size : [0.81, 0.81],
+    name : 'landscape_or5_image', units : undefined, 
+    image : 'resources\\landscape.jpg', mask : undefined,
+    ori : 5, pos : [0, 0], size : [0.72, 0.54],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
     texRes : 128, interpolate : true, depth : -1.0 
@@ -235,7 +235,7 @@ var continueRoutine;
 var gotValidClick;
 var intro_trialComponents;
 function intro_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'intro_trial'-------
     t = 0;
     intro_trialClock.reset(); // clock
@@ -263,7 +263,7 @@ function intro_trialRoutineBegin(snapshot) {
 var prevButtonState;
 var _mouseButtons;
 function intro_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'intro_trial'-------
     // get current time
     t = intro_trialClock.getTime();
@@ -328,14 +328,14 @@ function intro_trialRoutineEachFrame(snapshot) {
 
 var _mouseXYs;
 function intro_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'intro_trial'-------
     intro_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse.getPos();
     _mouseButtons = mouse.getPressed();
     psychoJS.experiment.addData('mouse.x', _mouseXYs[0]);
@@ -351,12 +351,12 @@ function intro_trialRoutineEnd(snapshot) {
 }
 
 
-var kitten_png_trialComponents;
-function kitten_png_trialRoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'kitten_png_trial'-------
+var ost_trialComponents;
+function ost_trialRoutineBegin(snapshot) {
+  return async function () {
+    //------Prepare to start Routine 'ost_trial'-------
     t = 0;
-    kitten_png_trialClock.reset(); // clock
+    ost_trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
@@ -364,12 +364,12 @@ function kitten_png_trialRoutineBegin(snapshot) {
     gotValidClick = false; // until a click is received
     document.body.setAttribute('data-report', 'img1');
     // keep track of which components have finished
-    kitten_png_trialComponents = [];
-    kitten_png_trialComponents.push(background_2);
-    kitten_png_trialComponents.push(kitten_png);
-    kitten_png_trialComponents.push(mouse_2);
+    ost_trialComponents = [];
+    ost_trialComponents.push(background_2);
+    ost_trialComponents.push(ost_image);
+    ost_trialComponents.push(mouse_2);
     
-    kitten_png_trialComponents.forEach( function(thisComponent) {
+    ost_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -378,11 +378,11 @@ function kitten_png_trialRoutineBegin(snapshot) {
 }
 
 
-function kitten_png_trialRoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'kitten_png_trial'-------
+function ost_trialRoutineEachFrame(snapshot) {
+  return async function () {
+    //------Loop for each frame of Routine 'ost_trial'-------
     // get current time
-    t = kitten_png_trialClock.getTime();
+    t = ost_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -396,13 +396,13 @@ function kitten_png_trialRoutineEachFrame(snapshot) {
     }
 
     
-    // *kitten_png* updates
-    if (t >= 0.0 && kitten_png.status === PsychoJS.Status.NOT_STARTED) {
+    // *ost_image* updates
+    if (t >= 0.0 && ost_image.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      kitten_png.tStart = t;  // (not accounting for frame time here)
-      kitten_png.frameNStart = frameN;  // exact frame index
+      ost_image.tStart = t;  // (not accounting for frame time here)
+      ost_image.frameNStart = frameN;  // exact frame index
       
-      kitten_png.setAutoDraw(true);
+      ost_image.setAutoDraw(true);
     }
 
     // *mouse_2* updates
@@ -436,7 +436,7 @@ function kitten_png_trialRoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    kitten_png_trialComponents.forEach( function(thisComponent) {
+    ost_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -452,15 +452,15 @@ function kitten_png_trialRoutineEachFrame(snapshot) {
 }
 
 
-function kitten_png_trialRoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'kitten_png_trial'-------
-    kitten_png_trialComponents.forEach( function(thisComponent) {
+function ost_trialRoutineEnd(snapshot) {
+  return async function () {
+    //------Ending Routine 'ost_trial'-------
+    ost_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_2.getPos();
     _mouseButtons = mouse_2.getPressed();
     psychoJS.experiment.addData('mouse_2.x', _mouseXYs[0]);
@@ -468,7 +468,7 @@ function kitten_png_trialRoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_2.leftButton', _mouseButtons[0]);
     psychoJS.experiment.addData('mouse_2.midButton', _mouseButtons[1]);
     psychoJS.experiment.addData('mouse_2.rightButton', _mouseButtons[2]);
-    // the Routine "kitten_png_trial" was not non-slip safe, so reset the non-slip timer
+    // the Routine "ost_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -476,12 +476,12 @@ function kitten_png_trialRoutineEnd(snapshot) {
 }
 
 
-var kitten_png5_trialComponents;
-function kitten_png5_trialRoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'kitten_png5_trial'-------
+var ost_or5_trialComponents;
+function ost_or5_trialRoutineBegin(snapshot) {
+  return async function () {
+    //------Prepare to start Routine 'ost_or5_trial'-------
     t = 0;
-    kitten_png5_trialClock.reset(); // clock
+    ost_or5_trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
@@ -489,12 +489,12 @@ function kitten_png5_trialRoutineBegin(snapshot) {
     gotValidClick = false; // until a click is received
     document.body.setAttribute('data-report', 'img2');
     // keep track of which components have finished
-    kitten_png5_trialComponents = [];
-    kitten_png5_trialComponents.push(background_3);
-    kitten_png5_trialComponents.push(kitten_png5);
-    kitten_png5_trialComponents.push(mouse_3);
+    ost_or5_trialComponents = [];
+    ost_or5_trialComponents.push(background_3);
+    ost_or5_trialComponents.push(ost_or5_image);
+    ost_or5_trialComponents.push(mouse_3);
     
-    kitten_png5_trialComponents.forEach( function(thisComponent) {
+    ost_or5_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -503,11 +503,11 @@ function kitten_png5_trialRoutineBegin(snapshot) {
 }
 
 
-function kitten_png5_trialRoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'kitten_png5_trial'-------
+function ost_or5_trialRoutineEachFrame(snapshot) {
+  return async function () {
+    //------Loop for each frame of Routine 'ost_or5_trial'-------
     // get current time
-    t = kitten_png5_trialClock.getTime();
+    t = ost_or5_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -521,13 +521,13 @@ function kitten_png5_trialRoutineEachFrame(snapshot) {
     }
 
     
-    // *kitten_png5* updates
-    if (t >= 0.0 && kitten_png5.status === PsychoJS.Status.NOT_STARTED) {
+    // *ost_or5_image* updates
+    if (t >= 0.0 && ost_or5_image.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      kitten_png5.tStart = t;  // (not accounting for frame time here)
-      kitten_png5.frameNStart = frameN;  // exact frame index
+      ost_or5_image.tStart = t;  // (not accounting for frame time here)
+      ost_or5_image.frameNStart = frameN;  // exact frame index
       
-      kitten_png5.setAutoDraw(true);
+      ost_or5_image.setAutoDraw(true);
     }
 
     // *mouse_3* updates
@@ -561,7 +561,7 @@ function kitten_png5_trialRoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    kitten_png5_trialComponents.forEach( function(thisComponent) {
+    ost_or5_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -577,15 +577,15 @@ function kitten_png5_trialRoutineEachFrame(snapshot) {
 }
 
 
-function kitten_png5_trialRoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'kitten_png5_trial'-------
-    kitten_png5_trialComponents.forEach( function(thisComponent) {
+function ost_or5_trialRoutineEnd(snapshot) {
+  return async function () {
+    //------Ending Routine 'ost_or5_trial'-------
+    ost_or5_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_3.getPos();
     _mouseButtons = mouse_3.getPressed();
     psychoJS.experiment.addData('mouse_3.x', _mouseXYs[0]);
@@ -593,7 +593,7 @@ function kitten_png5_trialRoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_3.leftButton', _mouseButtons[0]);
     psychoJS.experiment.addData('mouse_3.midButton', _mouseButtons[1]);
     psychoJS.experiment.addData('mouse_3.rightButton', _mouseButtons[2]);
-    // the Routine "kitten_png5_trial" was not non-slip safe, so reset the non-slip timer
+    // the Routine "ost_or5_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -601,12 +601,12 @@ function kitten_png5_trialRoutineEnd(snapshot) {
 }
 
 
-var kitten_jpg_trialComponents;
-function kitten_jpg_trialRoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'kitten_jpg_trial'-------
+var landscape_trialComponents;
+function landscape_trialRoutineBegin(snapshot) {
+  return async function () {
+    //------Prepare to start Routine 'landscape_trial'-------
     t = 0;
-    kitten_jpg_trialClock.reset(); // clock
+    landscape_trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
@@ -614,12 +614,12 @@ function kitten_jpg_trialRoutineBegin(snapshot) {
     gotValidClick = false; // until a click is received
     document.body.setAttribute('data-report', 'img3');
     // keep track of which components have finished
-    kitten_jpg_trialComponents = [];
-    kitten_jpg_trialComponents.push(background);
-    kitten_jpg_trialComponents.push(kitten_jpg);
-    kitten_jpg_trialComponents.push(mouse_4);
+    landscape_trialComponents = [];
+    landscape_trialComponents.push(background);
+    landscape_trialComponents.push(landscape_image);
+    landscape_trialComponents.push(mouse_4);
     
-    kitten_jpg_trialComponents.forEach( function(thisComponent) {
+    landscape_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -628,11 +628,11 @@ function kitten_jpg_trialRoutineBegin(snapshot) {
 }
 
 
-function kitten_jpg_trialRoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'kitten_jpg_trial'-------
+function landscape_trialRoutineEachFrame(snapshot) {
+  return async function () {
+    //------Loop for each frame of Routine 'landscape_trial'-------
     // get current time
-    t = kitten_jpg_trialClock.getTime();
+    t = landscape_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -646,13 +646,13 @@ function kitten_jpg_trialRoutineEachFrame(snapshot) {
     }
 
     
-    // *kitten_jpg* updates
-    if (t >= 0.0 && kitten_jpg.status === PsychoJS.Status.NOT_STARTED) {
+    // *landscape_image* updates
+    if (t >= 0.0 && landscape_image.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      kitten_jpg.tStart = t;  // (not accounting for frame time here)
-      kitten_jpg.frameNStart = frameN;  // exact frame index
+      landscape_image.tStart = t;  // (not accounting for frame time here)
+      landscape_image.frameNStart = frameN;  // exact frame index
       
-      kitten_jpg.setAutoDraw(true);
+      landscape_image.setAutoDraw(true);
     }
 
     // *mouse_4* updates
@@ -686,7 +686,7 @@ function kitten_jpg_trialRoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    kitten_jpg_trialComponents.forEach( function(thisComponent) {
+    landscape_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -702,15 +702,15 @@ function kitten_jpg_trialRoutineEachFrame(snapshot) {
 }
 
 
-function kitten_jpg_trialRoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'kitten_jpg_trial'-------
-    kitten_jpg_trialComponents.forEach( function(thisComponent) {
+function landscape_trialRoutineEnd(snapshot) {
+  return async function () {
+    //------Ending Routine 'landscape_trial'-------
+    landscape_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_4.getPos();
     _mouseButtons = mouse_4.getPressed();
     psychoJS.experiment.addData('mouse_4.x', _mouseXYs[0]);
@@ -718,7 +718,7 @@ function kitten_jpg_trialRoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_4.leftButton', _mouseButtons[0]);
     psychoJS.experiment.addData('mouse_4.midButton', _mouseButtons[1]);
     psychoJS.experiment.addData('mouse_4.rightButton', _mouseButtons[2]);
-    // the Routine "kitten_jpg_trial" was not non-slip safe, so reset the non-slip timer
+    // the Routine "landscape_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -726,12 +726,12 @@ function kitten_jpg_trialRoutineEnd(snapshot) {
 }
 
 
-var kitten_jpg5_trialComponents;
-function kitten_jpg5_trialRoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'kitten_jpg5_trial'-------
+var landscape_or5_trialComponents;
+function landscape_or5_trialRoutineBegin(snapshot) {
+  return async function () {
+    //------Prepare to start Routine 'landscape_or5_trial'-------
     t = 0;
-    kitten_jpg5_trialClock.reset(); // clock
+    landscape_or5_trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
@@ -739,12 +739,12 @@ function kitten_jpg5_trialRoutineBegin(snapshot) {
     gotValidClick = false; // until a click is received
     document.body.setAttribute('data-report', 'img4');
     // keep track of which components have finished
-    kitten_jpg5_trialComponents = [];
-    kitten_jpg5_trialComponents.push(background_4);
-    kitten_jpg5_trialComponents.push(kitten_jpg5);
-    kitten_jpg5_trialComponents.push(mouse_5);
+    landscape_or5_trialComponents = [];
+    landscape_or5_trialComponents.push(background_4);
+    landscape_or5_trialComponents.push(landscape_or5_image);
+    landscape_or5_trialComponents.push(mouse_5);
     
-    kitten_jpg5_trialComponents.forEach( function(thisComponent) {
+    landscape_or5_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -753,11 +753,11 @@ function kitten_jpg5_trialRoutineBegin(snapshot) {
 }
 
 
-function kitten_jpg5_trialRoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'kitten_jpg5_trial'-------
+function landscape_or5_trialRoutineEachFrame(snapshot) {
+  return async function () {
+    //------Loop for each frame of Routine 'landscape_or5_trial'-------
     // get current time
-    t = kitten_jpg5_trialClock.getTime();
+    t = landscape_or5_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -771,13 +771,13 @@ function kitten_jpg5_trialRoutineEachFrame(snapshot) {
     }
 
     
-    // *kitten_jpg5* updates
-    if (t >= 0.0 && kitten_jpg5.status === PsychoJS.Status.NOT_STARTED) {
+    // *landscape_or5_image* updates
+    if (t >= 0.0 && landscape_or5_image.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      kitten_jpg5.tStart = t;  // (not accounting for frame time here)
-      kitten_jpg5.frameNStart = frameN;  // exact frame index
+      landscape_or5_image.tStart = t;  // (not accounting for frame time here)
+      landscape_or5_image.frameNStart = frameN;  // exact frame index
       
-      kitten_jpg5.setAutoDraw(true);
+      landscape_or5_image.setAutoDraw(true);
     }
 
     // *mouse_5* updates
@@ -811,7 +811,7 @@ function kitten_jpg5_trialRoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    kitten_jpg5_trialComponents.forEach( function(thisComponent) {
+    landscape_or5_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -827,15 +827,15 @@ function kitten_jpg5_trialRoutineEachFrame(snapshot) {
 }
 
 
-function kitten_jpg5_trialRoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'kitten_jpg5_trial'-------
-    kitten_jpg5_trialComponents.forEach( function(thisComponent) {
+function landscape_or5_trialRoutineEnd(snapshot) {
+  return async function () {
+    //------Ending Routine 'landscape_or5_trial'-------
+    landscape_or5_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_5.getPos();
     _mouseButtons = mouse_5.getPressed();
     psychoJS.experiment.addData('mouse_5.x', _mouseXYs[0]);
@@ -843,7 +843,7 @@ function kitten_jpg5_trialRoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_5.leftButton', _mouseButtons[0]);
     psychoJS.experiment.addData('mouse_5.midButton', _mouseButtons[1]);
     psychoJS.experiment.addData('mouse_5.rightButton', _mouseButtons[2]);
-    // the Routine "kitten_jpg5_trial" was not non-slip safe, so reset the non-slip timer
+    // the Routine "landscape_or5_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -853,7 +853,7 @@ function kitten_jpg5_trialRoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -874,7 +874,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -882,7 +882,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();

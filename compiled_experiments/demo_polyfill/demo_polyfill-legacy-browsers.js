@@ -2,6 +2,14 @@
  * Demo_Polyfill Test *
  **********************/
 
+
+// store info about the experiment session:
+let expName = 'demo_polyfill';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
+// Import the polyfill
+import PsychoPolyFill from './PsychoPolyfill.js';
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -14,14 +22,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'demo_polyfill';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
-// Import the polyfill
-import PsychoPolyFill from './PsychoPolyfill.js';
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -57,10 +57,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -82,7 +82,7 @@ var run_testsClock;
 var test_text;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "import_polyfill"
   import_polyfillClock = new util.Clock();
   // Initialize the polyfill
@@ -114,7 +114,7 @@ var frameN;
 var continueRoutine;
 var import_polyfillComponents;
 function import_polyfillRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'import_polyfill'-------
     t = 0;
     import_polyfillClock.reset(); // clock
@@ -136,7 +136,7 @@ function import_polyfillRoutineBegin(snapshot) {
 
 
 function import_polyfillRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'import_polyfill'-------
     // get current time
     t = import_polyfillClock.getTime();
@@ -170,7 +170,7 @@ function import_polyfillRoutineEachFrame(snapshot) {
 
 
 function import_polyfillRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'import_polyfill'-------
     import_polyfillComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
@@ -188,7 +188,7 @@ function import_polyfillRoutineEnd(snapshot) {
 var checkRandomInteger;
 var run_testsComponents;
 function run_testsRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'run_tests'-------
     t = 0;
     run_testsClock.reset(); // clock
@@ -387,7 +387,7 @@ function run_testsRoutineBegin(snapshot) {
 
 var frameRemains;
 function run_testsRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'run_tests'-------
     // get current time
     t = run_testsClock.getTime();
@@ -435,7 +435,7 @@ function run_testsRoutineEachFrame(snapshot) {
 
 
 function run_testsRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'run_tests'-------
     run_testsComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
@@ -449,7 +449,7 @@ function run_testsRoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -470,7 +470,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -478,7 +478,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();

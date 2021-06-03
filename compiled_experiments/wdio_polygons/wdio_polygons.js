@@ -2,17 +2,20 @@
  * Wdio_Polygons Test *
  **********************/
 
-import { PsychoJS } from './lib/core-2021.1.4.js';
-import * as core from './lib/core-2021.1.4.js';
-import { TrialHandler } from './lib/data-2021.1.4.js';
-import { Scheduler } from './lib/util-2021.1.4.js';
-import * as visual from './lib/visual-2021.1.4.js';
-import * as sound from './lib/sound-2021.1.4.js';
-import * as util from './lib/util-2021.1.4.js';
+import { core, data, sound, util, visual } from './lib/psychojs-2021.2.0.js';
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+const { Scheduler } = util;
 //some handy aliases as in the psychopy scripts;
 const { abs, sin, cos, PI: pi, sqrt } = Math;
 const { round } = util;
 
+
+// store info about the experiment session:
+let expName = 'wdio_polygons';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -25,12 +28,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_polygons';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -69,10 +66,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.ERROR);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -108,7 +105,7 @@ var s_star_2;
 var mouse_3;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "into_trial"
   into_trialClock = new util.Clock();
   introduction_text = new visual.TextStim({
@@ -243,7 +240,7 @@ var continueRoutine;
 var gotValidClick;
 var into_trialComponents;
 function into_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'into_trial'-------
     t = 0;
     into_trialClock.reset(); // clock
@@ -269,7 +266,7 @@ function into_trialRoutineBegin(snapshot) {
 var prevButtonState;
 var _mouseButtons;
 function into_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'into_trial'-------
     // get current time
     t = into_trialClock.getTime();
@@ -334,14 +331,14 @@ function into_trialRoutineEachFrame(snapshot) {
 
 var _mouseXYs;
 function into_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'into_trial'-------
     for (const thisComponent of into_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse.getPos();
     _mouseButtons = mouse.getPressed();
     psychoJS.experiment.addData('mouse.x', _mouseXYs[0]);
@@ -359,7 +356,7 @@ function into_trialRoutineEnd(snapshot) {
 
 var polygon_trialComponents;
 function polygon_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'polygon_trial'-------
     t = 0;
     polygon_trialClock.reset(); // clock
@@ -387,7 +384,7 @@ function polygon_trialRoutineBegin(snapshot) {
 
 
 function polygon_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'polygon_trial'-------
     // get current time
     t = polygon_trialClock.getTime();
@@ -491,14 +488,14 @@ function polygon_trialRoutineEachFrame(snapshot) {
 
 
 function polygon_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'polygon_trial'-------
     for (const thisComponent of polygon_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_2.getPos();
     _mouseButtons = mouse_2.getPressed();
     psychoJS.experiment.addData('mouse_2.x', _mouseXYs[0]);
@@ -516,7 +513,7 @@ function polygon_trialRoutineEnd(snapshot) {
 
 var polygon5_trialComponents;
 function polygon5_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'polygon5_trial'-------
     t = 0;
     polygon5_trialClock.reset(); // clock
@@ -544,7 +541,7 @@ function polygon5_trialRoutineBegin(snapshot) {
 
 
 function polygon5_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'polygon5_trial'-------
     // get current time
     t = polygon5_trialClock.getTime();
@@ -648,14 +645,14 @@ function polygon5_trialRoutineEachFrame(snapshot) {
 
 
 function polygon5_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'polygon5_trial'-------
     for (const thisComponent of polygon5_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_3.getPos();
     _mouseButtons = mouse_3.getPressed();
     psychoJS.experiment.addData('mouse_3.x', _mouseXYs[0]);
@@ -673,7 +670,7 @@ function polygon5_trialRoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -694,7 +691,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -702,7 +699,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();

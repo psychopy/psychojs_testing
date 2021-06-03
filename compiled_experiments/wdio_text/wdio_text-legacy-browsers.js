@@ -2,6 +2,12 @@
  * Wdio_Text Test *
  ******************/
 
+
+// store info about the experiment session:
+let expName = 'wdio_text';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -14,12 +20,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_text';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -64,10 +64,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -105,7 +105,7 @@ var hebrew_arial;
 var mouse4;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "introduction"
   introductionClock = new util.Clock();
   document.body.setAttribute("data-report", "STARTED");
@@ -113,7 +113,7 @@ function experimentInit() {
   text_intro = new visual.TextStim({
     win: psychoJS.window,
     name: 'text_intro',
-    text: 'awdio_text\n\nThis test presents the following words in succession: "good morning" in Turkish (gunaydin), "hello" in Chinese (nihau), in Arabic (merhaba), and in Hebrew (shalom). Note that each of these words, written in native script, has non-ASCII symbols in them.\n\nClick to continue...',
+    text: 'wdio_text\n\nThis test presents the following words in succession: "many good mornings my dear" in Turkish, and "hello" in Chinese, Arabic, and Hebrew. \n\nClick to continue...',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
@@ -139,7 +139,7 @@ function experimentInit() {
   turkish_arial = new visual.TextStim({
     win: psychoJS.window,
     name: 'turkish_arial',
-    text: 'günaydın',
+    text: 'çok güzel sabahlar aşkım',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.2,  wrapWidth: undefined, ori: 0,
@@ -243,7 +243,7 @@ var continueRoutine;
 var gotValidClick;
 var introductionComponents;
 function introductionRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'introduction'-------
     t = 0;
     introductionClock.reset(); // clock
@@ -269,7 +269,7 @@ function introductionRoutineBegin(snapshot) {
 var prevButtonState;
 var _mouseButtons;
 function introductionRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'introduction'-------
     // get current time
     t = introductionClock.getTime();
@@ -334,14 +334,14 @@ function introductionRoutineEachFrame(snapshot) {
 
 var _mouseXYs;
 function introductionRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'introduction'-------
     introductionComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_intro.getPos();
     _mouseButtons = mouse_intro.getPressed();
     psychoJS.experiment.addData('mouse_intro.x', _mouseXYs[0]);
@@ -359,7 +359,7 @@ function introductionRoutineEnd(snapshot) {
 
 var text1Components;
 function text1RoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'text1'-------
     t = 0;
     text1Clock.reset(); // clock
@@ -385,7 +385,7 @@ function text1RoutineBegin(snapshot) {
 
 
 function text1RoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'text1'-------
     // get current time
     t = text1Clock.getTime();
@@ -459,14 +459,14 @@ function text1RoutineEachFrame(snapshot) {
 
 
 function text1RoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'text1'-------
     text1Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse1.getPos();
     _mouseButtons = mouse1.getPressed();
     psychoJS.experiment.addData('mouse1.x', _mouseXYs[0]);
@@ -484,7 +484,7 @@ function text1RoutineEnd(snapshot) {
 
 var text2Components;
 function text2RoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'text2'-------
     t = 0;
     text2Clock.reset(); // clock
@@ -510,7 +510,7 @@ function text2RoutineBegin(snapshot) {
 
 
 function text2RoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'text2'-------
     // get current time
     t = text2Clock.getTime();
@@ -584,14 +584,14 @@ function text2RoutineEachFrame(snapshot) {
 
 
 function text2RoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'text2'-------
     text2Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse2.getPos();
     _mouseButtons = mouse2.getPressed();
     psychoJS.experiment.addData('mouse2.x', _mouseXYs[0]);
@@ -609,7 +609,7 @@ function text2RoutineEnd(snapshot) {
 
 var text3Components;
 function text3RoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'text3'-------
     t = 0;
     text3Clock.reset(); // clock
@@ -635,7 +635,7 @@ function text3RoutineBegin(snapshot) {
 
 
 function text3RoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'text3'-------
     // get current time
     t = text3Clock.getTime();
@@ -709,14 +709,14 @@ function text3RoutineEachFrame(snapshot) {
 
 
 function text3RoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'text3'-------
     text3Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse3.getPos();
     _mouseButtons = mouse3.getPressed();
     psychoJS.experiment.addData('mouse3.x', _mouseXYs[0]);
@@ -734,7 +734,7 @@ function text3RoutineEnd(snapshot) {
 
 var text4Components;
 function text4RoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'text4'-------
     t = 0;
     text4Clock.reset(); // clock
@@ -760,7 +760,7 @@ function text4RoutineBegin(snapshot) {
 
 
 function text4RoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'text4'-------
     // get current time
     t = text4Clock.getTime();
@@ -834,14 +834,14 @@ function text4RoutineEachFrame(snapshot) {
 
 
 function text4RoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'text4'-------
     text4Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse4.getPos();
     _mouseButtons = mouse4.getPressed();
     psychoJS.experiment.addData('mouse4.x', _mouseXYs[0]);
@@ -859,7 +859,7 @@ function text4RoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -880,7 +880,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -888,7 +888,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();

@@ -2,6 +2,12 @@
  * Wdio_Calibration Test *
  *************************/
 
+
+// store info about the experiment session:
+let expName = 'wdio_calibration';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -14,12 +20,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_calibration';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -61,10 +61,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -99,7 +99,7 @@ var vfb_pointer;
 var vfb_mouse;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "calibration_0_trial"
   calibration_0_trialClock = new util.Clock();
   c0_text = new visual.TextStim({
@@ -214,7 +214,7 @@ var continueRoutine;
 var gotValidClick;
 var calibration_0_trialComponents;
 function calibration_0_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'calibration_0_trial'-------
     t = 0;
     calibration_0_trialClock.reset(); // clock
@@ -241,7 +241,7 @@ function calibration_0_trialRoutineBegin(snapshot) {
 var prevButtonState;
 var _mouseButtons;
 function calibration_0_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'calibration_0_trial'-------
     // get current time
     t = calibration_0_trialClock.getTime();
@@ -306,14 +306,14 @@ function calibration_0_trialRoutineEachFrame(snapshot) {
 
 var _mouseXYs;
 function calibration_0_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'calibration_0_trial'-------
     calibration_0_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = c0_mouse.getPos();
     _mouseButtons = c0_mouse.getPressed();
     psychoJS.experiment.addData('c0_mouse.x', _mouseXYs[0]);
@@ -331,7 +331,7 @@ function calibration_0_trialRoutineEnd(snapshot) {
 
 var calibration_1_trialComponents;
 function calibration_1_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'calibration_1_trial'-------
     t = 0;
     calibration_1_trialClock.reset(); // clock
@@ -360,7 +360,7 @@ function calibration_1_trialRoutineBegin(snapshot) {
 
 
 function calibration_1_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'calibration_1_trial'-------
     // get current time
     t = calibration_1_trialClock.getTime();
@@ -434,14 +434,14 @@ function calibration_1_trialRoutineEachFrame(snapshot) {
 
 
 function calibration_1_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'calibration_1_trial'-------
     calibration_1_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = c1_mouse.getPos();
     _mouseButtons = c1_mouse.getPressed();
     psychoJS.experiment.addData('c1_mouse.x', _mouseXYs[0]);
@@ -459,7 +459,7 @@ function calibration_1_trialRoutineEnd(snapshot) {
 
 var verification_trialComponents;
 function verification_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'verification_trial'-------
     t = 0;
     verification_trialClock.reset(); // clock
@@ -495,7 +495,7 @@ function verification_trialRoutineBegin(snapshot) {
 
 
 function verification_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'verification_trial'-------
     // get current time
     t = verification_trialClock.getTime();
@@ -576,14 +576,14 @@ function verification_trialRoutineEachFrame(snapshot) {
 
 
 function verification_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'verification_trial'-------
     verification_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     if (v_mouse.x) {  psychoJS.experiment.addData('v_mouse.x', v_mouse.x[0])};
     if (v_mouse.y) {  psychoJS.experiment.addData('v_mouse.y', v_mouse.y[0])};
     if (v_mouse.leftButton) {  psychoJS.experiment.addData('v_mouse.leftButton', v_mouse.leftButton[0])};
@@ -601,7 +601,7 @@ function verification_trialRoutineEnd(snapshot) {
 
 var verification_fb_trialComponents;
 function verification_fb_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'verification_fb_trial'-------
     t = 0;
     verification_fb_trialClock.reset(); // clock
@@ -631,7 +631,7 @@ function verification_fb_trialRoutineBegin(snapshot) {
 
 
 function verification_fb_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'verification_fb_trial'-------
     // get current time
     t = verification_fb_trialClock.getTime();
@@ -715,14 +715,14 @@ function verification_fb_trialRoutineEachFrame(snapshot) {
 
 
 function verification_fb_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'verification_fb_trial'-------
     verification_fb_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = vfb_mouse.getPos();
     _mouseButtons = vfb_mouse.getPressed();
     psychoJS.experiment.addData('vfb_mouse.x', _mouseXYs[0]);
@@ -740,7 +740,7 @@ function verification_fb_trialRoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -761,7 +761,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -769,7 +769,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();

@@ -2,17 +2,20 @@
  * Wdio_Mouseview Test *
  ***********************/
 
-import { PsychoJS } from './lib/core-2021.1.4.js';
-import * as core from './lib/core-2021.1.4.js';
-import { TrialHandler } from './lib/data-2021.1.4.js';
-import { Scheduler } from './lib/util-2021.1.4.js';
-import * as visual from './lib/visual-2021.1.4.js';
-import * as sound from './lib/sound-2021.1.4.js';
-import * as util from './lib/util-2021.1.4.js';
+import { core, data, sound, util, visual } from './lib/psychojs-2021.2.0.js';
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+const { Scheduler } = util;
 //some handy aliases as in the psychopy scripts;
 const { abs, sin, cos, PI: pi, sqrt } = Math;
 const { round } = util;
 
+
+// store info about the experiment session:
+let expName = 'wdio_mouseview';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -25,12 +28,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_mouseview';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -73,10 +70,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -104,7 +101,7 @@ var mouseview_trialClock;
 var circle;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "loading_trial"
   loading_trialClock = new util.Clock();
   // Download the webgazer library and re-download seedrandom.js (since webgazer
@@ -159,7 +156,7 @@ function experimentInit() {
   circle = new visual.ImageStim({
     win : psychoJS.window,
     name : 'circle', units : 'height', 
-    image : 'img/circle.png', mask : undefined,
+    image : 'img\\circle.png', mask : undefined,
     ori : 0.0, pos : [0, 0], size : [0.05, 0.05],
     color : new util.Color([1, 1, 1]), opacity : undefined,
     flipHoriz : false, flipVert : false,
@@ -178,7 +175,7 @@ var frameN;
 var continueRoutine;
 var loading_trialComponents;
 function loading_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'loading_trial'-------
     t = 0;
     loading_trialClock.reset(); // clock
@@ -198,7 +195,7 @@ function loading_trialRoutineBegin(snapshot) {
 
 
 function loading_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'loading_trial'-------
     // get current time
     t = loading_trialClock.getTime();
@@ -244,7 +241,7 @@ function loading_trialRoutineEachFrame(snapshot) {
 
 
 function loading_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'loading_trial'-------
     for (const thisComponent of loading_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
@@ -262,7 +259,7 @@ function loading_trialRoutineEnd(snapshot) {
 var gotValidClick;
 var intro_mouseview_trialComponents;
 function intro_mouseview_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'intro_mouseview_trial'-------
     t = 0;
     intro_mouseview_trialClock.reset(); // clock
@@ -288,7 +285,7 @@ function intro_mouseview_trialRoutineBegin(snapshot) {
 var prevButtonState;
 var _mouseButtons;
 function intro_mouseview_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'intro_mouseview_trial'-------
     // get current time
     t = intro_mouseview_trialClock.getTime();
@@ -353,14 +350,14 @@ function intro_mouseview_trialRoutineEachFrame(snapshot) {
 
 var _mouseXYs;
 function intro_mouseview_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'intro_mouseview_trial'-------
     for (const thisComponent of intro_mouseview_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_2.getPos();
     _mouseButtons = mouse_2.getPressed();
     psychoJS.experiment.addData('mouse_2.x', _mouseXYs[0]);
@@ -378,7 +375,7 @@ function intro_mouseview_trialRoutineEnd(snapshot) {
 
 var init_mouseview_trialComponents;
 function init_mouseview_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'init_mouseview_trial'-------
     t = 0;
     init_mouseview_trialClock.reset(); // clock
@@ -405,7 +402,7 @@ function init_mouseview_trialRoutineBegin(snapshot) {
 
 var frameRemains;
 function init_mouseview_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'init_mouseview_trial'-------
     // get current time
     t = init_mouseview_trialClock.getTime();
@@ -453,7 +450,7 @@ function init_mouseview_trialRoutineEachFrame(snapshot) {
 
 
 function init_mouseview_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'init_mouseview_trial'-------
     for (const thisComponent of init_mouseview_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
@@ -467,7 +464,7 @@ function init_mouseview_trialRoutineEnd(snapshot) {
 
 var mouseview_trialComponents;
 function mouseview_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'mouseview_trial'-------
     t = 0;
     mouseview_trialClock.reset(); // clock
@@ -491,7 +488,7 @@ function mouseview_trialRoutineBegin(snapshot) {
 
 
 function mouseview_trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'mouseview_trial'-------
     // get current time
     t = mouseview_trialClock.getTime();
@@ -535,7 +532,7 @@ function mouseview_trialRoutineEachFrame(snapshot) {
 
 
 function mouseview_trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'mouseview_trial'-------
     for (const thisComponent of mouseview_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
@@ -556,7 +553,7 @@ function mouseview_trialRoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -577,7 +574,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -585,7 +582,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();

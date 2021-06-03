@@ -2,17 +2,20 @@
  * Wdio_Conditions Test *
  ************************/
 
-import { PsychoJS } from './lib/core-2021.1.4.js';
-import * as core from './lib/core-2021.1.4.js';
-import { TrialHandler } from './lib/data-2021.1.4.js';
-import { Scheduler } from './lib/util-2021.1.4.js';
-import * as visual from './lib/visual-2021.1.4.js';
-import * as sound from './lib/sound-2021.1.4.js';
-import * as util from './lib/util-2021.1.4.js';
+import { core, data, sound, util, visual } from './lib/psychojs-2021.2.0.js';
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+const { Scheduler } = util;
 //some handy aliases as in the psychopy scripts;
 const { abs, sin, cos, PI: pi, sqrt } = Math;
 const { round } = util;
 
+
+// store info about the experiment session:
+let expName = 'wdio_conditions';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -25,12 +28,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_conditions';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -86,10 +83,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -123,7 +120,7 @@ var text_fullRandom;
 var mouse_3;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "intro_general"
   intro_generalClock = new util.Clock();
   text_2 = new visual.TextStim({
@@ -257,7 +254,7 @@ var continueRoutine;
 var gotValidClick;
 var intro_generalComponents;
 function intro_generalRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'intro_general'-------
     t = 0;
     intro_generalClock.reset(); // clock
@@ -284,7 +281,7 @@ function intro_generalRoutineBegin(snapshot) {
 var prevButtonState;
 var _mouseButtons;
 function intro_generalRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'intro_general'-------
     // get current time
     t = intro_generalClock.getTime();
@@ -349,14 +346,14 @@ function intro_generalRoutineEachFrame(snapshot) {
 
 var _mouseXYs;
 function intro_generalRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'intro_general'-------
     for (const thisComponent of intro_generalComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_4.getPos();
     _mouseButtons = mouse_4.getPressed();
     psychoJS.experiment.addData('mouse_4.x', _mouseXYs[0]);
@@ -374,7 +371,7 @@ function intro_generalRoutineEnd(snapshot) {
 
 var intro_random_csvComponents;
 function intro_random_csvRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'intro_random_csv'-------
     t = 0;
     intro_random_csvClock.reset(); // clock
@@ -398,7 +395,7 @@ function intro_random_csvRoutineBegin(snapshot) {
 
 
 function intro_random_csvRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'intro_random_csv'-------
     // get current time
     t = intro_random_csvClock.getTime();
@@ -462,14 +459,14 @@ function intro_random_csvRoutineEachFrame(snapshot) {
 
 
 function intro_random_csvRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'intro_random_csv'-------
     for (const thisComponent of intro_random_csvComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse.getPos();
     _mouseButtons = mouse.getPressed();
     psychoJS.experiment.addData('mouse.x', _mouseXYs[0]);
@@ -487,7 +484,7 @@ function intro_random_csvRoutineEnd(snapshot) {
 
 var random_csv;
 var currentLoop;
-function random_csvLoopBegin(random_csvLoopScheduler) {
+async function random_csvLoopBegin(random_csvLoopScheduler) {
   // set up handler to look after randomisation of conditions etc
   random_csv = new TrialHandler({
     psychoJS: psychoJS,
@@ -513,7 +510,7 @@ function random_csvLoopBegin(random_csvLoopScheduler) {
 }
 
 
-function random_csvLoopEnd() {
+async function random_csvLoopEnd() {
   psychoJS.experiment.removeLoop(random_csv);
 
   return Scheduler.Event.NEXT;
@@ -521,7 +518,7 @@ function random_csvLoopEnd() {
 
 
 var random_xlsx;
-function random_xlsxLoopBegin(random_xlsxLoopScheduler) {
+async function random_xlsxLoopBegin(random_xlsxLoopScheduler) {
   // set up handler to look after randomisation of conditions etc
   random_xlsx = new TrialHandler({
     psychoJS: psychoJS,
@@ -547,7 +544,7 @@ function random_xlsxLoopBegin(random_xlsxLoopScheduler) {
 }
 
 
-function random_xlsxLoopEnd() {
+async function random_xlsxLoopEnd() {
   psychoJS.experiment.removeLoop(random_xlsx);
 
   return Scheduler.Event.NEXT;
@@ -555,7 +552,7 @@ function random_xlsxLoopEnd() {
 
 
 var random_funky;
-function random_funkyLoopBegin(random_funkyLoopScheduler) {
+async function random_funkyLoopBegin(random_funkyLoopScheduler) {
   // set up handler to look after randomisation of conditions etc
   random_funky = new TrialHandler({
     psychoJS: psychoJS,
@@ -581,7 +578,7 @@ function random_funkyLoopBegin(random_funkyLoopScheduler) {
 }
 
 
-function random_funkyLoopEnd() {
+async function random_funkyLoopEnd() {
   psychoJS.experiment.removeLoop(random_funky);
 
   return Scheduler.Event.NEXT;
@@ -590,7 +587,7 @@ function random_funkyLoopEnd() {
 
 var trialComponents;
 function trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'trial'-------
     t = 0;
     trialClock.reset(); // clock
@@ -632,7 +629,7 @@ function trialRoutineBegin(snapshot) {
 
 
 function trialRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'trial'-------
     // get current time
     t = trialClock.getTime();
@@ -696,14 +693,14 @@ function trialRoutineEachFrame(snapshot) {
 
 
 function trialRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'trial'-------
     for (const thisComponent of trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_5.getPos();
     _mouseButtons = mouse_5.getPressed();
     psychoJS.experiment.addData('mouse_5.x', _mouseXYs[0]);
@@ -721,7 +718,7 @@ function trialRoutineEnd(snapshot) {
 
 var intro_random_xlsxComponents;
 function intro_random_xlsxRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'intro_random_xlsx'-------
     t = 0;
     intro_random_xlsxClock.reset(); // clock
@@ -745,7 +742,7 @@ function intro_random_xlsxRoutineBegin(snapshot) {
 
 
 function intro_random_xlsxRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'intro_random_xlsx'-------
     // get current time
     t = intro_random_xlsxClock.getTime();
@@ -809,14 +806,14 @@ function intro_random_xlsxRoutineEachFrame(snapshot) {
 
 
 function intro_random_xlsxRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'intro_random_xlsx'-------
     for (const thisComponent of intro_random_xlsxComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_2.getPos();
     _mouseButtons = mouse_2.getPressed();
     psychoJS.experiment.addData('mouse_2.x', _mouseXYs[0]);
@@ -834,7 +831,7 @@ function intro_random_xlsxRoutineEnd(snapshot) {
 
 var intro_random_funkyComponents;
 function intro_random_funkyRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
     //------Prepare to start Routine 'intro_random_funky'-------
     t = 0;
     intro_random_funkyClock.reset(); // clock
@@ -858,7 +855,7 @@ function intro_random_funkyRoutineBegin(snapshot) {
 
 
 function intro_random_funkyRoutineEachFrame(snapshot) {
-  return function () {
+  return async function () {
     //------Loop for each frame of Routine 'intro_random_funky'-------
     // get current time
     t = intro_random_funkyClock.getTime();
@@ -922,14 +919,14 @@ function intro_random_funkyRoutineEachFrame(snapshot) {
 
 
 function intro_random_funkyRoutineEnd(snapshot) {
-  return function () {
+  return async function () {
     //------Ending Routine 'intro_random_funky'-------
     for (const thisComponent of intro_random_funkyComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_3.getPos();
     _mouseButtons = mouse_3.getPressed();
     psychoJS.experiment.addData('mouse_3.x', _mouseXYs[0]);
@@ -947,7 +944,7 @@ function intro_random_funkyRoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -968,7 +965,7 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-function importConditions(currentLoop) {
+async function importConditions(currentLoop) {
   return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
@@ -976,7 +973,7 @@ function importConditions(currentLoop) {
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();
