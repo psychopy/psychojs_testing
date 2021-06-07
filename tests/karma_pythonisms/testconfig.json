@@ -1,0 +1,7 @@
+{
+  "test_framework": "karma",
+  "labels": ["karma_pythonisms", "karma", "full", "short"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "karma_pythonisms.js",
+  "description": "JS implementations of Python functions"
+}
