@@ -1,7 +1,12 @@
 //import * as util from '../../../dist/util-2021.1.2.js';
-import * as util from '/util.js';
-import {TrialHandler} from '/data.js';
-import { PsychoJS } from '/core.js';
+import { core, data, util } from '/psychojs.js';
+const { PsychoJS } = core;
+const { TrialHandler } = data;
+// const { Scheduler } = util;
+
+// import * as util from '/util.js';
+// import {TrialHandler} from '/data.js';
+// import { PsychoJS } from '/core.js';
 
 // *** GLOBALS
 // Polyfill for Array.flat. From: https://github.com/jonathantneal/array-flat-polyfill
@@ -62,6 +67,10 @@ describe('randomization', () => {
     };
     trialHandler.method = TrialHandler.Method.RANDOM;
     shuffleResult = trialHandler._prepareSequence().flat();
+		console.log({
+			expected: [4, 2, 3, 1],
+			shuffleResult: shuffleResult
+		});
     expect(shuffleResult).toEqual([4, 2, 3, 1]);
   });  
 
@@ -73,7 +82,11 @@ describe('randomization', () => {
     };
     trialHandler.method = TrialHandler.Method.RANDOM;
     shuffleResult = trialHandler._prepareSequence().flat();
-    expect(shuffleResult).toEqual(['b', 'a', 'a', 'b']);
+		console.log({
+			expected: ['b', 'a', 'a', 'b'],
+			shuffleResult: shuffleResult
+		});
+		expect(shuffleResult).toEqual(['b', 'a', 'a', 'b']);
   });  
 
   it('full_random_is_2_2_2_1_1_1', () => {
@@ -84,6 +97,10 @@ describe('randomization', () => {
     };
     trialHandler.method = TrialHandler.Method.FULL_RANDOM;
     shuffleResult = trialHandler._prepareSequence().flat();
+		console.log({
+			expected: [2, 2, 2, 1, 1, 1],
+			shuffleResult: shuffleResult
+		});
     expect(shuffleResult).toEqual([2, 2, 2, 1, 1, 1]);
   });
 });
