@@ -17,24 +17,22 @@ if (server === 'bs') {
   console.log('[runkarma.cjs] buildName is ' + buildName);
 }
 
-// Clean up logs and dist
+// Clean up logs and lib
 Paths.recreateDirectories([
   Paths.dir_results
 ], false);
 Paths.recreateDirectories([
   Paths.dir_results_karma,
-  'dist'
+  'lib'
 ], true);
 
-// Copy dist from PsychoJS repo to this repo
+// Copy out from PsychoJS repo to this repo
 const psychoJSPath = CLIParser.parseOption({env: 'PSYCHOJS_PATH'});
 console.log('[runkarma.cjs] psychoJSPath is ' + psychoJSPath);
-
-console.log('[runkarma.cjs] Copying dist from PsychoJS repo to this repo');
-// Copy dist/ to lib/
+console.log('[runkarma.cjs] Copying out from PsychoJS repo to this repo');
 fs.copySync(
-  psychoJSPath + '/dist',
-  'dist'
+  psychoJSPath + '/out',
+  'lib'
 );
 
 // Delete BrowserStack logs

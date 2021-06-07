@@ -30,25 +30,25 @@ if (server === 'bs') {
 }
 browsers = Object.keys(customLaunchers);  
 
-// Construct proxies for each JS and CCS file in dist 
-// E.g., from within the browser dist/util-2021.1.3.js can be referenced as /util.js and as /util-2021.1.3.js
-let libraryFiles = fs.readdirSync('out');
+// Construct proxies for each JS and CCS file in lib 
+// E.g., from within the browser lib/util-2021.1.3.js can be referenced as /util.js and as /util-2021.1.3.js
+let libraryFiles = fs.readdirSync('lib');
 let cssFiles = []; 
 let libraryProxies = {};
 for (let libraryFile of libraryFiles) {
-  // Ends with umd.js? Ignore
-  if (libraryFile.endsWith('umd.js')) { 
+  // Ends with iife.js or LEGAL.txt? Ignore
+  if (libraryFile.endsWith('iife.js') || libraryFile.endsWith('LEGAL.txt')) { 
   // Ends with css? Add to cssFiles   
   } else if (libraryFile.endsWith('css')) {
-    cssFiles.push({pattern: 'dist/' + libraryFile, type: 'css'});
+    cssFiles.push({pattern: 'lib/' + libraryFile, type: 'css'});
   // Else, make a proxy
   } else {
     // Get the part before the '-', that + '.js' is the proxy
-    libraryProxies['/' + libraryFile.split('-')[0] + '.js'] = 'http://localhost:9876/base/dist/' + libraryFile;
-    libraryProxies['/' + libraryFile] = 'http://localhost:9876/base/dist/' + libraryFile;
+    libraryProxies['/' + libraryFile.split('-')[0] + '.js'] = 'http://localhost:9876/base/lib/' + libraryFile;
+    libraryProxies['/' + libraryFile] = 'http://localhost:9876/base/lib/' + libraryFile;
   }
 }
-
+console.log(libraryProxies);
 module.exports = function(config) {
   config.set({
     browserStack: server !== 'bs'? {}:
@@ -72,19 +72,10 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css', type: 'css'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.1/seedrandom.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.7/pixi.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/1.0.1/preloadjs.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/log4javascript/1.4.9/log4javascript.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.74/Tone.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.min.js', type: 'js'},
-      {pattern: 'https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js', type: 'js'},
-      {pattern: 'dist/*.js', type: 'module', included: false, served: true},
+      {pattern: 'https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css', type: 'css'},
+      {pattern: 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js', type: 'js'},
+      {pattern: 'https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js', type: 'js'},
+      {pattern: 'lib/*.js', type: 'module', included: false, served: true},
       {pattern: 'scripts/shared/root.html', type: 'dom'}
     ].concat(cssFiles).concat(specFiles),
 
