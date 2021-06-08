@@ -48,7 +48,7 @@ for (let libraryFile of libraryFiles) {
     libraryProxies['/' + libraryFile] = 'http://localhost:9876/base/lib/' + libraryFile;
   }
 }
-console.log(libraryProxies);
+
 module.exports = function(config) {
   config.set({
     browserStack: server !== 'bs'? {}:
