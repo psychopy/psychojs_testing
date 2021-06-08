@@ -3,7 +3,6 @@ import { util } from '/psychojs.js';
 
 // *** RUN TESTS
 describe('pythonisms', () => {
-  it('util.sum', () => {
 		// Some basic checks of whether summing numbers works as expected
 		expect(util.sum([1,2,3])).toEqual(6);
 		expect(util.sum([1,2,3], 2)).toEqual(8);
