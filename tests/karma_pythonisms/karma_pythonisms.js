@@ -3,6 +3,7 @@ import { util } from '/psychojs.js';
 
 // *** RUN TESTS
 describe('pythonisms', () => {
+	it('util.sum', () => {
 		// Some basic checks of whether summing numbers works as expected
 		expect(util.sum([1,2,3])).toEqual(6);
 		expect(util.sum([1,2,3], 2)).toEqual(8);
@@ -12,7 +13,7 @@ describe('pythonisms', () => {
 		expect(() => { return util.sum({a:3}); }).toThrow();
 		expect(() => { return util.sum('hello'); }).toThrow();
 		expect(() => { util.sum([1,2,3], 2, 2); }).toThrow();
-  });
+	});
 
 	it('util.sort', () => {
 		// Sort a couple of numbers
@@ -77,6 +78,7 @@ describe('pythonisms', () => {
 		expect(() => { return util.range(1.1); }).toThrow(); 
 		expect(() => { return util.range(1, 1.1); }).toThrow(); 
 		expect(() => { return util.range(1, 1, 1.1); }).toThrow(); 
+		expect(() => { return util.range(1, 2, 0); }).toThrow(); 
 		expect(() => { return util.range(1, 2, 3, 4); }).toThrow(); 
 	});
 
