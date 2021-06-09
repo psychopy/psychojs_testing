@@ -2,11 +2,6 @@
 import { core, data, util } from '/psychojs.js';
 const { PsychoJS } = core;
 const { TrialHandler } = data;
-// const { Scheduler } = util;
-
-// import * as util from '/util.js';
-// import {TrialHandler} from '/data.js';
-// import { PsychoJS } from '/core.js';
 
 // *** GLOBALS
 // Polyfill for Array.flat. From: https://github.com/jonathantneal/array-flat-polyfill
