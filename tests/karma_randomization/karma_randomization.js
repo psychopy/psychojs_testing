@@ -16,7 +16,6 @@ Array.prototype.flat||Object.defineProperty(Array.prototype,"flat",{configurable
 let trialHandler = new TrialHandler({
   psychoJS: new PsychoJS()
 });
-trialHandler.seed = 42;
 trialHandler.trialList = {};
 // Results per shuffle
 let shuffleResult;
@@ -47,8 +46,9 @@ describe('randomization', () => {
     }
   });
 
-  // Sequential; each next element should alternate; no repetitions of 2 or longer
+  // SEQUENTIAL; should present the keys 1, 2, 3, 4 in sequence
   it('sequential_is_1_2_3_4', () => {
+		trialHandler.seed = 42;
     trialHandler.nReps = 1;
     trialHandler.nStim = 4;
     trialHandler.trialList.keys = function() {
@@ -59,7 +59,9 @@ describe('randomization', () => {
     expect(shuffleResult).toEqual([1, 2, 3, 4]);
   });  
 
-  it('random_is_4_2_3_1', () => {
+	// RANDOM should present the keys in a (seeded) random order
+	it('random_is_4_2_3_1', () => {
+		trialHandler.seed = 42;
     trialHandler.nReps = 1;
     trialHandler.nStim = 4;
     trialHandler.trialList.keys = function() {
@@ -67,95 +69,46 @@ describe('randomization', () => {
     };
     trialHandler.method = TrialHandler.Method.RANDOM;
     shuffleResult = trialHandler._prepareSequence().flat();
-		console.log({
-			expected: [4, 2, 3, 1],
-			shuffleResult: shuffleResult
-		});
     expect(shuffleResult).toEqual([4, 2, 3, 1]);
   });  
 
-  it('random_is_b_a_a_b', () => {
-    trialHandler.nReps = 2;
+	// RANDOM should present the keys in a (seeded) random order, no reps longer than two
+  it('random_reps_at_most_2', () => {
+		trialHandler.seed = 42;
+    trialHandler.nReps = 4;
     trialHandler.nStim = 2;
     trialHandler.trialList.keys = function() {
       return ['a', 'b'];
     };
     trialHandler.method = TrialHandler.Method.RANDOM;
     shuffleResult = trialHandler._prepareSequence().flat();
-		console.log({
-			expected: ['b', 'a', 'a', 'b'],
-			shuffleResult: shuffleResult
-		});
-		expect(shuffleResult).toEqual(['b', 'a', 'a', 'b']);
+		expect(shuffleResult).toEqual(['b', 'a', 'a', 'b', 'a', 'b', 'b', 'a']);
   });  
 
-  it('full_random_is_2_2_2_1_1_1', () => {
-    trialHandler.nReps = 3;
+	// RANDOM should present the keys in a (seeded) random order, with reps longer than two
+  it('full_random_reps_longer_than_2', () => {
+		trialHandler.seed = 42;
+    trialHandler.nReps = 5;
     trialHandler.nStim = 2;
     trialHandler.trialList.keys = function() {
       return [1, 2];
     };
     trialHandler.method = TrialHandler.Method.FULL_RANDOM;
     shuffleResult = trialHandler._prepareSequence().flat();
-		console.log({
-			expected: [2, 2, 2, 1, 1, 1],
-			shuffleResult: shuffleResult
-		});
-    expect(shuffleResult).toEqual([2, 2, 2, 1, 1, 1]);
+    expect(shuffleResult).toEqual([1, 1, 2, 2, 2, 1, 2, 2, 1, 1]);
   });
+
+	// Generating two sequences using RANDOM without seed should yield unique sequences
+	it('unseeded_random_is_unique', () => {
+		trialHandler.seed = undefined;
+    trialHandler.nReps = 1;
+    trialHandler.nStim = 8;
+    trialHandler.trialList.keys = function() {
+      return [1, 2, 3, 4, 5, 6, 7, 8];
+    };
+    trialHandler.method = TrialHandler.Method.RANDOM;
+		let firstResult = trialHandler._prepareSequence().flat();
+		let secondResult = trialHandler._prepareSequence().flat();
+    expect(firstResult).not.toEqual(secondResult);
+  });  	
 });
-
-
-/*
-// *** Some tests with long sequences
-// 
-
-
-
-
-// Random
-trialHandler.method = TrialHandler.Method.RANDOM;
-shuffleResult = trialHandler._prepareSequence().flat();
-//console.log('RANDOM. shuffleResult: ' + shuffleResult);
-console.log('RANDOM. All repetitions shorter than 3? ' + !repetitions(shuffleResult, 3));
-
-// Full random
-trialHandler.method = TrialHandler.Method.FULL_RANDOM;
-shuffleResult = trialHandler._prepareSequence().flat();
-//console.log('FULL_RANDOM. shuffleResult: ' + shuffleResult);
-console.log('RANDOM. Any repetitions longer than 2? ' + repetitions(shuffleResult, 3));
-
-
-// *** Tests with same settings as wdio_conditions
-
-// wdio_conditions: random_csv
-trialHandler.nReps = 1;
-trialHandler.nStim = 4;
-trialHandler.trialList.keys = function() {
-  return [1, 2, 3, 4];
-};
-trialHandler.method = TrialHandler.Method.RANDOM;
-shuffleResult = trialHandler._prepareSequence().flat();
-console.log('random_csv. shuffleResult == 4,2,3,1? ' + (shuffleResult.toString() === '4,2,3,1'));
-
-// wdio_conditions: random_xlsx
-trialHandler.nReps = 2;
-trialHandler.nStim = 2;
-trialHandler.trialList.keys = function() {
-  return ['a', 'b'];
-};
-trialHandler.method = TrialHandler.Method.RANDOM;
-shuffleResult = trialHandler._prepareSequence().flat();
-console.log('random_xlsx. shuffleResult == b,a,a,b? ' + (shuffleResult.toString() === 'b,a,a,b'));
-
-// wdio_conditions: random_funky
-trialHandler.nReps = 3;
-trialHandler.nStim = 2;
-trialHandler.trialList.keys = function() {
-  return [1, 2];
-};
-trialHandler.method = TrialHandler.Method.FULL_RANDOM;
-shuffleResult = trialHandler._prepareSequence().flat();
-console.log('random_funky. shuffleResult == 2,1,1,2,1,2? ' + (shuffleResult.toString() === '2,1,1,2,1,2'));
-console.log('random_funky. shuffleResult is ' + shuffleResult.toString());
-*/
