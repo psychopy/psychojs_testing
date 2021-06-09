@@ -43,8 +43,13 @@ for (let libraryFile of libraryFiles) {
     cssFiles.push({pattern: 'lib/' + libraryFile, type: 'css'});
   // Else, make a proxy
   } else {
-    // Get the part before the '-', that + '.js' is the proxy
-    libraryProxies['/' + libraryFile.split('-')[0] + '.js'] = 'http://localhost:9876/base/lib/' + libraryFile;
+    // Get the part before the '-', that + '.js' is the filename of the proxy
+    let filename = libraryFile.split('-')[0];
+    // Last part is '.js' by default; append '.map' if required
+    let extension = '.js';
+    extension = libraryFile.endsWith('.map')? extension + '.map': extension;
+    // Construct proxies
+    libraryProxies['/' + filename + extension] = 'http://localhost:9876/base/lib/' + libraryFile;
     libraryProxies['/' + libraryFile] = 'http://localhost:9876/base/lib/' + libraryFile;
   }
 }
@@ -75,7 +80,9 @@ module.exports = function(config) {
       {pattern: 'https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css', type: 'css'},
       {pattern: 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js', type: 'js'},
       {pattern: 'https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js', type: 'js'},
+      {pattern: 'https://cdn.jsdelivr.net/npm/preloadjs@1.0.1/lib/preloadjs.min.js', type: 'js'},
       {pattern: 'lib/*.js', type: 'module', included: false, served: true},
+      {pattern: 'lib/*.map', included: false, served: true},
       {pattern: 'scripts/shared/root.html', type: 'dom'}
     ].concat(cssFiles).concat(specFiles),
 
