@@ -1,6 +1,6 @@
 cache/
 deployed_experiments/
-dist/
+lib/
 docs/
 node_modules/
 results/
