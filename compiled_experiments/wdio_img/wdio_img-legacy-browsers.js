@@ -57,8 +57,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'resources/ost.png', 'path': 'resources/ost.png'},
-    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'}
+    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'},
+    {'name': 'resources/ost.png', 'path': 'resources/ost.png'}
   ]
 });
 
@@ -139,7 +139,7 @@ async function experimentInit() {
   ost_image = new visual.ImageStim({
     win : psychoJS.window,
     name : 'ost_image', units : undefined, 
-    image : 'resources\\ost.png', mask : undefined,
+    image : 'resources/ost.png', mask : undefined,
     ori : 0, pos : [0, 0], size : [0.72, 0.72],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
@@ -163,7 +163,7 @@ async function experimentInit() {
   ost_or5_image = new visual.ImageStim({
     win : psychoJS.window,
     name : 'ost_or5_image', units : undefined, 
-    image : 'resources\\ost.png', mask : undefined,
+    image : 'resources/ost.png', mask : undefined,
     ori : 5, pos : [0, 0], size : [0.72, 0.72],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
@@ -187,7 +187,7 @@ async function experimentInit() {
   landscape_image = new visual.ImageStim({
     win : psychoJS.window,
     name : 'landscape_image', units : undefined, 
-    image : 'resources\\landscape.jpg', mask : undefined,
+    image : 'resources/landscape.jpg', mask : undefined,
     ori : 0, pos : [0, 0], size : [0.72, 0.54],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
@@ -211,7 +211,7 @@ async function experimentInit() {
   landscape_or5_image = new visual.ImageStim({
     win : psychoJS.window,
     name : 'landscape_or5_image', units : undefined, 
-    image : 'resources\\landscape.jpg', mask : undefined,
+    image : 'resources/landscape.jpg', mask : undefined,
     ori : 5, pos : [0, 0], size : [0.72, 0.54],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
@@ -236,6 +236,8 @@ var gotValidClick;
 var intro_trialComponents;
 function intro_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_trial'-------
     t = 0;
     intro_trialClock.reset(); // clock
@@ -262,7 +264,7 @@ function intro_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function intro_trialRoutineEachFrame(snapshot) {
+function intro_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_trial'-------
     // get current time
@@ -327,7 +329,7 @@ function intro_trialRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function intro_trialRoutineEnd(snapshot) {
+function intro_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_trial'-------
     intro_trialComponents.forEach( function(thisComponent) {
@@ -354,6 +356,8 @@ function intro_trialRoutineEnd(snapshot) {
 var ost_trialComponents;
 function ost_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'ost_trial'-------
     t = 0;
     ost_trialClock.reset(); // clock
@@ -378,7 +382,7 @@ function ost_trialRoutineBegin(snapshot) {
 }
 
 
-function ost_trialRoutineEachFrame(snapshot) {
+function ost_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'ost_trial'-------
     // get current time
@@ -452,7 +456,7 @@ function ost_trialRoutineEachFrame(snapshot) {
 }
 
 
-function ost_trialRoutineEnd(snapshot) {
+function ost_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'ost_trial'-------
     ost_trialComponents.forEach( function(thisComponent) {
@@ -479,6 +483,8 @@ function ost_trialRoutineEnd(snapshot) {
 var ost_or5_trialComponents;
 function ost_or5_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'ost_or5_trial'-------
     t = 0;
     ost_or5_trialClock.reset(); // clock
@@ -503,7 +509,7 @@ function ost_or5_trialRoutineBegin(snapshot) {
 }
 
 
-function ost_or5_trialRoutineEachFrame(snapshot) {
+function ost_or5_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'ost_or5_trial'-------
     // get current time
@@ -577,7 +583,7 @@ function ost_or5_trialRoutineEachFrame(snapshot) {
 }
 
 
-function ost_or5_trialRoutineEnd(snapshot) {
+function ost_or5_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'ost_or5_trial'-------
     ost_or5_trialComponents.forEach( function(thisComponent) {
@@ -604,6 +610,8 @@ function ost_or5_trialRoutineEnd(snapshot) {
 var landscape_trialComponents;
 function landscape_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'landscape_trial'-------
     t = 0;
     landscape_trialClock.reset(); // clock
@@ -628,7 +636,7 @@ function landscape_trialRoutineBegin(snapshot) {
 }
 
 
-function landscape_trialRoutineEachFrame(snapshot) {
+function landscape_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'landscape_trial'-------
     // get current time
@@ -702,7 +710,7 @@ function landscape_trialRoutineEachFrame(snapshot) {
 }
 
 
-function landscape_trialRoutineEnd(snapshot) {
+function landscape_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'landscape_trial'-------
     landscape_trialComponents.forEach( function(thisComponent) {
@@ -729,6 +737,8 @@ function landscape_trialRoutineEnd(snapshot) {
 var landscape_or5_trialComponents;
 function landscape_or5_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'landscape_or5_trial'-------
     t = 0;
     landscape_or5_trialClock.reset(); // clock
@@ -753,7 +763,7 @@ function landscape_or5_trialRoutineBegin(snapshot) {
 }
 
 
-function landscape_or5_trialRoutineEachFrame(snapshot) {
+function landscape_or5_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'landscape_or5_trial'-------
     // get current time
@@ -827,7 +837,7 @@ function landscape_or5_trialRoutineEachFrame(snapshot) {
 }
 
 
-function landscape_or5_trialRoutineEnd(snapshot) {
+function landscape_or5_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'landscape_or5_trial'-------
     landscape_or5_trialComponents.forEach( function(thisComponent) {
@@ -874,8 +884,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

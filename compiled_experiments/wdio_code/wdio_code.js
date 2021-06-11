@@ -118,6 +118,8 @@ var continueRoutine;
 var code_trialComponents;
 function code_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'code_trial'-------
     t = 0;
     code_trialClock.reset(); // clock
@@ -139,7 +141,7 @@ function code_trialRoutineBegin(snapshot) {
 }
 
 
-function code_trialRoutineEachFrame(snapshot) {
+function code_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'code_trial'-------
     // get current time
@@ -187,7 +189,7 @@ function code_trialRoutineEachFrame(snapshot) {
 }
 
 
-function code_trialRoutineEnd(snapshot) {
+function code_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'code_trial'-------
     for (const thisComponent of code_trialComponents) {
@@ -229,8 +231,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

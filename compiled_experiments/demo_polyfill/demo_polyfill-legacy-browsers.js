@@ -115,6 +115,8 @@ var continueRoutine;
 var import_polyfillComponents;
 function import_polyfillRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'import_polyfill'-------
     t = 0;
     import_polyfillClock.reset(); // clock
@@ -135,7 +137,7 @@ function import_polyfillRoutineBegin(snapshot) {
 }
 
 
-function import_polyfillRoutineEachFrame(snapshot) {
+function import_polyfillRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'import_polyfill'-------
     // get current time
@@ -169,7 +171,7 @@ function import_polyfillRoutineEachFrame(snapshot) {
 }
 
 
-function import_polyfillRoutineEnd(snapshot) {
+function import_polyfillRoutineEnd() {
   return async function () {
     //------Ending Routine 'import_polyfill'-------
     import_polyfillComponents.forEach( function(thisComponent) {
@@ -189,6 +191,8 @@ var checkRandomInteger;
 var run_testsComponents;
 function run_testsRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'run_tests'-------
     t = 0;
     run_testsClock.reset(); // clock
@@ -386,7 +390,7 @@ function run_testsRoutineBegin(snapshot) {
 
 
 var frameRemains;
-function run_testsRoutineEachFrame(snapshot) {
+function run_testsRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'run_tests'-------
     // get current time
@@ -434,7 +438,7 @@ function run_testsRoutineEachFrame(snapshot) {
 }
 
 
-function run_testsRoutineEnd(snapshot) {
+function run_testsRoutineEnd() {
   return async function () {
     //------Ending Routine 'run_tests'-------
     run_testsComponents.forEach( function(thisComponent) {
@@ -470,8 +474,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

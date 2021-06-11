@@ -241,6 +241,8 @@ var gotValidClick;
 var into_trialComponents;
 function into_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'into_trial'-------
     t = 0;
     into_trialClock.reset(); // clock
@@ -265,7 +267,7 @@ function into_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function into_trialRoutineEachFrame(snapshot) {
+function into_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'into_trial'-------
     // get current time
@@ -330,7 +332,7 @@ function into_trialRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function into_trialRoutineEnd(snapshot) {
+function into_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'into_trial'-------
     for (const thisComponent of into_trialComponents) {
@@ -357,6 +359,8 @@ function into_trialRoutineEnd(snapshot) {
 var polygon_trialComponents;
 function polygon_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'polygon_trial'-------
     t = 0;
     polygon_trialClock.reset(); // clock
@@ -383,7 +387,7 @@ function polygon_trialRoutineBegin(snapshot) {
 }
 
 
-function polygon_trialRoutineEachFrame(snapshot) {
+function polygon_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'polygon_trial'-------
     // get current time
@@ -487,7 +491,7 @@ function polygon_trialRoutineEachFrame(snapshot) {
 }
 
 
-function polygon_trialRoutineEnd(snapshot) {
+function polygon_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'polygon_trial'-------
     for (const thisComponent of polygon_trialComponents) {
@@ -514,6 +518,8 @@ function polygon_trialRoutineEnd(snapshot) {
 var polygon5_trialComponents;
 function polygon5_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'polygon5_trial'-------
     t = 0;
     polygon5_trialClock.reset(); // clock
@@ -540,7 +546,7 @@ function polygon5_trialRoutineBegin(snapshot) {
 }
 
 
-function polygon5_trialRoutineEachFrame(snapshot) {
+function polygon5_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'polygon5_trial'-------
     // get current time
@@ -644,7 +650,7 @@ function polygon5_trialRoutineEachFrame(snapshot) {
 }
 
 
-function polygon5_trialRoutineEnd(snapshot) {
+function polygon5_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'polygon5_trial'-------
     for (const thisComponent of polygon5_trialComponents) {
@@ -691,8 +697,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

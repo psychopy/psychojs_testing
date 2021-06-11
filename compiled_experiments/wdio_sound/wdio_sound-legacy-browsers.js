@@ -141,6 +141,8 @@ var gotValidClick;
 var intro_trialComponents;
 function intro_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_trial'-------
     t = 0;
     intro_trialClock.reset(); // clock
@@ -166,7 +168,7 @@ function intro_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function intro_trialRoutineEachFrame(snapshot) {
+function intro_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_trial'-------
     // get current time
@@ -231,7 +233,7 @@ function intro_trialRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function intro_trialRoutineEnd(snapshot) {
+function intro_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_trial'-------
     intro_trialComponents.forEach( function(thisComponent) {
@@ -258,6 +260,8 @@ function intro_trialRoutineEnd(snapshot) {
 var sound_trialComponents;
 function sound_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'sound_trial'-------
     t = 0;
     sound_trialClock.reset(); // clock
@@ -283,7 +287,7 @@ function sound_trialRoutineBegin(snapshot) {
 }
 
 
-function sound_trialRoutineEachFrame(snapshot) {
+function sound_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'sound_trial'-------
     // get current time
@@ -360,7 +364,7 @@ function sound_trialRoutineEachFrame(snapshot) {
 }
 
 
-function sound_trialRoutineEnd(snapshot) {
+function sound_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'sound_trial'-------
     sound_trialComponents.forEach( function(thisComponent) {
@@ -408,8 +412,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

@@ -40,21 +40,21 @@ flowScheduler.add(intro_random_csvRoutineBegin());
 flowScheduler.add(intro_random_csvRoutineEachFrame());
 flowScheduler.add(intro_random_csvRoutineEnd());
 const random_csvLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(random_csvLoopBegin, random_csvLoopScheduler);
+flowScheduler.add(random_csvLoopBegin(random_csvLoopScheduler));
 flowScheduler.add(random_csvLoopScheduler);
 flowScheduler.add(random_csvLoopEnd);
 flowScheduler.add(intro_random_xlsxRoutineBegin());
 flowScheduler.add(intro_random_xlsxRoutineEachFrame());
 flowScheduler.add(intro_random_xlsxRoutineEnd());
 const random_xlsxLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(random_xlsxLoopBegin, random_xlsxLoopScheduler);
+flowScheduler.add(random_xlsxLoopBegin(random_xlsxLoopScheduler));
 flowScheduler.add(random_xlsxLoopScheduler);
 flowScheduler.add(random_xlsxLoopEnd);
 flowScheduler.add(intro_random_funkyRoutineBegin());
 flowScheduler.add(intro_random_funkyRoutineEachFrame());
 flowScheduler.add(intro_random_funkyRoutineEnd());
 const random_funkyLoopScheduler = new Scheduler(psychoJS);
-flowScheduler.add(random_funkyLoopBegin, random_funkyLoopScheduler);
+flowScheduler.add(random_funkyLoopBegin(random_funkyLoopScheduler));
 flowScheduler.add(random_funkyLoopScheduler);
 flowScheduler.add(random_funkyLoopEnd);
 flowScheduler.add(quitPsychoJS, '', true);
@@ -66,8 +66,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'resources/conditions.csv', 'path': 'resources/conditions.csv'},
-    {'name': 'resources/conditions.xlsx', 'path': 'resources/conditions.xlsx'}
+    {'name': 'resources/conditions.xlsx', 'path': 'resources/conditions.xlsx'},
+    {'name': 'resources/conditions.csv', 'path': 'resources/conditions.csv'}
   ]
 });
 
@@ -247,6 +247,8 @@ var gotValidClick;
 var intro_generalComponents;
 function intro_generalRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_general'-------
     t = 0;
     intro_generalClock.reset(); // clock
@@ -273,7 +275,7 @@ function intro_generalRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function intro_generalRoutineEachFrame(snapshot) {
+function intro_generalRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_general'-------
     // get current time
@@ -338,7 +340,7 @@ function intro_generalRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function intro_generalRoutineEnd(snapshot) {
+function intro_generalRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_general'-------
     intro_generalComponents.forEach( function(thisComponent) {
@@ -365,6 +367,8 @@ function intro_generalRoutineEnd(snapshot) {
 var intro_random_csvComponents;
 function intro_random_csvRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_random_csv'-------
     t = 0;
     intro_random_csvClock.reset(); // clock
@@ -388,7 +392,7 @@ function intro_random_csvRoutineBegin(snapshot) {
 }
 
 
-function intro_random_csvRoutineEachFrame(snapshot) {
+function intro_random_csvRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_random_csv'-------
     // get current time
@@ -452,7 +456,7 @@ function intro_random_csvRoutineEachFrame(snapshot) {
 }
 
 
-function intro_random_csvRoutineEnd(snapshot) {
+function intro_random_csvRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_random_csv'-------
     intro_random_csvComponents.forEach( function(thisComponent) {
@@ -478,30 +482,34 @@ function intro_random_csvRoutineEnd(snapshot) {
 
 var random_csv;
 var currentLoop;
-async function random_csvLoopBegin(random_csvLoopScheduler) {
-  // set up handler to look after randomisation of conditions etc
-  random_csv = new TrialHandler({
-    psychoJS: psychoJS,
-    nReps: 1, method: TrialHandler.Method.RANDOM,
-    extraInfo: expInfo, originPath: undefined,
-    trialList: 'resources/conditions.csv',
-    seed: 42, name: 'random_csv'
-  });
-  psychoJS.experiment.addLoop(random_csv); // add the loop to the experiment
-  currentLoop = random_csv;  // we're now the current loop
-
-  // Schedule all the trials in the trialList:
-  random_csv.forEach(function() {
-    const snapshot = random_csv.getSnapshot();
-
-    random_csvLoopScheduler.add(importConditions(snapshot));
-    random_csvLoopScheduler.add(trialRoutineBegin(snapshot));
-    random_csvLoopScheduler.add(trialRoutineEachFrame(snapshot));
-    random_csvLoopScheduler.add(trialRoutineEnd(snapshot));
-    random_csvLoopScheduler.add(endLoopIteration(random_csvLoopScheduler, snapshot));
-  });
-
-  return Scheduler.Event.NEXT;
+function random_csvLoopBegin(random_csvLoopScheduler, snapshot) {
+  return async function() {
+    TrialHandler.fromSnapshot(snapshot); // update internal variables (.thisN etc) of the loop
+    
+    // set up handler to look after randomisation of conditions etc
+    random_csv = new TrialHandler({
+      psychoJS: psychoJS,
+      nReps: 1, method: TrialHandler.Method.RANDOM,
+      extraInfo: expInfo, originPath: undefined,
+      trialList: 'resources/conditions.csv',
+      seed: 42, name: 'random_csv'
+    });
+    psychoJS.experiment.addLoop(random_csv); // add the loop to the experiment
+    currentLoop = random_csv;  // we're now the current loop
+    
+    // Schedule all the trials in the trialList:
+    random_csv.forEach(function() {
+      const snapshot = random_csv.getSnapshot();
+    
+      random_csvLoopScheduler.add(importConditions(snapshot));
+      random_csvLoopScheduler.add(trialRoutineBegin(snapshot));
+      random_csvLoopScheduler.add(trialRoutineEachFrame());
+      random_csvLoopScheduler.add(trialRoutineEnd());
+      random_csvLoopScheduler.add(endLoopIteration(random_csvLoopScheduler, snapshot));
+    });
+    
+    return Scheduler.Event.NEXT;
+  }
 }
 
 
@@ -513,30 +521,34 @@ async function random_csvLoopEnd() {
 
 
 var random_xlsx;
-async function random_xlsxLoopBegin(random_xlsxLoopScheduler) {
-  // set up handler to look after randomisation of conditions etc
-  random_xlsx = new TrialHandler({
-    psychoJS: psychoJS,
-    nReps: 2, method: TrialHandler.Method.RANDOM,
-    extraInfo: expInfo, originPath: undefined,
-    trialList: 'resources/conditions.xlsx',
-    seed: 42, name: 'random_xlsx'
-  });
-  psychoJS.experiment.addLoop(random_xlsx); // add the loop to the experiment
-  currentLoop = random_xlsx;  // we're now the current loop
-
-  // Schedule all the trials in the trialList:
-  random_xlsx.forEach(function() {
-    const snapshot = random_xlsx.getSnapshot();
-
-    random_xlsxLoopScheduler.add(importConditions(snapshot));
-    random_xlsxLoopScheduler.add(trialRoutineBegin(snapshot));
-    random_xlsxLoopScheduler.add(trialRoutineEachFrame(snapshot));
-    random_xlsxLoopScheduler.add(trialRoutineEnd(snapshot));
-    random_xlsxLoopScheduler.add(endLoopIteration(random_xlsxLoopScheduler, snapshot));
-  });
-
-  return Scheduler.Event.NEXT;
+function random_xlsxLoopBegin(random_xlsxLoopScheduler, snapshot) {
+  return async function() {
+    TrialHandler.fromSnapshot(snapshot); // update internal variables (.thisN etc) of the loop
+    
+    // set up handler to look after randomisation of conditions etc
+    random_xlsx = new TrialHandler({
+      psychoJS: psychoJS,
+      nReps: 2, method: TrialHandler.Method.RANDOM,
+      extraInfo: expInfo, originPath: undefined,
+      trialList: 'resources/conditions.xlsx',
+      seed: 42, name: 'random_xlsx'
+    });
+    psychoJS.experiment.addLoop(random_xlsx); // add the loop to the experiment
+    currentLoop = random_xlsx;  // we're now the current loop
+    
+    // Schedule all the trials in the trialList:
+    random_xlsx.forEach(function() {
+      const snapshot = random_xlsx.getSnapshot();
+    
+      random_xlsxLoopScheduler.add(importConditions(snapshot));
+      random_xlsxLoopScheduler.add(trialRoutineBegin(snapshot));
+      random_xlsxLoopScheduler.add(trialRoutineEachFrame());
+      random_xlsxLoopScheduler.add(trialRoutineEnd());
+      random_xlsxLoopScheduler.add(endLoopIteration(random_xlsxLoopScheduler, snapshot));
+    });
+    
+    return Scheduler.Event.NEXT;
+  }
 }
 
 
@@ -548,30 +560,34 @@ async function random_xlsxLoopEnd() {
 
 
 var random_funky;
-async function random_funkyLoopBegin(random_funkyLoopScheduler) {
-  // set up handler to look after randomisation of conditions etc
-  random_funky = new TrialHandler({
-    psychoJS: psychoJS,
-    nReps: 3, method: TrialHandler.Method.FULLRANDOM,
-    extraInfo: expInfo, originPath: undefined,
-    trialList: TrialHandler.importConditions(psychoJS.serverManager, 'resources/conditions.csv', '0:2'),
-    seed: 42, name: 'random_funky'
-  });
-  psychoJS.experiment.addLoop(random_funky); // add the loop to the experiment
-  currentLoop = random_funky;  // we're now the current loop
-
-  // Schedule all the trials in the trialList:
-  random_funky.forEach(function() {
-    const snapshot = random_funky.getSnapshot();
-
-    random_funkyLoopScheduler.add(importConditions(snapshot));
-    random_funkyLoopScheduler.add(trialRoutineBegin(snapshot));
-    random_funkyLoopScheduler.add(trialRoutineEachFrame(snapshot));
-    random_funkyLoopScheduler.add(trialRoutineEnd(snapshot));
-    random_funkyLoopScheduler.add(endLoopIteration(random_funkyLoopScheduler, snapshot));
-  });
-
-  return Scheduler.Event.NEXT;
+function random_funkyLoopBegin(random_funkyLoopScheduler, snapshot) {
+  return async function() {
+    TrialHandler.fromSnapshot(snapshot); // update internal variables (.thisN etc) of the loop
+    
+    // set up handler to look after randomisation of conditions etc
+    random_funky = new TrialHandler({
+      psychoJS: psychoJS,
+      nReps: 3, method: TrialHandler.Method.FULLRANDOM,
+      extraInfo: expInfo, originPath: undefined,
+      trialList: TrialHandler.importConditions(psychoJS.serverManager, 'resources/conditions.csv', '0:2'),
+      seed: 42, name: 'random_funky'
+    });
+    psychoJS.experiment.addLoop(random_funky); // add the loop to the experiment
+    currentLoop = random_funky;  // we're now the current loop
+    
+    // Schedule all the trials in the trialList:
+    random_funky.forEach(function() {
+      const snapshot = random_funky.getSnapshot();
+    
+      random_funkyLoopScheduler.add(importConditions(snapshot));
+      random_funkyLoopScheduler.add(trialRoutineBegin(snapshot));
+      random_funkyLoopScheduler.add(trialRoutineEachFrame());
+      random_funkyLoopScheduler.add(trialRoutineEnd());
+      random_funkyLoopScheduler.add(endLoopIteration(random_funkyLoopScheduler, snapshot));
+    });
+    
+    return Scheduler.Event.NEXT;
+  }
 }
 
 
@@ -585,6 +601,8 @@ async function random_funkyLoopEnd() {
 var trialComponents;
 function trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'trial'-------
     t = 0;
     trialClock.reset(); // clock
@@ -626,7 +644,7 @@ function trialRoutineBegin(snapshot) {
 }
 
 
-function trialRoutineEachFrame(snapshot) {
+function trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'trial'-------
     // get current time
@@ -690,7 +708,7 @@ function trialRoutineEachFrame(snapshot) {
 }
 
 
-function trialRoutineEnd(snapshot) {
+function trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'trial'-------
     trialComponents.forEach( function(thisComponent) {
@@ -717,6 +735,8 @@ function trialRoutineEnd(snapshot) {
 var intro_random_xlsxComponents;
 function intro_random_xlsxRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_random_xlsx'-------
     t = 0;
     intro_random_xlsxClock.reset(); // clock
@@ -740,7 +760,7 @@ function intro_random_xlsxRoutineBegin(snapshot) {
 }
 
 
-function intro_random_xlsxRoutineEachFrame(snapshot) {
+function intro_random_xlsxRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_random_xlsx'-------
     // get current time
@@ -804,7 +824,7 @@ function intro_random_xlsxRoutineEachFrame(snapshot) {
 }
 
 
-function intro_random_xlsxRoutineEnd(snapshot) {
+function intro_random_xlsxRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_random_xlsx'-------
     intro_random_xlsxComponents.forEach( function(thisComponent) {
@@ -831,6 +851,8 @@ function intro_random_xlsxRoutineEnd(snapshot) {
 var intro_random_funkyComponents;
 function intro_random_funkyRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_random_funky'-------
     t = 0;
     intro_random_funkyClock.reset(); // clock
@@ -854,7 +876,7 @@ function intro_random_funkyRoutineBegin(snapshot) {
 }
 
 
-function intro_random_funkyRoutineEachFrame(snapshot) {
+function intro_random_funkyRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_random_funky'-------
     // get current time
@@ -918,7 +940,7 @@ function intro_random_funkyRoutineEachFrame(snapshot) {
 }
 
 
-function intro_random_funkyRoutineEnd(snapshot) {
+function intro_random_funkyRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_random_funky'-------
     intro_random_funkyComponents.forEach( function(thisComponent) {
@@ -965,8 +987,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

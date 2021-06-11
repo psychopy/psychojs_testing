@@ -252,6 +252,8 @@ var gotValidClick;
 var introductionComponents;
 function introductionRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'introduction'-------
     t = 0;
     introductionClock.reset(); // clock
@@ -275,7 +277,7 @@ function introductionRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function introductionRoutineEachFrame(snapshot) {
+function introductionRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'introduction'-------
     // get current time
@@ -340,7 +342,7 @@ function introductionRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function introductionRoutineEnd(snapshot) {
+function introductionRoutineEnd() {
   return async function () {
     //------Ending Routine 'introduction'-------
     for (const thisComponent of introductionComponents) {
@@ -367,6 +369,8 @@ function introductionRoutineEnd(snapshot) {
 var text1Components;
 function text1RoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'text1'-------
     t = 0;
     text1Clock.reset(); // clock
@@ -390,7 +394,7 @@ function text1RoutineBegin(snapshot) {
 }
 
 
-function text1RoutineEachFrame(snapshot) {
+function text1RoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'text1'-------
     // get current time
@@ -464,7 +468,7 @@ function text1RoutineEachFrame(snapshot) {
 }
 
 
-function text1RoutineEnd(snapshot) {
+function text1RoutineEnd() {
   return async function () {
     //------Ending Routine 'text1'-------
     for (const thisComponent of text1Components) {
@@ -491,6 +495,8 @@ function text1RoutineEnd(snapshot) {
 var text2Components;
 function text2RoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'text2'-------
     t = 0;
     text2Clock.reset(); // clock
@@ -514,7 +520,7 @@ function text2RoutineBegin(snapshot) {
 }
 
 
-function text2RoutineEachFrame(snapshot) {
+function text2RoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'text2'-------
     // get current time
@@ -588,7 +594,7 @@ function text2RoutineEachFrame(snapshot) {
 }
 
 
-function text2RoutineEnd(snapshot) {
+function text2RoutineEnd() {
   return async function () {
     //------Ending Routine 'text2'-------
     for (const thisComponent of text2Components) {
@@ -615,6 +621,8 @@ function text2RoutineEnd(snapshot) {
 var text3Components;
 function text3RoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'text3'-------
     t = 0;
     text3Clock.reset(); // clock
@@ -638,7 +646,7 @@ function text3RoutineBegin(snapshot) {
 }
 
 
-function text3RoutineEachFrame(snapshot) {
+function text3RoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'text3'-------
     // get current time
@@ -712,7 +720,7 @@ function text3RoutineEachFrame(snapshot) {
 }
 
 
-function text3RoutineEnd(snapshot) {
+function text3RoutineEnd() {
   return async function () {
     //------Ending Routine 'text3'-------
     for (const thisComponent of text3Components) {
@@ -739,6 +747,8 @@ function text3RoutineEnd(snapshot) {
 var text4Components;
 function text4RoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'text4'-------
     t = 0;
     text4Clock.reset(); // clock
@@ -762,7 +772,7 @@ function text4RoutineBegin(snapshot) {
 }
 
 
-function text4RoutineEachFrame(snapshot) {
+function text4RoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'text4'-------
     // get current time
@@ -836,7 +846,7 @@ function text4RoutineEachFrame(snapshot) {
 }
 
 
-function text4RoutineEnd(snapshot) {
+function text4RoutineEnd() {
   return async function () {
     //------Ending Routine 'text4'-------
     for (const thisComponent of text4Components) {
@@ -883,8 +893,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

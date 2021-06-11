@@ -156,7 +156,7 @@ async function experimentInit() {
   circle = new visual.ImageStim({
     win : psychoJS.window,
     name : 'circle', units : 'height', 
-    image : 'img\\circle.png', mask : undefined,
+    image : 'img/circle.png', mask : undefined,
     ori : 0.0, pos : [0, 0], size : [0.05, 0.05],
     color : new util.Color([1, 1, 1]), opacity : undefined,
     flipHoriz : false, flipVert : false,
@@ -176,6 +176,8 @@ var continueRoutine;
 var loading_trialComponents;
 function loading_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'loading_trial'-------
     t = 0;
     loading_trialClock.reset(); // clock
@@ -194,7 +196,7 @@ function loading_trialRoutineBegin(snapshot) {
 }
 
 
-function loading_trialRoutineEachFrame(snapshot) {
+function loading_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'loading_trial'-------
     // get current time
@@ -240,7 +242,7 @@ function loading_trialRoutineEachFrame(snapshot) {
 }
 
 
-function loading_trialRoutineEnd(snapshot) {
+function loading_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'loading_trial'-------
     for (const thisComponent of loading_trialComponents) {
@@ -260,6 +262,8 @@ var gotValidClick;
 var intro_mouseview_trialComponents;
 function intro_mouseview_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_mouseview_trial'-------
     t = 0;
     intro_mouseview_trialClock.reset(); // clock
@@ -284,7 +288,7 @@ function intro_mouseview_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function intro_mouseview_trialRoutineEachFrame(snapshot) {
+function intro_mouseview_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'intro_mouseview_trial'-------
     // get current time
@@ -349,7 +353,7 @@ function intro_mouseview_trialRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function intro_mouseview_trialRoutineEnd(snapshot) {
+function intro_mouseview_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'intro_mouseview_trial'-------
     for (const thisComponent of intro_mouseview_trialComponents) {
@@ -376,6 +380,8 @@ function intro_mouseview_trialRoutineEnd(snapshot) {
 var init_mouseview_trialComponents;
 function init_mouseview_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'init_mouseview_trial'-------
     t = 0;
     init_mouseview_trialClock.reset(); // clock
@@ -401,7 +407,7 @@ function init_mouseview_trialRoutineBegin(snapshot) {
 
 
 var frameRemains;
-function init_mouseview_trialRoutineEachFrame(snapshot) {
+function init_mouseview_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'init_mouseview_trial'-------
     // get current time
@@ -449,7 +455,7 @@ function init_mouseview_trialRoutineEachFrame(snapshot) {
 }
 
 
-function init_mouseview_trialRoutineEnd(snapshot) {
+function init_mouseview_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'init_mouseview_trial'-------
     for (const thisComponent of init_mouseview_trialComponents) {
@@ -465,6 +471,8 @@ function init_mouseview_trialRoutineEnd(snapshot) {
 var mouseview_trialComponents;
 function mouseview_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'mouseview_trial'-------
     t = 0;
     mouseview_trialClock.reset(); // clock
@@ -487,7 +495,7 @@ function mouseview_trialRoutineBegin(snapshot) {
 }
 
 
-function mouseview_trialRoutineEachFrame(snapshot) {
+function mouseview_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'mouseview_trial'-------
     // get current time
@@ -531,7 +539,7 @@ function mouseview_trialRoutineEachFrame(snapshot) {
 }
 
 
-function mouseview_trialRoutineEnd(snapshot) {
+function mouseview_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'mouseview_trial'-------
     for (const thisComponent of mouseview_trialComponents) {
@@ -574,8 +582,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

@@ -215,6 +215,8 @@ var gotValidClick;
 var calibration_0_trialComponents;
 function calibration_0_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'calibration_0_trial'-------
     t = 0;
     calibration_0_trialClock.reset(); // clock
@@ -240,7 +242,7 @@ function calibration_0_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function calibration_0_trialRoutineEachFrame(snapshot) {
+function calibration_0_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'calibration_0_trial'-------
     // get current time
@@ -305,7 +307,7 @@ function calibration_0_trialRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function calibration_0_trialRoutineEnd(snapshot) {
+function calibration_0_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'calibration_0_trial'-------
     calibration_0_trialComponents.forEach( function(thisComponent) {
@@ -332,6 +334,8 @@ function calibration_0_trialRoutineEnd(snapshot) {
 var calibration_1_trialComponents;
 function calibration_1_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'calibration_1_trial'-------
     t = 0;
     calibration_1_trialClock.reset(); // clock
@@ -359,7 +363,7 @@ function calibration_1_trialRoutineBegin(snapshot) {
 }
 
 
-function calibration_1_trialRoutineEachFrame(snapshot) {
+function calibration_1_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'calibration_1_trial'-------
     // get current time
@@ -433,7 +437,7 @@ function calibration_1_trialRoutineEachFrame(snapshot) {
 }
 
 
-function calibration_1_trialRoutineEnd(snapshot) {
+function calibration_1_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'calibration_1_trial'-------
     calibration_1_trialComponents.forEach( function(thisComponent) {
@@ -460,6 +464,8 @@ function calibration_1_trialRoutineEnd(snapshot) {
 var verification_trialComponents;
 function verification_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'verification_trial'-------
     t = 0;
     verification_trialClock.reset(); // clock
@@ -494,7 +500,7 @@ function verification_trialRoutineBegin(snapshot) {
 }
 
 
-function verification_trialRoutineEachFrame(snapshot) {
+function verification_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'verification_trial'-------
     // get current time
@@ -575,7 +581,7 @@ function verification_trialRoutineEachFrame(snapshot) {
 }
 
 
-function verification_trialRoutineEnd(snapshot) {
+function verification_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'verification_trial'-------
     verification_trialComponents.forEach( function(thisComponent) {
@@ -602,6 +608,8 @@ function verification_trialRoutineEnd(snapshot) {
 var verification_fb_trialComponents;
 function verification_fb_trialRoutineBegin(snapshot) {
   return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'verification_fb_trial'-------
     t = 0;
     verification_fb_trialClock.reset(); // clock
@@ -630,7 +638,7 @@ function verification_fb_trialRoutineBegin(snapshot) {
 }
 
 
-function verification_fb_trialRoutineEachFrame(snapshot) {
+function verification_fb_trialRoutineEachFrame() {
   return async function () {
     //------Loop for each frame of Routine 'verification_fb_trial'-------
     // get current time
@@ -714,7 +722,7 @@ function verification_fb_trialRoutineEachFrame(snapshot) {
 }
 
 
-function verification_fb_trialRoutineEnd(snapshot) {
+function verification_fb_trialRoutineEnd() {
   return async function () {
     //------Ending Routine 'verification_fb_trial'-------
     verification_fb_trialComponents.forEach( function(thisComponent) {
@@ -761,8 +769,8 @@ function endLoopIteration(scheduler, snapshot) {
 }
 
 
-async function importConditions(currentLoop) {
-  return function () {
+function importConditions(currentLoop) {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };

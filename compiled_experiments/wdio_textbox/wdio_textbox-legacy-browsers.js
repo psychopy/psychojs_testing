@@ -2,6 +2,12 @@
  * Wdio_Textbox Test *
  *********************/
 
+
+// store info about the experiment session:
+let expName = 'wdio_textbox';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -14,14 +20,6 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
-
-// store info about the experiment session:
-let expName = 'wdio_textbox';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
-// Expose psychoJS to the browser window
-window.psychoJS = psychoJS;
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -41,12 +39,15 @@ flowScheduler.add(intro_trialRoutineEnd());
 flowScheduler.add(textbox_trial1RoutineBegin());
 flowScheduler.add(textbox_trial1RoutineEachFrame());
 flowScheduler.add(textbox_trial1RoutineEnd());
-flowScheduler.add(intro_trial2RoutineBegin());
-flowScheduler.add(intro_trial2RoutineEachFrame());
-flowScheduler.add(intro_trial2RoutineEnd());
 flowScheduler.add(textbox_trial2RoutineBegin());
 flowScheduler.add(textbox_trial2RoutineEachFrame());
 flowScheduler.add(textbox_trial2RoutineEnd());
+flowScheduler.add(intro_trial3RoutineBegin());
+flowScheduler.add(intro_trial3RoutineEachFrame());
+flowScheduler.add(intro_trial3RoutineEnd());
+flowScheduler.add(textbox_trial3RoutineBegin());
+flowScheduler.add(textbox_trial3RoutineEachFrame());
+flowScheduler.add(textbox_trial3RoutineEnd());
 flowScheduler.add(quitPsychoJS, '', true);
 
 // quit if user presses Cancel in dialog box:
@@ -63,10 +64,10 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-function updateInfo() {
+async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.1.4';
+  expInfo['psychopyVersion'] = '2021.2.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -87,25 +88,29 @@ var intro_trialClock;
 var intro_text;
 var intro_mouse;
 var textbox_trial1Clock;
+var textbox1_2;
+var button_submit1_2;
+var mouse_resp1_2;
+var textbox_trial2Clock;
 var textbox1;
 var button_submit1;
 var mouse_resp1;
-var intro_trial2Clock;
+var intro_trial3Clock;
 var feedback_text1;
 var feedback_keyboard1;
-var textbox_trial2Clock;
+var textbox_trial3Clock;
 var textbox2;
 var button_submit2;
 var mouse_resp2;
 var globalClock;
 var routineTimer;
-function experimentInit() {
+async function experimentInit() {
   // Initialize components for Routine "intro_trial"
   intro_trialClock = new util.Clock();
   intro_text = new visual.TextStim({
     win: psychoJS.window,
     name: 'intro_text',
-    text: "wdio_textbox\n\nThis experiment presents an editable textbox and a keyboard response that registers the 'enter' key. Upon pressing the 'enter' key, the text that was just typed in is presented.\n\nClick anywhere to continue...\n",
+    text: 'wdio_textbox\n\nThis experiment presents an non-editable textbox, followed by an editable textbox.\n\nClick anywhere to continue...\n',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
@@ -117,8 +122,43 @@ function experimentInit() {
     win: psychoJS.window,
   });
   intro_mouse.mouseClock = new util.Clock();
+  // Expose psychoJS to the browser window
+  window.psychoJS = psychoJS;
   // Initialize components for Routine "textbox_trial1"
   textbox_trial1Clock = new util.Clock();
+  textbox1_2 = new visual.TextBox({
+    win: psychoJS.window,
+    name: 'textbox1_2',
+    text: '',
+    font: 'Arial',
+    pos: [0, 0], letterHeight: 0.05,
+    size: [0.8, 0.1],  units: undefined, 
+    color: 'black', colorSpace: 'rgb',
+    fillColor: 'white', borderColor: undefined,
+    bold: false, italic: false,
+    opacity: 1,
+    padding: undefined,
+    editable: false,
+    multiline: true,
+    anchor: 'center',
+    depth: 0.0 
+  });
+  
+  button_submit1_2 = new visual.Rect ({
+    win: psychoJS.window, name: 'button_submit1_2', 
+    width: [0.1, 0.1][0], height: [0.1, 0.1][1],
+    ori: 0, pos: [0, (- 0.25)],
+    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    fillColor: new util.Color([(- 1), (- 1), 1]),
+    opacity: 1, depth: -2, interpolate: true,
+  });
+  
+  mouse_resp1_2 = new core.Mouse({
+    win: psychoJS.window,
+  });
+  mouse_resp1_2.mouseClock = new util.Clock();
+  // Initialize components for Routine "textbox_trial2"
+  textbox_trial2Clock = new util.Clock();
   textbox1 = new visual.TextBox({
     win: psychoJS.window,
     name: 'textbox1',
@@ -150,8 +190,8 @@ function experimentInit() {
     win: psychoJS.window,
   });
   mouse_resp1.mouseClock = new util.Clock();
-  // Initialize components for Routine "intro_trial2"
-  intro_trial2Clock = new util.Clock();
+  // Initialize components for Routine "intro_trial3"
+  intro_trial3Clock = new util.Clock();
   feedback_text1 = new visual.TextStim({
     win: psychoJS.window,
     name: 'feedback_text1',
@@ -165,8 +205,8 @@ function experimentInit() {
   
   feedback_keyboard1 = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
   
-  // Initialize components for Routine "textbox_trial2"
-  textbox_trial2Clock = new util.Clock();
+  // Initialize components for Routine "textbox_trial3"
+  textbox_trial3Clock = new util.Clock();
   textbox2 = new visual.TextBox({
     win: psychoJS.window,
     name: 'textbox2',
@@ -212,7 +252,9 @@ var continueRoutine;
 var gotValidClick;
 var intro_trialComponents;
 function intro_trialRoutineBegin(snapshot) {
-  return function () {
+  return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'intro_trial'-------
     t = 0;
     intro_trialClock.reset(); // clock
@@ -238,8 +280,8 @@ function intro_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function intro_trialRoutineEachFrame(snapshot) {
-  return function () {
+function intro_trialRoutineEachFrame() {
+  return async function () {
     //------Loop for each frame of Routine 'intro_trial'-------
     // get current time
     t = intro_trialClock.getTime();
@@ -303,15 +345,15 @@ function intro_trialRoutineEachFrame(snapshot) {
 
 
 var _mouseXYs;
-function intro_trialRoutineEnd(snapshot) {
-  return function () {
+function intro_trialRoutineEnd() {
+  return async function () {
     //------Ending Routine 'intro_trial'-------
     intro_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = intro_mouse.getPos();
     _mouseButtons = intro_mouse.getPressed();
     psychoJS.experiment.addData('intro_mouse.x', _mouseXYs[0]);
@@ -327,24 +369,30 @@ function intro_trialRoutineEnd(snapshot) {
 }
 
 
+var msg;
 var textbox_trial1Components;
 function textbox_trial1RoutineBegin(snapshot) {
-  return function () {
+  return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
     //------Prepare to start Routine 'textbox_trial1'-------
     t = 0;
     textbox_trial1Clock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
+    textbox1_2.setText(msg)
+    textbox1_2.reset()
     document.body.setAttribute('data-report', 'textbox1');
-    // setup some python lists for storing info about the mouse_resp1
-    mouse_resp1.clicked_name = [];
+    msg = "This is a test";
+    // setup some python lists for storing info about the mouse_resp1_2
+    mouse_resp1_2.clicked_name = [];
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     textbox_trial1Components = [];
-    textbox_trial1Components.push(textbox1);
-    textbox_trial1Components.push(button_submit1);
-    textbox_trial1Components.push(mouse_resp1);
+    textbox_trial1Components.push(textbox1_2);
+    textbox_trial1Components.push(button_submit1_2);
+    textbox_trial1Components.push(mouse_resp1_2);
     
     textbox_trial1Components.forEach( function(thisComponent) {
       if ('status' in thisComponent)
@@ -355,11 +403,151 @@ function textbox_trial1RoutineBegin(snapshot) {
 }
 
 
-function textbox_trial1RoutineEachFrame(snapshot) {
-  return function () {
+function textbox_trial1RoutineEachFrame() {
+  return async function () {
     //------Loop for each frame of Routine 'textbox_trial1'-------
     // get current time
     t = textbox_trial1Clock.getTime();
+    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+    // update/draw components on each frame
+    
+    // *textbox1_2* updates
+    if (t >= 0.0 && textbox1_2.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      textbox1_2.tStart = t;  // (not accounting for frame time here)
+      textbox1_2.frameNStart = frameN;  // exact frame index
+      
+      textbox1_2.setAutoDraw(true);
+    }
+
+    
+    // *button_submit1_2* updates
+    if (t >= 0.0 && button_submit1_2.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      button_submit1_2.tStart = t;  // (not accounting for frame time here)
+      button_submit1_2.frameNStart = frameN;  // exact frame index
+      
+      button_submit1_2.setAutoDraw(true);
+    }
+
+    // *mouse_resp1_2* updates
+    if (t >= 0.0 && mouse_resp1_2.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      mouse_resp1_2.tStart = t;  // (not accounting for frame time here)
+      mouse_resp1_2.frameNStart = frameN;  // exact frame index
+      
+      mouse_resp1_2.status = PsychoJS.Status.STARTED;
+      mouse_resp1_2.mouseClock.reset();
+      prevButtonState = mouse_resp1_2.getPressed();  // if button is down already this ISN'T a new click
+      }
+    if (mouse_resp1_2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse_resp1_2.getPressed();
+      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
+        prevButtonState = _mouseButtons;
+        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
+          // check if the mouse was inside our 'clickable' objects
+          gotValidClick = false;
+          for (const obj of [button_submit1]) {
+            if (obj.contains(mouse_resp1_2)) {
+              gotValidClick = true;
+              mouse_resp1_2.clicked_name.push(obj.name)
+            }
+          }
+          if (gotValidClick === true) { // abort routine on response
+            continueRoutine = false;
+          }
+        }
+      }
+    }
+    // check for quit (typically the Esc key)
+    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+    }
+    
+    // check if the Routine should terminate
+    if (!continueRoutine) {  // a component has requested a forced-end of Routine
+      return Scheduler.Event.NEXT;
+    }
+    
+    continueRoutine = false;  // reverts to True if at least one component still running
+    textbox_trial1Components.forEach( function(thisComponent) {
+      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
+        continueRoutine = true;
+      }
+    });
+    
+    // refresh the screen if continuing
+    if (continueRoutine) {
+      return Scheduler.Event.FLIP_REPEAT;
+    } else {
+      return Scheduler.Event.NEXT;
+    }
+  };
+}
+
+
+function textbox_trial1RoutineEnd() {
+  return async function () {
+    //------Ending Routine 'textbox_trial1'-------
+    textbox_trial1Components.forEach( function(thisComponent) {
+      if (typeof thisComponent.setAutoDraw === 'function') {
+        thisComponent.setAutoDraw(false);
+      }
+    });
+    // store data for psychoJS.experiment (ExperimentHandler)
+    _mouseXYs = mouse_resp1_2.getPos();
+    _mouseButtons = mouse_resp1_2.getPressed();
+    psychoJS.experiment.addData('mouse_resp1_2.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse_resp1_2.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse_resp1_2.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse_resp1_2.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse_resp1_2.rightButton', _mouseButtons[2]);
+    if (mouse_resp1_2.clicked_name.length > 0) {
+      psychoJS.experiment.addData('mouse_resp1_2.clicked_name', mouse_resp1_2.clicked_name[0]);}
+    // the Routine "textbox_trial1" was not non-slip safe, so reset the non-slip timer
+    routineTimer.reset();
+    
+    return Scheduler.Event.NEXT;
+  };
+}
+
+
+var textbox_trial2Components;
+function textbox_trial2RoutineBegin(snapshot) {
+  return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
+    //------Prepare to start Routine 'textbox_trial2'-------
+    t = 0;
+    textbox_trial2Clock.reset(); // clock
+    frameN = -1;
+    continueRoutine = true; // until we're told otherwise
+    // update component parameters for each repeat
+    textbox1.reset()
+    document.body.setAttribute('data-report', 'textbox1');
+    // setup some python lists for storing info about the mouse_resp1
+    mouse_resp1.clicked_name = [];
+    gotValidClick = false; // until a click is received
+    // keep track of which components have finished
+    textbox_trial2Components = [];
+    textbox_trial2Components.push(textbox1);
+    textbox_trial2Components.push(button_submit1);
+    textbox_trial2Components.push(mouse_resp1);
+    
+    textbox_trial2Components.forEach( function(thisComponent) {
+      if ('status' in thisComponent)
+        thisComponent.status = PsychoJS.Status.NOT_STARTED;
+       });
+    return Scheduler.Event.NEXT;
+  }
+}
+
+
+function textbox_trial2RoutineEachFrame() {
+  return async function () {
+    //------Loop for each frame of Routine 'textbox_trial2'-------
+    // get current time
+    t = textbox_trial2Clock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -422,7 +610,7 @@ function textbox_trial1RoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    textbox_trial1Components.forEach( function(thisComponent) {
+    textbox_trial2Components.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -438,17 +626,19 @@ function textbox_trial1RoutineEachFrame(snapshot) {
 }
 
 
-function textbox_trial1RoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'textbox_trial1'-------
-    textbox_trial1Components.forEach( function(thisComponent) {
+function textbox_trial2RoutineEnd() {
+  return async function () {
+    //------Ending Routine 'textbox_trial2'-------
+    textbox_trial2Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
     psychoJS.experiment.addData('textbox1.text',textbox1.text)
-    textbox1.reset()
-    // store data for thisExp (ExperimentHandler)
+    console.log(textbox1.getText())
+    console.log(textbox1.text)
+    document.body.setAttribute('data-output', textbox1.getText());
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_resp1.getPos();
     _mouseButtons = mouse_resp1.getPressed();
     psychoJS.experiment.addData('mouse_resp1.x', _mouseXYs[0]);
@@ -458,7 +648,7 @@ function textbox_trial1RoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_resp1.rightButton', _mouseButtons[2]);
     if (mouse_resp1.clicked_name.length > 0) {
       psychoJS.experiment.addData('mouse_resp1.clicked_name', mouse_resp1.clicked_name[0]);}
-    // the Routine "textbox_trial1" was not non-slip safe, so reset the non-slip timer
+    // the Routine "textbox_trial2" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -467,27 +657,28 @@ function textbox_trial1RoutineEnd(snapshot) {
 
 
 var _feedback_keyboard1_allKeys;
-var intro_trial2Components;
-function intro_trial2RoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'intro_trial2'-------
+var intro_trial3Components;
+function intro_trial3RoutineBegin(snapshot) {
+  return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
+    //------Prepare to start Routine 'intro_trial3'-------
     t = 0;
-    intro_trial2Clock.reset(); // clock
+    intro_trial3Clock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
     feedback_text1.setText('Press a key to continue...');
-    document.body.setAttribute('data-output', textbox1.getText());
     document.body.setAttribute('data-report', 'intro_trial2');
     feedback_keyboard1.keys = undefined;
     feedback_keyboard1.rt = undefined;
     _feedback_keyboard1_allKeys = [];
     // keep track of which components have finished
-    intro_trial2Components = [];
-    intro_trial2Components.push(feedback_text1);
-    intro_trial2Components.push(feedback_keyboard1);
+    intro_trial3Components = [];
+    intro_trial3Components.push(feedback_text1);
+    intro_trial3Components.push(feedback_keyboard1);
     
-    intro_trial2Components.forEach( function(thisComponent) {
+    intro_trial3Components.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -496,11 +687,11 @@ function intro_trial2RoutineBegin(snapshot) {
 }
 
 
-function intro_trial2RoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'intro_trial2'-------
+function intro_trial3RoutineEachFrame() {
+  return async function () {
+    //------Loop for each frame of Routine 'intro_trial3'-------
     // get current time
-    t = intro_trial2Clock.getTime();
+    t = intro_trial3Clock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -548,7 +739,7 @@ function intro_trial2RoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    intro_trial2Components.forEach( function(thisComponent) {
+    intro_trial3Components.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -564,10 +755,10 @@ function intro_trial2RoutineEachFrame(snapshot) {
 }
 
 
-function intro_trial2RoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'intro_trial2'-------
-    intro_trial2Components.forEach( function(thisComponent) {
+function intro_trial3RoutineEnd() {
+  return async function () {
+    //------Ending Routine 'intro_trial3'-------
+    intro_trial3Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
@@ -579,7 +770,7 @@ function intro_trial2RoutineEnd(snapshot) {
         }
     
     feedback_keyboard1.stop();
-    // the Routine "intro_trial2" was not non-slip safe, so reset the non-slip timer
+    // the Routine "intro_trial3" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -587,26 +778,29 @@ function intro_trial2RoutineEnd(snapshot) {
 }
 
 
-var textbox_trial2Components;
-function textbox_trial2RoutineBegin(snapshot) {
-  return function () {
-    //------Prepare to start Routine 'textbox_trial2'-------
+var textbox_trial3Components;
+function textbox_trial3RoutineBegin(snapshot) {
+  return async function () {
+    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
+    
+    //------Prepare to start Routine 'textbox_trial3'-------
     t = 0;
-    textbox_trial2Clock.reset(); // clock
+    textbox_trial3Clock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
+    textbox2.reset()
     document.body.setAttribute('data-report', 'textbox2');
     // setup some python lists for storing info about the mouse_resp2
     mouse_resp2.clicked_name = [];
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
-    textbox_trial2Components = [];
-    textbox_trial2Components.push(textbox2);
-    textbox_trial2Components.push(button_submit2);
-    textbox_trial2Components.push(mouse_resp2);
+    textbox_trial3Components = [];
+    textbox_trial3Components.push(textbox2);
+    textbox_trial3Components.push(button_submit2);
+    textbox_trial3Components.push(mouse_resp2);
     
-    textbox_trial2Components.forEach( function(thisComponent) {
+    textbox_trial3Components.forEach( function(thisComponent) {
       if ('status' in thisComponent)
         thisComponent.status = PsychoJS.Status.NOT_STARTED;
        });
@@ -615,11 +809,11 @@ function textbox_trial2RoutineBegin(snapshot) {
 }
 
 
-function textbox_trial2RoutineEachFrame(snapshot) {
-  return function () {
-    //------Loop for each frame of Routine 'textbox_trial2'-------
+function textbox_trial3RoutineEachFrame() {
+  return async function () {
+    //------Loop for each frame of Routine 'textbox_trial3'-------
     // get current time
-    t = textbox_trial2Clock.getTime();
+    t = textbox_trial3Clock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
@@ -682,7 +876,7 @@ function textbox_trial2RoutineEachFrame(snapshot) {
     }
     
     continueRoutine = false;  // reverts to True if at least one component still running
-    textbox_trial2Components.forEach( function(thisComponent) {
+    textbox_trial3Components.forEach( function(thisComponent) {
       if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
         continueRoutine = true;
       }
@@ -698,17 +892,16 @@ function textbox_trial2RoutineEachFrame(snapshot) {
 }
 
 
-function textbox_trial2RoutineEnd(snapshot) {
-  return function () {
-    //------Ending Routine 'textbox_trial2'-------
-    textbox_trial2Components.forEach( function(thisComponent) {
+function textbox_trial3RoutineEnd() {
+  return async function () {
+    //------Ending Routine 'textbox_trial3'-------
+    textbox_trial3Components.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     });
     psychoJS.experiment.addData('textbox2.text',textbox2.text)
-    textbox2.reset()
-    // store data for thisExp (ExperimentHandler)
+    // store data for psychoJS.experiment (ExperimentHandler)
     _mouseXYs = mouse_resp2.getPos();
     _mouseButtons = mouse_resp2.getPressed();
     psychoJS.experiment.addData('mouse_resp2.x', _mouseXYs[0]);
@@ -718,7 +911,7 @@ function textbox_trial2RoutineEnd(snapshot) {
     psychoJS.experiment.addData('mouse_resp2.rightButton', _mouseButtons[2]);
     if (mouse_resp2.clicked_name.length > 0) {
       psychoJS.experiment.addData('mouse_resp2.clicked_name', mouse_resp2.clicked_name[0]);}
-    // the Routine "textbox_trial2" was not non-slip safe, so reset the non-slip timer
+    // the Routine "textbox_trial3" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
     return Scheduler.Event.NEXT;
@@ -728,7 +921,7 @@ function textbox_trial2RoutineEnd(snapshot) {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return function () {
+  return async function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -750,20 +943,22 @@ function endLoopIteration(scheduler, snapshot) {
 
 
 function importConditions(currentLoop) {
-  return function () {
+  return async function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };
 }
 
 
-function quitPsychoJS(message, isCompleted) {
+async function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();
   }
   
   document.body.setAttribute('data-report', 'FINISHED');
+  
+  
   
   
   
