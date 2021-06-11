@@ -65,8 +65,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'},
-    {'name': 'resources/ost.png', 'path': 'resources/ost.png'}
+    {'name': 'resources/ost.png', 'path': 'resources/ost.png'},
+    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'}
   ]
 });
 
