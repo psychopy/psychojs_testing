@@ -68,8 +68,9 @@ getViewportResolutions = () => {
  * @public
  * @param {number} x - x coordinate
  * @param {number} y - y coordinate
+ * @param {number} [duration - 200] - Number of ms to keep mouse or finger depressed
  */
-tapAtCoordinate = (x, y) => {
+tapAtCoordinate = (x, y, duration = 200) => {
   browser.performActions([{
     "type": "pointer",
     "id": "my_pointer",
@@ -77,7 +78,7 @@ tapAtCoordinate = (x, y) => {
     "actions": [
       {"type": "pointerMove", "duration": 0, "x": x, "y":  y, origin: 'viewport'},
       {"type": "pointerDown", "duration": 0, "button": 0},
-      {"type": "pause", "duration": 200},
+      {"type": "pause", "duration": duration},
       {"type": "pointerUp", "duration": 0, "button": 0}
     ]
   }]);
@@ -202,7 +203,7 @@ waitForReport = (value) => {
  * <li>Finished experiment
  * @function
  * @public
- * @param {boolean} screenshots - If true, logs screenshots of every calibration step
+ * @param {boolean} [screenshots = false] - If true, logs screenshots of every calibration step
  * @returns {Object} results of calibration procedure
  */  
 performCalibrationExperiment = (screenshots = false) => {
