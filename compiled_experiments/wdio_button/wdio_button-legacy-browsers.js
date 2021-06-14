@@ -85,6 +85,7 @@ var myCallbackSingle;
 var myCallbackMultiple;
 var button1_trialClock;
 var button1;
+var textbox;
 var button2_trialClock;
 var button2;
 var button_finish;
@@ -133,6 +134,24 @@ async function experimentInit() {
     size: null
   });
   button1.clock = new util.Clock();
+  
+  textbox = new visual.TextBox({
+    win: psychoJS.window,
+    name: 'textbox',
+    text: 'Can you see me?',
+    font: 'Open Sans',
+    pos: [0, (- 0.25)], letterHeight: 0.05,
+    size: [null, null],  units: undefined, 
+    color: 'white', colorSpace: 'rgb',
+    fillColor: undefined, borderColor: undefined,
+    bold: false, italic: false,
+    opacity: undefined,
+    padding: 0.0,
+    editable: false,
+    multiline: true,
+    anchor: 'center',
+    depth: -2.0 
+  });
   
   // Initialize components for Routine "button2_trial"
   button2_trialClock = new util.Clock();
@@ -298,9 +317,11 @@ function button1_trialRoutineBegin(snapshot) {
     // update component parameters for each repeat
     document.body.setAttribute('data-report', 'button1_trial');
     document.body.setAttribute('data-output', '');
+    textbox.reset()
     // keep track of which components have finished
     button1_trialComponents = [];
     button1_trialComponents.push(button1);
+    button1_trialComponents.push(textbox);
     
     button1_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
@@ -357,6 +378,16 @@ function button1_trialRoutineEachFrame() {
       // if button1 is clicked next frame, it is a new click
       button1.wasClicked = false;
     }
+    
+    // *textbox* updates
+    if (t >= 0.0 && textbox.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      textbox.tStart = t;  // (not accounting for frame time here)
+      textbox.frameNStart = frameN;  // exact frame index
+      
+      textbox.setAutoDraw(true);
+    }
+
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
