@@ -2,20 +2,17 @@
  * Wdio_Button Test *
  ********************/
 
-import { core, data, sound, util, visual } from './lib/psychojs-2021.2.0.js';
-const { PsychoJS } = core;
-const { TrialHandler } = data;
-const { Scheduler } = util;
+import { PsychoJS } from './lib/core-2021.2.0.js';
+import * as core from './lib/core-2021.2.0.js';
+import { TrialHandler } from './lib/data-2021.2.0.js';
+import { Scheduler } from './lib/util-2021.2.0.js';
+import * as visual from './lib/visual-2021.2.0.js';
+import * as sound from './lib/sound-2021.2.0.js';
+import * as util from './lib/util-2021.2.0.js';
 //some handy aliases as in the psychopy scripts;
 const { abs, sin, cos, PI: pi, sqrt } = Math;
 const { round } = util;
 
-
-// store info about the experiment session:
-let expName = 'wdio_button';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
-
-// Start code blocks for 'Before Experiment'
 // init psychoJS:
 const psychoJS = new PsychoJS({
   debug: true
@@ -28,6 +25,12 @@ psychoJS.openWindow({
   units: 'height',
   waitBlanking: true
 });
+
+// store info about the experiment session:
+let expName = 'wdio_button';  // from the Builder filename that created this script
+let expInfo = {'participant': '', 'session': '001'};
+
+// Start code blocks for 'Before Experiment'
 // schedule the experiment:
 psychoJS.schedule(psychoJS.gui.DlgFromDict({
   dictionary: expInfo,
@@ -63,7 +66,7 @@ psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
 var frameDur;
-async function updateInfo() {
+function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
   expInfo['psychopyVersion'] = '2021.2.0';
@@ -87,10 +90,9 @@ var intro_trialClock;
 var intro_text;
 var intro_mouse;
 var textbox_trial1Clock;
-var button;
 var globalClock;
 var routineTimer;
-async function experimentInit() {
+function experimentInit() {
   // Initialize components for Routine "intro_trial"
   intro_trialClock = new util.Clock();
   intro_text = new visual.TextStim({
@@ -112,15 +114,6 @@ async function experimentInit() {
   window.psychoJS = psychoJS;
   // Initialize components for Routine "textbox_trial1"
   textbox_trial1Clock = new util.Clock();
-  button = new visual.ButtonStim({
-    win: psychoJS.window,
-    name: 'button',
-    text: 'Click here',
-    pos: [0, 0.25], letterHeight: 0.05,
-    size: null
-  });
-  button.clock = new util.Clock();
-  
   // Create some handy timers
   globalClock = new util.Clock();  // to track the time since experiment started
   routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
@@ -135,9 +128,7 @@ var continueRoutine;
 var gotValidClick;
 var intro_trialComponents;
 function intro_trialRoutineBegin(snapshot) {
-  return async function () {
-    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
-    
+  return function () {
     //------Prepare to start Routine 'intro_trial'-------
     t = 0;
     intro_trialClock.reset(); // clock
@@ -162,8 +153,8 @@ function intro_trialRoutineBegin(snapshot) {
 
 var prevButtonState;
 var _mouseButtons;
-function intro_trialRoutineEachFrame() {
-  return async function () {
+function intro_trialRoutineEachFrame(snapshot) {
+  return function () {
     //------Loop for each frame of Routine 'intro_trial'-------
     // get current time
     t = intro_trialClock.getTime();
@@ -227,15 +218,15 @@ function intro_trialRoutineEachFrame() {
 
 
 var _mouseXYs;
-function intro_trialRoutineEnd() {
-  return async function () {
+function intro_trialRoutineEnd(snapshot) {
+  return function () {
     //------Ending Routine 'intro_trial'-------
     for (const thisComponent of intro_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
-    // store data for psychoJS.experiment (ExperimentHandler)
+    // store data for thisExp (ExperimentHandler)
     _mouseXYs = intro_mouse.getPos();
     _mouseButtons = intro_mouse.getPressed();
     psychoJS.experiment.addData('intro_mouse.x', _mouseXYs[0]);
@@ -254,9 +245,7 @@ function intro_trialRoutineEnd() {
 var myFunction;
 var textbox_trial1Components;
 function textbox_trial1RoutineBegin(snapshot) {
-  return async function () {
-    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
-    
+  return function () {
     //------Prepare to start Routine 'textbox_trial1'-------
     t = 0;
     textbox_trial1Clock.reset(); // clock
@@ -270,7 +259,6 @@ function textbox_trial1RoutineBegin(snapshot) {
     }
     // keep track of which components have finished
     textbox_trial1Components = [];
-    textbox_trial1Components.push(button);
     
     for (const thisComponent of textbox_trial1Components)
       if ('status' in thisComponent)
@@ -280,51 +268,13 @@ function textbox_trial1RoutineBegin(snapshot) {
 }
 
 
-function textbox_trial1RoutineEachFrame() {
-  return async function () {
+function textbox_trial1RoutineEachFrame(snapshot) {
+  return function () {
     //------Loop for each frame of Routine 'textbox_trial1'-------
     // get current time
     t = textbox_trial1Clock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
-    
-    // *button* updates
-    if (t >= 0 && button.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      button.tStart = t;  // (not accounting for frame time here)
-      button.frameNStart = frameN;  // exact frame index
-      
-      button.setAutoDraw(true);
-    }
-
-    if (button.status === PsychoJS.Status.STARTED) {
-      // check whether button has been pressed
-      if (button.isClicked) {
-        if (!button.wasClicked) {
-          // store time of first click
-          button.timesOn.push(button.clock.getTime());
-          // store time clicked until
-          button.timesOff.push(button.clock.getTime());
-        } else {
-          // update time clicked until;
-          button.timesOff[button.timesOff.length - 1] = button.clock.getTime();
-        }
-        if (!button.wasClicked) {
-          // end routine when button is clicked
-          continueRoutine = false;
-        }
-        // if button is still clicked next frame, it is not a new click
-        button.wasClicked = true;
-      } else {
-        // if button is clicked next frame, it is a new click
-        button.wasClicked = false
-      }
-    } else {
-      // keep clock at 0 if button hasn't started / has finished
-      button.clock.reset();
-      // if button is clicked next frame, it is a new click
-      button.wasClicked = false;
-    }
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -352,8 +302,8 @@ function textbox_trial1RoutineEachFrame() {
 }
 
 
-function textbox_trial1RoutineEnd() {
-  return async function () {
+function textbox_trial1RoutineEnd(snapshot) {
+  return function () {
     //------Ending Routine 'textbox_trial1'-------
     for (const thisComponent of textbox_trial1Components) {
       if (typeof thisComponent.setAutoDraw === 'function') {
@@ -370,7 +320,7 @@ function textbox_trial1RoutineEnd() {
 
 function endLoopIteration(scheduler, snapshot) {
   // ------Prepare for next entry------
-  return async function () {
+  return function () {
     if (typeof snapshot !== 'undefined') {
       // ------Check if user ended loop early------
       if (snapshot.finished) {
@@ -392,14 +342,14 @@ function endLoopIteration(scheduler, snapshot) {
 
 
 function importConditions(currentLoop) {
-  return async function () {
+  return function () {
     psychoJS.importAttributes(currentLoop.getCurrentTrial());
     return Scheduler.Event.NEXT;
     };
 }
 
 
-async function quitPsychoJS(message, isCompleted) {
+function quitPsychoJS(message, isCompleted) {
   // Check for and save orphaned data
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();
