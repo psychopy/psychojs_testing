@@ -42,9 +42,6 @@ flowScheduler.add(textbox_trial1RoutineEnd());
 flowScheduler.add(textbox_trial2RoutineBegin());
 flowScheduler.add(textbox_trial2RoutineEachFrame());
 flowScheduler.add(textbox_trial2RoutineEnd());
-flowScheduler.add(intro_trial3RoutineBegin());
-flowScheduler.add(intro_trial3RoutineEachFrame());
-flowScheduler.add(intro_trial3RoutineEnd());
 flowScheduler.add(textbox_trial3RoutineBegin());
 flowScheduler.add(textbox_trial3RoutineEachFrame());
 flowScheduler.add(textbox_trial3RoutineEnd());
@@ -87,21 +84,21 @@ async function updateInfo() {
 var intro_trialClock;
 var intro_text;
 var intro_mouse;
+var intro_polygon;
 var textbox_trial1Clock;
-var textbox1_2;
-var button_submit1_2;
-var mouse_resp1_2;
-var textbox_trial2Clock;
 var textbox1;
-var button_submit1;
-var mouse_resp1;
-var intro_trial3Clock;
-var feedback_text1;
-var feedback_keyboard1;
-var textbox_trial3Clock;
+var polygon1;
+var mouse1;
+var text1;
+var textbox_trial2Clock;
 var textbox2;
-var button_submit2;
-var mouse_resp2;
+var polygon2;
+var mouse2;
+var text2;
+var textbox_trial3Clock;
+var textbox3;
+var text3;
+var key3;
 var globalClock;
 var routineTimer;
 async function experimentInit() {
@@ -110,10 +107,10 @@ async function experimentInit() {
   intro_text = new visual.TextStim({
     win: psychoJS.window,
     name: 'intro_text',
-    text: 'wdio_textbox\n\nThis experiment presents an non-editable textbox, followed by an editable textbox.\n\nClick anywhere to continue...\n',
+    text: 'wdio_textbox\n\nThis experiment presents a couple of textboxes\n\nClick anywhere to continue. Click in the blue square to trigger bug #2 shown in the next routine.\n',
     font: 'Arial',
     units: undefined, 
-    pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
+    pos: [0, 0.25], height: 0.025,  wrapWidth: undefined, ori: 0,
     color: new util.Color('white'),  opacity: 1,
     depth: 0.0 
   });
@@ -124,11 +121,20 @@ async function experimentInit() {
   intro_mouse.mouseClock = new util.Clock();
   // Expose psychoJS to the browser window
   window.psychoJS = psychoJS;
+  intro_polygon = new visual.Rect ({
+    win: psychoJS.window, name: 'intro_polygon', 
+    width: [0.1, 0.1][0], height: [0.1, 0.1][1],
+    ori: 0, pos: [0, 0],
+    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    fillColor: new util.Color([(- 1), (- 1), 1]),
+    opacity: 1, depth: -3, interpolate: true,
+  });
+  
   // Initialize components for Routine "textbox_trial1"
   textbox_trial1Clock = new util.Clock();
-  textbox1_2 = new visual.TextBox({
+  textbox1 = new visual.TextBox({
     win: psychoJS.window,
-    name: 'textbox1_2',
+    name: 'textbox1',
     text: '',
     font: 'Arial',
     pos: [0, 0], letterHeight: 0.05,
@@ -144,8 +150,8 @@ async function experimentInit() {
     depth: 0.0 
   });
   
-  button_submit1_2 = new visual.Rect ({
-    win: psychoJS.window, name: 'button_submit1_2', 
+  polygon1 = new visual.Rect ({
+    win: psychoJS.window, name: 'polygon1', 
     width: [0.1, 0.1][0], height: [0.1, 0.1][1],
     ori: 0, pos: [0, (- 0.25)],
     lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
@@ -153,64 +159,71 @@ async function experimentInit() {
     opacity: 1, depth: -2, interpolate: true,
   });
   
-  mouse_resp1_2 = new core.Mouse({
+  mouse1 = new core.Mouse({
     win: psychoJS.window,
   });
-  mouse_resp1_2.mouseClock = new util.Clock();
+  mouse1.mouseClock = new util.Clock();
+  text1 = new visual.TextStim({
+    win: psychoJS.window,
+    name: 'text1',
+    text: 'textbox_trial1: A non-editable textbox with the text "This is a test"  set via code. Two bugs: (1). Bug in PsychoPy code generation (PsychoPy #3969). (2) If in the previous routine you clicked where the textbox would appear in this routine, only then do you need to click twice on the blue square (#237).\n\nClick the blue squareto continue.',
+    font: 'Open Sans',
+    units: undefined, 
+    pos: [0, 0.25], height: 0.04,  wrapWidth: undefined, ori: 0.0,
+    color: new util.Color('white'),  opacity: undefined,
+    depth: -4.0 
+  });
+  
   // Initialize components for Routine "textbox_trial2"
   textbox_trial2Clock = new util.Clock();
-  textbox1 = new visual.TextBox({
-    win: psychoJS.window,
-    name: 'textbox1',
-    text: 'Type your response here',
-    font: 'Arial',
-    pos: [0, 0], letterHeight: 0.05,
-    size: [0.8, 0.1],  units: undefined, 
-    color: 'black', colorSpace: 'rgb',
-    fillColor: 'white', borderColor: undefined,
-    bold: false, italic: false,
-    opacity: 1,
-    padding: undefined,
-    editable: true,
-    multiline: true,
-    anchor: 'center',
-    depth: 0.0 
-  });
-  
-  button_submit1 = new visual.Rect ({
-    win: psychoJS.window, name: 'button_submit1', 
-    width: [0.1, 0.1][0], height: [0.1, 0.1][1],
-    ori: 0, pos: [0, (- 0.25)],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([(- 1), (- 1), 1]),
-    opacity: 1, depth: -2, interpolate: true,
-  });
-  
-  mouse_resp1 = new core.Mouse({
-    win: psychoJS.window,
-  });
-  mouse_resp1.mouseClock = new util.Clock();
-  // Initialize components for Routine "intro_trial3"
-  intro_trial3Clock = new util.Clock();
-  feedback_text1 = new visual.TextStim({
-    win: psychoJS.window,
-    name: 'feedback_text1',
-    text: '',
-    font: 'Arial',
-    units: undefined, 
-    pos: [0, 0], height: 0.1,  wrapWidth: undefined, ori: 0,
-    color: new util.Color('white'),  opacity: 1,
-    depth: 0.0 
-  });
-  
-  feedback_keyboard1 = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
-  
-  // Initialize components for Routine "textbox_trial3"
-  textbox_trial3Clock = new util.Clock();
   textbox2 = new visual.TextBox({
     win: psychoJS.window,
     name: 'textbox2',
-    text: 'Type your response here',
+    text: 'Can you see me?',
+    font: 'Arial',
+    pos: [0, 0], letterHeight: 0.05,
+    size: [0.8, 0.1],  units: undefined, 
+    color: 'black', colorSpace: 'rgb',
+    fillColor: 'white', borderColor: undefined,
+    bold: false, italic: false,
+    opacity: 1,
+    padding: undefined,
+    editable: false,
+    multiline: true,
+    anchor: 'center',
+    depth: 0.0 
+  });
+  
+  polygon2 = new visual.Rect ({
+    win: psychoJS.window, name: 'polygon2', 
+    width: [0.1, 0.1][0], height: [0.1, 0.1][1],
+    ori: 0, pos: [0, (- 0.25)],
+    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    fillColor: new util.Color([(- 1), (- 1), 1]),
+    opacity: 1, depth: -2, interpolate: true,
+  });
+  
+  mouse2 = new core.Mouse({
+    win: psychoJS.window,
+  });
+  mouse2.mouseClock = new util.Clock();
+  text2 = new visual.TextStim({
+    win: psychoJS.window,
+    name: 'text2',
+    text: 'textbox_trial2: A non-editable textbox with the text "Can you see me"  set via a component parameter. Note text isn\'t visible. (#395)\n\nClick the blue square to continue.',
+    font: 'Open Sans',
+    units: undefined, 
+    pos: [0, 0.25], height: 0.04,  wrapWidth: undefined, ori: 0.0,
+    color: new util.Color('white'),  opacity: undefined,
+    depth: -4.0 
+  });
+  
+  // Initialize components for Routine "textbox_trial3"
+  textbox_trial3Clock = new util.Clock();
+  textbox3 = new visual.TextBox({
+    win: psychoJS.window,
+    name: 'textbox3',
+    text: 'Type text here...',
     font: 'Arial',
     pos: [0, 0], letterHeight: 0.05,
     size: [0.8, 0.1],  units: undefined, 
@@ -225,19 +238,19 @@ async function experimentInit() {
     depth: 0.0 
   });
   
-  button_submit2 = new visual.Rect ({
-    win: psychoJS.window, name: 'button_submit2', 
-    width: [0.1, 0.1][0], height: [0.1, 0.1][1],
-    ori: 0, pos: [0, (- 0.25)],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
-    fillColor: new util.Color([(- 1), (- 1), 1]),
-    opacity: 1, depth: -2, interpolate: true,
+  text3 = new visual.TextStim({
+    win: psychoJS.window,
+    name: 'text3',
+    text: 'textbox_trial3: An editable textbox with a keyboard component that listens to the "x" key.  Bugs: (1) When the textbox has focus and you press an "x", the "x" should not be registered as textbox input but finish the routine (#380). (2) On mobile Edge, the on-screen keyboard "flickers"; it shows up then disappears, then shows up again... (#213)',
+    font: 'Open Sans',
+    units: undefined, 
+    pos: [0, 0.25], height: 0.04,  wrapWidth: undefined, ori: 0.0,
+    color: new util.Color('white'),  opacity: undefined,
+    depth: -2.0 
   });
   
-  mouse_resp2 = new core.Mouse({
-    win: psychoJS.window,
-  });
-  mouse_resp2.mouseClock = new util.Clock();
+  key3 = new core.Keyboard({psychoJS: psychoJS, clock: new util.Clock(), waitForStart: true});
+  
   // Create some handy timers
   globalClock = new util.Clock();  // to track the time since experiment started
   routineTimer = new util.CountdownTimer();  // to track time remaining of each (non-slip) routine
@@ -268,6 +281,7 @@ function intro_trialRoutineBegin(snapshot) {
     intro_trialComponents = [];
     intro_trialComponents.push(intro_text);
     intro_trialComponents.push(intro_mouse);
+    intro_trialComponents.push(intro_polygon);
     
     intro_trialComponents.forEach( function(thisComponent) {
       if ('status' in thisComponent)
@@ -317,6 +331,16 @@ function intro_trialRoutineEachFrame() {
         }
       }
     }
+    
+    // *intro_polygon* updates
+    if (t >= 0.0 && intro_polygon.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      intro_polygon.tStart = t;  // (not accounting for frame time here)
+      intro_polygon.frameNStart = frameN;  // exact frame index
+      
+      intro_polygon.setAutoDraw(true);
+    }
+
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -381,18 +405,19 @@ function textbox_trial1RoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    textbox1_2.setText(msg)
-    textbox1_2.reset()
+    textbox1.reset();
+    textbox1.setText(msg)
     document.body.setAttribute('data-report', 'textbox1');
     msg = "This is a test";
-    // setup some python lists for storing info about the mouse_resp1_2
-    mouse_resp1_2.clicked_name = [];
+    // setup some python lists for storing info about the mouse1
+    mouse1.clicked_name = [];
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     textbox_trial1Components = [];
-    textbox_trial1Components.push(textbox1_2);
-    textbox_trial1Components.push(button_submit1_2);
-    textbox_trial1Components.push(mouse_resp1_2);
+    textbox_trial1Components.push(textbox1);
+    textbox_trial1Components.push(polygon1);
+    textbox_trial1Components.push(mouse1);
+    textbox_trial1Components.push(text1);
     
     textbox_trial1Components.forEach( function(thisComponent) {
       if ('status' in thisComponent)
@@ -411,46 +436,46 @@ function textbox_trial1RoutineEachFrame() {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *textbox1_2* updates
-    if (t >= 0.0 && textbox1_2.status === PsychoJS.Status.NOT_STARTED) {
+    // *textbox1* updates
+    if (t >= 0.0 && textbox1.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      textbox1_2.tStart = t;  // (not accounting for frame time here)
-      textbox1_2.frameNStart = frameN;  // exact frame index
+      textbox1.tStart = t;  // (not accounting for frame time here)
+      textbox1.frameNStart = frameN;  // exact frame index
       
-      textbox1_2.setAutoDraw(true);
+      textbox1.setAutoDraw(true);
     }
 
     
-    // *button_submit1_2* updates
-    if (t >= 0.0 && button_submit1_2.status === PsychoJS.Status.NOT_STARTED) {
+    // *polygon1* updates
+    if (t >= 0.0 && polygon1.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      button_submit1_2.tStart = t;  // (not accounting for frame time here)
-      button_submit1_2.frameNStart = frameN;  // exact frame index
+      polygon1.tStart = t;  // (not accounting for frame time here)
+      polygon1.frameNStart = frameN;  // exact frame index
       
-      button_submit1_2.setAutoDraw(true);
+      polygon1.setAutoDraw(true);
     }
 
-    // *mouse_resp1_2* updates
-    if (t >= 0.0 && mouse_resp1_2.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse1* updates
+    if (t >= 0.0 && mouse1.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_resp1_2.tStart = t;  // (not accounting for frame time here)
-      mouse_resp1_2.frameNStart = frameN;  // exact frame index
+      mouse1.tStart = t;  // (not accounting for frame time here)
+      mouse1.frameNStart = frameN;  // exact frame index
       
-      mouse_resp1_2.status = PsychoJS.Status.STARTED;
-      mouse_resp1_2.mouseClock.reset();
-      prevButtonState = mouse_resp1_2.getPressed();  // if button is down already this ISN'T a new click
+      mouse1.status = PsychoJS.Status.STARTED;
+      mouse1.mouseClock.reset();
+      prevButtonState = mouse1.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse_resp1_2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_resp1_2.getPressed();
+    if (mouse1.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse1.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
           // check if the mouse was inside our 'clickable' objects
           gotValidClick = false;
-          for (const obj of [button_submit1]) {
-            if (obj.contains(mouse_resp1_2)) {
+          for (const obj of [polygon1]) {
+            if (obj.contains(mouse1)) {
               gotValidClick = true;
-              mouse_resp1_2.clicked_name.push(obj.name)
+              mouse1.clicked_name.push(obj.name)
             }
           }
           if (gotValidClick === true) { // abort routine on response
@@ -459,6 +484,16 @@ function textbox_trial1RoutineEachFrame() {
         }
       }
     }
+    
+    // *text1* updates
+    if (t >= 0.0 && text1.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      text1.tStart = t;  // (not accounting for frame time here)
+      text1.frameNStart = frameN;  // exact frame index
+      
+      text1.setAutoDraw(true);
+    }
+
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -495,15 +530,15 @@ function textbox_trial1RoutineEnd() {
       }
     });
     // store data for psychoJS.experiment (ExperimentHandler)
-    _mouseXYs = mouse_resp1_2.getPos();
-    _mouseButtons = mouse_resp1_2.getPressed();
-    psychoJS.experiment.addData('mouse_resp1_2.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_resp1_2.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_resp1_2.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_resp1_2.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_resp1_2.rightButton', _mouseButtons[2]);
-    if (mouse_resp1_2.clicked_name.length > 0) {
-      psychoJS.experiment.addData('mouse_resp1_2.clicked_name', mouse_resp1_2.clicked_name[0]);}
+    _mouseXYs = mouse1.getPos();
+    _mouseButtons = mouse1.getPressed();
+    psychoJS.experiment.addData('mouse1.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse1.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse1.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse1.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse1.rightButton', _mouseButtons[2]);
+    if (mouse1.clicked_name.length > 0) {
+      psychoJS.experiment.addData('mouse1.clicked_name', mouse1.clicked_name[0]);}
     // the Routine "textbox_trial1" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -523,16 +558,17 @@ function textbox_trial2RoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    textbox1.reset()
-    document.body.setAttribute('data-report', 'textbox1');
-    // setup some python lists for storing info about the mouse_resp1
-    mouse_resp1.clicked_name = [];
+    textbox2.reset();
+    document.body.setAttribute('data-report', 'textbox_trial2');
+    // setup some python lists for storing info about the mouse2
+    mouse2.clicked_name = [];
     gotValidClick = false; // until a click is received
     // keep track of which components have finished
     textbox_trial2Components = [];
-    textbox_trial2Components.push(textbox1);
-    textbox_trial2Components.push(button_submit1);
-    textbox_trial2Components.push(mouse_resp1);
+    textbox_trial2Components.push(textbox2);
+    textbox_trial2Components.push(polygon2);
+    textbox_trial2Components.push(mouse2);
+    textbox_trial2Components.push(text2);
     
     textbox_trial2Components.forEach( function(thisComponent) {
       if ('status' in thisComponent)
@@ -551,46 +587,46 @@ function textbox_trial2RoutineEachFrame() {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *textbox1* updates
-    if (t >= 0.0 && textbox1.status === PsychoJS.Status.NOT_STARTED) {
+    // *textbox2* updates
+    if (t >= 0.0 && textbox2.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      textbox1.tStart = t;  // (not accounting for frame time here)
-      textbox1.frameNStart = frameN;  // exact frame index
+      textbox2.tStart = t;  // (not accounting for frame time here)
+      textbox2.frameNStart = frameN;  // exact frame index
       
-      textbox1.setAutoDraw(true);
+      textbox2.setAutoDraw(true);
     }
 
     
-    // *button_submit1* updates
-    if (t >= 0.0 && button_submit1.status === PsychoJS.Status.NOT_STARTED) {
+    // *polygon2* updates
+    if (t >= 0.0 && polygon2.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      button_submit1.tStart = t;  // (not accounting for frame time here)
-      button_submit1.frameNStart = frameN;  // exact frame index
+      polygon2.tStart = t;  // (not accounting for frame time here)
+      polygon2.frameNStart = frameN;  // exact frame index
       
-      button_submit1.setAutoDraw(true);
+      polygon2.setAutoDraw(true);
     }
 
-    // *mouse_resp1* updates
-    if (t >= 0.0 && mouse_resp1.status === PsychoJS.Status.NOT_STARTED) {
+    // *mouse2* updates
+    if (t >= 0.0 && mouse2.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_resp1.tStart = t;  // (not accounting for frame time here)
-      mouse_resp1.frameNStart = frameN;  // exact frame index
+      mouse2.tStart = t;  // (not accounting for frame time here)
+      mouse2.frameNStart = frameN;  // exact frame index
       
-      mouse_resp1.status = PsychoJS.Status.STARTED;
-      mouse_resp1.mouseClock.reset();
-      prevButtonState = mouse_resp1.getPressed();  // if button is down already this ISN'T a new click
+      mouse2.status = PsychoJS.Status.STARTED;
+      mouse2.mouseClock.reset();
+      prevButtonState = mouse2.getPressed();  // if button is down already this ISN'T a new click
       }
-    if (mouse_resp1.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_resp1.getPressed();
+    if (mouse2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
+      _mouseButtons = mouse2.getPressed();
       if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
         prevButtonState = _mouseButtons;
         if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
           // check if the mouse was inside our 'clickable' objects
           gotValidClick = false;
-          for (const obj of [button_submit1]) {
-            if (obj.contains(mouse_resp1)) {
+          for (const obj of [polygon2]) {
+            if (obj.contains(mouse2)) {
               gotValidClick = true;
-              mouse_resp1.clicked_name.push(obj.name)
+              mouse2.clicked_name.push(obj.name)
             }
           }
           if (gotValidClick === true) { // abort routine on response
@@ -599,6 +635,16 @@ function textbox_trial2RoutineEachFrame() {
         }
       }
     }
+    
+    // *text2* updates
+    if (t >= 0.0 && text2.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      text2.tStart = t;  // (not accounting for frame time here)
+      text2.frameNStart = frameN;  // exact frame index
+      
+      text2.setAutoDraw(true);
+    }
+
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -634,20 +680,16 @@ function textbox_trial2RoutineEnd() {
         thisComponent.setAutoDraw(false);
       }
     });
-    psychoJS.experiment.addData('textbox1.text',textbox1.text)
-    console.log(textbox1.getText())
-    console.log(textbox1.text)
-    document.body.setAttribute('data-output', textbox1.getText());
     // store data for psychoJS.experiment (ExperimentHandler)
-    _mouseXYs = mouse_resp1.getPos();
-    _mouseButtons = mouse_resp1.getPressed();
-    psychoJS.experiment.addData('mouse_resp1.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_resp1.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_resp1.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_resp1.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_resp1.rightButton', _mouseButtons[2]);
-    if (mouse_resp1.clicked_name.length > 0) {
-      psychoJS.experiment.addData('mouse_resp1.clicked_name', mouse_resp1.clicked_name[0]);}
+    _mouseXYs = mouse2.getPos();
+    _mouseButtons = mouse2.getPressed();
+    psychoJS.experiment.addData('mouse2.x', _mouseXYs[0]);
+    psychoJS.experiment.addData('mouse2.y', _mouseXYs[1]);
+    psychoJS.experiment.addData('mouse2.leftButton', _mouseButtons[0]);
+    psychoJS.experiment.addData('mouse2.midButton', _mouseButtons[1]);
+    psychoJS.experiment.addData('mouse2.rightButton', _mouseButtons[2]);
+    if (mouse2.clicked_name.length > 0) {
+      psychoJS.experiment.addData('mouse2.clicked_name', mouse2.clicked_name[0]);}
     // the Routine "textbox_trial2" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -656,128 +698,7 @@ function textbox_trial2RoutineEnd() {
 }
 
 
-var _feedback_keyboard1_allKeys;
-var intro_trial3Components;
-function intro_trial3RoutineBegin(snapshot) {
-  return async function () {
-    TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
-    
-    //------Prepare to start Routine 'intro_trial3'-------
-    t = 0;
-    intro_trial3Clock.reset(); // clock
-    frameN = -1;
-    continueRoutine = true; // until we're told otherwise
-    // update component parameters for each repeat
-    feedback_text1.setText('Press a key to continue...');
-    document.body.setAttribute('data-report', 'intro_trial2');
-    feedback_keyboard1.keys = undefined;
-    feedback_keyboard1.rt = undefined;
-    _feedback_keyboard1_allKeys = [];
-    // keep track of which components have finished
-    intro_trial3Components = [];
-    intro_trial3Components.push(feedback_text1);
-    intro_trial3Components.push(feedback_keyboard1);
-    
-    intro_trial3Components.forEach( function(thisComponent) {
-      if ('status' in thisComponent)
-        thisComponent.status = PsychoJS.Status.NOT_STARTED;
-       });
-    return Scheduler.Event.NEXT;
-  }
-}
-
-
-function intro_trial3RoutineEachFrame() {
-  return async function () {
-    //------Loop for each frame of Routine 'intro_trial3'-------
-    // get current time
-    t = intro_trial3Clock.getTime();
-    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
-    // update/draw components on each frame
-    
-    // *feedback_text1* updates
-    if (t >= 0.0 && feedback_text1.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      feedback_text1.tStart = t;  // (not accounting for frame time here)
-      feedback_text1.frameNStart = frameN;  // exact frame index
-      
-      feedback_text1.setAutoDraw(true);
-    }
-
-    
-    // *feedback_keyboard1* updates
-    if (t >= 0.0 && feedback_keyboard1.status === PsychoJS.Status.NOT_STARTED) {
-      // keep track of start time/frame for later
-      feedback_keyboard1.tStart = t;  // (not accounting for frame time here)
-      feedback_keyboard1.frameNStart = frameN;  // exact frame index
-      
-      // keyboard checking is just starting
-      psychoJS.window.callOnFlip(function() { feedback_keyboard1.clock.reset(); });  // t=0 on next screen flip
-      psychoJS.window.callOnFlip(function() { feedback_keyboard1.start(); }); // start on screen flip
-      psychoJS.window.callOnFlip(function() { feedback_keyboard1.clearEvents(); });
-    }
-
-    if (feedback_keyboard1.status === PsychoJS.Status.STARTED) {
-      let theseKeys = feedback_keyboard1.getKeys({keyList: ['y', 'n', 'left', 'right', 'space'], waitRelease: false});
-      _feedback_keyboard1_allKeys = _feedback_keyboard1_allKeys.concat(theseKeys);
-      if (_feedback_keyboard1_allKeys.length > 0) {
-        feedback_keyboard1.keys = _feedback_keyboard1_allKeys[_feedback_keyboard1_allKeys.length - 1].name;  // just the last key pressed
-        feedback_keyboard1.rt = _feedback_keyboard1_allKeys[_feedback_keyboard1_allKeys.length - 1].rt;
-        // a response ends the routine
-        continueRoutine = false;
-      }
-    }
-    
-    // check for quit (typically the Esc key)
-    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
-      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
-    }
-    
-    // check if the Routine should terminate
-    if (!continueRoutine) {  // a component has requested a forced-end of Routine
-      return Scheduler.Event.NEXT;
-    }
-    
-    continueRoutine = false;  // reverts to True if at least one component still running
-    intro_trial3Components.forEach( function(thisComponent) {
-      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
-        continueRoutine = true;
-      }
-    });
-    
-    // refresh the screen if continuing
-    if (continueRoutine) {
-      return Scheduler.Event.FLIP_REPEAT;
-    } else {
-      return Scheduler.Event.NEXT;
-    }
-  };
-}
-
-
-function intro_trial3RoutineEnd() {
-  return async function () {
-    //------Ending Routine 'intro_trial3'-------
-    intro_trial3Components.forEach( function(thisComponent) {
-      if (typeof thisComponent.setAutoDraw === 'function') {
-        thisComponent.setAutoDraw(false);
-      }
-    });
-    psychoJS.experiment.addData('feedback_keyboard1.keys', feedback_keyboard1.keys);
-    if (typeof feedback_keyboard1.keys !== 'undefined') {  // we had a response
-        psychoJS.experiment.addData('feedback_keyboard1.rt', feedback_keyboard1.rt);
-        routineTimer.reset();
-        }
-    
-    feedback_keyboard1.stop();
-    // the Routine "intro_trial3" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset();
-    
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
+var _key3_allKeys;
 var textbox_trial3Components;
 function textbox_trial3RoutineBegin(snapshot) {
   return async function () {
@@ -789,16 +710,16 @@ function textbox_trial3RoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    textbox2.reset()
-    document.body.setAttribute('data-report', 'textbox2');
-    // setup some python lists for storing info about the mouse_resp2
-    mouse_resp2.clicked_name = [];
-    gotValidClick = false; // until a click is received
+    textbox3.reset();
+    document.body.setAttribute('data-report', 'textbox_trial3');
+    key3.keys = undefined;
+    key3.rt = undefined;
+    _key3_allKeys = [];
     // keep track of which components have finished
     textbox_trial3Components = [];
-    textbox_trial3Components.push(textbox2);
-    textbox_trial3Components.push(button_submit2);
-    textbox_trial3Components.push(mouse_resp2);
+    textbox_trial3Components.push(textbox3);
+    textbox_trial3Components.push(text3);
+    textbox_trial3Components.push(key3);
     
     textbox_trial3Components.forEach( function(thisComponent) {
       if ('status' in thisComponent)
@@ -817,54 +738,49 @@ function textbox_trial3RoutineEachFrame() {
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
     // update/draw components on each frame
     
-    // *textbox2* updates
-    if (t >= 0.0 && textbox2.status === PsychoJS.Status.NOT_STARTED) {
+    // *textbox3* updates
+    if (t >= 0.0 && textbox3.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      textbox2.tStart = t;  // (not accounting for frame time here)
-      textbox2.frameNStart = frameN;  // exact frame index
+      textbox3.tStart = t;  // (not accounting for frame time here)
+      textbox3.frameNStart = frameN;  // exact frame index
       
-      textbox2.setAutoDraw(true);
+      textbox3.setAutoDraw(true);
     }
 
     
-    // *button_submit2* updates
-    if (t >= 0.0 && button_submit2.status === PsychoJS.Status.NOT_STARTED) {
+    // *text3* updates
+    if (t >= 0.0 && text3.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      button_submit2.tStart = t;  // (not accounting for frame time here)
-      button_submit2.frameNStart = frameN;  // exact frame index
+      text3.tStart = t;  // (not accounting for frame time here)
+      text3.frameNStart = frameN;  // exact frame index
       
-      button_submit2.setAutoDraw(true);
+      text3.setAutoDraw(true);
     }
 
-    // *mouse_resp2* updates
-    if (t >= 0.0 && mouse_resp2.status === PsychoJS.Status.NOT_STARTED) {
+    
+    // *key3* updates
+    if (t >= 0.0 && key3.status === PsychoJS.Status.NOT_STARTED) {
       // keep track of start time/frame for later
-      mouse_resp2.tStart = t;  // (not accounting for frame time here)
-      mouse_resp2.frameNStart = frameN;  // exact frame index
+      key3.tStart = t;  // (not accounting for frame time here)
+      key3.frameNStart = frameN;  // exact frame index
       
-      mouse_resp2.status = PsychoJS.Status.STARTED;
-      mouse_resp2.mouseClock.reset();
-      prevButtonState = mouse_resp2.getPressed();  // if button is down already this ISN'T a new click
-      }
-    if (mouse_resp2.status === PsychoJS.Status.STARTED) {  // only update if started and not finished!
-      _mouseButtons = mouse_resp2.getPressed();
-      if (!_mouseButtons.every( (e,i,) => (e == prevButtonState[i]) )) { // button state changed?
-        prevButtonState = _mouseButtons;
-        if (_mouseButtons.reduce( (e, acc) => (e+acc) ) > 0) { // state changed to a new click
-          // check if the mouse was inside our 'clickable' objects
-          gotValidClick = false;
-          for (const obj of [button_submit2]) {
-            if (obj.contains(mouse_resp2)) {
-              gotValidClick = true;
-              mouse_resp2.clicked_name.push(obj.name)
-            }
-          }
-          if (gotValidClick === true) { // abort routine on response
-            continueRoutine = false;
-          }
-        }
+      // keyboard checking is just starting
+      psychoJS.window.callOnFlip(function() { key3.clock.reset(); });  // t=0 on next screen flip
+      psychoJS.window.callOnFlip(function() { key3.start(); }); // start on screen flip
+      psychoJS.window.callOnFlip(function() { key3.clearEvents(); });
+    }
+
+    if (key3.status === PsychoJS.Status.STARTED) {
+      let theseKeys = key3.getKeys({keyList: ['x'], waitRelease: false});
+      _key3_allKeys = _key3_allKeys.concat(theseKeys);
+      if (_key3_allKeys.length > 0) {
+        key3.keys = _key3_allKeys[_key3_allKeys.length - 1].name;  // just the last key pressed
+        key3.rt = _key3_allKeys[_key3_allKeys.length - 1].rt;
+        // a response ends the routine
+        continueRoutine = false;
       }
     }
+    
     // check for quit (typically the Esc key)
     if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
       return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
@@ -900,17 +816,14 @@ function textbox_trial3RoutineEnd() {
         thisComponent.setAutoDraw(false);
       }
     });
-    psychoJS.experiment.addData('textbox2.text',textbox2.text)
-    // store data for psychoJS.experiment (ExperimentHandler)
-    _mouseXYs = mouse_resp2.getPos();
-    _mouseButtons = mouse_resp2.getPressed();
-    psychoJS.experiment.addData('mouse_resp2.x', _mouseXYs[0]);
-    psychoJS.experiment.addData('mouse_resp2.y', _mouseXYs[1]);
-    psychoJS.experiment.addData('mouse_resp2.leftButton', _mouseButtons[0]);
-    psychoJS.experiment.addData('mouse_resp2.midButton', _mouseButtons[1]);
-    psychoJS.experiment.addData('mouse_resp2.rightButton', _mouseButtons[2]);
-    if (mouse_resp2.clicked_name.length > 0) {
-      psychoJS.experiment.addData('mouse_resp2.clicked_name', mouse_resp2.clicked_name[0]);}
+    psychoJS.experiment.addData('textbox3.text',textbox3.text)
+    psychoJS.experiment.addData('key3.keys', key3.keys);
+    if (typeof key3.keys !== 'undefined') {  // we had a response
+        psychoJS.experiment.addData('key3.rt', key3.rt);
+        routineTimer.reset();
+        }
+    
+    key3.stop();
     // the Routine "textbox_trial3" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -957,8 +870,6 @@ async function quitPsychoJS(message, isCompleted) {
   }
   
   document.body.setAttribute('data-report', 'FINISHED');
-  
-  
   
   
   
