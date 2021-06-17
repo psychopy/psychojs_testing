@@ -76,7 +76,7 @@
         <Param name="stopType" updates="None" val="duration (s)" valType="str"/>
         <Param name="stopVal" updates="constant" val="" valType="code"/>
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
-        <Param name="text" updates="constant" val="wdio_textbox&amp;#10;&amp;#10;This experiment presents a couple of textboxes&amp;#10;&amp;#10;Click anywhere to continue. Click in the blue square to trigger bug #2 shown in the next routine.&amp;#10;" valType="extendedStr"/>
+        <Param name="text" updates="constant" val="wdio_textbox&amp;#10;&amp;#10;This experiment presents a couple of textboxes&amp;#10;&amp;#10;Click anywhere to continue. Click in the blue square to trigger the bug shown in the next routine.&amp;#10;" valType="extendedStr"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
         <Param name="wrapWidth" updates="constant" val="" valType="code"/>
       </TextComponent>
@@ -145,6 +145,23 @@
       </PolygonComponent>
     </Routine>
     <Routine name="textbox_trial1">
+      <CodeComponent name="code1">
+        <Param name="Before Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Before JS Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin JS Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Begin JS Routine" updates="constant" val="document.body.setAttribute('data-report', 'textbox_trial1');&amp;#10;msg = &quot;This is a test&quot;;" valType="extendedCode"/>
+        <Param name="Begin Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Code Type" updates="None" val="Both" valType="str"/>
+        <Param name="Each Frame" updates="constant" val="" valType="extendedCode"/>
+        <Param name="Each JS Frame" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End JS Experiment" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End JS Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="End Routine" updates="constant" val="" valType="extendedCode"/>
+        <Param name="disabled" updates="None" val="False" valType="bool"/>
+        <Param name="name" updates="None" val="code1" valType="code"/>
+      </CodeComponent>
       <TextboxComponent name="textbox1">
         <Param name="anchor" updates="constant" val="center" valType="str"/>
         <Param name="autoLog" updates="constant" val="True" valType="bool"/>
@@ -181,23 +198,6 @@
         <Param name="text" updates="set every repeat" val="$msg" valType="extendedStr"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
       </TextboxComponent>
-      <CodeComponent name="code1">
-        <Param name="Before Experiment" updates="constant" val="" valType="extendedCode"/>
-        <Param name="Before JS Experiment" updates="constant" val="" valType="extendedCode"/>
-        <Param name="Begin Experiment" updates="constant" val="" valType="extendedCode"/>
-        <Param name="Begin JS Experiment" updates="constant" val="" valType="extendedCode"/>
-        <Param name="Begin JS Routine" updates="constant" val="document.body.setAttribute('data-report', 'textbox1');&amp;#10;msg = &quot;This is a test&quot;;" valType="extendedCode"/>
-        <Param name="Begin Routine" updates="constant" val="" valType="extendedCode"/>
-        <Param name="Code Type" updates="None" val="Both" valType="str"/>
-        <Param name="Each Frame" updates="constant" val="" valType="extendedCode"/>
-        <Param name="Each JS Frame" updates="constant" val="" valType="extendedCode"/>
-        <Param name="End Experiment" updates="constant" val="" valType="extendedCode"/>
-        <Param name="End JS Experiment" updates="constant" val="" valType="extendedCode"/>
-        <Param name="End JS Routine" updates="constant" val="" valType="extendedCode"/>
-        <Param name="End Routine" updates="constant" val="" valType="extendedCode"/>
-        <Param name="disabled" updates="None" val="False" valType="bool"/>
-        <Param name="name" updates="None" val="code1" valType="code"/>
-      </CodeComponent>
       <PolygonComponent name="polygon1">
         <Param name="colorSpace" updates="constant" val="rgb" valType="str"/>
         <Param name="contrast" updates="constant" val="1" valType="num"/>
@@ -265,7 +265,7 @@
         <Param name="stopType" updates="None" val="duration (s)" valType="str"/>
         <Param name="stopVal" updates="constant" val="" valType="code"/>
         <Param name="syncScreenRefresh" updates="None" val="True" valType="bool"/>
-        <Param name="text" updates="constant" val="textbox_trial1: A non-editable textbox with the text &quot;This is a test&quot;  set via code. Two bugs: (1). Bug in PsychoPy code generation (PsychoPy #3969). (2) If in the previous routine you clicked where the textbox would appear in this routine, only then do you need to click twice on the blue square (#237).&amp;#10;&amp;#10;Click the blue squareto continue." valType="str"/>
+        <Param name="text" updates="constant" val="textbox_trial1: A non-editable textbox with the text &quot;This is a test&quot;  set via code.  If in the previous routine you clicked where the textbox would appear in this routine, only then do you need to click twice on the blue square (#237).&amp;#10;&amp;#10;Click the blue squareto continue." valType="str"/>
         <Param name="units" updates="None" val="from exp settings" valType="str"/>
         <Param name="wrapWidth" updates="constant" val="" valType="num"/>
       </TextComponent>

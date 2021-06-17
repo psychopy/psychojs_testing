@@ -107,7 +107,7 @@ async function experimentInit() {
   intro_text = new visual.TextStim({
     win: psychoJS.window,
     name: 'intro_text',
-    text: 'wdio_textbox\n\nThis experiment presents a couple of textboxes\n\nClick anywhere to continue. Click in the blue square to trigger bug #2 shown in the next routine.\n',
+    text: 'wdio_textbox\n\nThis experiment presents a couple of textboxes\n\nClick anywhere to continue. Click in the blue square to trigger the bug shown in the next routine.\n',
     font: 'Arial',
     units: undefined, 
     pos: [0, 0.25], height: 0.025,  wrapWidth: undefined, ori: 0,
@@ -147,7 +147,7 @@ async function experimentInit() {
     editable: false,
     multiline: true,
     anchor: 'center',
-    depth: 0.0 
+    depth: -1.0 
   });
   
   polygon1 = new visual.Rect ({
@@ -166,7 +166,7 @@ async function experimentInit() {
   text1 = new visual.TextStim({
     win: psychoJS.window,
     name: 'text1',
-    text: 'textbox_trial1: A non-editable textbox with the text "This is a test"  set via code. Two bugs: (1). Bug in PsychoPy code generation (PsychoPy #3969). (2) If in the previous routine you clicked where the textbox would appear in this routine, only then do you need to click twice on the blue square (#237).\n\nClick the blue squareto continue.',
+    text: 'textbox_trial1: A non-editable textbox with the text "This is a test"  set via code.  If in the previous routine you clicked where the textbox would appear in this routine, only then do you need to click twice on the blue square (#237).\n\nClick the blue squareto continue.',
     font: 'Open Sans',
     units: undefined, 
     pos: [0, 0.25], height: 0.04,  wrapWidth: undefined, ori: 0.0,
@@ -405,10 +405,9 @@ function textbox_trial1RoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    textbox1.reset();
-    textbox1.setText(msg)
-    document.body.setAttribute('data-report', 'textbox1');
+    document.body.setAttribute('data-report', 'textbox_trial1');
     msg = "This is a test";
+    textbox1.setText(msg);
     // setup some python lists for storing info about the mouse1
     mouse1.clicked_name = [];
     gotValidClick = false; // until a click is received
@@ -558,7 +557,6 @@ function textbox_trial2RoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    textbox2.reset();
     document.body.setAttribute('data-report', 'textbox_trial2');
     // setup some python lists for storing info about the mouse2
     mouse2.clicked_name = [];
@@ -710,7 +708,7 @@ function textbox_trial3RoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    textbox3.reset();
+    textbox3.setText('Type text here...');
     document.body.setAttribute('data-report', 'textbox_trial3');
     key3.keys = undefined;
     key3.rt = undefined;

@@ -29,54 +29,42 @@ module.exports = {
     SharedBehaviors.waitForReport('intro');
     SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
 
-    // *** textbox1
-    // type something in textbox, wait 100ms, make screenshot, submit
-    SharedBehaviors.waitForReport('textbox1');
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
+    // *** textbox_trial1
+    // Make a screenshot, then tap once on the blue square
+    SharedBehaviors.waitForReport('textbox_trial1');
+    browser.writeScreenshot('textbox_trial1');
+    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
+    browser.pause(100);
+    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
+
+    // *** textbox_trial2
+    // Make a screenshot, then tap once on the blue square
+    SharedBehaviors.waitForReport('textbox_trial2');
+    browser.writeScreenshot('textbox_trial2');
+    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
+
+    // *** textbox_trial2
+    // Type in "test", make a screenshot, then press "x" to finish the routine
+    SharedBehaviors.waitForReport('textbox_trial3');
     browser.performActions([{
       "type": "key",
       "id": "test1",
-      "actions": typeText('test1')
+      "actions": typeText('test')
     }]);
-    browser.pause(100);
-    //browser.writeScreenshot('textbox1');
-    browser.pause(100);
-    // Tap submit button (once)
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-    browser.pause(100);
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-
-    // Go through intro2
-    SharedBehaviors.waitForReport('intro_trial2');
+    browser.writeScreenshot('textbox3');
     browser.performActions([{
       "type": "key",
       "id": "intro_trial2",
-      "actions": typeText('y')
+      "actions": typeText('x')
     }]);
 
-    // *** textbox2
-    // type something in textbox, wait 100ms, make screenshot, submit
-    SharedBehaviors.waitForReport('textbox2');
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(0));
-    browser.performActions([{
-      "type": "key",
-      "id": "test2",
-      "actions": typeText('test2')
-    }]);
-    browser.pause(1000);
-    //browser.writeScreenshot('textbox2');
-    // Tap submit button (once)
-    SharedBehaviors.tapAtCoordinate(calibration.transformX(0), calibration.transformY(-0.25));
-
-    // Wait until experiment finished
+    // *** Finish
+    // Wait until experiment finished, then check whether typed in text is indeed "test"
     SharedBehaviors.waitForReport('FINISHED');
-
-    // Check data
     let data = browser.execute(function() {
       return psychoJS.experiment._trialsData;
     });        
     console.log(data);
-    expect(data[0]['textbox1.text']).toBe('test1');
-    expect(data[0]['textbox2.text']).toBe('test2');
+    expect(data[0]['textbox3.text']).toBe('testx');
   }
 };
