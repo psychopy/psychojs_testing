@@ -41,6 +41,7 @@ const logSilent = 1; // Log nothing
 // true, an error is thrown. If both are defined, earlier elements in sources take precedence.
 // If censor === true; the value of the option is not printed to the console
 parseOption = (sources = {}, required = true, logLevel = logFull) => {
+  console.log(yargs(hideBin(process.argv)).argv);
   // Key in cli/environment
   let optionKey;
   // Processor function
