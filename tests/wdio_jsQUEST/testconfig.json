@@ -1,0 +1,9 @@
+{
+  "test_framework": "wdio",
+  "labels": ["wdio_jsQUEST", "wdio", "full", "short"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "wdio_jsQUEST.cjs",
+  "experiment_file": "wdio_jsQUEST.psyexp",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/wdio_jsQUEST",
+  "description": "Loads the jsQUEST module and performs a small simulation to check whether mean and SD parameters are consistent across devices"
+}
