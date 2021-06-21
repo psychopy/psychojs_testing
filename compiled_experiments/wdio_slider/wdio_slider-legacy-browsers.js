@@ -117,7 +117,7 @@ async function experimentInit() {
     size: [0.6, 0.1], pos: [0, 0], units: 'height',
     labels: ["left", "right"], ticks: [1, 2, 3, 4, 5],
     granularity: 0, style: ["RATING"],
-    color: new util.Color('LightGray'), 
+    color: new util.Color('LightGray'), markerColor: new util.Color('Blue'), lineColor: new util.Color('White'), 
     fontFamily: 'HelveticaBold', bold: true, italic: false, depth: -1, 
     flip: false,
   });

@@ -324,7 +324,6 @@ function button1_trialRoutineBegin(snapshot) {
     // update component parameters for each repeat
     document.body.setAttribute('data-report', 'button1_trial');
     document.body.setAttribute('data-output', '');
-    textbox.reset()
     // keep track of which components have finished
     button1_trialComponents = [];
     button1_trialComponents.push(button1);
