@@ -190,7 +190,7 @@ performCalibrationProcedure = (screenshots = false) => {
 waitForReport = (value) => {
   browser.waitUntil(() => {
     return $('<body>').getAttribute('data-report') === value;
-  }, {timeoutMsg: 'Attribute data-report of body in HTML was not ' + value});
+  }, {timeoutMsg: 'Attribute data-report of body in HTML was not ' + value + ' but ' + $('<body>').getAttribute('data-report')});
 };
 
 
