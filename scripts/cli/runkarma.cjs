@@ -46,7 +46,8 @@ if (server === 'bs') {
     await BrowserStack.waitUntilReady();
   }
 
-  // Run karma
+  // Run karma (assume we haven't failed, unless the child process throws)
+  let failed = false;
   try {
     // String of options passed to this script; we pass these on to karma.conf.js
     let cliString = CLIParser.constructCLIString(2);
@@ -54,6 +55,7 @@ if (server === 'bs') {
       stdio: ['inherit', 'inherit', 'inherit']
     });
   } catch (e) {
+    failed  = true;
     console.log(e.message);
   }
   // Get sessions and store them
@@ -84,5 +86,9 @@ if (server === 'bs') {
     // Upload logs
     console.log('[runkarma.cjs] Uploading new reports to Stager');
     await Stager.uploadDirectory(Paths.dir_results_karma, Paths.subdir_results_karma + '/' + stagerPath);
+  }
+
+  if (failed) {
+    process.exit(1);
   }
 })();
