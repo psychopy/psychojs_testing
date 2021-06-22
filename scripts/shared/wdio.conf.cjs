@@ -95,7 +95,7 @@ exports.config = {
   // Options to be passed to Jasmine.
   jasmineOpts: {
     // Jasmine default timeout
-    defaultTimeoutInterval: 90000,
+    defaultTimeoutInterval: 120000,
     // Fail whole suite after first failed spec
     failFast: true,
     //
