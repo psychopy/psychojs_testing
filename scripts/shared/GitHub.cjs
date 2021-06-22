@@ -4,7 +4,7 @@
 const child_process = require('child_process');
 
 // Default repo
-const repoName = "tpronk/e2e_robot";
+const repoName = "psychopy/psychojs";
 
 // Get branch names of default repo
 getBranchNames = () => {
