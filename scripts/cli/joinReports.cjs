@@ -18,7 +18,8 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
 // Join reports
 (async () => {
   // Any failed tests?
-  let failed = false;
+  let anyFailed = false;
+  let thisFailed;
   // Create directories we need for aggregating
   Paths.recreateDirectories(
     [Paths.dir_results],
@@ -63,11 +64,12 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
       report = JSON.parse(getResults);
       joinedReports = joinedReports.concat(report);
     }
-    failed = failed || ReportSummarizer.aggregateAndStoreKarma(
+    thisFailed = ReportSummarizer.aggregateAndStoreKarma(
       joinedReports,
       Paths.dir_results_joined + '/karma', 
       true
     );
+    anyFailed = anyFailed || thisFailed;
   }
 
   // *** WDIO reports
@@ -111,20 +113,28 @@ let testrun = CLIParser.parseOption({cli: 'testrun'});
       buildNamesToBuildIdsMap[buildName] = buildIds[0];
     }
     console.log('[joinReports.cjs] buildNamesToBuildIdsMap is ' + JSON.stringify(buildNamesToBuildIdsMap));
-    failed = failed || ReportSummarizer.aggregateAndStoreWdio(
+    thisFailed = ReportSummarizer.aggregateAndStoreWdio(
       joinedReports,
       Paths.dir_results_joined + '/wdio',
       true, 
       BrowserStack.createBuildName(branch, testrun, undefined, trailingSeparator = true),
       buildNamesToBuildIdsMap
     );
+    anyFailed = anyFailed || thisFailed;
   }
   
   // Upload to stager
+  console.log('[joinReports.cjs] Deleting old joined logs')
+  await Stager.deleteDirectory(Paths.subdir_results_joined + '/'  + Stager.createReportPath(branch, testrun));
+
   console.log('[joinReports.cjs] Uploading joined logs');
+  console.log([
+    Paths.dir_results_joined,
+    Paths.subdir_results_joined + '/'  + Stager.createReportPath(branch, testrun)
+  ]);
   await Stager.uploadDirectory(Paths.dir_results_joined, Paths.subdir_results_joined + '/'  + Stager.createReportPath(branch, testrun));
 
-  process.exit(failed? 1: 0);
+  process.exit(anyFailed? 1: 0);
 })();
 
 
