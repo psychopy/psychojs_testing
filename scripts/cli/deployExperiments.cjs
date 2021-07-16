@@ -50,6 +50,10 @@ Paths.recreateDirectories([Paths.dir_deployed], false);
 
 // Perform deployment
 (async () => {
+  // Delete contents of deployed_experiments
+  console.log('[deployExperiments.cjs] Emptying deployed_experiments');
+  fs.emptyDirSync(Paths.dir_deployed);
+
   // Copy and deploy each experiment
   console.log('[deployExperiments.cjs] Deploying ' + tests.wdio.length + ' experiments');
 
