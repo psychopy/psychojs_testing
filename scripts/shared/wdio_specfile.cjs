@@ -25,6 +25,12 @@ describe('wdio_specfile', () => {
       browser.setTestConfig(test);
       testFunction = require('../../tests/' + test.path + '/' + test.testscript_file).run;
       testFunction(calibration);
+      // Check on messages in data-error, even though all assertions passed
+      let errorMessage = $('<body>').getAttribute('data-error');
+      if (errorMessage !== null) {
+        browser.logAdd('error', errorMessage);
+        fail('[wdio_specfile.cjs] error message detected even though all assertions passed');
+      }
     });
   }
 });
