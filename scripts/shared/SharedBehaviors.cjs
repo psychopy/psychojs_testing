@@ -13,6 +13,7 @@ performPavloviaPrelude = (waitForCanvas = true, resourceTimeout = 20000) => {
   // Wait until resource have loaded, then click OK
   $('#buttonOk').waitForEnabled({timeout: resourceTimeout, timeoutMsg: '#buttonOK was not enabled within ' + resourceTimeout + ' ms'});
   browser.pause(1000);
+  browser.writeScreenshot('exp_dialog');
   $('#buttonOk').click();    
   //browser.pause(100000);      
   // Wait for canvas, then wait 3 seconds for any status bars to disappear after full-screen is enabled
@@ -41,14 +42,24 @@ getViewportResolutions = () => {
       'window.innerHeight': window.innerHeight,
       'window.devicePixelRatio': window.devicePixelRatio,
       'screen.width': screen.width,
-      'screen.height': screen.height
+      'screen.height': screen.height,
+      'window.orientation': window.orientation
     };
   });        
   // On iPhones, use screen.width and screen.height for calibration taps, otherwise use windows.innerWidth and windows.innerHeight
   let width, height;
   if (browser.getDeviceName() !== undefined && browser.getDeviceName().startsWith('iPhone')) {
-    width = viewport['screen.width'];
-    height = viewport['screen.height']
+    // If we're in landscape on iOS, use height as width and vice versa (iOS reports screen.height and screen.width in portrait more,
+    // regardless of the actual device orientation)
+    if (viewport['window.orientation'] !== undefined && viewport['window.orientation'] !== 0 && viewport['window.orientation'] !== 180) {
+      // Landscape
+      width = viewport['screen.height'];
+      height = viewport['screen.width']
+    } else {
+      // Portrait
+      width = viewport['screen.width'];
+      height = viewport['screen.height']
+    }
   } else {
     width = viewport['window.innerWidth'];
     height = viewport['window.innerHeight'];
@@ -101,18 +112,26 @@ tapAtCoordinate = (x, y, duration = 200) => {
  * @param {boolean} screenshots - If true, logs screenshots of every calibration step
  * @returns {Object} results of calibration procedure
  */  
-performCalibrationProcedure = (screenshots = false) => {
+performCalibrationProcedure = (screenshots = false, rotateTo = null) => {
   // Local variables
   let actionX = [], actionY = [], coefX, interceptX, deviationX, transformX;
   let canvasX = [], canvasY = [], coefY, interceptY, deviationY, transformY;
   let viewport;
 
-  // Get viewport resolutions
-  viewport = getViewportResolutions();
-
   // *** First tap
   // Wait for confirmation we're at the first calibration routine
   waitForReport('calibration_0');
+  // Rotate screen if so required
+  if(rotateTo !== null) {
+    browser.setOrientation(rotateTo);
+    browser.pause(2000);
+  }
+  // Get viewport resolutions
+  viewport = getViewportResolutions();
+  // Take a screenshot
+  if (screenshots) {
+    browser.writeScreenshot('calibration_0');
+  }
   // Perform first calibration tap
   actionX.push(viewport.transformX(-0.25));
   actionY.push(viewport.transformY(-0.25));
@@ -121,7 +140,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('calibration_1');
   // Take a screenshot
   if (screenshots) {
-    browser.writeScreenshot('wdio_calibration', 'afterc0');
+    browser.writeScreenshot('calibration_1');
   }
   // Store first canvas coordinates
   canvasX.push($('<body>').getAttribute('data-x'));
@@ -136,7 +155,7 @@ performCalibrationProcedure = (screenshots = false) => {
   waitForReport('verification');
   // Take a screenshot
   if (screenshots) {  
-    browser.writeScreenshot('wdio_calibration', 'afterc1');
+    browser.writeScreenshot('verification');
   }
   // Store second canvas coordinates  
   canvasX.push($('<body>').getAttribute('data-x'));
@@ -206,13 +225,13 @@ waitForReport = (value) => {
  * @param {boolean} [screenshots = false] - If true, logs screenshots of every calibration step
  * @returns {Object} results of calibration procedure
  */  
-performCalibrationExperiment = (screenshots = false) => {
+performCalibrationExperiment = (screenshots = false, rotateTo = null) => {
   // Navigate to experiment and perform prelude
   browser.url(browser.getExperimentUrl());
   performPavloviaPrelude();
 
   // Perform calibration procedure, store results
-  calibration = performCalibrationProcedure(screenshots);
+  calibration = performCalibrationProcedure(screenshots, rotateTo);
   //console.log("Shared performCalibration");
   //console.log(calibration);
   browser.logAdd('window.innerWidth', calibration.viewport['window.innerWidth']);
