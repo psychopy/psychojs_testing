@@ -1,11 +1,4 @@
-<?php
-// Config vars
-$prefix = "https://www.lab.uva.nl";
-$params = array(
-  "project_url" => $prefix . $task->getParameter('project_url'),
-  "event_url" => $prefix . $task->getParameter('event_url')
-);
-?><!doctype html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -13,7 +6,7 @@ $params = array(
     <title>{{experiment}} [PsychoPy]</title>
     <!-- styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
-    <link rel="stylesheet" href="<?= $params["project_url"]; ?>lib/psychojs-{{psychoJSVersion}}.css">
+    <link rel="stylesheet" href="lib/psychojs-{{psychoJSVersion}}.css">
   </head>
   <body>
     <!-- replaced by <div id="root"></div> from root.html; we do it like this since the karma test only requires that node; not the whole index.html -->
@@ -22,18 +15,15 @@ $params = array(
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/preloadjs@1.0.1/lib/preloadjs.min.js"></script>
-    <!-- Params -->
-    <script type="text/javascript">
-      var lotusConfig = <? echo json_encode($params); ?>;
-      function submitData(data) {
-        document.getElementById('value').value = JSON.stringify(data);
-        document.getElementById('task_data').submit();
-      }      
+    <script>
+      window.lotusConfig = {
+        url: 'localhost/blabla'
+      };
     </script>
 		<!-- experiment -->
-		<script type='module' src='<?= $params["project_url"]; ?>{{experiment}}.js'></script>
-    <form style="display:none" id="task_data" method="post" action="<?= $params["event_url"]; ?>">
-      <input type='text' id='value' name='value' />
-    </form>
+		<script type='module' src='./{{experiment}}.js'></script>
+		<!-- legacy browsers -->
+    <script nomodule type="text/javascript" src="lib/psychojs-{{psychoJSVersion}}.js"></script>
+    <script nomodule type="text/javascript" src="./{{experiment}}-legacy-browsers.js"></script>
   </body>
 </html>
