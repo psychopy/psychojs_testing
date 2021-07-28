@@ -57,8 +57,8 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
-    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'},
-    {'name': 'resources/ost.png', 'path': 'resources/ost.png'}
+    {'name': 'resources/ost.png', 'path': 'resources/ost.png'},
+    {'name': 'resources/landscape.jpg', 'path': 'resources/landscape.jpg'}
   ]
 });
 
@@ -69,7 +69,7 @@ var frameDur;
 async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.2.0';
+  expInfo['psychopyVersion'] = '2021.3.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully

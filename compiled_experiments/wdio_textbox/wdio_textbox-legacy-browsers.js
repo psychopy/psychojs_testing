@@ -64,7 +64,7 @@ var frameDur;
 async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.2.0';
+  expInfo['psychopyVersion'] = '2021.3.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
@@ -815,6 +815,10 @@ function textbox_trial3RoutineEnd() {
       }
     });
     psychoJS.experiment.addData('textbox3.text',textbox3.text)
+    // update the trial handler
+    if (currentLoop instanceof MultiStairHandler) {
+      currentLoop.addResponse(key3.corr);
+    }
     psychoJS.experiment.addData('key3.keys', key3.keys);
     if (typeof key3.keys !== 'undefined') {  // we had a response
         psychoJS.experiment.addData('key3.rt', key3.rt);

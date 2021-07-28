@@ -2,9 +2,9 @@
  * Demo_Polyfill Test *
  **********************/
 
-import { core, data, sound, util, visual } from './lib/psychojs-2021.2.0.js';
+import { core, data, sound, util, visual } from './lib/psychojs-2021.3.0.js';
 const { PsychoJS } = core;
-const { TrialHandler } = data;
+const { TrialHandler, MultiStairHandler } = data;
 const { Scheduler } = util;
 //some handy aliases as in the psychopy scripts;
 const { abs, sin, cos, PI: pi, sqrt } = Math;
@@ -68,7 +68,7 @@ var frameDur;
 async function updateInfo() {
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.2.0';
+  expInfo['psychopyVersion'] = '2021.3.0';
   expInfo['OS'] = window.navigator.platform;
 
   // store frame rate of monitor if we can measure it successfully
