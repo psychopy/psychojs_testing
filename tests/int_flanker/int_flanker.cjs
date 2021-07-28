@@ -6,6 +6,7 @@ const wave = 1;
 module.exports = {
   run: () => {
     // Smartphone or keyboard
+    //let dev = ['ios', 'and'].includes(browser.getPlatformName().substr(0, 3))? 'sm': 'kb';
     let dev = ['ios', 'and'].includes(browser.getPlatformName().substr(0, 3))? 'sm': 'kb';
     let respond;
     console.log('[int_flanker.cjs] dev is ' + dev);

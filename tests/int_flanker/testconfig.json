@@ -1,0 +1,9 @@
+{
+  "test_framework": "wdio",
+  "labels": ["int_flanker"],
+  "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
+  "testscript_file": "int_flanker.cjs",
+  "experiment_file": "int_flanker_kb.psyexp",
+  "description": "Takes part in a responsive Flanker task",
+  "pavlovia_url": "https://run.pavlovia.org/tpronk/int_flanker"
+}
