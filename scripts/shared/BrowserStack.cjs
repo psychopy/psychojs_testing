@@ -7,7 +7,7 @@ const CLIParser = require('./CLIParser.cjs');
 // CURL shorthand
 curlCommand = (postfix, infix = '') => {
   return '' +
-    'curl -s -u "' + 
+    'curl --ssl-no-revoke -s -u "' + 
     CLIParser.parseOption({env: 'BROWSERSTACK_USER'}, true, CLIParser.logSilent) + 
     ':' + 
     CLIParser.parseOption({env: 'BROWSERSTACK_ACCESSKEY'}, true, CLIParser.logSilent) + 
