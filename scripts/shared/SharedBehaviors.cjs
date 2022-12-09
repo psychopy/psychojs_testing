@@ -9,11 +9,11 @@
 performPavloviaPrelude = (waitForCanvas = true, resourceTimeout = 20000) => {
   // Wait for root element and OK button  
   $('#root').waitForExist({timeout: 10000, timeoutMsg: 'Could not find div #root in HTML'});
-  $('#buttonOk').waitForExist({timeout: 10000, timeoutMsg: 'Could not find #buttonOK in HTML'});
+  $('#dialogOK').waitForExist({timeout: 10000, timeoutMsg: 'Could not find #dialogOK in HTML'});
   // Wait until resource have loaded, then click OK
-  $('#buttonOk').waitForEnabled({timeout: resourceTimeout, timeoutMsg: '#buttonOK was not enabled within ' + resourceTimeout + ' ms'});
+  $('#dialogOK').waitForEnabled({timeout: resourceTimeout, timeoutMsg: '#dialogOK was not enabled within ' + resourceTimeout + ' ms'});
   browser.pause(1000);
-  $('#buttonOk').click();    
+  $('#dialogOK').click();    
   //browser.pause(100000);      
   // Wait for canvas, then wait 3 seconds for any status bars to disappear after full-screen is enabled
   if (waitForCanvas) {
