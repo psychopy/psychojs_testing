@@ -37,9 +37,9 @@
     "mustache": "^4.1.0",
     "onchange": "^7.1.0",
     "replace-color": "^2.3.0",
-    "ssh2-sftp-client": "^6.0.1",
-    "wdio-json-reporter": "^2.0.0",
-    "xlsx": "^0.16.9",
+    "ssh2-sftp-client": "^9.0.4",
+    "wdio-json-reporter": "^3.0.0",
+    "xlsx": "^0.18.5",
     "yargs": "^16.2.0"
   }
 }
