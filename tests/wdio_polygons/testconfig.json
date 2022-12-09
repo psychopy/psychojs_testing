@@ -1,6 +1,6 @@
 {
   "test_framework": "wdio",
-  "labels": ["wdio_polygons", "wdio", "full", "short"],
+  "labels": ["wdio_polygons", "wdio", "full", "short", "y2022"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "wdio_polygons.cjs",
   "experiment_file": "wdio_polygons.psyexp",
