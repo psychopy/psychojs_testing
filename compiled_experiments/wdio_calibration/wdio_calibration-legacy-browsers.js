@@ -5,7 +5,10 @@
 
 // store info about the experiment session:
 let expName = 'wdio_calibration';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
+let expInfo = {
+    'participant': '',
+    'session': '001',
+};
 
 // Start code blocks for 'Before Experiment'
 // init psychoJS:
@@ -60,12 +63,16 @@ psychoJS.start({
 psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
+var currentLoop;
 var frameDur;
 async function updateInfo() {
+  currentLoop = psychoJS.experiment;  // right now there are no loops
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.3.0';
+  expInfo['psychopyVersion'] = '2022.2.4';
   expInfo['OS'] = window.navigator.platform;
+
+  psychoJS.experiment.dataFileName = (("." + "/") + `data/${expInfo["participant"]}_${expName}_${expInfo["date"]}`);
 
   // store frame rate of monitor if we can measure it successfully
   expInfo['frameRate'] = psychoJS.window.getActualFrameRate();
@@ -109,6 +116,7 @@ async function experimentInit() {
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
+    languageStyle: 'LTR',
     color: new util.Color('white'),  opacity: 1,
     depth: 0.0 
   });
@@ -125,7 +133,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'c1_background', 
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
@@ -134,7 +144,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'c1_pointer', 
     width: [0.02, 0.02][0], height: [0.02, 0.02][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -1, interpolate: true,
   });
@@ -149,7 +161,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'v_background', 
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([(- 1), 1, (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
@@ -158,7 +172,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'v_pointer', 
     width: [0.02, 0.02][0], height: [0.02, 0.02][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -1, interpolate: true,
   });
@@ -173,7 +189,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'vfb_background', 
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([(- 1), (- 1), 1]),
     opacity: 1, depth: 0, interpolate: true,
   });
@@ -182,7 +200,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'vfb_expected', 
     width: [0.02, 0.02][0], height: [0.02, 0.02][1],
     ori: 0, pos: [0.25, 0.25],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([(- 1), (- 1), (- 1)]),
     opacity: 1, depth: -1, interpolate: true,
   });
@@ -191,7 +211,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 'vfb_pointer', 
     width: [0.02, 0.02][0], height: [0.02, 0.02][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -2, interpolate: true,
   });
@@ -217,7 +239,7 @@ function calibration_0_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'calibration_0_trial'-------
+    //--- Prepare to start Routine 'calibration_0_trial' ---
     t = 0;
     calibration_0_trialClock.reset(); // clock
     frameN = -1;
@@ -244,7 +266,7 @@ var prevButtonState;
 var _mouseButtons;
 function calibration_0_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'calibration_0_trial'-------
+    //--- Loop for each frame of Routine 'calibration_0_trial' ---
     // get current time
     t = calibration_0_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -307,9 +329,9 @@ function calibration_0_trialRoutineEachFrame() {
 
 
 var _mouseXYs;
-function calibration_0_trialRoutineEnd() {
+function calibration_0_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'calibration_0_trial'-------
+    //--- Ending Routine 'calibration_0_trial' ---
     calibration_0_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -326,8 +348,12 @@ function calibration_0_trialRoutineEnd() {
     // the Routine "calibration_0_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -336,7 +362,7 @@ function calibration_1_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'calibration_1_trial'-------
+    //--- Prepare to start Routine 'calibration_1_trial' ---
     t = 0;
     calibration_1_trialClock.reset(); // clock
     frameN = -1;
@@ -365,7 +391,7 @@ function calibration_1_trialRoutineBegin(snapshot) {
 
 function calibration_1_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'calibration_1_trial'-------
+    //--- Loop for each frame of Routine 'calibration_1_trial' ---
     // get current time
     t = calibration_1_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -437,9 +463,9 @@ function calibration_1_trialRoutineEachFrame() {
 }
 
 
-function calibration_1_trialRoutineEnd() {
+function calibration_1_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'calibration_1_trial'-------
+    //--- Ending Routine 'calibration_1_trial' ---
     calibration_1_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -456,8 +482,12 @@ function calibration_1_trialRoutineEnd() {
     // the Routine "calibration_1_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -466,7 +496,7 @@ function verification_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'verification_trial'-------
+    //--- Prepare to start Routine 'verification_trial' ---
     t = 0;
     verification_trialClock.reset(); // clock
     frameN = -1;
@@ -502,7 +532,7 @@ function verification_trialRoutineBegin(snapshot) {
 
 function verification_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'verification_trial'-------
+    //--- Loop for each frame of Routine 'verification_trial' ---
     // get current time
     t = verification_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -581,9 +611,9 @@ function verification_trialRoutineEachFrame() {
 }
 
 
-function verification_trialRoutineEnd() {
+function verification_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'verification_trial'-------
+    //--- Ending Routine 'verification_trial' ---
     verification_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -600,8 +630,12 @@ function verification_trialRoutineEnd() {
     // the Routine "verification_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -610,7 +644,7 @@ function verification_fb_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'verification_fb_trial'-------
+    //--- Prepare to start Routine 'verification_fb_trial' ---
     t = 0;
     verification_fb_trialClock.reset(); // clock
     frameN = -1;
@@ -640,7 +674,7 @@ function verification_fb_trialRoutineBegin(snapshot) {
 
 function verification_fb_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'verification_fb_trial'-------
+    //--- Loop for each frame of Routine 'verification_fb_trial' ---
     // get current time
     t = verification_fb_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -722,9 +756,9 @@ function verification_fb_trialRoutineEachFrame() {
 }
 
 
-function verification_fb_trialRoutineEnd() {
+function verification_fb_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'verification_fb_trial'-------
+    //--- Ending Routine 'verification_fb_trial' ---
     verification_fb_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -741,31 +775,12 @@ function verification_fb_trialRoutineEnd() {
     // the Routine "verification_fb_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
-function endLoopIteration(scheduler, snapshot) {
-  // ------Prepare for next entry------
-  return async function () {
-    if (typeof snapshot !== 'undefined') {
-      // ------Check if user ended loop early------
-      if (snapshot.finished) {
-        // Check for and save orphaned data
-        if (psychoJS.experiment.isEntryEmpty()) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-        scheduler.stop();
-      } else {
-        const thisTrial = snapshot.getCurrentTrial();
-        if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-      }
-    return Scheduler.Event.NEXT;
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
     }
-  };
+    return Scheduler.Event.NEXT;
+  }
 }
 
 

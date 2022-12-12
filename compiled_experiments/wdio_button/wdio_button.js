@@ -2,7 +2,7 @@
  * Wdio_Button Test *
  ********************/
 
-import { core, data, sound, util, visual } from './lib/psychojs-2021.3.0.js';
+import { core, data, sound, util, visual, hardware } from './lib/psychojs-2022.2.4.js';
 const { PsychoJS } = core;
 const { TrialHandler, MultiStairHandler } = data;
 const { Scheduler } = util;
@@ -13,7 +13,10 @@ const { round } = util;
 
 // store info about the experiment session:
 let expName = 'wdio_button';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
+let expInfo = {
+    'participant': '',
+    'session': '001',
+};
 
 // Start code blocks for 'Before Experiment'
 // init psychoJS:
@@ -65,12 +68,16 @@ psychoJS.start({
 psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.EXP);
 
 
+var currentLoop;
 var frameDur;
 async function updateInfo() {
+  currentLoop = psychoJS.experiment;  // right now there are no loops
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.3.0';
+  expInfo['psychopyVersion'] = '2022.2.4';
   expInfo['OS'] = window.navigator.platform;
+
+  psychoJS.experiment.dataFileName = (("." + "/") + `data/${expInfo["participant"]}_${expName}_${expInfo["date"]}`);
 
   // store frame rate of monitor if we can measure it successfully
   expInfo['frameRate'] = psychoJS.window.getActualFrameRate();
@@ -109,6 +116,7 @@ async function experimentInit() {
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
+    languageStyle: 'LTR',
     color: new util.Color('white'),  opacity: 1,
     depth: 0.0 
   });
@@ -157,9 +165,11 @@ async function experimentInit() {
     size: [null, null],  units: undefined, 
     color: 'white', colorSpace: 'rgb',
     fillColor: undefined, borderColor: undefined,
+    languageStyle: 'LTR',
     bold: false, italic: false,
     opacity: undefined,
     padding: 0.0,
+    alignment: 'center',
     editable: false,
     multiline: true,
     anchor: 'center',
@@ -213,7 +223,7 @@ function intro_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'intro_trial'-------
+    //--- Prepare to start Routine 'intro_trial' ---
     t = 0;
     intro_trialClock.reset(); // clock
     frameN = -1;
@@ -239,7 +249,7 @@ var prevButtonState;
 var _mouseButtons;
 function intro_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'intro_trial'-------
+    //--- Loop for each frame of Routine 'intro_trial' ---
     // get current time
     t = intro_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -302,9 +312,9 @@ function intro_trialRoutineEachFrame() {
 
 
 var _mouseXYs;
-function intro_trialRoutineEnd() {
+function intro_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'intro_trial'-------
+    //--- Ending Routine 'intro_trial' ---
     for (const thisComponent of intro_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -321,8 +331,12 @@ function intro_trialRoutineEnd() {
     // the Routine "intro_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -331,12 +345,13 @@ function button1_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'button1_trial'-------
+    //--- Prepare to start Routine 'button1_trial' ---
     t = 0;
     button1_trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
+    // Run 'Begin Routine' code from button1_code
     document.body.setAttribute('data-report', 'button1_trial');
     document.body.setAttribute('data-output', '');
     // keep track of which components have finished
@@ -354,7 +369,7 @@ function button1_trialRoutineBegin(snapshot) {
 
 function button1_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'button1_trial'-------
+    //--- Loop for each frame of Routine 'button1_trial' ---
     // get current time
     t = button1_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -375,6 +390,7 @@ function button1_trialRoutineEachFrame() {
         if (!button1.wasClicked) {
           // store time of first click
           button1.timesOn.push(button1.clock.getTime());
+          button1.numClicks += 1;
           // store time clicked until
           button1.timesOff.push(button1.clock.getTime());
         } else {
@@ -390,7 +406,7 @@ function button1_trialRoutineEachFrame() {
         button1.wasClicked = true;
       } else {
         // if button1 is clicked next frame, it is a new click
-        button1.wasClicked = false
+        button1.wasClicked = false;
       }
     } else {
       // keep clock at 0 if button1 hasn't started / has finished
@@ -435,19 +451,26 @@ function button1_trialRoutineEachFrame() {
 }
 
 
-function button1_trialRoutineEnd() {
+function button1_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'button1_trial'-------
+    //--- Ending Routine 'button1_trial' ---
     for (const thisComponent of button1_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
+    psychoJS.experiment.addData('button1.numClicks', button1.numClicks);
+    psychoJS.experiment.addData('button1.timesOn', button1.timesOn);
+    psychoJS.experiment.addData('button1.timesOff', button1.timesOff);
     // the Routine "button1_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -456,12 +479,13 @@ function button2_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'button2_trial'-------
+    //--- Prepare to start Routine 'button2_trial' ---
     t = 0;
     button2_trialClock.reset(); // clock
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
+    // Run 'Begin Routine' code from button2_code
     document.body.setAttribute('data-report', 'button2_trial');
     // keep track of which components have finished
     button2_trialComponents = [];
@@ -478,7 +502,7 @@ function button2_trialRoutineBegin(snapshot) {
 
 function button2_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'button2_trial'-------
+    //--- Loop for each frame of Routine 'button2_trial' ---
     // get current time
     t = button2_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -499,6 +523,7 @@ function button2_trialRoutineEachFrame() {
         if (!button2.wasClicked) {
           // store time of first click
           button2.timesOn.push(button2.clock.getTime());
+          button2.numClicks += 1;
           // store time clicked until
           button2.timesOff.push(button2.clock.getTime());
         } else {
@@ -510,7 +535,7 @@ function button2_trialRoutineEachFrame() {
         button2.wasClicked = true;
       } else {
         // if button2 is clicked next frame, it is a new click
-        button2.wasClicked = false
+        button2.wasClicked = false;
       }
     } else {
       // keep clock at 0 if button2 hasn't started / has finished
@@ -534,6 +559,7 @@ function button2_trialRoutineEachFrame() {
         if (!button_finish.wasClicked) {
           // store time of first click
           button_finish.timesOn.push(button_finish.clock.getTime());
+          button_finish.numClicks += 1;
           // store time clicked until
           button_finish.timesOff.push(button_finish.clock.getTime());
         } else {
@@ -543,13 +569,12 @@ function button2_trialRoutineEachFrame() {
         if (!button_finish.wasClicked) {
           // end routine when button_finish is clicked
           continueRoutine = false;
-          null;
         }
         // if button_finish is still clicked next frame, it is not a new click
         button_finish.wasClicked = true;
       } else {
         // if button_finish is clicked next frame, it is a new click
-        button_finish.wasClicked = false
+        button_finish.wasClicked = false;
       }
     } else {
       // keep clock at 0 if button_finish hasn't started / has finished
@@ -584,42 +609,29 @@ function button2_trialRoutineEachFrame() {
 }
 
 
-function button2_trialRoutineEnd() {
+function button2_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'button2_trial'-------
+    //--- Ending Routine 'button2_trial' ---
     for (const thisComponent of button2_trialComponents) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
       }
     }
+    psychoJS.experiment.addData('button2.numClicks', button2.numClicks);
+    psychoJS.experiment.addData('button2.timesOn', button2.timesOn);
+    psychoJS.experiment.addData('button2.timesOff', button2.timesOff);
+    psychoJS.experiment.addData('button_finish.numClicks', button_finish.numClicks);
+    psychoJS.experiment.addData('button_finish.timesOn', button_finish.timesOn);
+    psychoJS.experiment.addData('button_finish.timesOff', button_finish.timesOff);
     // the Routine "button2_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
-function endLoopIteration(scheduler, snapshot) {
-  // ------Prepare for next entry------
-  return async function () {
-    if (typeof snapshot !== 'undefined') {
-      // ------Check if user ended loop early------
-      if (snapshot.finished) {
-        // Check for and save orphaned data
-        if (psychoJS.experiment.isEntryEmpty()) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-        scheduler.stop();
-      } else {
-        const thisTrial = snapshot.getCurrentTrial();
-        if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-      }
-    return Scheduler.Event.NEXT;
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
     }
-  };
+    return Scheduler.Event.NEXT;
+  }
 }
 
 

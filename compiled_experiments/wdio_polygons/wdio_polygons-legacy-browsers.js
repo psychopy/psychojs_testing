@@ -5,7 +5,10 @@
 
 // store info about the experiment session:
 let expName = 'wdio_polygons';  // from the Builder filename that created this script
-let expInfo = {'participant': '', 'session': '001'};
+let expInfo = {
+    'participant': '',
+    'session': '001',
+};
 
 // Start code blocks for 'Before Experiment'
 // init psychoJS:
@@ -57,12 +60,16 @@ psychoJS.start({
 psychoJS.experimentLogger.setLevel(core.Logger.ServerLevel.ERROR);
 
 
+var currentLoop;
 var frameDur;
 async function updateInfo() {
+  currentLoop = psychoJS.experiment;  // right now there are no loops
   expInfo['date'] = util.MonotonicClock.getDateStr();  // add a simple timestamp
   expInfo['expName'] = expName;
-  expInfo['psychopyVersion'] = '2021.3.0';
+  expInfo['psychopyVersion'] = '2022.2.4';
   expInfo['OS'] = window.navigator.platform;
+
+  psychoJS.experiment.dataFileName = (("." + "/") + `data/${expInfo["participant"]}_${expName}_${expInfo["date"]}`);
 
   // store frame rate of monitor if we can measure it successfully
   expInfo['frameRate'] = psychoJS.window.getActualFrameRate();
@@ -107,6 +114,7 @@ async function experimentInit() {
     font: 'Arial',
     units: undefined, 
     pos: [0, 0], height: 0.04,  wrapWidth: undefined, ori: 0,
+    languageStyle: 'LTR',
     color: new util.Color('white'),  opacity: 1,
     depth: 0.0 
   });
@@ -122,7 +130,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_background', 
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
@@ -131,7 +141,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_triangle', 
     vertices: [[-[0.4, 0.4][0]/2.0, -[0.4, 0.4][1]/2.0], [+[0.4, 0.4][0]/2.0, -[0.4, 0.4][1]/2.0], [0, [0.4, 0.4][1]/2.0]],
     ori: 0, pos: [(- 0.25), 0.25],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -2, interpolate: true,
   });
@@ -140,7 +152,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_rectangle', 
     width: [0.4, 0.4][0], height: [0.4, 0.4][1],
     ori: 0, pos: [0.25, 0.25],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -3, interpolate: true,
   });
@@ -149,7 +163,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_cross', 
     vertices: 'cross', size:[0.4, 0.4],
     ori: 0, pos: [(- 0.25), (- 0.25)],
-    lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 1, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -4, interpolate: true,
   });
@@ -158,7 +174,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_star', 
     vertices: 'star7', size: [0.4, 0.4],
     ori: 0, pos: [0.25, (- 0.25)],
-    lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 1, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -5, interpolate: true,
   });
@@ -173,7 +191,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_background_2', 
     width: [1, 1][0], height: [1, 1][1],
     ori: 0, pos: [0, 0],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, (- 1), (- 1)]),
     opacity: 1, depth: 0, interpolate: true,
   });
@@ -182,7 +202,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_triangle_2', 
     vertices: [[-[0.4, 0.4][0]/2.0, -[0.4, 0.4][1]/2.0], [+[0.4, 0.4][0]/2.0, -[0.4, 0.4][1]/2.0], [0, [0.4, 0.4][1]/2.0]],
     ori: 5, pos: [(- 0.25), 0.25],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -2, interpolate: true,
   });
@@ -191,7 +213,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_rectangle_2', 
     width: [0.4, 0.4][0], height: [0.4, 0.4][1],
     ori: 5, pos: [0.25, 0.25],
-    lineWidth: 0, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 0, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -3, interpolate: true,
   });
@@ -200,7 +224,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_cross_2', 
     vertices: 'cross', size:[0.4, 0.4],
     ori: 5, pos: [(- 0.25), (- 0.25)],
-    lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 1, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -4, interpolate: true,
   });
@@ -209,7 +235,9 @@ async function experimentInit() {
     win: psychoJS.window, name: 's_star_2', 
     vertices: 'star7', size: [0.4, 0.4],
     ori: 5, pos: [0.25, (- 0.25)],
-    lineWidth: 1, lineColor: new util.Color([1, 1, 1]),
+    lineWidth: 1, 
+    colorSpace: 'rgb',
+    lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -5, interpolate: true,
   });
@@ -235,7 +263,7 @@ function into_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'into_trial'-------
+    //--- Prepare to start Routine 'into_trial' ---
     t = 0;
     into_trialClock.reset(); // clock
     frameN = -1;
@@ -262,7 +290,7 @@ var prevButtonState;
 var _mouseButtons;
 function into_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'into_trial'-------
+    //--- Loop for each frame of Routine 'into_trial' ---
     // get current time
     t = into_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -325,9 +353,9 @@ function into_trialRoutineEachFrame() {
 
 
 var _mouseXYs;
-function into_trialRoutineEnd() {
+function into_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'into_trial'-------
+    //--- Ending Routine 'into_trial' ---
     into_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -344,8 +372,12 @@ function into_trialRoutineEnd() {
     // the Routine "into_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -354,7 +386,7 @@ function polygon_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'polygon_trial'-------
+    //--- Prepare to start Routine 'polygon_trial' ---
     t = 0;
     polygon_trialClock.reset(); // clock
     frameN = -1;
@@ -383,7 +415,7 @@ function polygon_trialRoutineBegin(snapshot) {
 
 function polygon_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'polygon_trial'-------
+    //--- Loop for each frame of Routine 'polygon_trial' ---
     // get current time
     t = polygon_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -485,9 +517,9 @@ function polygon_trialRoutineEachFrame() {
 }
 
 
-function polygon_trialRoutineEnd() {
+function polygon_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'polygon_trial'-------
+    //--- Ending Routine 'polygon_trial' ---
     polygon_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -504,8 +536,12 @@ function polygon_trialRoutineEnd() {
     // the Routine "polygon_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
+    }
     return Scheduler.Event.NEXT;
-  };
+  }
 }
 
 
@@ -514,7 +550,7 @@ function polygon5_trialRoutineBegin(snapshot) {
   return async function () {
     TrialHandler.fromSnapshot(snapshot); // ensure that .thisN vals are up to date
     
-    //------Prepare to start Routine 'polygon5_trial'-------
+    //--- Prepare to start Routine 'polygon5_trial' ---
     t = 0;
     polygon5_trialClock.reset(); // clock
     frameN = -1;
@@ -543,7 +579,7 @@ function polygon5_trialRoutineBegin(snapshot) {
 
 function polygon5_trialRoutineEachFrame() {
   return async function () {
-    //------Loop for each frame of Routine 'polygon5_trial'-------
+    //--- Loop for each frame of Routine 'polygon5_trial' ---
     // get current time
     t = polygon5_trialClock.getTime();
     frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
@@ -645,9 +681,9 @@ function polygon5_trialRoutineEachFrame() {
 }
 
 
-function polygon5_trialRoutineEnd() {
+function polygon5_trialRoutineEnd(snapshot) {
   return async function () {
-    //------Ending Routine 'polygon5_trial'-------
+    //--- Ending Routine 'polygon5_trial' ---
     polygon5_trialComponents.forEach( function(thisComponent) {
       if (typeof thisComponent.setAutoDraw === 'function') {
         thisComponent.setAutoDraw(false);
@@ -664,31 +700,12 @@ function polygon5_trialRoutineEnd() {
     // the Routine "polygon5_trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
-    return Scheduler.Event.NEXT;
-  };
-}
-
-
-function endLoopIteration(scheduler, snapshot) {
-  // ------Prepare for next entry------
-  return async function () {
-    if (typeof snapshot !== 'undefined') {
-      // ------Check if user ended loop early------
-      if (snapshot.finished) {
-        // Check for and save orphaned data
-        if (psychoJS.experiment.isEntryEmpty()) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-        scheduler.stop();
-      } else {
-        const thisTrial = snapshot.getCurrentTrial();
-        if (typeof thisTrial === 'undefined' || !('isTrials' in thisTrial) || thisTrial.isTrials) {
-          psychoJS.experiment.nextEntry(snapshot);
-        }
-      }
-    return Scheduler.Event.NEXT;
+    // Routines running outside a loop should always advance the datafile row
+    if (currentLoop === psychoJS.experiment) {
+      psychoJS.experiment.nextEntry(snapshot);
     }
-  };
+    return Scheduler.Event.NEXT;
+  }
 }
 
 
