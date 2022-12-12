@@ -1,6 +1,6 @@
 {
   "test_framework": "karma",
-  "labels": ["karma_formattedString", "karma", "full", "short", "y2022"],
+  "labels": ["karma_formattedString", "karma", "full", "short"],
   "author": "Thomas Pronk <pronkthomas@gmail.com> (https://thomaspronk.com)",
   "testscript_file": "karma_formattedString.js",
   "description": "Formatting strings using ${} placeholders"
