@@ -11,6 +11,6 @@ Scripts for automated testing of [PsychoJS](https://github.com/psychopy/psychojs
 * A series of tests can be run in one go by giving them a [label](../../wiki/Test-configuration-file)
 * A plethora of test logs are available, summarized in a [handy table](../../wiki/Organization-of-test-logs)
 * There is a [collection of tests](../../wiki/Overview-of-tests) already available, but be welcome to add more!
-* Tests can be triggered automatically on a change in the code base via a set of [watchers](../../psychojs_testing/blob/main/package.json#L11) (not documented yet)
+* Tests can be triggered automatically on a change in the code base via a set of [watchers](../../package.json#L11) (not documented yet)
 
 
