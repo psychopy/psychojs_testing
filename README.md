@@ -2,7 +2,7 @@
 Scripts for automated testing of [PsychoJS](https://github.com/psychopy/psychojs) and associated libraries. See the [wiki](../../wiki) for detailed documentation on installing, using, or extending psychojs_testing. Read on for a brief overview of the features.
 
 ## Overview of features
-* We support [unit testing via the karma](wiki/Karma-testing) and [end-to-end testing via WebdriverIO](../../wiki#webdriverio-testing)
+* We support [unit testing via karma](../../wiki/Karma-testing) and [end-to-end testing via WebdriverIO](../../wiki#webdriverio-testing)
 * Screenshots can taken automatically and be subjected to a [visual regression test](../../wiki/Visual-regression-testing-of-screenshots)
 * Tests can be coordinated by your [local device](.../../wiki/Test-script-shorthands) or via [GitHub Actions](../../wiki/Github-Workflows)
 * Test clients can be your [local browsers](../../wiki/Setting-up-a-Selenium-or-Appium-server#setting-up-a-local-selenium-server) or a collection of [BrowserStack devices](../../wiki/Setting-up-a-Selenium-or-Appium-server#setting-up-a-local-selenium-server)
